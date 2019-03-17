@@ -1,0 +1,26 @@
+{
+	"name": "skeeks/theme-unify-shop",
+	"description": "Theme for SkeekS CMS Project",
+	"keywords": ["yii", "app", "skeeks", "framework", "theme"],
+    "homepage": "https://cms.skeeks.com/",
+	"type": "yii2-extension",
+	"license": "BSD-3-Clause",
+	"support": {
+        "issues": "https://skeeks.com/",
+        "wiki": "https://cms.skeeks.com/docs/"
+    },
+	"authors": [
+		{
+			"name": "Semenov Alexander",
+			"email": "semenov@skeeks.com"
+		}
+	],
+	"require": {
+		"skeeks/cms-theme-unify-v2": "^0.0.2"
+	},
+    "autoload": {
+        "psr-4": {
+            "skeeks\\cms\\themes\\unifyshop\\": "src/"
+        }
+    }
+}
