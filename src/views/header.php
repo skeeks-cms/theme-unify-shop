@@ -33,7 +33,8 @@ JS
 ?>
 
 <!-- Header -->
-<header id="js-header" class="u-header u-header--sticky-top u-header--toggle-section u-header--change-appearance" data-header-fix-moment="80">
+<!--u-header--sticky-top-->
+<header id="js-header" class="u-header  u-header--toggle-section u-header--change-appearance u-shadow-v19" data-header-fix-moment="80">
     <!-- Top Bar -->
     <!--u-header__section--hidden -->
     <div class="u-header__section u-header__section--dark g-bg-black g-transition-0_3 g-py-7">
@@ -81,14 +82,22 @@ JS
 
                 <div class="col-auto g-pos-rel">
                     <ul class="list-inline g-overflow-hidden g-pt-1 g-mx-minus-4 mb-0">
-                        <li class="list-inline-item g-mx-4">
-                            <i class="fa fa-user g-font-size-18 g-valign-middle g-color-primary g-mr-10 g-mt-minus-2"></i>
-                            <a class="g-color-white g-color-primary--hover g-text-underline--none--hover" href="#!">Вход</a>
-                        </li>
-                        <li class="list-inline-item g-mx-4">|</li>
-                        <li class="list-inline-item g-mx-4">
-                            <a class="g-color-white g-color-primary--hover g-text-underline--none--hover" href="#!">Регистрация</a>
-                        </li>
+                        <? if (\Yii::$app->user->isGuest) : ?>
+                            <li class="list-inline-item g-mx-4">
+                                <i class="fa fa-user g-font-size-18 g-valign-middle g-color-primary g-mr-10 g-mt-minus-2"></i>
+                                <a class="g-color-white g-color-primary--hover g-text-underline--none--hover" href="<?= \skeeks\cms\helpers\UrlHelper::construct('cms/auth/login'); ?>">Вход</a>
+                            </li>
+                            <li class="list-inline-item g-mx-4">|</li>
+                            <li class="list-inline-item g-mx-4">
+                                <a class="g-color-white g-color-primary--hover g-text-underline--none--hover" href="<?= \skeeks\cms\helpers\UrlHelper::construct('cms/auth/register'); ?>">Регистрация</a>
+                            </li>
+                        <? else : ?>
+                            <li class="list-inline-item g-mx-4">
+                                <i class="fa fa-user g-font-size-18 g-valign-middle g-color-primary g-mr-10 g-mt-minus-2"></i>
+                                <a class="g-color-white g-color-primary--hover g-text-underline--none--hover" href="<?= \yii\helpers\Url::to(['/cms/upa-personal/update']) ?>"><?= \Yii::$app->user->identity->displayName; ?></a>
+                            </li>
+                        <? endif; ?>
+
                     </ul>
                 </div>
 
