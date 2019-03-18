@@ -82,30 +82,34 @@ JS
                 </div>-->
 
                 <div class="col-auto">
-                    <i class="fa fa-phone g-font-size-18 g-valign-middle g-color-primary g-mr-10 g-mt-minus-2"></i>
-                    <?= $this->theme->phone; ?>
+                    <i class="fa fa-phone g-font-size-18 g-valign-middle g-color-white g-mr-10 g-mt-minus-2"></i>
+                    <a href="tel:<?= $this->theme->phone; ?>" class="g-color-white g-color-white--hover">
+                        <?= $this->theme->phone; ?>
+                    </a>
                 </div>
 
                 <div class="col-auto">
-                    <i class="fa fa-envelope g-font-size-18 g-valign-middle g-color-primary g-mr-10 g-mt-minus-2"></i>
-                    <?= $this->theme->email; ?>
+                    <i class="fa fa-envelope g-font-size-18 g-valign-middle g-color-white g-mr-10 g-mt-minus-2"></i>
+                    <a href="mailto:<?= $this->theme->email; ?>" class="g-color-white g-color-white--hover">
+                        <?= $this->theme->email; ?>
+                    </a>
                 </div>
 
                 <div class="col-auto g-pos-rel">
                     <ul class="list-inline g-overflow-hidden g-pt-1 g-mx-minus-4 mb-0">
                         <? if (\Yii::$app->user->isGuest) : ?>
                             <li class="list-inline-item g-mx-4">
-                                <i class="fa fa-user g-font-size-18 g-valign-middle g-color-primary g-mr-10 g-mt-minus-2"></i>
-                                <a class="g-color-white g-color-primary--hover g-text-underline--none--hover" href="<?= \skeeks\cms\helpers\UrlHelper::construct('cms/auth/login'); ?>">Вход</a>
+                                <i class="fa fa-user g-font-size-18 g-valign-middle g-color-white g-mr-10 g-mt-minus-2"></i>
+                                <a class="g-color-white g-color-white--hover" href="<?= \skeeks\cms\helpers\UrlHelper::construct('cms/auth/login'); ?>">Вход</a>
                             </li>
                             <li class="list-inline-item g-mx-4">|</li>
                             <li class="list-inline-item g-mx-4">
-                                <a class="g-color-white g-color-primary--hover g-text-underline--none--hover" href="<?= \skeeks\cms\helpers\UrlHelper::construct('cms/auth/register'); ?>">Регистрация</a>
+                                <a class="g-color-white g-color-white--hover" href="<?= \skeeks\cms\helpers\UrlHelper::construct('cms/auth/register'); ?>">Регистрация</a>
                             </li>
                         <? else : ?>
                             <li class="list-inline-item g-mx-4">
-                                <i class="fa fa-user g-font-size-18 g-valign-middle g-color-primary g-mr-10 g-mt-minus-2"></i>
-                                <a class="g-color-white g-color-primary--hover g-text-underline--none--hover" href="<?= \yii\helpers\Url::to(['/cms/upa-personal/update']) ?>"><?= \Yii::$app->user->identity->displayName; ?></a>
+                                <i class="fa fa-user g-font-size-18 g-valign-middle g-color-white g-mr-10 g-mt-minus-2"></i>
+                                <a class="g-color-white g-color-white--hover" href="<?= \yii\helpers\Url::to(['/cms/upa-personal/update']) ?>"><?= \Yii::$app->user->identity->displayName; ?></a>
                             </li>
                         <? endif; ?>
 
