@@ -7,7 +7,18 @@
  */
 /* @var $this yii\web\View */
 /* @see https://htmlstream.com/public/preview/unify-v2.6.1/unify-main/shortcodes/headers/classic-header--topbar-1.html */
+
+\skeeks\assets\unify\base\UnifyHsDropdownAsset::register($this);
+\skeeks\assets\unify\base\UnifyHsHeaderAsset::register($this);
 $this->registerJs(<<<JS
+
+// initialization of HSDropdown component
+  $.HSCore.components.HSDropdown.init($('[data-dropdown-target]'), {
+    afterOpen: function(){
+      $(this).find('input[type="search"]').focus();
+    }
+  });
+
 $(window).on('load', function () {
     // initialization of header
     $.HSCore.components.HSHeader.init($('#js-header'));
