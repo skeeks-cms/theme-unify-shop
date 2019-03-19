@@ -120,37 +120,59 @@ JS
 
 $widget = $this->context;
 ?>
-<div class="">
-    <h2 class="h5 u-heading-v3__title g-font-weight-600 text-uppercase g-brd-primary ">
-        Фильтры
-    </h2>
-</div>
+<div id="stickyblock-start" class="g-bg-white g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
+    <div>
+        <h2 class="h5 u-heading-v3__title g-font-weight-600 text-uppercase g-brd-primary ">
+            Фильтры
+        </h2>
+    </div>
+    <!--<div class="h-100">-->
 
-<? $form = \yii\widgets\ActiveForm::begin([
-    'method'  => 'post',
-    //'action' => "/" . \Yii::$app->request->pathInfo,
-    'options' => [
-        'id'    => 'sx-filters-form',
-        'class' => 'sx-filters-form',
-        'data'  => [
-            'pjax' => 1,
+    <? $form = \yii\widgets\ActiveForm::begin([
+        'method'  => 'post',
+        //'action' => "/" . \Yii::$app->request->pathInfo,
+        'options' => [
+            'id'    => 'sx-filters-form',
+            'class' => 'sx-filters-form',
+            'data'  => [
+                'pjax' => 1,
+            ],
         ],
-    ],
-]); ?>
-<? foreach ($widget->handlers as $filtersHandler) : ?>
-    <?= $filtersHandler->render($form); ?>
-<? endforeach; ?>
+    ]); ?>
+    <? foreach ($widget->handlers as $filtersHandler) : ?>
+        <?= $filtersHandler->render($form); ?>
+    <? endforeach; ?>
 
-<? if (\Yii::$app->request->get(\Yii::$app->cmsSearch->searchQueryParamName)) : ?>
-    <input type="text" value="<?= \Yii::$app->cmsSearch->searchQuery; ?>" name="<?= \Yii::$app->cmsSearch->searchQueryParamName; ?>"/>
-<? endif; ?>
-<div style="display: none;">
-    <button type="submit" class="btn btn-default">Применить</button>
+    <? if (\Yii::$app->request->get(\Yii::$app->cmsSearch->searchQueryParamName)) : ?>
+        <input type="text" value="<?= \Yii::$app->cmsSearch->searchQuery; ?>" name="<?= \Yii::$app->cmsSearch->searchQueryParamName; ?>"/>
+    <? endif; ?>
+    <div style="display: none;">
+        <button type="submit" class="btn btn-default">Применить</button>
+    </div>
+    <? \yii\widgets\ActiveForm::end(); ?>
+    <!--</div>-->
 </div>
-<? \yii\widgets\ActiveForm::end(); ?>
+
+
 
 <?
+
+
 $this->registerJs(<<<JS
+$(window).on('load', function () {
+        // initialization of sticky blocks
+setTimeout(function() { // important in this case
+  $.HSCore.components.HSStickyBlock.init('.js-sticky-block');
+}, 1);
+});
+JS
+);
+
+
+$this->registerJs(<<<JS
+
+
+
 $('.filter--group').each(function(){
     var group = $(this),
         groupHeader = group.find('.filter--group--header'),

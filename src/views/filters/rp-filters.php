@@ -6,8 +6,7 @@
  * @date 13.11.2017
  */
 /* @var $this yii\web\View */
-/* @var $widget \v3p\aff\widgets\filter\V3pProductFiterWidget */
-/* @var $handler \v3p\aff\widgets\filter\V3pFeatureValueHandler */
+/* @var $handler \skeeks\cms\queryFilters\EavFiltersHandler */
 /* @var $form \yii\widgets\ActiveForm */
 /* @var $code string */
 $widget = $this->context;
@@ -15,28 +14,25 @@ $widget = $this->context;
 <? foreach ($handler->toArray() as $code => $value) : ?>
 
     <?
-    $feature = $handler->getFeatureByCode($code);
+    $rp = $handler->getRPByCode($code);
     ?>
-
-    <? if ($feature && in_array($feature->value_type, [
-            \v3p\aff\models\V3pFeature::VALUE_TYPE_INT,
-            \v3p\aff\models\V3pFeature::VALUE_TYPE_NUM,
-            \v3p\aff\models\V3pFeature::VALUE_TYPE_INT_RANGE,
-            \v3p\aff\models\V3pFeature::VALUE_TYPE_NUM_RANGE,
+    <? if ($rp && in_array($rp->property_type, [
+            \skeeks\cms\relatedProperties\PropertyType::CODE_NUMBER,
+            \skeeks\cms\relatedProperties\PropertyType::CODE_RANGE,
         ])) : ?>
     <?
-        $min = $handler->getMinValue($code);
-        $max = $handler->getMaxValue($code);
+        $min = $handler->getMinValue($rp);
+        $max = $handler->getMaxValue($rp);
 
-        $val1Name = $handler->getAttributeNameRangeFrom($feature->id);
+        $val1Name = $handler->getAttributeNameRangeFrom($rp->id);
         $val1 = $handler->{$val1Name} ? $handler->{$val1Name} : $min;
 
-        $val2Name = $handler->getAttributeNameRangeTo($feature->id);
+        $val2Name = $handler->getAttributeNameRangeTo($rp->id);
         $val2 = $handler->{$val2Name} ? $handler->{$val2Name} : $max;
 
-        $fromId = \yii\helpers\Html::getInputId($handler, $handler->getAttributeNameRangeFrom($feature->id));
-        $toId = \yii\helpers\Html::getInputId($handler, $handler->getAttributeNameRangeTo($feature->id));
-        $id = \yii\helpers\Html::getInputId($handler, $handler->getAttributeName($feature->id));
+        $fromId = \yii\helpers\Html::getInputId($handler, $handler->getAttributeNameRangeFrom($rp->id));
+        $toId = \yii\helpers\Html::getInputId($handler, $handler->getAttributeNameRangeTo($rp->id));
+        $id = \yii\helpers\Html::getInputId($handler, $handler->getAttributeName($rp->id));
 
         ?>
         <? if ($min != $max
@@ -44,7 +40,7 @@ $widget = $this->context;
         ) : ?>
 
             <section class="filter--group <?= ($val1 != $min || $val2 != $max) ? "opened sx-filter-selected": ""?>">
-                <header class="filter--group--header"><?= $feature->title; ?></header>
+                <header class="filter--group--header"><?= $rp->name; ?></header>
                 <div class="filter--group--body">
                     <div class="filter--group--inner">
                         <input type="text"
@@ -56,18 +52,18 @@ $widget = $this->context;
                                data-max="<?= $max ?>"
                                data-from="<?= $val1; ?>"
                                data-to="<?= $val2; ?>"
-                               data-postfix=" <?= $feature->measure_title; ?>."/>
+                               data-postfix=""/>
 
 
                         <div class="" style="display: none;">
                             <div class="col-md-6">
-                                <?= $form->field($handler, $handler->getAttributeNameRangeFrom($feature->id))->textInput([
+                                <?= $form->field($handler, $handler->getAttributeNameRangeFrom($rp->id))->textInput([
                                     'placeholder' => \Yii::$app->money->currencyCode,
                                     'id' => $id . '-from'
                                 ])->label("От"); ?>
                             </div>
                             <div class="col-md-6">
-                                <?= $form->field($handler, $handler->getAttributeNameRangeTo($feature->id))->textInput([
+                                <?= $form->field($handler, $handler->getAttributeNameRangeTo($rp->id))->textInput([
                                     'placeholder' => \Yii::$app->money->currencyCode,
                                     'id' => $id . '-to'
                                 ])->label("До"); ?>
@@ -141,72 +137,17 @@ JS
                 </div>
             </div>-->
         <? endif; ?>
-    <? elseif ($feature && in_array($feature->value_type, [
-            \v3p\aff\models\V3pFeature::VALUE_TYPE_LEAF_SOPTION,
-            \v3p\aff\models\V3pFeature::VALUE_TYPE_ANY_SOPTION,
-    ])) : ?>
-        <? if ($options = $handler->getOptions($feature)) : ?>
+    <? elseif ($rp && in_array($rp->property_type, [
+            \skeeks\cms\relatedProperties\PropertyType::CODE_ELEMENT,
+            \skeeks\cms\relatedProperties\PropertyType::CODE_LIST,
+        ]))
+        : ?>
+
+        <? if ($options = $handler->getOprionsByRp($rp)) : ?>
             <? if (count($options) > 1) : ?>
 
                 <?
-                    $code = $handler->getAttributeName($feature->id);
-                    $values = $handler->{$code};
-                    $class = '';
-                    if ($values) {
-                        $class = 'opened sx-filter-selected';
-                    }
-
-                    $info = '';
-                    if ($feature->buyer_description) {
-                        $info = "<i class='fa fa-question' title='{$feature->buyer_description}'></i>";
-                    }
-                ?>
-                <?= $form->field($handler, $code, [
-                        'options'      => [
-                            'class' => 'filter--group ' . $class,
-                            'tag' => 'section'
-                        ],
-                        'template'      => <<<HTML
-<header class="filter--group--header">{$feature->title} {$info}</header>
-<div class="filter--group--body">
-{input}
-</div>
-HTML
-,
-                    ])->checkboxList(
-                        $options
-                        , [
-                    'class' => 'sx-filters-checkbox-options filter--group--inner',
-                    'item' => function ($index, $label, $name, $checked, $value) use ($feature)
-                    {
-                        $input = \yii\helpers\Html::checkbox($name, $checked, [
-                            'id' => 'filter-check-' .  $feature->id . "-" . $index,
-                            'value' => $value
-                        ]);
-                        return <<<HTML
-<div class="checkbox">
-{$input}
-<label for="filter-check-{$feature->id}-{$index}">{$label}</label>
-</div>
-HTML;
-
-                    }
-                ]); ?>
-            <? endif; ?>
-        <? endif; ?>
-    <? elseif ($feature && in_array($feature->value_type, ['bool'])) : ?>
-        <? if ($feature->bool_type == 'yes') : ?>
-            <div class="sx-product-filter-wrapper">
-                <div class="row">
-                    <div class="col-md-12">
-                        <?= $form->field($handler, $handler->getAttributeName($feature->id))->checkbox(); ?>
-                    </div>
-                </div>
-            </div>
-        <? else : ?>
-
-            <?
-                $code = $handler->getAttributeName($feature->id);
+                $code = $handler->getAttributeName($rp->id);
                 $values = $handler->{$code};
                 $class = '';
                 if ($values) {
@@ -214,43 +155,44 @@ HTML;
                 }
 
                 $info = '';
-                if ($feature->buyer_description) {
+                /*if ($rp->buyer_description) {
                     $info = "<i class='fa fa-question' title='{$feature->buyer_description}'></i>";
-                }
-            ?>
-
-            <?= $form->field($handler, $code, [
-                    'options'      => [
-                        'class' => 'filter--group ' . $class,
-                        'tag' => 'section'
+                }*/
+                ?>
+                <?= $form->field($handler, $code, [
+                    'options'  => [
+                        'class' => 'filter--group '.$class,
+                        'tag'   => 'section',
                     ],
-                    'template'      => <<<HTML
-<header class="filter--group--header"">{$feature->title} {$info}</header>
+                    'template' => <<<HTML
+<header class="filter--group--header">{$rp->name} {$info}</header>
 <div class="filter--group--body">
 {input}
 </div>
 HTML
-,
+                    ,
                 ])->checkboxList(
-                    $handler->getOptions($feature)
+                    $options
                     , [
-                'class' => 'sx-filters-checkbox-options filter--group--inner',
-                'item' => function ($index, $label, $name, $checked, $value) use ($feature)
-                {
-                    $input = \yii\helpers\Html::checkbox($name, $checked, [
-                        'id' => 'filter-check-' .  $feature->id . "-" . $index,
-                        'value' => $value
-                    ]);
-                    return <<<HTML
+                    'class' => 'sx-filters-checkbox-options filter--group--inner',
+                    'item'  => function ($index, $label, $name, $checked, $value) use ($rp) {
+                        $input = \yii\helpers\Html::checkbox($name, $checked, [
+                            'id'    => 'filter-check-'.$rp->id."-".$index,
+                            'value' => $value,
+                        ]);
+                        return <<<HTML
 <div class="checkbox">
 {$input}
-<label for="filter-check-{$feature->id}-{$index}">{$label}</label>
+<label for="filter-check-{$rp->id}-{$index}">{$label}</label>
 </div>
 HTML;
 
-                }
-            ]); ?>
+                    },
+                ]); ?>
+            <? endif; ?>
         <? endif; ?>
+
+
     <? endif; ?>
 
 <? endforeach; ?>

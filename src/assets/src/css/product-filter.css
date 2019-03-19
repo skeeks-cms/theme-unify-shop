@@ -71,8 +71,14 @@
   display: none;
 }
 .filter--group .filter--show-more {
-  font-size: 1.166667em;
+  font-size: 14px;
   padding: 0 0 10px;
+}
+.filter--group .filter--show-more a {
+  border-bottom: 1px dashed;
+}
+.filter--group .filter--show-more a:hover {
+  text-decoration: none;
 }
 .filter--group.opened .filter--group--header:before {
   -webkit-transform: rotate(180deg);

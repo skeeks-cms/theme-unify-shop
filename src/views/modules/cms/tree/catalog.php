@@ -6,6 +6,7 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
+/* @var $model \skeeks\cms\models\CmsTree */
 \skeeks\cms\themes\unifyshop\assets\UnifyShopCatalogAsset::register($this);
 ?>
 <section class="g-mt-0 g-pb-0">
@@ -40,9 +41,11 @@
                 $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
                 $sortFiltersHandler = new \skeeks\cms\shop\queryFilter\SortFiltersHandler();
 
+
                 $filterWidget
                     ->registerHandler($availabilityFiltersHandler)
                     ->registerHandler($sortFiltersHandler);
+
 
                 $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("shop-product-list", [
                     'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-list',
@@ -62,8 +65,30 @@
 
                 ]);
 
+
                 $query = $widgetElements->dataProvider->query;
                 $baseQuery = clone $query;
+
+
+
+
+
+                $eavFiltersHandler = new \skeeks\cms\queryFilters\EavFiltersHandler([
+                    'baseQuery' => $baseQuery
+                ]);
+                $eavFiltersHandler->viewFile = '@app/views/filters/rp-filters';
+                $rpQuery = $eavFiltersHandler->getRPQuery();
+                /*$rpQuery->andWhere([
+                    'cmap.cms_content_id' => $model->tree_id,
+                ]);*/
+                /*$rpQuery->andWhere(
+                    ['map.cms_tree_id' => $model->id]
+                );*/
+                $eavFiltersHandler->initRPByQuery($rpQuery);
+
+
+
+
 
                 $priceFiltersHandler = new \skeeks\cms\shop\queryFilter\PriceFiltersHandler([
                     'baseQuery' => $baseQuery,
@@ -73,6 +98,8 @@
                 $filterWidget
                     ->registerHandler($priceFiltersHandler);
 
+                $filterWidget
+                    ->registerHandler($eavFiltersHandler);
                 ?>
 
 
