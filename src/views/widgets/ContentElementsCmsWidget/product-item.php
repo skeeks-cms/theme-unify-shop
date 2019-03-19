@@ -17,7 +17,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 //$v3ProductElement = new \v3toys\parsing\models\V3toysProductContentElement($model->toArray());
 $v3ProductElement = $model;
 ?>
-    <article class="card-prod">
+    <article class="card-prod h-100">
         <div class="card-prod--labels">
                     <?/*
                     if ( $enum->id == 141) : */?><!--
@@ -46,8 +46,8 @@ $v3ProductElement = $model;
             <a href="<?= $model->url; ?>" data-pjax="0">
                 <img src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
-                        'w' => 230,
-                        'h' => 230,
+                        'w' => 260,
+                        'h' => 200,
                         'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
                     ]), $model->code
                 ); ?>" title="<?= \yii\helpers\Html::encode($model->name); ?>" alt="<?= \yii\helpers\Html::encode($model->name); ?>" />
@@ -55,16 +55,16 @@ $v3ProductElement = $model;
         </div>
         <div class="card-prod--inner">
 
-            <div class="card-prod--reviews">
-                <? if ($count>0) : ?>
+            <!--<div class="card-prod--reviews">
+                <?/* if ($count>0) : */?>
                     <div class="rating">
-                        <div class="star <?= ($rating > 0) ? "active" :''?>"></div>
-                        <div class="star <?= ($rating > 2) ? "active" :''?>"></div>
-                        <div class="star <?= ($rating > 3) ? "active" :''?>"></div>
-                        <div class="star <?= ($rating > 4) ? "active" :''?>"></div>
-                        <div class="star <?= ($rating >=5 ) ? "active" :''?>"></div>
+                        <div class="star <?/*= ($rating > 0) ? "active" :''*/?>"></div>
+                        <div class="star <?/*= ($rating > 2) ? "active" :''*/?>"></div>
+                        <div class="star <?/*= ($rating > 3) ? "active" :''*/?>"></div>
+                        <div class="star <?/*= ($rating > 4) ? "active" :''*/?>"></div>
+                        <div class="star <?/*= ($rating >=5 ) ? "active" :''*/?>"></div>
                     </div>
-                <? else : ?>
+                <?/* else : */?>
                     <div class="rating">
                         <div class="star"></div>
                         <div class="star"></div>
@@ -72,24 +72,26 @@ $v3ProductElement = $model;
                         <div class="star"></div>
                         <div class="star"></div>
                     </div>
-                <? endif; ?>
-                <div class="caption"><a href="<?=$model->url.'#tab-reviews'?>">(<?=$count;?> отзывов)</a></div>
-            </div>
+                <?/* endif; */?>
+                <div class="caption"><a href="<?/*=$model->url.'#tab-reviews'*/?>">(<?/*= (int) $count;*/?> отзывов)</a></div>
+            </div>-->
 
 
             <?/* if ($model->relatedPropertiesModel->getSmartAttribute('typeConstruct')) : $prop = $model->relatedPropertiesModel->getSmartAttribute('typeConstruct'); */?>
-                <div class="card-prod--category">
-                    <?/*=$prop;*/?>
-                </div>
+                <!--<div class="card-prod--category">
+                    <?/* if ($model->cmsTree) : */?>
+                        <a href="<?/*= $model->cmsTree->url; */?>"><?/*= $model->cmsTree->name; */?></a>
+                    <?/* endif; */?>
+                </div>-->
             <?/* endif; */?>
 
             <div class="card-prod--title">
-                <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0"><?= $model->name; ?></a>
+                <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0" class="g-color-gray-dark-v2 g-font-weight-600 g-line-height-1"><?= $model->name; ?></a>
             </div>
             <? if (isset($shopProduct)) : ?>
             <div class="card-prod--price">
                 <? if ($shopProduct->minProductPrice && $shopProduct->baseProductPrice && $shopProduct->minProductPrice->id == $shopProduct->baseProductPrice->id) : ?>
-                    <div class="new"><?= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); ?></div>
+                    <div class="new g-color-primary g-font-size-20"><?= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); ?></div>
                 <? else : ?>
                     <? if ($shopProduct->baseProductPrice && $shopProduct->minProductPrice) : ?>
                     <div class="old"><?= \Yii::$app->money->convertAndFormat($shopProduct->baseProductPrice->money); ?></div>
@@ -101,7 +103,7 @@ $v3ProductElement = $model;
             <div class="card-prod--actions">
                 <? if ($shopProduct->quantity > 0 && $shopProduct->minProductPrice) : ?>
                     <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>Купить", [
-                        'class' => 'btn js-to-cart',
+                        'class' => 'btn btn-primary js-to-cart',
                         'type' => 'button',
                         'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
                         'data' => \yii\helpers\ArrayHelper::merge($model->toArray(['name', 'id']), [
@@ -124,6 +126,8 @@ $v3ProductElement = $model;
         <div class="card-prod--hidden">
             <div class="card-prod--inner">
                 <div class="with-icon-group">
+                    
+
                     <?/* if ($model->relatedPropertiesModel->getSmartAttribute('totalDetaley')) : $prop = $model->relatedPropertiesModel->getSmartAttribute('totalDetaley'); */?><!--
                     <p class="with-icon"><img src="<?/*= \v3project\themes\mega\assets\ThemeMegaBuildAsset::getAssetUrl('images/details.png'); */?>" alt="">деталей: <?/*=$prop;*/?></p>
                     --><?/* endif; */?>

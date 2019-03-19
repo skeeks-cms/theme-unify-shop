@@ -7,26 +7,24 @@
  */
 namespace skeeks\cms\themes\unifyshop\assets;
 
+use skeeks\cms\themes\unify\assets\UnifyDefaultAsset;
 use yii\web\AssetBundle;
 
 /**
- * Class ProductFiterWidgetAsset
- * @package v3p\aff\widgets\filter\assets
+ * @author Semenov Alexander <semenov@skeeks.com>
  */
-class ProductFiterWidgetAsset extends AssetBundle
+class UnifyShopCatalogAsset extends AssetBundle
 {
     public $sourcePath = '@skeeks/cms/themes/unifyshop/assets/src';
 
     public $css = [
-        'css/product-filter.css'
+        'css/unify-catalog.css'
     ];
     public $js = [
-        'js/product-filter.js'
+        //'js/jquery.matchHeight-min.js',
+        //'js/unify-catalog.js',
     ];
     public $depends = [
-        'yii\web\YiiAsset',
-        'skeeks\sx\assets\Custom',
-        'yii\bootstrap\BootstrapPluginAsset',
-        UnifyIoRangeSliderAsset::class,
+        UnifyDefaultAsset::class,
     ];
 }

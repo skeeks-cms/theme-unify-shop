@@ -6,6 +6,7 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
+\skeeks\cms\themes\unifyshop\assets\UnifyShopCatalogAsset::register($this);
 ?>
 <section class="g-mt-0 g-pb-0">
     <div class="container g-py-20">
@@ -74,16 +75,18 @@
 
                 ?>
 
-                <?= $this->render('@app/views/filters/filters', [
-                    'filterWidget'               => $filterWidget,
-                    'sortFiltersHandler'         => $sortFiltersHandler,
-                    'availabilityFiltersHandler' => $availabilityFiltersHandler,
-                ]) ?>
+
 
                 <?
                 $filterWidget->loadFromRequest();
                 $filterWidget->applyToQuery($query);
                 ?>
+
+                <?= $this->render('@app/views/filters/filters', [
+                    'filterWidget'               => $filterWidget,
+                    'sortFiltersHandler'         => $sortFiltersHandler,
+                    'availabilityFiltersHandler' => $availabilityFiltersHandler,
+                ]) ?>
 
                 <? $widgetElements::end(); ?>
 
