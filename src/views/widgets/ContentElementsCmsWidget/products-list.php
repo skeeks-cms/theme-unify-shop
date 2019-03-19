@@ -14,15 +14,15 @@
 
 <? echo \yii\widgets\ListView::widget([
     'dataProvider' => $widget->dataProvider,
-    'itemView' => 'product-item',
-    'emptyText' => '',
-    'options' =>
-        [
-            'class' => 'shop-item-list-v2 row list-inline nomargin',
-            'tag' => 'ul',
-        ],
-    'itemOptions' => [
-        'tag' => false
+    'itemView'     => 'product-item',
+    'emptyText'    => '',
+    'options'      => [
+        'class' => '',
+        'tag'   => 'div',
     ],
-    'layout' => "\n{items}\n<p class=\"row\">{pager}</p>"
+    'itemOptions' => [
+        'tag' => 'div',
+        'class' => 'col-lg-4 col-sm-6 item'
+    ],
+    'layout'       => '<div class="no-gutters row list-view">{items}</div><div class="row">{pager}</div>',
 ]) ?>

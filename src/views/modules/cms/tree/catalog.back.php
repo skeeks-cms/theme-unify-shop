@@ -24,78 +24,68 @@
                     'treePid'         => $model->id,
                     'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
                 ]); ?>
-                <?
-                $widget->activeQuery->with('image');
-                ?>
+                    <?
+                        $widget->activeQuery->with('image');
+                    ?>
                 <? \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::end(); ?>
 
 
 
 
                 <?
-                $filterWidget = \skeeks\cms\themes\unifyshop\widgets\filter\ProductFiterWidget::begin();
-                $filterWidget->viewFile = '@app/views/filters/product-filter';
+                    $filterWidget = new \skeeks\yii2\queryfilter\QueryFilterShortUrlWidget();
+                    $filterWidget->viewFile = '@app/views/filters/product-filter';
 
-                $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
-                $sortFiltersHandler = new \skeeks\cms\shop\queryFilter\SortFiltersHandler();
+                    $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
+                    $sortFiltersHandler = new \skeeks\cms\shop\queryFilter\SortFiltersHandler();
 
-                $filterWidget
-                    ->registerHandler($availabilityFiltersHandler)
-                    ->registerHandler($sortFiltersHandler);
+                    $filterWidget
+                        ->registerHandler($availabilityFiltersHandler)
+                        ->registerHandler($sortFiltersHandler)
+                    ;
+                ?>
 
+
+
+                <?/* $filters = new \skeeks\cms\themes\unifyshop\models\ProductFilters(); */?><!--
+                --><?/* $filters->load(\Yii::$app->request->get()); */?>
+
+                <?
                 $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("shop-product-list", [
                     'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-list',
                     'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::className(),
                     'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider)
-                    use ($filterWidget) {
+                    use ($filters) {
                         //$activeDataProvider->query->with('relatedProperties');
 
                         $activeDataProvider->query->with('shopProduct');
                         $activeDataProvider->query->with('shopProduct.baseProductPrice');
                         $activeDataProvider->query->with('shopProduct.minProductPrice');
                         $activeDataProvider->query->with('image');
+                        /*
+                        if ($shopFilters) {
+                            $shopFilters->search($activeDataProvider);
+                        }*/
+                        $filters->search($activeDataProvider);
 
+                        $activeDataProvider->query->joinWith('shopProduct');
+                        $activeDataProvider->query->andWhere([
+                            '!=',
+                            'shopProduct.product_type',
+                            \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
+                        ]);
                         //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
                         //$activeDataProvider->query->orderBy(['basePrice' => SORT_ASC]);
                     },
 
-                ]);
+                ]); ?>
 
-                $query = $widgetElements->dataProvider->query;
-                $baseQuery = clone $query;
-
-                $priceFiltersHandler = new \skeeks\cms\shop\queryFilter\PriceFiltersHandler([
-                    'baseQuery' => $baseQuery,
-                    'viewFile'  => '@app/views/filters/price-filter',
-                ]);
-
-                $filterWidget
-                    ->registerHandler($priceFiltersHandler);
-
-                ?>
-
-                <?= $this->render('@app/views/filters/filters', [
-                    'filterWidget'               => $filterWidget,
-                    'sortFiltersHandler'         => $sortFiltersHandler,
-                    'availabilityFiltersHandler' => $availabilityFiltersHandler,
-                ]) ?>
-
-                <?
-                $filterWidget->loadFromRequest();
-                $filterWidget->applyToQuery($query);
-                ?>
+                <?= $this->render('@app/views/include/filters', ['filters' => $filters]) ?>
 
                 <? $widgetElements::end(); ?>
 
             </div>
-            <div class="col-md-3 order-md-1  g-pt-0">
-                <div class="g-mb-20">
-                    <? $filterWidget::end(); ?>
-                    <div id="stickyblock-start" class="g-bg-white g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
-
-                    </div>
-                </div>
-            </div>
+            <?= $this->render("@app/views/include/col-left"); ?>
         </div>
     </div>
 </section>
