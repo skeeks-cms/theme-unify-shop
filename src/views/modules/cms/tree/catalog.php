@@ -73,10 +73,10 @@
 
 
 
-                $eavFiltersHandler = new \skeeks\cms\queryFilters\EavFiltersHandler([
+                $eavFiltersHandler = new \skeeks\cms\eavqueryfilter\CmsEavQueryFilterHandler([
                     'baseQuery' => $baseQuery
                 ]);
-                $eavFiltersHandler->viewFile = '@app/views/filters/rp-filters';
+                $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
                 $rpQuery = $eavFiltersHandler->getRPQuery();
                 /*$rpQuery->andWhere([
                     'cmap.cms_content_id' => $model->tree_id,
