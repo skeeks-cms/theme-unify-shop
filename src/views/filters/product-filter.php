@@ -58,7 +58,7 @@ new sx.classes.ProductFilters();
                 var jBtn = $("<button>", {
                     'href' : '#', 
                     'class' : 'btn btn-default btn-sm g-mr-10 g-mb-10',
-                    
+                    'title' : jOption.closest(".filter--group").find('header').text(),
                 })
                     .append(text)
                     .append(" ")
@@ -93,6 +93,7 @@ new sx.classes.ProductFilters();
                 var jBtn = $("<button>", {
                     'href' : '#', 
                     'class' : 'btn btn-default btn-sm g-mr-10 g-mb-10',
+                    'title' : jOption.closest(".filter--group").find('header').text(),
                 })
                     .append(text)
                     .append(" ")
@@ -120,7 +121,8 @@ JS
 
 $widget = $this->context;
 ?>
-<div id="stickyblock-start" class="g-bg-white g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
+<!--<div id="stickyblock-start" class="g-bg-white g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">-->
+<div>
     <div>
         <h2 class="h5 u-heading-v3__title g-font-weight-600 text-uppercase g-brd-primary ">
             Фильтры

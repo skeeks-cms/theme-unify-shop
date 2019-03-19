@@ -45,10 +45,10 @@ JS
 
 <!-- Header -->
 <!--u-header--sticky-top-->
-<header id="js-header" class="u-shadow-v19 u-header u-header--sticky-top u-header--toggle-section u-header--change-appearance" data-header-fix-moment="0">
+<header id="js-header" class="u-shadow-v19 u-header u-header--static u-header--show-hide u-header--change-appearance u-header--has-hidden-element u-header--untransitioned" data-header-fix-moment="500" data-header-fix-effect="slide">
     <!-- Top Bar -->
     <!--u-header__section--hidden -->
-    <div class="u-header__section u-header__section--hidden u-header__section--dark g-bg-black g-py-7">
+    <div class="u-header__section u-header__section--dark g-bg-black g-transition-0_3 g-py-7 u-header__section--hidden">
         <div class="container">
             <div class="row flex-column flex-sm-row justify-content-between align-items-center text-uppercase g-font-weight-600 g-color-white g-font-size-12 g-mx-0--lg">
                 <!--<div class="col-auto">
@@ -121,7 +121,7 @@ JS
     </div>
     <!-- End Top Bar -->
 
-    <div class="u-header__section u-header__section--light g-bg-white-opacity-0_8 g-py-10" data-header-fix-moment-exclude="g-bg-white-opacity-0_8 g-py-10" data-header-fix-moment-classes="g-bg-white u-shadow-v18 g-py-0">
+    <div class="u-header__section u-header__section--light g-bg-white-opacity-0_8" data-header-fix-moment-exclude="g-bg-white-opacity-0_8" data-header-fix-moment-classes="d-none g-bg-white u-shadow-v18">
         <nav class="navbar navbar-expand-lg">
             <div class="container">
                 <!-- Responsive Toggle Button -->
@@ -157,10 +157,123 @@ JS
                 <!-- End Navigation -->
 
 
-                <?= \skeeks\cms\shop\widgets\cart\ShopCartWidget::widget([
-                    'namespace' => 'ShopCartWidget-small-top',
-                    'viewFile' => '@app/views/widgets/ShopCartWidget/small-top'
-                ]); ?>
+                <!-- Basket -->
+                <div class="u-basket d-inline-block g-valign-middle g-mr-30 g-pt-8">
+                  <a href="#!" id="basket-bar-invoker" class="u-icon-v1 g-color-main g-text-underline--none--hover g-width-20 g-height-20" aria-controls="basket-bar" aria-haspopup="true" aria-expanded="false" data-dropdown-event="hover" data-dropdown-target="#basket-bar"
+                  data-dropdown-type="css-animation" data-dropdown-duration="300" data-dropdown-hide-on-scroll="false" data-dropdown-animation-in="fadeIn" data-dropdown-animation-out="fadeOut">
+                    <span class="u-badge-v1--sm g-color-white g-bg-primary g-rounded-50x">3</span>
+                    <i class="fa fa-shopping-cart"></i>
+                  </a>
+
+                  <div id="basket-bar" class="u-basket__bar u-dropdown--css-animation u-dropdown--hidden g-brd-top g-brd-2 g-brd-primary g-color-main g-mt-20" aria-labelledby="basket-bar-invoker">
+                    <div class="js-scrollbar g-height-280">
+                      <!-- Product -->
+                      <div class="u-basket__product">
+                        <div class="row align-items-center no-gutters">
+                          <div class="col-4 g-pr-20">
+                            <a href="#!" class="u-basket__product-img">
+                              <img src="../../../assets/img-temp/150x150/img1.jpg" alt="Image Description">
+                            </a>
+                          </div>
+
+                          <div class="col-8">
+                            <h6 class="g-font-weight-600 g-mb-0">
+
+                          <a href="#!" class="g-color-main g-color-main--hover g-text-underline--none--hover">Black Glasses</a>
+
+                        </h6>
+                            <small class="g-color-gray-dark-v5 g-font-size-14">1 x $400.00</small>
+                          </div>
+                        </div>
+
+                        <button class="u-basket__product-remove" type="button">&times;</button>
+                      </div>
+                      <!-- End Product -->
+
+                      <!-- Product -->
+                      <div class="u-basket__product">
+                        <div class="row align-items-center no-gutters">
+                          <div class="col-4 g-pr-20">
+                            <a href="#!" class="u-basket__product-img">
+                              <img src="../../../assets/img-temp/150x150/img2.jpg" alt="Image Description">
+                            </a>
+                          </div>
+
+                          <div class="col-8">
+                            <h6 class="g-font-weight-600 g-mb-0">
+
+                          <a href="#!" class="g-color-main g-color-main--hover g-text-underline--none--hover">Black Glasses</a>
+
+                        </h6>
+                            <small class="g-color-gray-dark-v5 g-font-size-14">1 x $400.00</small>
+                          </div>
+                        </div>
+
+                        <button class="u-basket__product-remove" type="button">&times;</button>
+                      </div>
+                      <!-- End Product -->
+
+                      <!-- Product -->
+                      <div class="u-basket__product">
+                        <div class="row align-items-center no-gutters">
+                          <div class="col-4 g-pr-20">
+                            <a href="#!" class="u-basket__product-img">
+                              <img src="../../../assets/img-temp/150x150/img3.jpg" alt="Image Description">
+                            </a>
+                          </div>
+
+                          <div class="col-8">
+                            <h6 class="g-font-weight-600 g-mb-0">
+
+                          <a href="#!" class="g-color-main g-color-main--hover g-text-underline--none--hover">Black Glasses</a>
+
+                        </h6>
+                            <small class="g-color-gray-dark-v5 g-font-size-14">1 x $400.00</small>
+                          </div>
+                        </div>
+
+                        <button class="u-basket__product-remove" type="button">&times;</button>
+                      </div>
+                      <!-- End Product -->
+
+                      <!-- Product -->
+                      <div class="u-basket__product">
+                        <div class="row align-items-center no-gutters">
+                          <div class="col-4 g-pr-20">
+                            <a href="#!" class="u-basket__product-img">
+                              <img src="../../../assets/img-temp/150x150/img3.jpg" alt="Image Description">
+                            </a>
+                          </div>
+
+                          <div class="col-8">
+                            <h6 class="g-font-weight-600 g-mb-0">
+
+                          <a href="#!" class="g-color-main g-color-main--hover g-text-underline--none--hover">Black Glasses</a>
+
+                        </h6>
+                            <small class="g-color-gray-dark-v5 g-font-size-14">1 x $400.00</small>
+                          </div>
+                        </div>
+
+                        <button class="u-basket__product-remove" type="button">&times;</button>
+                      </div>
+                      <!-- End Product -->
+                    </div>
+
+                    <div class="g-brd-top g-brd-gray-light-v4 g-pa-15 g-pb-20">
+                      <div class="d-flex flex-row align-items-center justify-content-between g-letter-spacing-1 g-font-size-16 g-mb-15">
+                        <strong class="text-uppercase g-font-weight-600">Subtotal</strong>
+                        <strong class="g-color-primary g-font-weight-600">$1200.00</strong>
+                      </div>
+
+                      <div class="d-flex flex-row align-items-center justify-content-between g-font-size-18">
+                        <a href="#!" class="btn u-btn-outline-primary rounded-0 g-width-120">View Cart</a>
+                        <a href="#!" class="btn u-btn-primary rounded-0 g-width-120">Checkout</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End Basket -->
 
 
             </div>
