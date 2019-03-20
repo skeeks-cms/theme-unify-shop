@@ -7,6 +7,7 @@
  */
 namespace skeeks\cms\themes\unifyshop\assets;
 use skeeks\cms\base\AssetBundle;
+use skeeks\cms\shop\assets\ShopAsset;
 
 /**
  * @author Semenov Alexander <semenov@skeeks.com>
@@ -20,6 +21,7 @@ class ShopUnifyCartAsset extends AssetBundle
         'js/classes/Shop.js',
     ];
     public $depends = [
-        '\skeeks\cms\shop\assets\ShopAsset',
+        UnifyThemeShopAsset::class,
+        ShopAsset::class,
     ];
 }

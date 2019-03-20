@@ -27,6 +27,6 @@ class UnifyIoRangeSliderAsset extends UnifyAsset
         'admin-template/assets/vendor/ion-range-slider/js/ion.rangeSlider.js',
     ];
     public $depends = [
-        'yii\web\YiiAsset',
+        UnifyThemeShopAsset::class,
     ];
 }

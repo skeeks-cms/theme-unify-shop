@@ -24,9 +24,7 @@ class ProductFiterWidgetAsset extends AssetBundle
         'js/product-filter.js'
     ];
     public $depends = [
-        'yii\web\YiiAsset',
-        'skeeks\sx\assets\Custom',
-        'yii\bootstrap\BootstrapPluginAsset',
+        UnifyThemeShopAsset::class,
         UnifyIoRangeSliderAsset::class,
     ];
 }
