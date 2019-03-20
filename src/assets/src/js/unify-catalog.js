@@ -8,11 +8,18 @@
 
 	$(document).ready(function(){
 
+	    $(document).on('pjax:complete', function (e) {
+            /*if (e.target.id == self.get('id')) {
+                new sx.classes.Location().href($(e.target));
+            }*/
+            $.HSCore.components.HSScrollBar.init($('.js-scrollbar'));
+        });
+	    
         /* ==========================================================================
 			Catalog
 			========================================================================== */
 
-		$('.card-prod').matchHeight({
+		/*$('.card-prod').matchHeight({
 			'byRow' : false
 		});
 
@@ -27,7 +34,11 @@
 			dropup.on('hide.bs.dropdown', function () {
 				parent.removeClass(classHover);
 			});
-		});
+		});*/
+
+		// initialization of HSScrollBar component
+      $.HSCore.components.HSScrollBar.init($('.js-scrollbar'));
+
 
     });
 

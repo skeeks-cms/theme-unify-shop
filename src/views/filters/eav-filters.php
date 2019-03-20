@@ -152,6 +152,16 @@ JS
                 $class = '';
                 if ($values) {
                     $class = 'opened sx-filter-selected';
+
+                    $newOptions = [];
+                    foreach ($values as $value)
+                    {
+                        $newOptions[$value] = $options[$value];
+                        unset($options[$value]);
+                    }
+                    if ($newOptions) {
+                        $options = \yii\helpers\ArrayHelper::merge($newOptions, $options);
+                    }
                 }
 
                 $info = '';
@@ -166,7 +176,7 @@ JS
                     ],
                     'template' => <<<HTML
 <header class="filter--group--header">{$rp->name} {$info}</header>
-<div class="filter--group--body">
+<div class="filter--group--body js-scrollbar " style="max-height: 280px;">
 {input}
 </div>
 HTML

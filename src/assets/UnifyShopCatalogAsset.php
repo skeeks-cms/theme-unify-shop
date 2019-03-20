@@ -7,6 +7,7 @@
  */
 namespace skeeks\cms\themes\unifyshop\assets;
 
+use skeeks\assets\unify\base\UnifyHsScrollbarAsset;
 use skeeks\cms\themes\unify\assets\UnifyDefaultAsset;
 use yii\web\AssetBundle;
 
@@ -22,9 +23,10 @@ class UnifyShopCatalogAsset extends AssetBundle
     ];
     public $js = [
         //'js/jquery.matchHeight-min.js',
-        //'js/unify-catalog.js',
+        'js/unify-catalog.js',
     ];
     public $depends = [
         UnifyDefaultAsset::class,
+        UnifyHsScrollbarAsset::class
     ];
 }

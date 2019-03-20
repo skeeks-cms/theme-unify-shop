@@ -38,8 +38,8 @@ class ProductFiterWidget extends QueryFilterShortUrlWidget
             }
             $this->_data = $data;
             $this->load($data);
-            \Yii::$app->response->redirect($this->getFilterUrl());
-            \Yii::$app->end();
+            /*\Yii::$app->response->redirect($this->getFilterUrl());
+            \Yii::$app->end();*/
             $newUrl = $this->getFilterUrl();
             \Yii::$app->view->registerJs(<<<JS
 window.history.pushState('page', 'title', '{$newUrl}');

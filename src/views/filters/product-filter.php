@@ -121,8 +121,9 @@ JS
 
 $widget = $this->context;
 ?>
-<!--<div id="stickyblock-start" class="g-bg-white g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">-->
-<div>
+<!--<div id="stickyblock-start" class="js-scrollbar h-100 g-bg-white g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer" data-has-sticky-header="true">-->
+<!--js-scrollbar g-height-280-->
+<div class="">
     <div>
         <h2 class="h5 u-heading-v3__title g-font-weight-600 text-uppercase g-brd-primary ">
             Фильтры

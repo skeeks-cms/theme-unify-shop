@@ -11,6 +11,7 @@
 ?>
 <section class="g-mt-0 g-pb-0">
     <div class="container g-py-20">
+        <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
         <div class="row">
             <div class="col-md-9 order-md-2">
                 <?= $this->render('@app/views/breadcrumbs', [
@@ -127,6 +128,8 @@
                 </div>
             </div>
         </div>
+
+        <? $pjax::end(); ?>
     </div>
 </section>
 
