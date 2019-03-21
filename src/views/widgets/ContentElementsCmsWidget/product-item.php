@@ -30,11 +30,6 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                         <div class="card-prod--label blue"><?/*=$enum->value;*/?></div>
                         <div class="clear"></div>
                     --><?/* endif; */?>
-
-
-
-
-
         </div>
         <? if ($shopProduct && $shopProduct->baseProductPrice && $shopProduct->minProductPrice && $shopProduct->minProductPrice->id != $shopProduct->baseProductPrice->id) :
             $percent =  (int)(100-$shopProduct->minProductPrice->money->getAmount()*100/$shopProduct->baseProductPrice->money->getAmount()); ?>
