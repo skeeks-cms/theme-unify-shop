@@ -15,9 +15,10 @@ $shopProduct = $model->shopProduct;
 $count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
 $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 //$v3ProductElement = new \v3toys\parsing\models\V3toysProductContentElement($model->toArray());
-$v3ProductElement = $model;
+$priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
+
 ?>
-    <article class="card-prod h-100">
+    <article class="card-prod h-100 to-cart-fly-wrapper">
         <div class="card-prod--labels">
                     <?/*
                     if ( $enum->id == 141) : */?><!--
@@ -44,7 +45,7 @@ $v3ProductElement = $model;
         <? endif; ?>
         <div class="card-prod--photo">
             <a href="<?= $model->url; ?>" data-pjax="0">
-                <img src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
+                <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => 260,
                         'h' => 200,
@@ -90,27 +91,29 @@ $v3ProductElement = $model;
             </div>
             <? if (isset($shopProduct)) : ?>
             <div class="card-prod--price">
-                <? if ($shopProduct->minProductPrice && $shopProduct->baseProductPrice && $shopProduct->minProductPrice->id == $shopProduct->baseProductPrice->id) : ?>
-                    <div class="new g-color-primary g-font-size-20"><?= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); ?></div>
+                <? if ($priceHelper->hasDiscount) : ?>
+                    <div class="old"><?= $priceHelper->basePrice->money; ?></div>
+                    <div class="new"><?= $priceHelper->minMoney; ?></div>
                 <? else : ?>
-                    <? if ($shopProduct->baseProductPrice && $shopProduct->minProductPrice) : ?>
-                    <div class="old"><?= \Yii::$app->money->convertAndFormat($shopProduct->baseProductPrice->money); ?></div>
-                    <div class="new"><?= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); ?></div>
-                    <? endif; ?>
+                    <div class="new g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></div>
                 <? endif; ?>
+                
+                <?/* if ($shopProduct->minProductPrice && $shopProduct->baseProductPrice && $shopProduct->minProductPrice->id == $shopProduct->baseProductPrice->id) : */?><!--
+                    <div class="new g-color-primary g-font-size-20"><?/*= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); */?></div>
+                <?/* else : */?>
+                    <?/* if ($shopProduct->baseProductPrice && $shopProduct->minProductPrice) : */?>
+                    <div class="old"><?/*= \Yii::$app->money->convertAndFormat($shopProduct->baseProductPrice->money); */?></div>
+                    <div class="new"><?/*= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); */?></div>
+                    <?/* endif; */?>
+                --><?/* endif; */?>
             </div>
 
             <div class="card-prod--actions">
                 <? if ($shopProduct->quantity > 0 && $shopProduct->minProductPrice) : ?>
                     <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>Купить", [
-                        'class' => 'btn btn-primary js-to-cart',
+                        'class' => 'btn btn-primary js-to-cart to-cart-fly-btn',
                         'type' => 'button',
                         'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
-                        'data' => \yii\helpers\ArrayHelper::merge($model->toArray(['name', 'id']), [
-                            'url' => $model->url,
-                            'image' => \skeeks\cms\helpers\Image::getSrc($model->image ? $model->image->src : null),
-                            'price' => \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money),
-                        ]),
                     ]); ?>
                 <? else : ?>
                     <?= \yii\helpers\Html::tag('a', "Подробнее", [

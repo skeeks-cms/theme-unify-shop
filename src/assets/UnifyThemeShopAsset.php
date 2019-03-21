@@ -23,6 +23,7 @@ class UnifyThemeShopAsset extends AssetBundle
         'css/unify-shop.css'
     ];
     public $js = [
+        'vendor/jquery.transform2d.js',
         'js/unify-shop.js',
     ];
     public $depends = [

@@ -18,6 +18,7 @@
                     $(".sx-cart-small-open-trigger").click();
                 }
                 $('.sx-count-baskets').empty().append(self.Shop.get('cartData').countShopBaskets);
+                $('.sx-count-quantity').empty().append(self.Shop.get('cartData').quantity);
             });
         }
     });

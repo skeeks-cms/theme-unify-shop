@@ -21,11 +21,11 @@ JS
 
 
 <!-- Basket -->
-<div class="u-basket d-inline-block g-valign-middle g-mr-30 g-pt-8">
+<div class="u-basket d-inline-block g-valign-middle g-mr-30 g-pt-8" id="sx-top-cart">
     <a href="<?= \yii\helpers\Url::to(['/shop/cart']); ?>" id="basket-bar-invoker" class="sx-cart-small-open-trigger u-icon-v1 g-color-main g-text-underline--none--hover g-width-20 g-height-20" aria-controls="basket-bar" aria-haspopup="true" aria-expanded="false" data-dropdown-event="hover" data-dropdown-target="#basket-bar"
        data-dropdown-type="css-animation" data-dropdown-duration="300" data-dropdown-hide-on-scroll="false" data-dropdown-animation-in="fadeIn" data-dropdown-animation-out="fadeOut">
-                    <span class="u-badge-v1--sm g-color-white g-bg-primary g-rounded-50x sx-count-baskets">
-                        <?= \Yii::$app->shop->shopFuser->countShopBaskets ? \Yii::$app->shop->shopFuser->countShopBaskets : ""; ?>
+                    <span class="u-badge-v1--sm g-color-white g-bg-primary g-rounded-50x sx-count-quantity">
+                        <?= \Yii::$app->shop->cart->quantity ? \Yii::$app->shop->cart->quantity : ""; ?>
                     </span>
         <i class="fa fa-shopping-cart"></i>
     </a>

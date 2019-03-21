@@ -50,6 +50,7 @@
 
                 $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("shop-product-list", [
                     'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-list',
+                    'pageSize'             => 15,
                     'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::className(),
                     'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider)
                     use ($filterWidget) {
