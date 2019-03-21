@@ -7,6 +7,7 @@
  */
 namespace skeeks\cms\themes\unifyshop\assets;
 
+use skeeks\assets\unify\base\UnifyHsCarouselAsset;
 use skeeks\assets\unify\base\UnifyHsScrollbarAsset;
 use skeeks\cms\themes\unify\assets\UnifyDefaultAsset;
 use skeeks\cms\themes\unify\assets\UnifyThemeAsset;
@@ -28,6 +29,7 @@ class UnifyThemeShopAsset extends AssetBundle
     ];
     public $depends = [
         UnifyThemeAsset::class,
-        UnifyHsScrollbarAsset::class
+        UnifyHsScrollbarAsset::class,
+        UnifyHsCarouselAsset::class
     ];
 }

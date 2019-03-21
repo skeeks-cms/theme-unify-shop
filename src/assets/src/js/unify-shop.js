@@ -13,8 +13,12 @@
                 new sx.classes.Location().href($(e.target));
             }*/
             $.HSCore.components.HSScrollBar.init($('.js-scrollbar'));
+            // initialization of carousel
+            $.HSCore.components.HSCarousel.init('.js-carousel');
         });
         $.HSCore.components.HSScrollBar.init($('.js-scrollbar'));
+        // initialization of carousel
+        $.HSCore.components.HSCarousel.init('.js-carousel');
 
         /* ==========================================================================
 			Catalog

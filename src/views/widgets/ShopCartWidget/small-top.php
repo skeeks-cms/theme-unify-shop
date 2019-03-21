@@ -65,7 +65,7 @@ JS
                             </div>
                         </div>
 
-                        <!--<button class="u-basket__product-remove" type="button">&times;</button>-->
+                        <button class="u-basket__product-remove" type="button" onclick="sx.Shop.removeBasket('<?= $shopBasket->id; ?>'); return false;">&times;</button>
                     </div>
                     <!-- End Product -->
 
