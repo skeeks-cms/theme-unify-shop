@@ -654,8 +654,109 @@
 
 
 
+/**
+ * Рейтинги звездочки
+ */
+.product-rating .rating-container .rating {
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+}
+.rating-container .rating {
+    cursor: default;
+    position: relative;
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.product-rating .rating-container .rating .empty-stars .star {
+    background-image:url("../images/star-empty.svg");
+}
+.product-rating .rating-container .rating .filled-stars .star {
+    background-image: url(../images/star-fill.svg);
+}
+.product-rating .rating-container .rating .star {
+    width: 11px;
+    min-width: 11px;
+    height: 10px;
+    cursor: default;
+    margin: 0 1px;
+}
+.rating-container .star {
+    display: inline-block;
+    margin: 0 3px;
+    text-align: center;
+}
 
 
+.product-rating .rating-container .rating [class*="-stars"] {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    cursor: default;
+}
+.rating-animate .filled-stars {
+    transition: width 0.25s ease;
+    -o-transition: width 0.25s ease;
+    -moz-transition: width 0.25s ease;
+    -webkit-transition: width 0.25s ease;
+}
+.rating-container .filled-stars {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: auto;
+    color: #fde16d;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-text-stroke: 1px #777;
+    text-shadow: 1px 1px #999;
+}
+.rating-container .filled-stars {
+    color: #fa6;
+    -webkit-text-stroke: unset;
+    text-shadow: 0 0 1px #000;
+}
+
+.product-info-header .topmost-row .product-rating {
+    -webkit-box-pack: end;
+    -moz-box-pack: end;
+    -ms-flex-pack: end;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+}
+.product-rating {
+    font-size: .5rem;
+    height: 22px;
+    line-height: 1.375rem;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+
+
+
+
+
+/**
+ * Карточка товара
+ */
 .sx-product-card-wrapper .sx-stick-navigation .js-slide {
     cursor: pointer;
     border: none;
@@ -682,4 +783,24 @@
 
 .sx-product-card-wrapper .u-carousel-v3 .slick-slide {
     opacity: .8;
+}
+
+.sx-product-card-wrapper .sx-description-short p {
+    margin-bottom: 0;
+}
+
+
+
+
+
+/**
+ * Просто общие вещи
+ */
+a.sx-dashed {
+    text-decoration: none;
+    border-bottom: 1px dashed;
+}
+a.sx-dashed:hover {
+    text-decoration: none;
+    border-bottom: 1px dashed;
 }
