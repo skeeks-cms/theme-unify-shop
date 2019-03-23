@@ -789,7 +789,36 @@
     margin-bottom: 0;
 }
 
+.sx-product-card-wrapper .product-control {
+    display: flex;
+}
 
+.sx-product-card-wrapper .availability-row {
+    text-align: center;
+    color: #3b3937;
+    font-size: .8125rem;
+    line-height: 22px;
+}
+
+
+
+/**
+ * Маленькие табы в товаре
+ */
+.sx-product-card-wrapper .sx-product-delivery-info .tab-pane  {
+    background: #fafafa;
+    padding: 20px;
+}
+.sx-product-card-wrapper .sx-product-delivery-info .tab-pane p  {
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+
+
+.sx-content {
+    font-size: 16px;
+}
 
 
 

@@ -171,14 +171,23 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
                         <? if ($shopProduct->quantity > 0) : ?>
                             <div class="product-control g-mt-10">
-                                <div class="control-group group-submit">
+                                <div class="control-group group-submit g-mr-10 g-mb-15">
+                                    <div class="buttons-row ">
+                                        <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
+                                            'class'   => 'btn btn-xxl u-btn-primary g-rounded-50 js-to-cart to-cart-fly-btn g-font-size-18',
+                                            'type'    => 'button',
+                                            'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                                        ]); ?>
+                                    </div>
+                                    <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
 
-                                    <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
-                                        'class'   => 'btn btn-xxl u-btn-primary g-rounded-50 g-mr-10 g-mb-15 js-to-cart to-cart-fly-btn g-font-size-18',
-                                        'type'    => 'button',
-                                        'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
-                                    ]); ?>
+                                        <? if ($shopProduct->quantity > 10) : ?>
+                                            <span class="row-label">В наличии более 10 шт.</span>
+                                        <? else : ?>
+                                            <span class="row-label">В наличии:</span> <span class="row-value"><?= $shopProduct->quantity; ?> шт.</span>
+                                        <? endif; ?>
 
+                                    </div>
                                 </div>
                             </div>
                         <? else : ?>
@@ -211,16 +220,115 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                             <div class="sx-description-short g-color-gray-dark-v4">
                                 <?= $model->description_short; ?>
                                 <p>
-                                <a href="#" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed g-brd-primary--hover g-color-primary--hover">
-                                    Подробнее
-                                </a>
+                                    <a href="#" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed g-brd-primary--hover g-color-primary--hover">
+                                        Подробнее
+                                    </a>
                                 </p>
                             </div>
                         <? endif; ?>
+
+
+                        <div class="sx-product-delivery-info g-mt-20">
+                            <!--<ul class="nav d-flex justify-content-between g-font-size-12 text-uppercase" role="tablist" data-target="nav-1-1-default-hor-left">
+                                <li class="nav-item">
+                                    <a class="nav-link g-color-primary--parent-active g-pa-0 g-pb-1 active show" data-toggle="tab" href="#nav-1-1-default-hor-left--3" role="tab" aria-selected="true">
+                                        <span class="u-icon-v3 g-rounded-50x">
+                                            <i class="icon-christmas-005 u-line-icon-pro"></i>
+                                        </span>
+                                        <span>Условия доставки</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item g-brd-bottom g-brd-gray-dark-v4">
+                                    <a class="nav-link g-color-primary--parent-active g-pa-0 g-pb-1 show" data-toggle="tab" href="#nav-1-1-default-hor-left--1" role="tab" aria-selected="false">View Size Guide</a>
+                                </li>
+                            </ul>-->
+
+                            <!-- Nav tabs -->
+                            <!--u-nav-v1-1-->
+                            <ul class="nav nav-justified  u-nav-v5-1" role="tablist" data-target="nav-1-1-accordion-default-hor-left-icons" data-tabs-mobile-type="accordion" data-btn-classes="btn btn-md btn-block rounded-0 u-btn-outline-lightgray g-mb-20">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#nav-1-1-accordion-default-hor-left-icons--1" role="tab">
+                                        <!--<i class="icon-christmas-037 u-tab-line-icon-pro "></i>-->
+                                        <i class="fas fa-truck g-mr-3"></i>
+                                        Условия доставки
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#nav-1-1-accordion-default-hor-left-icons--2" role="tab">
+                                        <!--<i class="icon-communication-025 u-tab-line-icon-pro g-mr-3"></i>-->
+                                        <i class="far fa-question-circle g-mr-3"></i>
+                                        Помощь
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
+                                <div class="tab-pane fade show active" id="nav-1-1-accordion-default-hor-left-icons--1" role="tabpanel">
+                                    <p>Ближайшая дата доставки: 31 мар. 2019 г.</p>
+                                    <p>Способы доставки: курьер, Почта России</p>
+                                    <p>Регионы доставки: вся Россия</p>
+                                </div>
+
+                                <div class="tab-pane fade" id="nav-1-1-accordion-default-hor-left-icons--2" role="tabpanel">
+                                    <p class="g-font-weight-600">Проблема с добавлением товара в корзину?</p>
+                                    <p>Если у вас появилась сложность с добавлением товара в корзину, вы можете позвонить по номеру
+                                        <a href="tel:<?= $this->theme->phone; ?>"><?= $this->theme->phone; ?></a> и оформить заказ по телефону.</p>
+                                    <p>Пожалуйста, сообщите, какие проблемы с добавлением товара в корзину вы испытываете:</p>
+                                </div>
+                            </div>
+
+                            <!-- End Nav tabs -->
+
+                        </div>
                     </div>
 
                 </div>
             </div>
         </div>
+    </div>
+
+
+    <div class="container">
+        <div class="g-py-20">
+
+            <!-- Nav tabs -->
+            <ul class="nav justify-content-center u-nav-v5-1" role="tablist" data-target="nav-5-1-primary-hor-center" data-tabs-mobile-type="slide-up-down" data-btn-classes="btn btn-md btn-block u-btn-outline-primary">
+                <li class="nav-item">
+                    <a class="nav-link active h4" data-toggle="tab" href="#sx-description" role="tab">Описание</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link h4" data-toggle="tab" href="#sx-reviews" role="tab">Отзывы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link h4" data-toggle="tab" href="#nav-5-1-primary-hor-center--3" role="tab">Комментарии</a>
+                </li>
+            </ul>
+            <!-- End Nav tabs -->
+
+
+            <!-- Tab panes -->
+            <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
+                <div class="tab-pane fade show active sx-content" id="sx-description" role="tabpanel">
+                    <?= $model->description_full; ?>
+                </div>
+
+                <div class="tab-pane fade" id="sx-reviews" role="tabpanel">
+                    <div class="reviews-section">
+                        <?
+                        $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
+                            'namespace'         => 'Reviews2Widget',
+                            'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
+                            'cmsContentElement' => $model,
+                        ]);
+                        $widgetReviews::end();
+                        ?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 </section>
