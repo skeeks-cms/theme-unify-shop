@@ -302,7 +302,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                     <a class="nav-link h4" data-toggle="tab" href="#sx-reviews" role="tab">Отзывы</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link h4" data-toggle="tab" href="#nav-5-1-primary-hor-center--3" role="tab">Комментарии</a>
+                    <a class="nav-link h4" data-toggle="tab" href="#sx-vk-comments" role="tab">Комментарии</a>
                 </li>
             </ul>
             <!-- End Nav tabs -->
@@ -311,6 +311,19 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             <!-- Tab panes -->
             <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
                 <div class="tab-pane fade show active sx-content" id="sx-description" role="tabpanel">
+                    <div class="col-md-8 offset-md-2">
+                    <?
+
+                    $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
+                        'model'                   => $model,
+                        'visible_properties'      => @$visible_items,
+                        'visible_only_has_values' => true,
+                        'viewFile'                => '@app/views/widgets/RpWidget/default',
+                    ]); ?>
+                    <? /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/ ?>
+                    <? \skeeks\cms\rpViewWidget\RpViewWidget::end(); ?>
+
+                    </div>
                     <?= $model->description_full; ?>
                 </div>
 
@@ -326,6 +339,17 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                         ?>
                     </div>
                 </div>
+
+
+                <div class="tab-pane fade show active sx-content" id="sx-vk-comments" role="tabpanel">
+                    <div role="tabpanel" class="tab-pane fade" id="sx-vk">
+                        <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
+                            'namespace' => 'VkCommentsWidget',
+                            'apiId'     => 6911979,
+                        ]); ?>
+                    </div>
+                </div>
+
             </div>
 
         </div>
