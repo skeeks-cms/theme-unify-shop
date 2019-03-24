@@ -7,7 +7,6 @@
  */
 /* @var $this yii\web\View */
 /* @var $model \skeeks\cms\models\CmsTree */
-\skeeks\cms\themes\unifyshop\assets\UnifyShopCatalogAsset::register($this);
 ?>
 <section class="g-mt-0 g-pb-0">
     <div class="container g-py-20">
