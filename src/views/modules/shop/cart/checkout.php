@@ -43,9 +43,11 @@ JS
                     <!-- /EMPTY CART -->
                 <? else: ?>
 
-                    <?= \skeeks\cms\shopCartStepsWidget\ShopCartStepsWidget::widget(); ?>
-
-                    <hr/>
+                    <div class="col-md-12 g-my-50 sx-steps">
+                        <?= \skeeks\cms\shopCartStepsWidget\ShopCartStepsWidget::widget([
+                            'viewFile' => '@app/views/modules/shop/cart/_steps',
+                        ]); ?>
+                    </div>
 
                     <!-- LEFT -->
                     <div class="col-lg-9 col-sm-8">
@@ -53,22 +55,9 @@ JS
                         <!-- CART -->
 
                         <!-- cart content -->
-                        <div id="cartContent">
+                        <div id="cartContent" class="g-bg-gray-light-v5 g-pa-20 g-pb-50 mb-4 sx-project-form-wrapper">
 
-                            <?
-                            $this->registerCss(<<<CSS
-    .radio input[type=radio]
-    {
-        left: 0px;
-        margin-left: 0px;
-    }
-    .checkbox label, .radio label
-    {
-        padding-left: 0px;
-    }
-CSS
-                            );
-                            ?>
+
                             <? $checkout = \skeeks\cms\shopCheckout\ShopCheckoutWidget::begin([
                                 'btnSubmitWrapperOptions' =>
                                     [

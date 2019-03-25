@@ -7,7 +7,7 @@
  */
 /* @var $this yii\web\View */
 ?>
-<div class="toggle-transparent toggle-bordered-full clearfix">
+<div class="g-bg-gray-light-v5 g-pa-20 g-pb-50 mb-4">
     <div class="toggle active" style="display: block;">
         <div class="toggle-content" style="display: block;">
 

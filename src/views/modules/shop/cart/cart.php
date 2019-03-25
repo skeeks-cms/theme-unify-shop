@@ -27,6 +27,7 @@ JS
             <div class="row">
 
 
+
                 <? if (\Yii::$app->shop->cart->isEmpty) : ?>
                     <!-- EMPTY CART -->
                     <div class="panel panel-default">
@@ -39,8 +40,11 @@ JS
                     </div>
                     <!-- /EMPTY CART -->
                 <? else: ?>
-                    <?= \skeeks\cms\shopCartStepsWidget\ShopCartStepsWidget::widget(); ?>
-                    <hr/>
+                <div class="col-md-12 g-my-50 sx-steps">
+                    <?= \skeeks\cms\shopCartStepsWidget\ShopCartStepsWidget::widget([
+                        'viewFile' => '@app/views/modules/shop/cart/_steps'
+                    ]); ?>
+                </div>
                     <!-- LEFT -->
                     <div class="col-lg-9 col-sm-8">
                         <?= \skeeks\cms\shopCartItemsWidget\ShopCartItemsListWidget::widget([

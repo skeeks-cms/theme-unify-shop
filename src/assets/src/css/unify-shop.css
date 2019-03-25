@@ -1,115 +1,3 @@
-
-/**
- * Кастомные checkbox
- */
-
-.checkbox, .radio {
-    margin: 0 0 12px;
-    /*margin: 0 0 5px; */
-    position: relative;
-    margin-top: 0 !important;
-}
-
-.checkbox input[type=checkbox], .checkbox input[type=radio], .radio input[type=checkbox], .radio input[type=radio] {
-    position: absolute;
-    visibility: hidden;
-}
-
-.checkbox input[type=checkbox]:checked + label, .checkbox input[type=radio]:checked + label, .radio input[type=checkbox]:checked + label, .radio input[type=radio]:checked + label {
-    font-weight: 700;
-}
-
-.checkbox label, .radio label {
-    display: inline-block;
-    vertical-align: top;
-    position: relative;
-    line-height: 14px;
-    padding: 0 0 0 26px;
-    font-size: 1.083333em;
-}
-
-.checkbox label:before, .radio label:before {
-    display: block;
-    left: 0;
-    top: 0;
-}
-
-.checkbox input[type=checkbox] + label:before, .radio input[type=checkbox] + label:before {
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    width: 15px;
-    height: 15px;
-
-    background-color: white;
-    border: 1px solid #ddd;
-
-    content: '';
-    position: absolute;
-}
-
-.checkbox input[type=checkbox]:checked + label:before, .radio input[type=checkbox]:checked + label:before {
-    background: url(../images/no-bg-check.png) 50% 50% no-repeat #fff;
-    /*background: url(../images/check.png) 50% 50% no-repeat #fff;*/
-    /*border-color: #131313;*/
-    background-color: #87c451;
-    border-color: #87c451;
-}
-
-.checkbox.checkbox-typical, .radio.checkbox-typical {
-    margin-bottom: 25px;
-}
-
-.checkbox.checkbox-typical label, .radio.checkbox-typical label {
-    font-weight: 400 !important;
-    font-size: 1.166667em;
-}
-
-.checkbox input[type=radio] + label, .radio input[type=radio] + label {
-    padding-left: 44px;
-    line-height: 36px;
-    font-size: 1.333333em;
-    font-weight: 700;
-}
-
-.checkbox input[type=radio] + label:before, .radio input[type=radio] + label:before {
-    width: 36px;
-    height: 36px;
-    background: url(../images/radio.png) 50% 0 no-repeat;
-}
-
-.checkbox input[type=radio] + label .small, .radio input[type=radio] + label .small {
-    font-size: .875em;
-    font-weight: 400;
-}
-
-.checkbox input[type=radio]:checked + label:before, .radio input[type=radio]:checked + label:before {
-    background-position: 50% 100%;
-}
-
-.checkbox.with-icon .icon, .radio.with-icon .icon {
-    height: 100px;
-    text-align: center;
-    margin: 0 0 12px;
-    display: block;
-}
-
-.checkbox.with-icon input[type=radio] + label:before, .radio.with-icon input[type=radio] + label:before {
-    top: 112px;
-}
-
-@media (max-width: 991px) {
-    .checkbox.with-icon .icon, .radio.with-icon .icon {
-        display: none;
-    }
-
-    .checkbox.with-icon input[type=radio] + label:before, .radio.with-icon input[type=radio] + label:before {
-        top: 0;
-    }
-}
-
-
-
-
 /* ==========================================================================
    Sorting
    ========================================================================== */
@@ -816,20 +704,9 @@
 
 
 
-.sx-content {
-    font-size: 16px;
-}
-
-
-
 /**
- * Просто общие вещи
+ * Шаги оформления заказа
  */
-a.sx-dashed {
-    text-decoration: none;
-    border-bottom: 1px dashed;
-}
-a.sx-dashed:hover {
-    text-decoration: none;
-    border-bottom: 1px dashed;
+.sx-steps li {
+    cursor: pointer;
 }
