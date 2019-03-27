@@ -13,10 +13,6 @@ $this->registerCss(<<<CSS
 /**
  * Кастомизация слайдера
  */
-header .u-header__section.g-bg-black {
-    background: linear-gradient(to right, #6b86c9 12%, #f577bf) !important;
-}
-
 
 .tp-caption.FoodCarousel-Button,
 .FoodCarousel-Button,

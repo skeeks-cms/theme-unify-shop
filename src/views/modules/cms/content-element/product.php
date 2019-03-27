@@ -291,15 +291,74 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
 
     <div class="container">
+
+        <div class="col-md-12">
+            <h2>Характеристики</h2>
+            <?
+
+            $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
+                'model'                   => $model,
+                'visible_properties'      => @$visible_items,
+                'visible_only_has_values' => true,
+                'viewFile'                => '@app/views/widgets/RpWidget/default',
+            ]); ?>
+            <? /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/ ?>
+            <? \skeeks\cms\rpViewWidget\RpViewWidget::end(); ?>
+
+        </div>
+        <div class="col-md-12 sx-content">
+            <h2>Описание</h2>
+            <?= $model->description_full; ?>
+
+        </div>
+    </div>
+</section>
+
+<section class="g-brd-gray-light-v4 g-brd-top g-mt-20">
+
+    <? if (\Yii::$app->shop->shopContents) : ?>
+        <?
+        $treeIds = [];
+        if ($model->cmsTree && $model->cmsTree->parent) {
+            $treeIds = \yii\helpers\ArrayHelper::map($model->cmsTree->parent->children, 'id', 'id');
+        }
+        ?>
+        <div class="container g-mt-20 g-mb-40 ">
+            <?
+            $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-similar-products", [
+                'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
+                'label'                => "Рекомендуем также",
+                'enabledPaging'        => "N",
+                'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+                'tree_ids'             => $treeIds,
+                'limit'                => 15,
+                'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+                'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
+                    $activeDataProvider->query->with('shopProduct');
+                    $activeDataProvider->query->with('shopProduct.baseProductPrice');
+                    $activeDataProvider->query->with('shopProduct.minProductPrice');
+                    $activeDataProvider->query->with('image');
+                    //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
+                    //$activeDataProvider->query->orderBy(['show_counter' => SORT_DESC]);
+
+                    $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
+
+                },
+            ]);
+            $widgetElements::end();
+            ?>
+        </div>
+    <? endif; ?>
+</section>
+<section>
+    <div class="container">
         <div class="g-py-20">
 
             <!-- Nav tabs -->
             <ul class="nav justify-content-center u-nav-v5-1" role="tablist" data-target="nav-5-1-primary-hor-center" data-tabs-mobile-type="slide-up-down" data-btn-classes="btn btn-md btn-block u-btn-outline-primary">
+
                 <li class="nav-item">
-                    <a class="nav-link active h4" data-toggle="tab" href="#sx-description" role="tab">Описание</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link h4" data-toggle="tab" href="#sx-reviews" role="tab">Отзывы</a>
+                    <a class="nav-link active h4" data-toggle="tab" href="#sx-reviews" role="tab">Отзывы</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link h4" data-toggle="tab" href="#sx-vk-comments" role="tab">Комментарии</a>
@@ -310,22 +369,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
             <!-- Tab panes -->
             <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
-                <div class="tab-pane fade show active sx-content" id="sx-description" role="tabpanel">
-                    <div class="col-md-8 offset-md-2">
-                    <?
 
-                    $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
-                        'model'                   => $model,
-                        'visible_properties'      => @$visible_items,
-                        'visible_only_has_values' => true,
-                        'viewFile'                => '@app/views/widgets/RpWidget/default',
-                    ]); ?>
-                    <? /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/ ?>
-                    <? \skeeks\cms\rpViewWidget\RpViewWidget::end(); ?>
-
-                    </div>
-                    <?= $model->description_full; ?>
-                </div>
 
                 <div class="tab-pane fade" id="sx-reviews" role="tabpanel">
                     <div class="reviews-section">
@@ -341,18 +385,18 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                 </div>
 
 
-                <div class="tab-pane fade show active sx-content" id="sx-vk-comments" role="tabpanel">
-                    <div role="tabpanel" class="tab-pane fade" id="sx-vk">
-                        <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
-                            'namespace' => 'VkCommentsWidget',
-                            'apiId'     => 6911979,
-                        ]); ?>
-                    </div>
+                <div class="tab-pane fade sx-content" id="sx-vk-comments" role="tabpanel">
+                    <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
+                        'namespace' => 'VkCommentsWidget',
+                        'apiId'     => 6911979,
+                    ]); ?>
                 </div>
 
             </div>
 
         </div>
     </div>
-
 </section>
+
+
+

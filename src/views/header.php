@@ -48,7 +48,7 @@ JS
 <header id="js-header" class="u-shadow-v19 u-header u-header--sticky-top u-header--toggle-section u-header--change-appearance" data-header-fix-moment="0">
     <!-- Top Bar -->
     <!--u-header__section--hidden -->
-    <div class="u-header__section u-header__section--hidden u-header__section--dark g-bg-black g-py-7">
+    <div class="u-header__section u-header__section--hidden u-header__section--dark g-bg-black g-py-7 sx-topbar">
         <div class="container">
             <div class="row flex-column flex-sm-row justify-content-between align-items-center text-uppercase g-font-weight-600 g-color-white g-font-size-12 g-mx-0--lg">
                 <!--<div class="col-auto">
