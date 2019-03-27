@@ -8,6 +8,24 @@
 /* @var $this   yii\web\View */
 /* @var $widget \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget */
 /* @var $trees  \skeeks\cms\models\Tree[] */
+
+$this->registerCss(<<<CSS
+/**
+ * Кастомизация слайдера
+ */
+header .u-header__section.g-bg-black {
+    background: linear-gradient(to right, #6b86c9 12%, #f577bf) !important;
+}
+
+
+.tp-caption.FoodCarousel-Button,
+.FoodCarousel-Button,
+.erinyen .tp-thumb-title
+{
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+}
+CSS
+);
 \skeeks\assets\unify\base\UnifyRevolutionAsset::register($this);
 \skeeks\assets\unify\base\revolution\UnifyRevolutionActionsAsset::register($this);
 $this->registerJs(<<<JS
@@ -141,11 +159,14 @@ JS
                         data-rotate="0"
                         data-saveperformance="off"
                         data-title="<?= $tree->name; ?>">
+
                         <img class="rev-slidebg" src="<?= $tree->image->src; ?>" alt="<?= $tree->name; ?>"
                              data-bgposition="center center"
                              data-bgfit="contain"
-                             data-bgrepeat="no-repeat">
-
+                             data-bgrepeat="no-repeat"
+                             style="cursor: pointer;"
+                             onclick="location.href='<?= $tree->url; ?>'; return false;"
+                        />
 
                         <!-- LAYER NR. 2 -->
                         <a href="<?= $tree->url; ?>" id="slide-<?= $tree->id; ?>-layer-1" class="tp-caption FoodCarousel-Button rev-btn" style="z-index: 6; white-space: nowrap; text-transform: uppercase; outline: none; box-shadow: none; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; cursor: pointer;"
@@ -170,7 +191,7 @@ JS
                            data-paddingleft="[50,50,50,50]"
                            data-lasttriggerstate="reset">
                             <i class="pe-7s-note2" style="font-size: 21px; float: left; margin-top: -6px; margin-right: 10px;"></i>
-                            Смотреть товары
+                            <?= $tree->name; ?>
                         </a>
                     </li>
 
