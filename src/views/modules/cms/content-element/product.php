@@ -138,7 +138,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                                         </div>
 
                                         <div class="sx-feedback-links pull-right g-mr-10">
-                                            <a href="#" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed  g-brd-primary--hover g-color-primary--hover">
+                                            <a href="#sx-reviews" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed  g-brd-primary--hover g-color-primary--hover">
                                                 <?
                                                 echo \Yii::t(
                                                     'app',
@@ -220,7 +220,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                             <div class="sx-description-short g-color-gray-dark-v4">
                                 <?= $model->description_short; ?>
                                 <p>
-                                    <a href="#" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed g-brd-primary--hover g-color-primary--hover">
+                                    <a href="#sx-description" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed g-brd-primary--hover g-color-primary--hover">
                                         Подробнее
                                     </a>
                                 </p>
@@ -306,7 +306,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             <? \skeeks\cms\rpViewWidget\RpViewWidget::end(); ?>
 
         </div>
-        <div class="col-md-12 sx-content">
+        <div class="col-md-12 sx-content" id="sx-description">
             <h2>Описание</h2>
             <?= $model->description_full; ?>
 
@@ -350,7 +350,45 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         </div>
     <? endif; ?>
 </section>
-<section>
+
+<section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
+    <div class="container">
+
+        <div class="col-md-12 g-mt-20" id="sx-reviews">
+            <h2>Отзывы</h2>
+        </div>
+
+        <?
+        $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
+            'namespace'         => 'Reviews2Widget',
+            'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
+            'cmsContentElement' => $model,
+        ]);
+        $widgetReviews::end();
+        ?>
+    </div>
+</section>
+
+
+<section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
+    <div class="container">
+
+        <div class="col-md-12 g-mt-20" id="sx-reviews">
+            <h2>Комментарии</h2>
+        </div>
+
+        <div class="col-md-12">
+
+        <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
+                        'namespace' => 'VkCommentsWidget',
+                        'apiId'     => 6911979,
+                    ]); ?>
+        </div>
+    </div>
+</section>
+
+
+<section style="display: none;">
     <div class="container">
         <div class="g-py-20">
 
@@ -398,5 +436,42 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
     </div>
 </section>
 
+
+
+
+<section class="g-brd-gray-light-v4 g-brd-top g-mt-20">
+
+    <? if (\Yii::$app->shop->shopContents) : ?>
+        <?
+        $treeIds = [];
+        if ($model->cmsTree && $model->cmsTree->parent) {
+            $treeIds = \yii\helpers\ArrayHelper::map($model->cmsTree->parent->children, 'id', 'id');
+        }
+        ?>
+        <div class="container g-mt-20 g-mb-40 ">
+            <?
+            $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-viewed-products", [
+                'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
+                'label'                => "Просмотренные товары",
+                'enabledPaging'        => "N",
+                'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+                //'tree_ids'             => $treeIds,
+                'enabledSearchParams'                => "N",
+                'enabledCurrentTree'                => "N",
+                'limit'                => 15,
+                'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+                'activeQueryCallback' => function (\yii\db\ActiveQuery $query) use ($model) {
+                    $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName() . ".id", $model->id]);
+                    $query->leftJoin('shop_product', '`shop_product`.`id` = `cms_content_element`.`id`');
+                    $query->leftJoin('shop_viewed_product', '`shop_viewed_product`.`shop_product_id` = `shop_product`.`id`');
+                    $query->andWhere(['shop_fuser_id' => \Yii::$app->shop->shopFuser->id]);
+                    //$query->orderBy(['shop_viewed_product.created_at' => SORT_DESC]);
+                }
+            ]);
+            $widgetElements::end();
+            ?>
+        </div>
+    <? endif; ?>
+</section>
 
 
