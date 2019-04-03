@@ -9,10 +9,10 @@
 /* @var $model \skeeks\cms\models\CmsTree */
 ?>
 <section class="g-mt-0 g-pb-0">
-    <div class="container g-py-20">
+    <div class="container">
         <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
         <div class="row">
-            <div class="col-md-9 order-md-2">
+            <div class="col-md-9 order-md-2 g-py-20">
                 <?= $this->render('@app/views/breadcrumbs', [
                     'model' => $model,
                 ]) ?>
@@ -119,10 +119,10 @@
                 <? $widgetElements::end(); ?>
 
             </div>
-            <div class="col-md-3 order-md-1  g-pt-0">
+            <div class="col-md-3 order-md-1 g-py-20 g-bg-secondary">
                 <div class="g-mb-20">
                     <? $filterWidget::end(); ?>
-                    <div id="stickyblock-start" class="g-bg-white g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
+                    <div id="stickyblock-start" class="g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
 
                     </div>
                 </div>
