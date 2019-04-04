@@ -35,14 +35,18 @@
 
 
                 <?
-                $filterWidget = \skeeks\cms\themes\unifyshop\widgets\filter\ProductFiterWidget::begin();
-                $filterWidget->viewFile = '@app/views/filters/product-filter';
+                //$filterWidget = \skeeks\cms\themes\unifyshop\widgets\filter\ProductFiterWidget::begin();
+                $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
+               /* \Yii::$app->seo->canurl->ADDimportant_pname($filterWidget->filtersParamName);
+                $filterWidget->viewFile = '@app/views/filters/product-filter';*/
 
                 $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
                 $sortFiltersHandler = new \skeeks\cms\shop\queryFilter\SortFiltersHandler();
 
+                $availabilityFiltersHandler->viewFileVisible = '@app/views/filters/availability-filter';
+                $sortFiltersHandler->viewFileVisible = '@app/views/filters/sort-filter';
 
-                $filterWidget
+                $filtersWidget
                     ->registerHandler($availabilityFiltersHandler)
                     ->registerHandler($sortFiltersHandler);
 
@@ -52,7 +56,7 @@
                     'pageSize'             => 15,
                     'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::className(),
                     'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider)
-                    use ($filterWidget) {
+                    use ($filtersWidget) {
                         //$activeDataProvider->query->with('relatedProperties');
 
                         $activeDataProvider->query->with('shopProduct');
@@ -96,22 +100,22 @@
                     'viewFile'  => '@app/views/filters/price-filter',
                 ]);
 
-                $filterWidget
+                $filtersWidget
                     ->registerHandler($priceFiltersHandler);
 
-                $filterWidget
+                $filtersWidget
                     ->registerHandler($eavFiltersHandler);
                 ?>
 
 
 
                 <?
-                $filterWidget->loadFromRequest();
-                $filterWidget->applyToQuery($query);
+                $filtersWidget->loadFromRequest();
+                $filtersWidget->applyToQuery($query);
                 ?>
 
-                <?= $this->render('@app/views/filters/filters', [
-                    'filterWidget'               => $filterWidget,
+                <?= $this->render('@app/views/filters/sorts', [
+                    'filtersWidget'               => $filtersWidget,
                     'sortFiltersHandler'         => $sortFiltersHandler,
                     'availabilityFiltersHandler' => $availabilityFiltersHandler,
                 ]) ?>
@@ -121,7 +125,7 @@
             </div>
             <div class="col-md-3 order-md-1 g-py-20 g-bg-secondary">
                 <div class="g-mb-20">
-                    <? $filterWidget::end(); ?>
+                    <? $filtersWidget::end(); ?>
                     <div id="stickyblock-start" class="g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
 
                     </div>
