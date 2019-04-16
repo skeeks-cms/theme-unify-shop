@@ -114,11 +114,12 @@
                 $filtersWidget->applyToQuery($query);
                 ?>
 
+
                 <?= $this->render('@app/views/filters/sorts', [
                     'filtersWidget'               => $filtersWidget,
                     'sortFiltersHandler'         => $sortFiltersHandler,
                     'availabilityFiltersHandler' => $availabilityFiltersHandler,
-                ]) ?>
+                ]); ?>
 
                 <? $widgetElements::end(); ?>
 
