@@ -8,7 +8,11 @@
 /* @var $this yii\web\View */
 ?>
 <?
-$catalog = \skeeks\cms\models\CmsTree::find()->where(['dir' => 'catalog'])->one();
+$catalog = \skeeks\cms\models\CmsTree::find()->where([
+    'dir' => 'catalog'
+])->andWhere([
+    '>', 'image_id', 0
+])->one();
 echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
     'namespace'       => 'home-tree-slider',
     'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/revolution-slider',

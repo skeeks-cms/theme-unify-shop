@@ -143,53 +143,57 @@ JS
         <ul>
             <? if ($trees = $widget->activeQuery->all()) : ?>
                 <? foreach ($trees as $key => $tree) : ?>
-                    <li data-index="rs-<?= $tree->id; ?>"
-                        data-transition="fade"
-                        data-slotamount="7"
-                        data-hideafterloop="0"
-                        data-hideslideonmobile="off"
-                        data-easein="default"
-                        data-easeout="default"
-                        data-masterspeed="300"
-                        data-thumb="<?= $tree->image->src; ?>"
-                        data-rotate="0"
-                        data-saveperformance="off"
-                        data-title="<?= $tree->name; ?>">
+                    <? if ($tree->image) : ?>
 
-                        <img class="rev-slidebg" src="<?= $tree->image->src; ?>" alt="<?= $tree->name; ?>"
-                             data-bgposition="center center"
-                             data-bgfit="contain"
-                             data-bgrepeat="no-repeat"
-                             style="cursor: pointer;"
-                             onclick="location.href='<?= $tree->url; ?>'; return false;"
-                        />
+                        <li data-index="rs-<?= $tree->id; ?>"
+                            data-transition="fade"
+                            data-slotamount="7"
+                            data-hideafterloop="0"
+                            data-hideslideonmobile="off"
+                            data-easein="default"
+                            data-easeout="default"
+                            data-masterspeed="300"
+                            data-thumb="<?= $tree->image->src; ?>"
+                            data-rotate="0"
+                            data-saveperformance="off"
+                            data-title="<?= $tree->name; ?>">
 
-                        <!-- LAYER NR. 2 -->
-                        <a href="<?= $tree->url; ?>" id="slide-<?= $tree->id; ?>-layer-1" class="tp-caption FoodCarousel-Button rev-btn" style="z-index: 6; white-space: nowrap; text-transform: uppercase; outline: none; box-shadow: none; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; cursor: pointer;"
-                           data-x="center"
-                           data-y="bottom"
-                           data-voffset="50"
-                           data-width="['auto']"
-                           data-height="['auto']"
-                           data-type="button"
+                            <img class="rev-slidebg" src="<?= $tree->image->src; ?>" alt="<?= $tree->name; ?>"
+                                 data-bgposition="center center"
+                                 data-bgfit="contain"
+                                 data-bgrepeat="no-repeat"
+                                 style="cursor: pointer;"
+                                 onclick="location.href='<?= $tree->url; ?>'; return false;"
+                            />
 
-                           data-responsive_offset="on"
-                           data-responsive="off"
-                           data-frames='[
+                            <!-- LAYER NR. 2 -->
+                            <a href="<?= $tree->url; ?>" id="slide-<?= $tree->id; ?>-layer-1" class="tp-caption FoodCarousel-Button rev-btn" style="z-index: 6; white-space: nowrap; text-transform: uppercase; outline: none; box-shadow: none; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; cursor: pointer;"
+                               data-x="center"
+                               data-y="bottom"
+                               data-voffset="50"
+                               data-width="['auto']"
+                               data-height="['auto']"
+                               data-type="button"
+
+                               data-responsive_offset="on"
+                               data-responsive="off"
+                               data-frames='[
                      {"from":"opacity:0;","speed":300,"to":"o:1;","delay":0,"ease":"Power3.easeInOut"},
                      {"delay":"wait","speed":300,"to":"opacity:0;","ease":"nothing"},
                      {"frame":"hover","speed":"300","ease":"Power1.easeInOut","to":"o:1;rX:0;rY:0;rZ:0;z:0;","style":"c:rgba(255,255,255,1);bg:rgba(41,46,49,1);bw:1px 1px 1px 1px;"}
                    ]'
-                           data-textAlign="['left','left','left','left']"
-                           data-paddingtop="[15,15,15,15]"
-                           data-paddingright="[70,70,70,70]"
-                           data-paddingbottom="[15,15,15,15]"
-                           data-paddingleft="[50,50,50,50]"
-                           data-lasttriggerstate="reset">
-                            <i class="pe-7s-note2" style="font-size: 21px; float: left; margin-top: -6px; margin-right: 10px;"></i>
-                            <?= $tree->name; ?>
-                        </a>
-                    </li>
+                               data-textAlign="['left','left','left','left']"
+                               data-paddingtop="[15,15,15,15]"
+                               data-paddingright="[70,70,70,70]"
+                               data-paddingbottom="[15,15,15,15]"
+                               data-paddingleft="[50,50,50,50]"
+                               data-lasttriggerstate="reset">
+                                <i class="pe-7s-note2" style="font-size: 21px; float: left; margin-top: -6px; margin-right: 10px;"></i>
+                                <?= $tree->name; ?>
+                            </a>
+                        </li>
+                    <? endif; ?>
+
 
                 <? endforeach; ?>
             <? endif; ?>
