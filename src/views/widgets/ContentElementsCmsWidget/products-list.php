@@ -24,5 +24,5 @@
         'tag' => 'div',
         'class' => 'col-lg-4 col-sm-6 item'
     ],
-    'layout'       => '<div class="no-gutters row list-view">{items}</div><div class="row">{pager}</div>',
+    'layout'       => '<div class="no-gutters row list-view">{items}</div><div class="row"><div class="col-md-12">{summary}</div><div class="col-md-12">{pager}</div></div>',
 ]) ?>
