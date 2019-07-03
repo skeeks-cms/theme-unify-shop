@@ -574,11 +574,3 @@
 .sx-steps li {
     cursor: pointer;
 }
-
-/**
- * Корзина в шапке
- */
-
-.sx-main-menu-wrapper a.u-btn-primary {
-    color: #fff !important;
-}

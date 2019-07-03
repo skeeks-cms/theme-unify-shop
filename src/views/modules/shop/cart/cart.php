@@ -30,7 +30,7 @@ JS
 
                 <? if (\Yii::$app->shop->cart->isEmpty) : ?>
                     <!-- EMPTY CART -->
-                    <div class="panel panel-default col-sm-12">
+                    <div class="panel panel-default">
                         <div class="panel-body">
                             <strong>Ваша корзина пуста!</strong><br/>
                             В вашей корзине нет покупок.<br/>
