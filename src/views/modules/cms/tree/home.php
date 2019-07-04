@@ -69,4 +69,19 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
     </div>
 
 <? endif; ?>
+<!-- What People Say -->
+<section class="container g-pt-10 g-pb-10">
+    <div class="row justify-content-between">
+        <div class="col-lg-12 flex-lg-unordered g-mt-50--lg g-mb-60">
+            <div class="mb-2">
+                <div class="d-inline-block g-width-20 g-height-2 g-pos-rel g-top-minus-4 g-bg-primary mr-2"></div>
+                <span class="g-color-gray-dark-v3 g-font-weight-600 g-font-size-12 text-uppercase">О компании</span>
+            </div>
+
+            <?=$model->description_full; ?>
+
+        </div>
+    </div>
+</section>
+<!-- End What People Say -->
 

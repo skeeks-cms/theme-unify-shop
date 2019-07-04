@@ -40,7 +40,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         <? endif; ?>
         <div class="card-prod--photo">
             <a href="<?= $model->url; ?>" data-pjax="0">
-                <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
+                <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : \Yii::$app->cms->noImageUrl,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => 260,
                         'h' => 200,
