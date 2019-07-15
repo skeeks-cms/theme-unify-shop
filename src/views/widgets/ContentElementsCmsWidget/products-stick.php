@@ -8,6 +8,18 @@
 /* @var $this   yii\web\View */
 /* @var $widget \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget */
 $query = $widget->dataProvider->query;
+if (!$this->theme->is_show_zero_price)   {
+    $query->andWhere(['>','`prices`.price',0]);
+}
+$this->registerCss(<<<CSS
+.slick-slide {
+    text-align: center;
+}
+.slick-slide img {
+    display: inline;
+}
+CSS
+);
 ?>
 <? if ($query->count()) : ?>
 
@@ -26,10 +38,38 @@ $query = $widget->dataProvider->query;
             'class' => 'js-carousel g-pb-0 g-mx-minus-10',
             'tag'   => 'div',
             'data'  => [
-                'slides-show'         => 6,
+                'slidesToShow' => 6,
+                'responsive' =>  [
+                    [
+                        'breakpoint' => 2600,
+                        'settings'     => [
+                          'slidesToShow' => 6,
+                        ]
+                    ],
+                    [
+                        'breakpoint' => 1025,
+                        'settings'     => [
+                            'slidesToShow' => 4,
+                        ]
+                    ],
+                    [
+                        'breakpoint' => 480,
+                        'settings'     => [
+                            'slidesToShow' => 2,
+                        ]
+                    ],
+                    [
+                        'breakpoint' => 376,
+                        'settings'     => [
+                            'slidesToShow' => 1,
+                        ]
+                    ]
+
+                ],
+
                 'arrows-classes'      => "u-arrow-v1 g-absolute-centered--y g-width-45 g-height-45 g-font-size-30 g-color-gray-dark-v5 g-color-primary--hover rounded-circle",
-                'arrow-left-classes'  => "fa fa-angle-left g-left-minus-40",
-                'arrow-right-classes' => "fa fa-angle-right g-right-minus-40",
+                'arrow-left-classes'  => "fa fa-angle-left g-left-0",
+                'arrow-right-classes' => "fa fa-angle-right g-right-0",
             ],
         ],
         'itemOptions'  => [

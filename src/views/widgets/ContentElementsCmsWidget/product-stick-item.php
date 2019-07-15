@@ -23,7 +23,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         <!-- Product -->
         <figure class="g-pos-rel g-mb-10">
             <a class="" href="<?= $model->url; ?>" title="<?= $model->name; ?>">
-                <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
+                <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : \Yii::$app->cms->noImageUrl,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => 260,
                         'h' => 200,

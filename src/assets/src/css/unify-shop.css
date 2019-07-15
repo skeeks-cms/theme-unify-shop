@@ -574,6 +574,9 @@
 .sx-steps li {
     cursor: pointer;
 }
-
-
-
+@media (max-width: 450px) {
+    .u-basket {
+        margin-right: 80px !important;
+        padding-top: 20px !important;
+    }
+}

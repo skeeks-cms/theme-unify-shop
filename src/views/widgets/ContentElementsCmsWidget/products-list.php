@@ -7,6 +7,9 @@
  */
 /* @var $this   yii\web\View */
 /* @var $widget \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget */
+if (!$this->theme->is_show_zero_price)   {
+    $widget->dataProvider->query->andWhere(['>','`prices`.price',0]);
+}
 ?>
 <? if ($widget->label) : ?>
     <h1 class="size-17 margin-bottom-20"><?= $widget->label; ?></h1>
