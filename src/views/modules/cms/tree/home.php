@@ -64,9 +64,7 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
                     $activeDataProvider->query->joinWith('shopProduct.shopProductPrices as pricesFilter');
                     $activeDataProvider->query->andWhere(['>','`pricesFilter`.price',0]);
                 }
-                if (ENV == 'dev'){
-                    var_dump($activeDataProvider->query->createCommand()->rawSql);die();
-                }
+
                 //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
                 $activeDataProvider->query->orderBy(['published_at' => SORT_DESC]);
             },
