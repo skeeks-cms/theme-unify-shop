@@ -60,6 +60,13 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
                 $activeDataProvider->query->with('shopProduct.baseProductPrice');
                 $activeDataProvider->query->with('shopProduct.minProductPrice');
                 $activeDataProvider->query->with('image');
+                if (!$this->theme->is_show_zero_price)   {
+                    $activeDataProvider->query->joinWith('shopProduct.shopProductPrices as pricesFilter');
+                    $activeDataProvider->query->andWhere(['>','`pricesFilter`.price',0]);
+                }
+                if (ENV == 'dev'){
+                    var_dump($activeDataProvider->query->createCommand()->rawSql);die();
+                }
                 //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
                 $activeDataProvider->query->orderBy(['published_at' => SORT_DESC]);
             },
@@ -84,4 +91,20 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
     </div>
 </section>
 <!-- End What People Say -->
+<!-- Blog News -->
+<section class="container-fluid g-pt-10 g-pb-10">
+    <?
+    $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-news", [
+        'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/news-masonry',
+        'label'                => "Новости компании",
+        'content_ids'          => [1],
+        'enabledCurrentTree'   => \skeeks\cms\components\Cms::BOOL_N,
+        'enabledCurrentTreeChild' => skeeks\cms\components\Cms::BOOL_N,
+        'enabledCurrentTreeChildAll' => skeeks\cms\components\Cms::BOOL_N
+    ]);
+    $widgetElements::end();
+    ?>
+
+</section>
+<!-- End Blog News -->
 

@@ -173,11 +173,24 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                             <div class="product-control g-mt-10">
                                 <div class="control-group group-submit g-mr-10 g-mb-15">
                                     <div class="buttons-row ">
-                                        <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
-                                            'class'   => 'btn btn-xxl u-btn-primary g-rounded-50 js-to-cart to-cart-fly-btn g-font-size-18',
-                                            'type'    => 'button',
-                                            'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
-                                        ]); ?>
+                                        <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
+                                            <? if ($this->theme->is_buy_zero_price) : ?>
+                                                <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
+                                                    'class'   => 'btn btn-xxl u-btn-primary g-rounded-50 js-to-cart to-cart-fly-btn g-font-size-18',
+                                                    'type'    => 'button',
+                                                    'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                                                ]); ?>
+                                            <? else : ?>
+                                                <a class="btn btn-xxl u-btn-primary g-rounded-50 g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
+
+                                            <? endif; ?>
+                                        <? else : ?>
+                                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
+                                                'class'   => 'btn btn-xxl u-btn-primary g-rounded-50 js-to-cart to-cart-fly-btn g-font-size-18',
+                                                'type'    => 'button',
+                                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                                            ]); ?>
+                                        <? endif; ?>
                                     </div>
                                     <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
 
@@ -475,3 +488,22 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 </section>
 
 
+
+<?
+$modal = \yii\bootstrap\Modal::begin([
+    'header' => 'Оставить заявку',
+    'id' => 'sx-order',
+    'toggleButton' => false,
+    'size' => \yii\bootstrap\Modal::SIZE_DEFAULT
+]);
+?>
+<?= \skeeks\modules\cms\form2\cmsWidgets\form2\FormWidget::widget([
+    'form_code' => 'feedback',
+    'namespace' => 'FormWidget-feedback',
+    'viewFile' => 'with-messages'
+    //'viewFile' => '@app/views/widgets/FormWidget/fiz-connect'
+]); ?>
+
+<?
+$modal::end();
+?>

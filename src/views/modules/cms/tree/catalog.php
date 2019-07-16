@@ -64,6 +64,11 @@
                         $activeDataProvider->query->with('shopProduct.minProductPrice');
                         $activeDataProvider->query->with('image');
 
+                        if (!$this->theme->is_show_zero_price)   {
+                            $activeDataProvider->query->joinWith('shopProduct.shopProductPrices as pricesFilter');
+                            $activeDataProvider->query->andWhere(['>','`pricesFilter`.price',0]);
+                        }
+
                         //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
                         //$activeDataProvider->query->orderBy(['basePrice' => SORT_ASC]);
                     },
