@@ -58,7 +58,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                                             'w' => 700,
                                             'h' => 500,
                                             'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
-                                        ]), 'img'.$model->id
+                                        ]), $model->code
                                     ); ?>" alt="<?= $model->name; ?>">
                                 </div>
                             <? endforeach; ?>

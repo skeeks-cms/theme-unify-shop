@@ -23,14 +23,17 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         <!-- Product -->
         <figure class="g-pos-rel g-mb-10">
             <a class="" href="<?= $model->url; ?>" title="<?= $model->name; ?>">
-                <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : \Yii::$app->cms->noImageUrl,
+                <? if ($model->image) : ?>
+                <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => 260,
                         'h' => 200,
                         'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
-                    ]), 'img'.$model->id
+                    ]), $model->code
                 ); ?>" alt="<?= $model->name; ?>">
-
+                <? else : ?>
+                    <img class="img-fluid" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
+                <? endif; ?>
             </a>
             <!--<figcaption class="w-100 g-bg-primary g-bg-black--hover text-center g-pos-abs g-bottom-0 g-transition-0_2 g-py-5">
                 <a class="g-color-white g-font-size-11 text-uppercase g-letter-spacing-1 g-text-underline--none--hover" href="#!">New Arrival</a>
