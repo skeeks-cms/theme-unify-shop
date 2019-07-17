@@ -74,6 +74,7 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
     </div>
 
 <? endif; ?>
+<? if ($model->description_full) : ?>
 <!-- What People Say -->
 <section class="container g-pt-10 g-pb-10">
     <div class="row justify-content-between">
@@ -89,6 +90,7 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
     </div>
 </section>
 <!-- End What People Say -->
+<? endif; ?>
 <!-- Blog News -->
 <section class="container-fluid g-pt-10 g-pb-10">
     <?
