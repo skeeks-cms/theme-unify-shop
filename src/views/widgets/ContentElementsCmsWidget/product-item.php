@@ -40,13 +40,17 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         <? endif; ?>
         <div class="card-prod--photo">
             <a href="<?= $model->url; ?>" data-pjax="0">
-                <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : \Yii::$app->cms->noImageUrl,
+                <? if ($model->image) : ?>
+                <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => 260,
                         'h' => 200,
                         'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
                     ]), $model->code
                 ); ?>" title="<?= \yii\helpers\Html::encode($model->name); ?>" alt="<?= \yii\helpers\Html::encode($model->name); ?>" />
+                <? else : ?>
+                <img class="img-fluid" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
+                <? endif; ?>
             </a>
         </div>
         <div class="card-prod--inner">
@@ -104,19 +108,37 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             </div>
 
             <div class="card-prod--actions">
-                <? if ($shopProduct->quantity > 0 && $shopProduct->minProductPrice) : ?>
-                    <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>Купить", [
-                        'class' => 'btn btn-primary js-to-cart to-cart-fly-btn',
-                        'type' => 'button',
-                        'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
-                    ]); ?>
+                <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
+                    <? if ($shopProduct->quantity > 0 && \Yii::$app->shop->is_show_button_no_price) : ?>
+                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>Купить", [
+                            'class' => 'btn btn-primary js-to-cart to-cart-fly-btn',
+                            'type' => 'button',
+                            'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                        ]); ?>
+
+                    <? else : ?>
+                        <?= \yii\helpers\Html::tag('a', "Подробнее", [
+                            'class' => 'btn btn-primary',
+                            'href' => $model->url,
+                            'data' => ['pjax' => 0],
+                        ]); ?>
+                    <? endif; ?>
+
                 <? else : ?>
-                    <?= \yii\helpers\Html::tag('a', "Подробнее", [
-                        'class' => 'btn to-cart',
-                        'type' => 'button',
-                        'href' => $model->url,
-                        'data' => ['pjax' => 0],
-                    ]); ?>
+                    <? if ($shopProduct->quantity > 0 && $shopProduct->minProductPrice) : ?>
+                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>Купить", [
+                            'class' => 'btn btn-primary js-to-cart to-cart-fly-btn',
+                            'type' => 'button',
+                            'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                        ]); ?>
+
+                    <? else : ?>
+                        <?= \yii\helpers\Html::tag('a', "Подробнее", [
+                            'class' => 'btn btn-primary',
+                            'href' => $model->url,
+                            'data' => ['pjax' => 0],
+                        ]); ?>
+                    <? endif; ?>
                 <? endif; ?>
             </div>
             <? endif; ?>
