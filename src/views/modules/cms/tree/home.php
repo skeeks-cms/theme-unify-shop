@@ -60,7 +60,7 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
                 $activeDataProvider->query->with('shopProduct.baseProductPrice');
                 $activeDataProvider->query->with('shopProduct.minProductPrice');
                 $activeDataProvider->query->with('image');
-                if (!$this->theme->is_show_zero_price)   {
+                if (!\Yii::$app->shop->is_show_product_no_price)   {
                     $activeDataProvider->query->joinWith('shopProduct.shopProductPrices as pricesFilter');
                     $activeDataProvider->query->andWhere(['>','`pricesFilter`.price',0]);
                 }

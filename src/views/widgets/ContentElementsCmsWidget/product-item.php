@@ -45,7 +45,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                         'w' => 260,
                         'h' => 200,
                         'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
-                    ]), $model->code
+                    ]), 'img'.$model->id
                 ); ?>" title="<?= \yii\helpers\Html::encode($model->name); ?>" alt="<?= \yii\helpers\Html::encode($model->name); ?>" />
             </a>
         </div>
@@ -105,7 +105,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
             <div class="card-prod--actions">
                 <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
-                    <? if ($shopProduct->quantity > 0 && $this->theme->is_buy_zero_price) : ?>
+                    <? if ($shopProduct->quantity > 0 && \Yii::$app->shop->is_show_button_no_price) : ?>
                         <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>Купить", [
                             'class' => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type' => 'button',
@@ -114,8 +114,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
                     <? else : ?>
                         <?= \yii\helpers\Html::tag('a', "Подробнее", [
-                            'class' => 'btn to-cart',
-                            'type' => 'button',
+                            'class' => 'btn btn-primary',
                             'href' => $model->url,
                             'data' => ['pjax' => 0],
                         ]); ?>
@@ -131,8 +130,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
                     <? else : ?>
                         <?= \yii\helpers\Html::tag('a', "Подробнее", [
-                            'class' => 'btn to-cart',
-                            'type' => 'button',
+                            'class' => 'btn btn-primary',
                             'href' => $model->url,
                             'data' => ['pjax' => 0],
                         ]); ?>

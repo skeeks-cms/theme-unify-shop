@@ -8,7 +8,7 @@
 /* @var $this   yii\web\View */
 /* @var $widget \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget */
 $query = $widget->dataProvider->query;
-if (!$this->theme->is_show_zero_price)   {
+if (!\Yii::$app->shop->is_show_product_no_price)   {
     $query->joinWith('shopProduct.shopProductPrices as pricesFilter');
     $query->andWhere(['>','`pricesFilter`.price',0]);
 }

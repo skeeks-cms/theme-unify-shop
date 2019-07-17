@@ -58,7 +58,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                                             'w' => 700,
                                             'h' => 500,
                                             'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
-                                        ]), $model->code
+                                        ]), 'img'.$model->id
                                     ); ?>" alt="<?= $model->name; ?>">
                                 </div>
                             <? endforeach; ?>
@@ -174,7 +174,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                                 <div class="control-group group-submit g-mr-10 g-mb-15">
                                     <div class="buttons-row ">
                                         <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
-                                            <? if ($this->theme->is_buy_zero_price) : ?>
+                                            <? if (\Yii::$app->shop->is_show_button_no_price) : ?>
                                                 <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
                                                     'class'   => 'btn btn-xxl u-btn-primary g-rounded-50 js-to-cart to-cart-fly-btn g-font-size-18',
                                                     'type'    => 'button',
