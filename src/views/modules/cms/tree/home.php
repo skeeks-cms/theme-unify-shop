@@ -93,7 +93,7 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
 <section class="container-fluid g-pt-10 g-pb-10">
     <?
     $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-news", [
-        'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/news-masonry',
+        'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/news-masonry-nopagination',
         'label'                => "Новости компании",
         'content_ids'          => [1],
         'enabledCurrentTree'   => \skeeks\cms\components\Cms::BOOL_N,
