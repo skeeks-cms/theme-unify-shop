@@ -153,12 +153,24 @@ JS
                             data-easein="default"
                             data-easeout="default"
                             data-masterspeed="300"
-                            data-thumb="<?= $tree->image->src; ?>"
+                            data-thumb="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($tree->image ? $tree->image->src : null,
+                                new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                    'w' => 600,
+                                    'h' => 400,
+                                    'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                                ]), $tree->code
+                            ); ?>"
                             data-rotate="0"
                             data-saveperformance="off"
                             data-title="<?= $tree->name; ?>">
 
-                            <img class="rev-slidebg" src="<?= $tree->image->src; ?>" alt="<?= $tree->name; ?>"
+                            <img class="rev-slidebg" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($tree->image ? $tree->image->src : null,
+                                new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                    'w' => 600,
+                                    'h' => 400,
+                                    'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                                ]), $tree->code
+                            ); ?>" alt="<?= $tree->name; ?>"
                                  data-bgposition="center center"
                                  data-bgfit="contain"
                                  data-bgrepeat="no-repeat"
