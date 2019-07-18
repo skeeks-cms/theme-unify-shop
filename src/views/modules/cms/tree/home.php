@@ -15,9 +15,10 @@ $catalog = \skeeks\cms\models\CmsTree::find()->where([
 ])->one();
 echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
     'namespace'       => 'home-tree-slider',
+    'enabledRunCache'                => "Y",
     'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/revolution-slider',
     'treePid'         => $catalog ? $catalog->id : null,
-    'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
+    //'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
 ]);
 ?>
 
@@ -29,6 +30,7 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
             'label'                => "Популярные товары",
             'enabledPaging'        => "N",
+            'enabledRunCache'                => "Y",
             'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
             'limit'                => 15,
             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
@@ -51,6 +53,7 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
             'label'                => "Новые поступления",
             'enabledPaging'        => "N",
+            'enabledRunCache'                => "Y",
             'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
             'limit'                => 15,
             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
@@ -97,6 +100,7 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
     $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-news", [
         'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/news-masonry-nopagination',
         'label'                => "Новости компании",
+        'enabledRunCache'                => "Y",
         'content_ids'          => [1],
         'enabledCurrentTree'   => \skeeks\cms\components\Cms::BOOL_N,
         'enabledCurrentTreeChild' => skeeks\cms\components\Cms::BOOL_N,

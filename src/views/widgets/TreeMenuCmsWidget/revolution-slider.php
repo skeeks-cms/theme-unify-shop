@@ -9,6 +9,7 @@
 /* @var $widget \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget */
 /* @var $trees  \skeeks\cms\models\Tree[] */
 
+
 $this->registerCss(<<<CSS
 /**
  * Кастомизация слайдера
@@ -22,8 +23,14 @@ $this->registerCss(<<<CSS
 }
 CSS
 );
+
+$url = \Yii::$app->assetManager->getAssetUrl(\Yii::$app->assetManager->getBundle(\skeeks\assets\unify\base\UnifyAsset::class), "assets/vendor/revolution-slider/revolution/js/extensions/");
+
 \skeeks\assets\unify\base\UnifyRevolutionAsset::register($this);
 \skeeks\assets\unify\base\revolution\UnifyRevolutionActionsAsset::register($this);
+\skeeks\assets\unify\base\revolution\UnifyRevolutionNavigationAsset::register($this);
+\skeeks\assets\unify\base\revolution\UnifyRevolutionLayeranimationAsset::register($this);
+\skeeks\assets\unify\base\revolution\UnifyRevolutionCarouselAsset::register($this);
 $this->registerJs(<<<JS
 var tpj = jQuery;
 
@@ -34,7 +41,7 @@ var tpj = jQuery;
       } else {
         revapi41 = tpj('#rev_slider_41_1').show().revolution({
           sliderType: 'carousel',
-          //jsFileLocation: 'revolution/js/',
+          jsFileLocation: '{$url}',
           sliderLayout: 'fullwidth',
           dottedOverlay: 'none',
           delay: 9000,

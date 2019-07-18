@@ -71,7 +71,7 @@ JS
                     'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/menu-top',
                     'label'           => 'Верхнее меню',
                     'level'           => '1',
-                    'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
+                    'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_Y,
                 ]); ?>
             </div>
             <!-- End Navigation -->
