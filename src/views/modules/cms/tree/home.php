@@ -98,7 +98,7 @@ echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
 <section class="container-fluid g-pt-10 g-pb-10">
     <?
     $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-news", [
-        'viewFile'    => '@app/views/widgets/ContentElementsCmsWidget/'.$this->theme->news_list_view,
+        'viewFile'    => '@app/views/widgets/ContentElementsCmsWidget/news-masonry',
         'label'                => "Новости компании",
         'enabledRunCache'                => "Y",
         'content_ids'          => [1],

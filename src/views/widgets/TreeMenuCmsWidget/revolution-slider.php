@@ -42,7 +42,7 @@ var tpj = jQuery;
         revapi41 = tpj('#rev_slider_41_1').show().revolution({
           sliderType: 'carousel',
           jsFileLocation: '{$url}',
-          sliderLayout: 'fullwidth',
+          //sliderLayout: 'fullwidth',
           dottedOverlay: 'none',
           delay: 9000,
           navigation: {
@@ -164,7 +164,7 @@ JS
                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
                                     'w' => 600,
                                     'h' => 400,
-                                    'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                                    //'m' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
                                 ]), $tree->code
                             ); ?>"
                             data-rotate="0"
@@ -175,7 +175,7 @@ JS
                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
                                     'w' => 600,
                                     'h' => 400,
-                                    'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                                    //'m' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
                                 ]), $tree->code
                             ); ?>" alt="<?= $tree->name; ?>"
                                  data-bgposition="center center"
