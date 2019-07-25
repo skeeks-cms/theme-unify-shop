@@ -85,7 +85,7 @@ use yii\helpers\Html;
                 <?= \yii\widgets\DetailView::widget([
                     'model' => $model->buyer->relatedPropertiesModel,
                     'template' => "<tr><th style='width: 50%; '>{label}</th><td style='width:50%;'>{value}</td></tr>",
-                    'attributes' => array_keys($model->buyer->relatedPropertiesModel->toArray())
+                    'attributes' => ( isset($model->buyer) && isset($model->buyer->relatedPropertiesModel) ) ? array_keys($model->buyer->relatedPropertiesModel->toArray()) : []
                 ]) ?>
             </div>
             <h4>Содержимое заказа: </h4>
