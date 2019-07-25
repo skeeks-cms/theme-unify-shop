@@ -305,6 +305,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
     <div class="container">
 
+        <div class="row">
         <div class="col-md-12">
             <h2>Характеристики</h2>
             <?
@@ -319,10 +320,12 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             <? \skeeks\cms\rpViewWidget\RpViewWidget::end(); ?>
 
         </div>
+        </div>
+        <div class="row">
         <div class="col-md-12 sx-content" id="sx-description">
             <h2>Описание</h2>
             <?= $model->description_full; ?>
-
+        </div>
         </div>
     </div>
 </section>
