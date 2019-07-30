@@ -44,10 +44,10 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             <!-- Product Info -->
             <div class="d-flex flex-column">
                 <? if ($priceHelper->hasDiscount) : ?>
-                    <div class="old"><?= $priceHelper->basePrice->money; ?></div>
-                    <span class="d-block g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></span>
+                    <div class="sx-old-price old"><?= $priceHelper->basePrice->money; ?></div>
+                    <span class="d-block sx-new-price g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></span>
                 <? else : ?>
-                    <span class="d-block g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></span>
+                    <span class="d-block sx-new-price g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></span>
                 <? endif; ?>
 
 

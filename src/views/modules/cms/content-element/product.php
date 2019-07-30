@@ -161,11 +161,18 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
 
                         <div class="product-price g-mt-10 g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                            <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
-                            <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
+
+                            <meta itemprop="price" content="<?= $priceHelper->minPrice->money->amount; ?>">
+                            <meta itemprop="priceCurrency" content="<?= $priceHelper->minPrice->money->currency->code; ?>">
                             <link itemprop="availability" href="http://schema.org/InStock">
 
-                            <span class="current ss-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->basePrice->money; ?></span>
+                            <? if ($priceHelper->hasDiscount) : ?>
+                                <span class="current ss-price sx-old-price h1"><?= $priceHelper->basePrice->money; ?></span>
+                                <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                            <? else: ?>
+                                <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                            <? endif; ?>
+
                         </div>
 
 
@@ -306,27 +313,30 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
     <div class="container">
 
         <div class="row">
-        <div class="col-md-12">
-            <h2>Характеристики</h2>
-            <?
+            <div class="col-md-12">
+                <h2>Характеристики</h2>
+                <?
 
-            $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
-                'model'                   => $model,
-                'visible_properties'      => @$visible_items,
-                'visible_only_has_values' => true,
-                'viewFile'                => '@app/views/widgets/RpWidget/default',
-            ]); ?>
-            <? /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/ ?>
-            <? \skeeks\cms\rpViewWidget\RpViewWidget::end(); ?>
+                $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
+                    'model'                   => $model,
+                    'visible_properties'      => @$visible_items,
+                    'visible_only_has_values' => true,
+                    'viewFile'                => '@app/views/widgets/RpWidget/default',
+                ]); ?>
+                <? /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/ ?>
+                <? \skeeks\cms\rpViewWidget\RpViewWidget::end(); ?>
 
+            </div>
         </div>
-        </div>
-        <div class="row">
-        <div class="col-md-12 sx-content" id="sx-description">
-            <h2>Описание</h2>
-            <?= $model->description_full; ?>
-        </div>
-        </div>
+        <? if ($model->description_full) : ?>
+            <div class="row">
+                <div class="col-md-12 sx-content" id="sx-description">
+                    <h2>Описание</h2>
+                    <?= $model->description_full; ?>
+                </div>
+            </div>
+        <? endif; ?>
+
     </div>
 </section>
 
@@ -395,10 +405,10 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
         <div class="col-md-12">
 
-        <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
-                        'namespace' => 'VkCommentsWidget',
-                        'apiId'     => 6911979,
-                    ]); ?>
+            <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
+                'namespace' => 'VkCommentsWidget',
+                'apiId'     => 6911979,
+            ]); ?>
         </div>
     </div>
 </section>
@@ -453,8 +463,6 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 </section>
 
 
-
-
 <section class="g-brd-gray-light-v4 g-brd-top g-mt-20">
 
     <? if (\Yii::$app->shop->shopContents) : ?>
@@ -467,22 +475,22 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         <div class="container g-mt-20 g-mb-40 ">
             <?
             $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-viewed-products", [
-                'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
-                'label'                => "Просмотренные товары",
-                'enabledPaging'        => "N",
-                'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+                'viewFile'            => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
+                'label'               => "Просмотренные товары",
+                'enabledPaging'       => "N",
+                'content_ids'         => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
                 //'tree_ids'             => $treeIds,
-                'enabledSearchParams'                => "N",
-                'enabledCurrentTree'                => "N",
-                'limit'                => 15,
-                'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+                'enabledSearchParams' => "N",
+                'enabledCurrentTree'  => "N",
+                'limit'               => 15,
+                'contentElementClass' => \skeeks\cms\shop\models\ShopCmsContentElement::class,
                 'activeQueryCallback' => function (\yii\db\ActiveQuery $query) use ($model) {
-                    $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName() . ".id", $model->id]);
+                    $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
                     $query->leftJoin('shop_product', '`shop_product`.`id` = `cms_content_element`.`id`');
                     $query->leftJoin('shop_viewed_product', '`shop_viewed_product`.`shop_product_id` = `shop_product`.`id`');
                     $query->andWhere(['shop_fuser_id' => \Yii::$app->shop->shopFuser->id]);
                     //$query->orderBy(['shop_viewed_product.created_at' => SORT_DESC]);
-                }
+                },
             ]);
             $widgetElements::end();
             ?>
@@ -491,19 +499,18 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 </section>
 
 
-
 <?
 $modal = \yii\bootstrap\Modal::begin([
-    'header' => 'Оставить заявку',
-    'id' => 'sx-order',
+    'header'       => 'Оставить заявку',
+    'id'           => 'sx-order',
     'toggleButton' => false,
-    'size' => \yii\bootstrap\Modal::SIZE_DEFAULT
+    'size'         => \yii\bootstrap\Modal::SIZE_DEFAULT,
 ]);
 ?>
 <?= \skeeks\modules\cms\form2\cmsWidgets\form2\FormWidget::widget([
     'form_code' => 'feedback',
     'namespace' => 'FormWidget-feedback',
-    'viewFile' => 'with-messages'
+    'viewFile'  => 'with-messages'
     //'viewFile' => '@app/views/widgets/FormWidget/fiz-connect'
 ]); ?>
 

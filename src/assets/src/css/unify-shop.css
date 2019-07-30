@@ -580,3 +580,9 @@
         padding-top: 20px !important;
     }
 }
+
+
+.sx-old-price {
+    text-decoration: line-through;
+    color: #8a8a8a;
+}
