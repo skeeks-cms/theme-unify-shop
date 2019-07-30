@@ -14,7 +14,13 @@
         <? foreach ($attributes as $code => $value ) :
             if (!in_array($code, ['propertySameProducts','video', 'simillar'])) : ?>
                 <tr>
-                    <td><?= $widget->model->relatedPropertiesModel->getRelatedProperty($code)->name; ?></td>
+                    <td>
+                        <? $property = $widget->model->relatedPropertiesModel->getRelatedProperty($code); ?>
+                        <?= $property->name; ?>
+                        <? if ($property->hint) : ?>
+                            <i class="far fa-question-circle" title="<?= $property->hint; ?>"></i>
+                        <? endif; ?>
+                    </td>
                     <td class="rtd"><?= $value; ?></td>
                 </tr>
             <? endif; ?>

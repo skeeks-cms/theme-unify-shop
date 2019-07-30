@@ -286,16 +286,20 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                             <!-- Tab panes -->
                             <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
                                 <div class="tab-pane fade show active" id="nav-1-1-accordion-default-hor-left-icons--1" role="tabpanel">
+                                    <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::beginWidget('product-delivery-short'); ?>
                                     <p>Ближайшая дата доставки: 31 мар. 2019 г.</p>
                                     <p>Способы доставки: курьер, Почта России</p>
                                     <p>Регионы доставки: вся Россия</p>
+                                    <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::end(); ?>
                                 </div>
 
                                 <div class="tab-pane fade" id="nav-1-1-accordion-default-hor-left-icons--2" role="tabpanel">
+                                    <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::beginWidget('product-help-short'); ?>
                                     <p class="g-font-weight-600">Проблема с добавлением товара в корзину?</p>
                                     <p>Если у вас появилась сложность с добавлением товара в корзину, вы можете позвонить по номеру
                                         <a href="tel:<?= $this->theme->phone; ?>"><?= $this->theme->phone; ?></a> и оформить заказ по телефону.</p>
                                     <p>Пожалуйста, сообщите, какие проблемы с добавлением товара в корзину вы испытываете:</p>
+                                    <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::end(); ?>
                                 </div>
                             </div>
 
