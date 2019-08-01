@@ -18,7 +18,9 @@
             <?= $sortFiltersHandler->renderVisible(); ?>
         </div>
     </div>
-    <?= $availabilityFiltersHandler->renderVisible(); ?>
+    <? if (@$availabilityFiltersHandler) : ?>
+        <?= $availabilityFiltersHandler->renderVisible(); ?>
+    <? endif; ?>
 </div>
 <div class="row">
     <div class="col-md-12 sx-filters-selected-wrapper">

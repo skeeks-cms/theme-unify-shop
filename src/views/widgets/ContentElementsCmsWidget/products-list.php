@@ -18,7 +18,7 @@ if (!\Yii::$app->shop->is_show_product_no_price)   {
 
 <? echo \yii\widgets\ListView::widget([
     'dataProvider' => $widget->dataProvider,
-    'itemView'     => 'product-item',
+    'itemView'     => '@app/views/widgets/ContentElementsCmsWidget/product-item',
     'emptyText'    => '',
     'options'      => [
         'class' => '',
