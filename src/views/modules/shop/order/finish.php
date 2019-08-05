@@ -9,7 +9,29 @@
 /* @var $model \skeeks\cms\shop\models\ShopOrder */
 use yii\helpers\Html;
 
+$theme_color = \Yii::$app->view->theme->main_theme_color1;
 
+$this->registerCss(<<<CSS
+ul.process-steps, ul.process-steps li {
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+ul.process-steps li a {
+    position: relative;
+    line-height: 45px;
+    z-index: 1;
+}
+ul.process-steps li.active a, ul.process-steps li.active:hover>a {
+    background-color: {$theme_color};
+}
+ul.process-steps li:after {
+    margin: 0;
+    z-index: 0;
+}
+
+CSS
+);
 
 ?>
 
@@ -17,7 +39,7 @@ use yii\helpers\Html;
 
 <!-- Product page -->
 <!--=== Content Part ===-->
-<section>
+<section class="container-fluid" style="padding-top: 50px;">
     <div class="row">
         <div class="col-sm-12">
 
@@ -175,12 +197,3 @@ use yii\helpers\Html;
     </div>
 </div>
 </section>
-<?
-
-$this->registerCss(<<<CSS
-ul.process-steps li.active a, ul.process-steps li.active:hover>a {
-    background-color: #3fb5d6;
-}
-CSS
-);
-?>
