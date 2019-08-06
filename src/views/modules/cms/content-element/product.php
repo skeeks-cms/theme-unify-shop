@@ -6,13 +6,31 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
+skeeks\assets\unify\base\UnifyHsRatingAsset::register($this);
+$this->registerJs(<<<JS
+$.HSCore.components.HSRating.init($('.js-rating-show'), {
+  spacing: 2
+});
+JS
+);
 $shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($model);
 $model = $shopProduct->cmsContentElement;
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
+
+$reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
+$rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 ?>
 <section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper" itemscope itemtype="http://schema.org/Product">
     <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?><?= $priceHelper->basePrice->money; ?>"/>
-    <meta itemprop="url" content="<?= $model->absoluteUrl; ?>"/>
+    <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
+    <meta itemprop="description" content="<?= $model->description_short?$model->description_short:'-'; ?>"/>
+    <meta itemprop="sku" content="<?= $model->id; ?>"/>
+
+    <? if ($model->relatedPropertiesModel->getAttribute('brand')) : ?>
+        <meta itemprop="brand" content="<?= $model->relatedPropertiesModel->getSmartAttribute('brand'); ?>"/>
+    <? else : ?>
+        <meta itemprop="brand" content="<?=\Yii::$app->view->theme->title; ?>"/>
+    <? endif; ?>
     <? if ($model->image) : ?>
         <link itemprop="image" href="<?= $model->image->absoluteSrc; ?>">
     <? endif; ?>
@@ -113,29 +131,17 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
                                 <div class="col-7">
                                     <div class="feedback-review cf pull-right">
-                                        <div class="product-rating pull-right" itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
-                                            <div class="rating-container rating-custom-size rating-animate">
-                                                <div class="rating">
-                                                    <span class="empty-stars">
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                        <span class="star"><i class="star-empty"></i></span>
-                                                    </span>
-                                                    <span class="filled-stars" style="width: 0%;">
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                        <span class="star"><i class="star-fill"></i></span>
-                                                    </span>
-                                                </div>
+                                        <? if ($rating>0) : ?>
+                                            <div class="product-rating pull-right" itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
+                                                <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
+                                                <meta itemprop="ratingValue" content="<?=$rating?$rating:0; ?>">
+                                                <meta itemprop="reviewCount" content="<?=$reviews2Count?$reviews2Count:0; ?>">
                                             </div>
-                                            <meta itemprop="ratingValue" content="5">
-                                            <meta itemprop="bestRating" content="5">
-                                            <meta itemprop="ratingCount" content="1">
-                                        </div>
+                                        <? else : ?>
+                                            <div class="product-rating pull-right">
+                                                <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
+                                            </div>
+                                        <? endif; ?>
 
                                         <div class="sx-feedback-links pull-right g-mr-10">
                                             <a href="#sx-reviews" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed  g-brd-primary--hover g-color-primary--hover">
@@ -143,7 +149,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                                                 echo \Yii::t(
                                                     'app',
                                                     '{n, plural, =0{нет отзывов} =1{один отзыв} one{# отзыв} few{# отзыва} many{# отзывов} other{# отзыва}}',
-                                                    ['n' => 0]
+                                                    ['n' => $reviews2Count]
                                                 );
                                                 ?>
                                             </a>
@@ -161,9 +167,10 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
 
                         <div class="product-price g-mt-10 g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-
-                            <meta itemprop="price" content="<?= $priceHelper->minPrice->money->amount; ?>">
-                            <meta itemprop="priceCurrency" content="<?= $priceHelper->minPrice->money->currency->code; ?>">
+                            <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
+                            <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
+                            <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
+                            <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
                             <link itemprop="availability" href="http://schema.org/InStock">
 
                             <? if ($priceHelper->hasDiscount) : ?>
@@ -344,6 +351,25 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
     </div>
 </section>
 
+<section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
+    <div class="container">
+
+        <div class="col-md-12 g-mt-20" id="sx-reviews">
+            <div class="pull-right"><a href="#showReviewFormBlock"  data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div><h2>Отзывы</h2>
+        </div>
+
+        <?
+        $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
+            'namespace'         => 'Reviews2Widget',
+            'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
+            'cmsContentElement' => $model,
+        ]);
+        $widgetReviews::end();
+        ?>
+    </div>
+</section>
+
+
 <section class="g-brd-gray-light-v4 g-brd-top g-mt-20">
 
     <? if (\Yii::$app->shop->shopContents) : ?>
@@ -379,91 +405,6 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             ?>
         </div>
     <? endif; ?>
-</section>
-
-<section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
-    <div class="container">
-
-        <div class="col-md-12 g-mt-20" id="sx-reviews">
-            <h2>Отзывы</h2>
-        </div>
-
-        <?
-        $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-            'namespace'         => 'Reviews2Widget',
-            'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-            'cmsContentElement' => $model,
-        ]);
-        $widgetReviews::end();
-        ?>
-    </div>
-</section>
-
-
-<section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
-    <div class="container">
-
-        <div class="col-md-12 g-mt-20" id="sx-reviews">
-            <h2>Комментарии</h2>
-        </div>
-
-        <div class="col-md-12">
-
-            <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
-                'namespace' => 'VkCommentsWidget',
-                'apiId'     => 6911979,
-            ]); ?>
-        </div>
-    </div>
-</section>
-
-
-<section style="display: none;">
-    <div class="container">
-        <div class="g-py-20">
-
-            <!-- Nav tabs -->
-            <ul class="nav justify-content-center u-nav-v5-1" role="tablist" data-target="nav-5-1-primary-hor-center" data-tabs-mobile-type="slide-up-down" data-btn-classes="btn btn-md btn-block u-btn-outline-primary">
-
-                <li class="nav-item">
-                    <a class="nav-link active h4" data-toggle="tab" href="#sx-reviews" role="tab">Отзывы</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link h4" data-toggle="tab" href="#sx-vk-comments" role="tab">Комментарии</a>
-                </li>
-            </ul>
-            <!-- End Nav tabs -->
-
-
-            <!-- Tab panes -->
-            <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
-
-
-                <div class="tab-pane fade" id="sx-reviews" role="tabpanel">
-                    <div class="reviews-section">
-                        <?
-                        $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-                            'namespace'         => 'Reviews2Widget',
-                            'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-                            'cmsContentElement' => $model,
-                        ]);
-                        $widgetReviews::end();
-                        ?>
-                    </div>
-                </div>
-
-
-                <div class="tab-pane fade sx-content" id="sx-vk-comments" role="tabpanel">
-                    <?= \skeeks\cms\vk\comments\VkCommentsWidget::widget([
-                        'namespace' => 'VkCommentsWidget',
-                        'apiId'     => 6911979,
-                    ]); ?>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
 </section>
 
 
