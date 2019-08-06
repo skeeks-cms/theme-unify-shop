@@ -39,6 +39,8 @@ if ($model->rating == 1)
             <header class="g-mb-5 g-mb-0--sm" itemprop="author">
                 <h5 class="h4 g-font-weight-300 g-mr-10 g-mb-5"><? if ($model->createdBy) : ?>
                         <?= $model->createdBy->displayName; ?>
+                    <? elseif ($model->user_name) : ?>
+                        <?= $model->user_name; ?>
                     <? else : ?>
                         Гость
                     <? endif; ?></h5>
@@ -48,18 +50,19 @@ if ($model->rating == 1)
                 <span class="text-muted"><?=\Yii::$app->formatter->asDatetime($model->published_at);?></span>
             </div>
         </div>
-        <div itemprop="reviewBody">
-        <?= $model->comments; ?>
-        </div>
         <? if ($model->dignity) : ?>
-            <h5 class="g-mr-10 g-mb-5">Достоинства: </h5>
-            <?=$model->dignity; ?>
+            <strong>Достоинства: </strong>
+            <?=$model->dignity; ?></p>
         <? endif; ?>
 
         <? if ($model->disadvantages) : ?>
-            <h5 class="g-mr-10 g-mb-5">Недостатки: </h5>
+            <strong>Недостатки: </strong>
             <?=$model->disadvantages; ?>
         <? endif; ?>
+        <div itemprop="reviewBody">
+            <strong>Комментарий: </strong> <?= $model->comments; ?>
+        </div>
+
     </div>
 </div>
 

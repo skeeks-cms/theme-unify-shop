@@ -84,7 +84,13 @@ JS
         <? \skeeks\cms\modules\admin\widgets\Pjax::end(); ?>
     <? endif; ?>
 <? else : ?>
-    <p>Ваш отзыв может стать первым.</p>
+    <div class="container">
+        <div class="row">
+           <div class="col-sm-12">
+               <p>Ваш отзыв может стать первым.</p>
+           </div>
+        </div>
+    </div>
 <? endif; ?>
 </section><!--.reviews-section--left-->
 
@@ -158,16 +164,16 @@ CSS
     <div class="form-group d-flex align-items-center justify-content-between mb-0">
         <label class="mb-0">Ретинг: </label>
         <ul class="js-rating u-rating-v1 g-font-size-17 g-color-gray-light-v3 mb-0" data-hover-classes="g-color-yellow">
-            <li class="g-color-yellow click">
+            <li>
                 <i class="fa fa-star"></i>
             </li>
-            <li class="g-color-yellow click">
+            <li>
                 <i class="fa fa-star"></i>
             </li>
-            <li class="g-color-yellow click">
+            <li>
                 <i class="fa fa-star"></i>
             </li>
-            <li class="g-color-yellow click">
+            <li>
                 <i class="fa fa-star"></i>
             </li>
             <li>
@@ -200,19 +206,7 @@ CSS
             'class' => 'form-control form-control-rounded',
         ]); ?>
     <? endif; ?>
-    <? if (in_array('comments', \Yii::$app->reviews2->enabledFieldsOnGuest)): ?>
-        <?= $form->field($model, 'comments', [
-            'options'      => [
-                'class' => 'form-grid--row',
-            ],
-            'template'     => "<div class=\"form-grid--cell\">{label}</div>\n<div class='form-grid--cell'>{input}{hint}{error}</div>",
-            'labelOptions' => ['class' => 'form-label form-label-inline'],
-        ])->label('Текст отзыва:<br><small>(минимальное количество символов&nbsp;100)</small>')->textarea([
-            'rows'      => 6,
-            'minlength' => 100,
-            'class'     => 'form-control form-control-rounded',
-        ]); ?>
-    <? endif; ?>
+
     <? if (in_array('dignity', \Yii::$app->reviews2->enabledFieldsOnGuest)): ?>
         <?= $form->field($model, 'dignity', [
             'options'  => [
@@ -237,6 +231,19 @@ CSS
         ])->textarea([
             'rows'  => 6,
             'class' => 'form-control form-control-rounded',
+        ]); ?>
+    <? endif; ?>
+    <? if (in_array('comments', \Yii::$app->reviews2->enabledFieldsOnGuest)): ?>
+        <?= $form->field($model, 'comments', [
+            'options'      => [
+                'class' => 'form-grid--row',
+            ],
+            'template'     => "<div class=\"form-grid--cell\">{label}</div>\n<div class='form-grid--cell'>{input}{hint}{error}</div>",
+            'labelOptions' => ['class' => 'form-label form-label-inline'],
+        ])->label('Текст отзыва:<br><small>(минимальное количество символов&nbsp;100)</small>')->textarea([
+            'rows'      => 6,
+            'minlength' => 100,
+            'class'     => 'form-control form-control-rounded',
         ]); ?>
     <? endif; ?>
     <? if (in_array('verifyCode', \Yii::$app->reviews2->enabledFieldsOnGuest)): ?>
@@ -267,21 +274,6 @@ CSS
         ]); ?>
     <? endif; ?>
 
-    <? if (in_array('comments', \Yii::$app->reviews2->enabledFieldsOnUser)): ?>
-
-        <?= $form->field($model, 'comments', [
-            'options'      => [
-                'class' => 'form-grid--row',
-            ],
-            'template'     => "<div class=\"form-grid--cell\">{label}</div>\n<div class='form-grid--cell'>{input}{hint}{error}</div>",
-            'labelOptions' => ['class' => 'form-label form-label-inline'],
-        ])->label('Текст отзыва:<br><small>(минимальное количество символов&nbsp;100)</small>')->textarea([
-            'rows'      => 6,
-            'minlength' => 100,
-            'class'     => 'form-control form-control-rounded',
-        ]); ?>
-
-    <? endif; ?>
     <? if (in_array('dignity', \Yii::$app->reviews2->enabledFieldsOnUser)): ?>
         <?= $form->field($model, 'dignity', [
             'options'  => [
@@ -305,6 +297,21 @@ CSS
             'rows'  => 6,
             'class' => 'form-control form-control-rounded',
         ]); ?>
+    <? endif; ?>
+    <? if (in_array('comments', \Yii::$app->reviews2->enabledFieldsOnUser)): ?>
+
+        <?= $form->field($model, 'comments', [
+            'options'      => [
+                'class' => 'form-grid--row',
+            ],
+            'template'     => "<div class=\"form-grid--cell\">{label}</div>\n<div class='form-grid--cell'>{input}{hint}{error}</div>",
+            'labelOptions' => ['class' => 'form-label form-label-inline'],
+        ])->label('Текст отзыва:<br><small>(минимальное количество символов&nbsp;100)</small>')->textarea([
+            'rows'      => 6,
+            'minlength' => 100,
+            'class'     => 'form-control form-control-rounded',
+        ]); ?>
+
     <? endif; ?>
     <? if (in_array('verifyCode', \Yii::$app->reviews2->enabledFieldsOnUser)): ?>
         <?= $form->field($model, 'verifyCode')->widget(\skeeks\cms\captcha\Captcha::className()) ?>
