@@ -42,7 +42,7 @@ if ($model->rating == 1)
                     <? else : ?>
                         Гость
                     <? endif; ?></h5>
-                <div class="js-rating g-color-yellow" data-rating="<?=$model->rating; ?>"></div>
+                <div class="js-rating-show g-color-yellow" data-rating="<?=$model->rating; ?>"></div>
             </header>
             <div class="text-nowrap g-font-size-12">
                 <span class="text-muted"><?=\Yii::$app->formatter->asDatetime($model->published_at);?></span>
