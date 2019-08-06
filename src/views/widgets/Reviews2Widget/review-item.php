@@ -26,10 +26,17 @@ if ($model->rating == 1)
     $message = 'Очень хороший товар';
 }
 ?>
-<div class="media g-brd-around g-brd-gray-light-v4 g-pa-20 g-mb-20">
+<div class="media g-brd-around g-brd-gray-light-v4 g-pa-20 g-mb-20" itemprop="review" itemscope itemtype="http://schema.org/Review">
+    <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+        <meta itemprop="worstRating" content = "1">
+        <meta itemprop="ratingValue" content="<?=$model->rating; ?>">
+        <meta itemprop="bestRating" content="5">
+    </div>
+    <meta  itemprop="itemReviewed" content="<?=\yii\helpers\Html::encode($model->element->name); ?>">
+    <meta  itemprop="datePublished" content="<?=date('Y-m-d', $model->published_at); ?>">
     <div class="media-body">
         <div class="d-sm-flex justify-content-sm-between align-items-sm-center g-mb-15 g-mb-10--sm">
-            <header class="g-mb-5 g-mb-0--sm">
+            <header class="g-mb-5 g-mb-0--sm" itemprop="author">
                 <h5 class="h4 g-font-weight-300 g-mr-10 g-mb-5"><? if ($model->createdBy) : ?>
                         <?= $model->createdBy->displayName; ?>
                     <? else : ?>
@@ -41,7 +48,9 @@ if ($model->rating == 1)
                 <span class="text-muted"><?=\Yii::$app->formatter->asDatetime($model->published_at);?></span>
             </div>
         </div>
+        <div itemprop="reviewBody">
         <?= $model->comments; ?>
+        </div>
         <? if ($model->dignity) : ?>
             <h5 class="g-mr-10 g-mb-5">Достоинства: </h5>
             <?=$model->dignity; ?>
