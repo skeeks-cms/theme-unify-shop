@@ -32,30 +32,17 @@ $('.rating-active').click(function(){
 
 JS
 );
-?><!--
-<div class="row">
-    <div class="col-md-12 col-lg-12">
-        <a href="#" class="btn btn-primary sx-toggle-add-review2 pull-right"><i class="glyphicon glyphicon-plus"></i>
-            Добавить отзыв</a>
-    </div>
-</div>-->
-<section class="reviews-section--left">
+?>
 
-    <? /* if ($widget->dataProvider->count > 0) :*/ ?><!--
-            <header class="title-subsection">
-                <h3>Отзывы</h3>
-            </header>
-        <? /* else : */ ?>
-            <header class="title-subsection text-center">
-                <h3 class="no-reviews">Ты можешь<br/>быть первым… <span class="arrow hidden-xs hidden-sm">&rarr;</span></h3>
-            </header>
-        --><? /* endif; */ ?>
+<section class="reviews-section--left">
 
     <? if ($widget->enabledPjaxPagination == \skeeks\cms\components\Cms::BOOL_Y) : ?>
         <? \skeeks\cms\modules\admin\widgets\Pjax::begin([
             'id' => $pjaxId,
         ]); ?>
     <? endif; ?>
+    <!-- Panel Body -->
+    <div class="card-block g-pa-0">
 
     <? echo \yii\widgets\ListView::widget([
         'dataProvider' => $widget->dataProvider,
@@ -83,6 +70,7 @@ JS
         ],
         'layout'       => "{items}{pager}",
     ]) ?>
+    </div>
 
     <? if ($widget->enabledPjaxPagination == \skeeks\cms\components\Cms::BOOL_Y) : ?>
         <? \skeeks\cms\modules\admin\widgets\Pjax::end(); ?>
@@ -90,8 +78,7 @@ JS
 </section><!--.reviews-section--left-->
 
 
-<div class="col-md-8 offset-md-2" style="    background: #fafafa;
-    padding: 20px;">
+<div id="showReviewFormBlock" class="col-md-8 offset-md-2" style="background: #fafafa; padding: 20px; display: none">
 
     <? $form = \skeeks\cms\base\widgets\ActiveFormAjaxSubmit::begin([
         'action'                => \skeeks\cms\helpers\UrlHelper::construct('/reviews2/backend/submit')->toString(),
@@ -142,7 +129,109 @@ JS
                 <div class="rating-active" data-rate-value="0"></div>
             </div>
         </div>-->
-        <?= $form->field($model, 'rating')->radioList(\Yii::$app->reviews2->ratings); ?>
+        <? $this->registerJsFile('https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js'); ?>
+        <? $this->registerJs(<<<JS
+        $(':radio').change(function () {
+          console.log('New star rating: ' + this.value);
+        });
+JS
+
+        );
+        $this->registerCss(<<<CSS
+        #reviews2message-rating {
+  display: inline-block;
+  position: relative;
+  height: 30px;
+  line-height: 30px;
+  font-size: 30px;
+}
+
+#reviews2message-rating label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  cursor: pointer;
+}
+
+#reviews2message-rating label:last-child {
+  position: static;
+}
+
+#reviews2message-rating label:nth-child(1) {
+  z-index: 5;
+}
+
+#reviews2message-rating label:nth-child(2) {
+  z-index: 4;
+}
+
+#reviews2message-rating label:nth-child(3) {
+  z-index: 3;
+}
+
+#reviews2message-rating label:nth-child(4) {
+  z-index: 2;
+}
+
+#reviews2message-rating label:nth-child(5) {
+  z-index: 1;
+}
+
+#reviews2message-rating label input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+#reviews2message-rating label .icon {
+  float: left;
+  color: transparent;
+}
+
+#reviews2message-rating label:last-child .icon {
+  color: lightgray;
+}
+
+#reviews2message-rating:not(:hover) label input:checked ~ .icon,
+#reviews2message-rating:hover label:hover input ~ .icon {
+  color: goldenrod;
+}
+
+#reviews2message-rating label input:focus:not(:checked) ~ .icon:last-child {
+  color: transparent;
+  text-shadow: 0 0 5px goldenrod;
+}
+.sx-from-required {
+    display: none;
+}
+CSS
+);
+        $starsSpans = [];
+        $span = '<span class="icon">★</span>';
+        for ($i=1; $i<=5; $i++)
+        {
+            if ($i>1) {
+                $starsSpans[$i] = $starsSpans[$i-1].$span;
+            }
+            else {
+                $starsSpans[$i] = $span;
+            }
+        }
+        ?>
+
+        <?= $form->field($model, 'rating')->radioList(\Yii::$app->reviews2->ratings, [
+                'item'  =>  function($index, $label, $name, $checked, $value) use($starsSpans) {
+
+                    $return = '<label style="display: inline;">';
+                    $return .= '<input type="radio" name="' . $name . '" value="' . $value . '">';
+                    $return .= $starsSpans[$value];
+                    $return .= '</label>';
+
+                    return $return;
+                }
+        ]); ?>
         <? if (\Yii::$app->user->isGuest) : ?>
             <? if (in_array('user_name', \Yii::$app->reviews2->enabledFieldsOnGuest)): ?>
                 <?= $form->field($model, 'user_name', [

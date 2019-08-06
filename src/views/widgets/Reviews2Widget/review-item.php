@@ -26,24 +26,31 @@ if ($model->rating == 1)
     $message = 'Очень хороший товар';
 }
 ?>
-    <div class="review-item--header">
-        <span class="review-item--author">
-            <? if ($model->createdBy) : ?>
-                <?= $model->createdBy->displayName; ?>
-            <? else : ?>
-                Гость
-            <? endif; ?></span>
-        <span class="review-item--date"><?= $model->user_city ? $model->user_city . '&nbsp;|&nbsp;' : '' ?> <?= $model->user_name; ?><?=\Yii::$app->formatter->asDatetime($model->published_at);?></span>
-        <div class="rating">
-            <div class="star <?= $model->rating >1 ? 'active' : ''?>"></div>
-            <div class="star <?= $model->rating >2 ? 'active' : ''?>"></div>
-            <div class="star <?= $model->rating >3 ? 'active' : ''?>"></div>
-            <div class="star <?= $model->rating >4 ? 'active' : ''?>"></div>
-            <div class="star"<?= $model->rating >=5 ? 'active' : ''?>></div>
+<div class="media g-brd-around g-brd-gray-light-v4 g-pa-20 g-mb-20">
+    <div class="media-body">
+        <div class="d-sm-flex justify-content-sm-between align-items-sm-center g-mb-15 g-mb-10--sm">
+            <header class="g-mb-5 g-mb-0--sm">
+                <h5 class="h4 g-font-weight-300 g-mr-10 g-mb-5"><? if ($model->createdBy) : ?>
+                        <?= $model->createdBy->displayName; ?>
+                    <? else : ?>
+                        Гость
+                    <? endif; ?></h5>
+                <div class="js-rating g-color-yellow" data-rating="<?=$model->rating; ?>"></div>
+            </header>
+            <div class="text-nowrap g-font-size-12">
+                <span class="text-muted"><?=\Yii::$app->formatter->asDatetime($model->published_at);?></span>
+            </div>
         </div>
+        <?= $model->comments; ?>
+        <? if ($model->dignity) : ?>
+            <h5 class="g-mr-10 g-mb-5">Достоинства: </h5>
+            <?=$model->dignity; ?>
+        <? endif; ?>
+
+        <? if ($model->disadvantages) : ?>
+            <h5 class="g-mr-10 g-mb-5">Недостатки: </h5>
+            <?=$model->disadvantages; ?>
+        <? endif; ?>
     </div>
-    <div class="review-item--prod">
-        <a href="<?= $model->element->url; ?>"><?= $model->element->name; ?></a>
-    </div>
-    <div class="review-item--txt"><?= $model->comments; ?></div>
+</div>
 
