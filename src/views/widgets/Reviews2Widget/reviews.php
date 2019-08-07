@@ -7,7 +7,6 @@
  */
 /* @var $this yii\web\View */
 /* @var $widget \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget */
-skeeks\assets\unify\base\UnifyHsHelperRatingAsset::register($this);
 
 $model = $widget->modelMessage;
 $pjaxId = $widget->id."-pjax";
