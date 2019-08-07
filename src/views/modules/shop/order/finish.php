@@ -65,7 +65,7 @@ use yii\helpers\Html;
                     [                      // the owner name of the model
                         'label' => 'Оплата',
                         'format' => 'raw',
-                        'value' => $model->payed == 'Y' ? "<span style='color: green;'>Оплачен</span>" : "<span style='color: red;'>Не оплчаен</span>",
+                        'value' => $model->payed == 'Y' ? "<span style='color: green;'>Оплачен</span>" : "<span style='color: red;'>Не оплачен</span>",
                     ],
                     [                      // the owner name of the model
                         'attribute' => 'Заказ отменен',
