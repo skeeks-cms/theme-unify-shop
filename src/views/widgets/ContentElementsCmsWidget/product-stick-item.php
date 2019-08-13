@@ -24,13 +24,13 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         <figure class="g-pos-rel g-mb-10">
             <a class="" href="<?= $model->url; ?>" title="<?= $model->name; ?>">
                 <? if ($model->image) : ?>
-                <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
-                    new \skeeks\cms\components\imaging\filters\Thumbnail([
-                        'w' => 260,
-                        'h' => 200,
-                        'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
-                    ]), $model->code
-                ); ?>" alt="<?= $model->name; ?>">
+                    <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
+                        new \skeeks\cms\components\imaging\filters\Thumbnail([
+                            'w' => 260,
+                            'h' => 200,
+                            'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                        ]), $model->code
+                    ); ?>" alt="<?= $model->name; ?>">
                 <? else : ?>
                     <img class="img-fluid" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
                 <? endif; ?>
@@ -43,11 +43,13 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         <div class="media text-center">
             <!-- Product Info -->
             <div class="d-flex flex-column">
-                <? if ($priceHelper->hasDiscount) : ?>
-                    <div class="sx-old-price old"><?= $priceHelper->basePrice->money; ?></div>
-                    <span class="d-block sx-new-price g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></span>
-                <? else : ?>
-                    <span class="d-block sx-new-price g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></span>
+                <? if ($priceHelper && (float) $priceHelper->minPrice->money->amount > 0) : ?>
+                    <? if ($priceHelper->hasDiscount) : ?>
+                        <div class="sx-old-price old"><?= $priceHelper->basePrice->money; ?></div>
+                        <span class="d-block sx-new-price g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></span>
+                    <? else : ?>
+                        <span class="d-block sx-new-price g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></span>
+                    <? endif; ?>
                 <? endif; ?>
 
 

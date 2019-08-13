@@ -93,11 +93,13 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         </div>
         <? if (isset($shopProduct)) : ?>
             <div class="card-prod--price">
-                <? if ($priceHelper->hasDiscount) : ?>
+                <? if ($priceHelper->hasDiscount && (float) $priceHelper->minMoney->getAmount() > 0) : ?>
                     <div class="old sx-old-price" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $priceHelper->basePrice->money; ?></div>
                     <div class="new sx-new-price g-color-primary g-font-size-20" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $priceHelper->minMoney; ?></div>
                 <? else : ?>
-                    <div class="new sx-new-price g-color-primary g-font-size-20" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $priceHelper->minMoney; ?></div>
+                    <? if ((float) $priceHelper->minMoney->getAmount() > 0) : ?>
+                        <div class="new sx-new-price g-color-primary g-font-size-20" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $priceHelper->minMoney; ?></div>
+                    <? endif; ?>
                 <? endif; ?>
 
                 <? /* if ($shopProduct->minProductPrice && $shopProduct->baseProductPrice && $shopProduct->minProductPrice->id == $shopProduct->baseProductPrice->id) : */ ?><!--
@@ -111,9 +113,9 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             </div>
 
             <div class="card-prod--actions">
-                <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
+                <? if ($priceHelper && (float) $priceHelper->minMoney->getAmount() == 0) : ?>
                     <? if ($shopProduct->quantity > 0 && \Yii::$app->shop->is_show_button_no_price) : ?>
-                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>Купить", [
+                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>В корзину", [
                             'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type'    => 'button',
                             'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
@@ -128,13 +130,12 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                     <? endif; ?>
 
                 <? else : ?>
-                    <? if ($shopProduct->quantity > 0 && $shopProduct->minProductPrice) : ?>
-                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>Купить", [
+                    <? if ($shopProduct->quantity > 0) : ?>
+                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>В корзину", [
                             'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type'    => 'button',
                             'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
                         ]); ?>
-
                     <? else : ?>
                         <?= \yii\helpers\Html::tag('a', "Подробнее", [
                             'class' => 'btn btn-primary',
