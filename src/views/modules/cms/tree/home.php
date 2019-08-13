@@ -31,7 +31,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
 
     echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
         'namespace'       => 'home-tree-slider',
-        'enabledRunCache' => "Y",
+        'enabledRunCache' => "N",
         'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/revolution-slider',
         'treeParentCode'         => "catalog",
         //'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
@@ -114,7 +114,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
     <!-- End What People Say -->
 <? endif; ?>
 <!-- Blog News -->
-<section class="container-fluid g-pt-10 g-pb-10">
+<section class="container g-pt-10 g-pb-10">
     <?
     $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-news", [
         'viewFile'                   => '@app/views/widgets/ContentElementsCmsWidget/news-masonry',
