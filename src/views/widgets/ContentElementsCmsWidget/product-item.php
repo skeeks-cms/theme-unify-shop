@@ -5,7 +5,7 @@
  * @copyright 2010 SkeekS (СкикС)
  * @date 06.03.2015
  *
- * @var \v3toys\skeeks\models\V3toysProductContentElement $model
+ * @var \skeeks\cms\shop\models\ShopCmsContentElement $model
  *
  */
 /* @var $this yii\web\View */
@@ -32,7 +32,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                     --><? /* endif; */ ?>
     </div>
     <? if ($priceHelper->hasDiscount) : ?>
-        <? $percent = (int) ($priceHelper->percent * 100); ?>
+        <? $percent = (int)($priceHelper->percent * 100); ?>
         <? if ($percent > 0) : ?>
             <div class="card-prod--sale">
                 <div><span class="number">-<?= $percent; ?></span><span class="percent">%</span></div>
@@ -58,27 +58,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
     </div>
     <div class="card-prod--inner">
 
-        <!--<div class="card-prod--reviews">
-                <? /* if ($count>0) : */ ?>
-                    <div class="rating">
-                        <div class="star <? /*= ($rating > 0) ? "active" :''*/ ?>"></div>
-                        <div class="star <? /*= ($rating > 2) ? "active" :''*/ ?>"></div>
-                        <div class="star <? /*= ($rating > 3) ? "active" :''*/ ?>"></div>
-                        <div class="star <? /*= ($rating > 4) ? "active" :''*/ ?>"></div>
-                        <div class="star <? /*= ($rating >=5 ) ? "active" :''*/ ?>"></div>
-                    </div>
-                <? /* else : */ ?>
-                    <div class="rating">
-                        <div class="star"></div>
-                        <div class="star"></div>
-                        <div class="star"></div>
-                        <div class="star"></div>
-                        <div class="star"></div>
-                    </div>
-                <? /* endif; */ ?>
-                <div class="caption"><a href="<? /*=$model->url.'#tab-reviews'*/ ?>">(<? /*= (int) $count;*/ ?> отзывов)</a></div>
-            </div>-->
-
+        <div class="card-prod--reviews">
 
         <? /* if ($model->relatedPropertiesModel->getSmartAttribute('typeConstruct')) : $prop = $model->relatedPropertiesModel->getSmartAttribute('typeConstruct'); */ ?>
         <!--<div class="card-prod--category">
@@ -93,28 +73,27 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         </div>
         <? if (isset($shopProduct)) : ?>
             <div class="card-prod--price">
-                <? if ($priceHelper->hasDiscount && (float) $priceHelper->minMoney->getAmount() > 0) : ?>
-                    <div class="old sx-old-price" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $priceHelper->basePrice->money; ?></div>
-                    <div class="new sx-new-price g-color-primary g-font-size-20" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $priceHelper->minMoney; ?></div>
-                <? else : ?>
-                    <? if ((float) $priceHelper->minMoney->getAmount() > 0) : ?>
-                        <div class="new sx-new-price g-color-primary g-font-size-20" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $priceHelper->minMoney; ?></div>
+                <? if ($priceHelper) : ?>
+                    <?
+                    $prefix = "";
+                    if ($shopProduct->isTradeOffers()) {
+                        $prefix = "от ";
+                    }
+                    ?>
+                    <? if ($priceHelper->hasDiscount && (float)$priceHelper->minMoney->getAmount() > 0) : ?>
+                        <div class="old sx-old-price" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></div>
+                        <div class="new sx-new-price g-color-primary g-font-size-20" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
+                    <? else : ?>
+                        <? if ((float)$priceHelper->minMoney->getAmount() > 0) : ?>
+                            <div class="new sx-new-price g-color-primary g-font-size-20" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
+                        <? endif; ?>
                     <? endif; ?>
                 <? endif; ?>
-
-                <? /* if ($shopProduct->minProductPrice && $shopProduct->baseProductPrice && $shopProduct->minProductPrice->id == $shopProduct->baseProductPrice->id) : */ ?><!--
-                    <div class="new g-color-primary g-font-size-20"><? /*= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); */ ?></div>
-                <? /* else : */ ?>
-                    <? /* if ($shopProduct->baseProductPrice && $shopProduct->minProductPrice) : */ ?>
-                    <div class="old"><? /*= \Yii::$app->money->convertAndFormat($shopProduct->baseProductPrice->money); */ ?></div>
-                    <div class="new"><? /*= \Yii::$app->money->convertAndFormat($shopProduct->minProductPrice->money); */ ?></div>
-                    <? /* endif; */ ?>
-                --><? /* endif; */ ?>
             </div>
 
             <div class="card-prod--actions">
-                <? if ($priceHelper && (float) $priceHelper->minMoney->getAmount() == 0) : ?>
-                    <? if ($shopProduct->quantity > 0 && \Yii::$app->shop->is_show_button_no_price) : ?>
+                <? if ($priceHelper && (float)$priceHelper->minMoney->getAmount() == 0) : ?>
+                    <? if ($shopProduct->quantity > 0 && \Yii::$app->shop->is_show_button_no_price && !$shopProduct->isTradeOffers()) : ?>
                         <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>В корзину", [
                             'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type'    => 'button',
@@ -130,7 +109,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                     <? endif; ?>
 
                 <? else : ?>
-                    <? if ($shopProduct->quantity > 0) : ?>
+                    <? if ($shopProduct->quantity > 0 && !$shopProduct->isTradeOffers()) : ?>
                         <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>В корзину", [
                             'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type'    => 'button',
@@ -152,19 +131,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             <div class="with-icon-group">
 
 
-                <? /* if ($model->relatedPropertiesModel->getSmartAttribute('totalDetaley')) : $prop = $model->relatedPropertiesModel->getSmartAttribute('totalDetaley'); */ ?><!--
-                    <p class="with-icon"><img src="<? /*= \v3project\themes\mega\assets\ThemeMegaBuildAsset::getAssetUrl('images/details.png'); */ ?>" alt="">деталей: <? /*=$prop;*/ ?></p>
-                    --><? /* endif; */ ?>
-                <!--<p class="with-icon"><img src="<? /*= \v3project\themes\mega\assets\ThemeMegaBuildAsset::getAssetUrl('images/age.png'); */ ?>" alt="">возраст:
-                        --><? /*= $v3ProductElement->v3toysProductProperty ? $v3ProductElement->v3toysProductProperty->ageString : ""; */ ?>
             </div>
-
-            <? /* if ($v3ProductElement->v3toysProductProperty->sku) : */ ?><!--
-                    <p>Артикул: <? /*= $v3ProductElement->v3toysProductProperty->sku; */ ?></p>
-                <? /* endif; */ ?>
-                <? /* if ($prop = $model->relatedPropertiesModel->getSmartAttribute('brand')) : */ ?>
-                    <p>Бренд:  <? /*=$prop; */ ?></p>
-                --><? /* endif; */ ?>
         </div>
     </div>
 </article>

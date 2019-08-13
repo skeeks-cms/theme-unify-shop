@@ -43,12 +43,18 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         <div class="media text-center">
             <!-- Product Info -->
             <div class="d-flex flex-column">
-                <? if ($priceHelper && (float) $priceHelper->minPrice->money->amount > 0) : ?>
+                <? if ($priceHelper && (float)$priceHelper->minPrice->money->amount > 0) : ?>
+                    <?
+                    $prefix = "";
+                    if ($shopProduct->isTradeOffers()) {
+                        $prefix = "от ";
+                    }
+                    ?>
                     <? if ($priceHelper->hasDiscount) : ?>
-                        <div class="sx-old-price old"><?= $priceHelper->basePrice->money; ?></div>
-                        <span class="d-block sx-new-price g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></span>
+                        <div class="sx-old-price old"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></div>
+                        <span class="d-block sx-new-price g-color-primary g-font-size-20"><?= $prefix; ?><?= $priceHelper->minMoney; ?></span>
                     <? else : ?>
-                        <span class="d-block sx-new-price g-color-primary g-font-size-20"><?= $priceHelper->minMoney; ?></span>
+                        <span class="d-block sx-new-price g-color-primary g-font-size-20"><?= $prefix; ?><?= $priceHelper->minMoney; ?></span>
                     <? endif; ?>
                 <? endif; ?>
 

@@ -23,13 +23,13 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 <section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper" itemscope itemtype="http://schema.org/Product">
     <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?><?= $priceHelper->basePrice->money; ?>"/>
     <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
-    <meta itemprop="description" content="<?= $model->description_short?$model->description_short:'-'; ?>"/>
+    <meta itemprop="description" content="<?= $model->description_short ? $model->description_short : '-'; ?>"/>
     <meta itemprop="sku" content="<?= $model->id; ?>"/>
 
     <? if ($model->relatedPropertiesModel->getAttribute('brand')) : ?>
         <meta itemprop="brand" content="<?= $model->relatedPropertiesModel->getSmartAttribute('brand'); ?>"/>
     <? else : ?>
-        <meta itemprop="brand" content="<?=\Yii::$app->view->theme->title; ?>"/>
+        <meta itemprop="brand" content="<?= \Yii::$app->view->theme->title; ?>"/>
     <? endif; ?>
     <? if ($model->image) : ?>
         <link itemprop="image" href="<?= $model->image->absoluteSrc; ?>">
@@ -131,15 +131,15 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
                                 <div class="col-7">
                                     <div class="feedback-review cf pull-right">
-                                        <? if ($rating>0) : ?>
+                                        <? if ($rating > 0) : ?>
                                             <div class="product-rating pull-right" itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
-                                                <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
-                                                <meta itemprop="ratingValue" content="<?=$rating?$rating:0; ?>">
-                                                <meta itemprop="reviewCount" content="<?=$reviews2Count?$reviews2Count:0; ?>">
+                                                <div class="js-rating-show g-color-yellow" data-rating="<?= $rating; ?>"></div>
+                                                <meta itemprop="ratingValue" content="<?= $rating ? $rating : 0; ?>">
+                                                <meta itemprop="reviewCount" content="<?= $reviews2Count ? $reviews2Count : 0; ?>">
                                             </div>
                                         <? else : ?>
                                             <div class="product-rating pull-right">
-                                                <div class="js-rating-show g-color-yellow" data-rating="<?=$rating; ?>"></div>
+                                                <div class="js-rating-show g-color-yellow" data-rating="<?= $rating; ?>"></div>
                                             </div>
                                         <? endif; ?>
 
@@ -173,11 +173,20 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                             <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
                             <link itemprop="availability" href="http://schema.org/InStock">
 
-                            <? if ($priceHelper->hasDiscount) : ?>
-                                <span class="current ss-price sx-old-price h1"><?= $priceHelper->basePrice->money; ?></span>
-                                <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
-                            <? else: ?>
-                                <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                            <? if ($priceHelper) : ?>
+                                <?
+                                $prefix = "";
+                                if ($shopProduct->isTradeOffers()) {
+                                    $prefix = "от ";
+                                }
+                                ?>
+
+                                <? if ($priceHelper->hasDiscount) : ?>
+                                    <span class="current ss-price sx-old-price h1"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></span>
+                                    <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $prefix; ?><?= $priceHelper->minPrice->money; ?></span>
+                                <? else: ?>
+                                    <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $prefix; ?><?= $priceHelper->minPrice->money; ?></span>
+                                <? endif; ?>
                             <? endif; ?>
 
                         </div>
@@ -207,7 +216,6 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                         <? endif; ?>
                                     </div>
                                     <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
-
                                         <? if ($shopProduct->quantity > 10) : ?>
                                             <span class="row-label">В наличии более 10 шт.</span>
                                         <? else : ?>
@@ -320,6 +328,110 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
         </div>
     </div>
 
+    <? if ($shopProduct->isTradeOffers()) : ?>
+        <div class="container" style="background: #f1f1f1;">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Предложения</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+
+                    <?
+                    $query = $shopProduct->getTradeOffers();
+                    $baseQuery = clone $query;
+
+                    $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
+
+                    $eavFiltersHandler = new \skeeks\cms\eavqueryfilter\CmsEavQueryFilterHandler([
+                        'baseQuery' => $baseQuery,
+                    ]);
+                    $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
+                    $rpQuery = $eavFiltersHandler->getRPQuery();
+                    $eavFiltersHandler->initRPByQuery($rpQuery);
+
+                    $filtersWidget
+                        ->registerHandler($eavFiltersHandler);
+                    $filtersWidget->loadFromRequest();
+                    $filtersWidget->applyToQuery($query);
+
+                    $filtersWidget::end();
+
+                    /**
+                     * @var \skeeks\cms\shop\models\ShopCmsContentElement $tOffer
+                     */
+                    //$tradeOffers = $shopCmsContentElement->getTradeOffers()->with("relatedProperties")->with("relatedElementProperties")->all();
+                    $tradeOffers = $query->all();
+                    ?>
+                </div>
+                <div class="col-md-9">
+                    <? foreach ($tradeOffers as $tOffer) : ?>
+                        <div class="row sx-price-block">
+                            <div class="col-md-2 col-sm-12">
+                                <img src="<?= \skeeks\cms\helpers\Image::getSrc(
+                                    \Yii::$app->imaging->thumbnailUrlOnRequest($tOffer->image ? $tOffer->image->src : null,
+                                        new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                            'w' => 50,
+                                            'h' => 50,
+                                            'm' => \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                                        ]), $model->code
+                                    )); ?>" title="<?= $model->name; ?>" alt="<?= $model->name; ?>" class="img_list_catalog" style="max-height: 50px; max-width: 50px;"/>
+                                Код: <?= $tOffer->id; ?>
+                            </div>
+                            <div class="col-md-2 col-sm-12">
+                                <b style="line-height: 20px;">
+                                    <?
+                                    $color = trim($tOffer->relatedPropertiesModel->getSmartAttribute('color'));
+                                    $title = $tOffer->relatedPropertiesModel->getSmartAttribute('packing')." ".$tOffer->relatedPropertiesModel->getSmartAttribute('measure').($color ? " - ".$color : "");
+                                    echo(trim($title) ? $title : $tOffer->name);
+                                    ?>
+                                </b>
+                                <!--
+                                      <img class="img-responsive" src="<? /*= \skeeks\cms\helpers\Image::getSrc($tOffer->image ? $tOffer->image->src : ""); */ ?>" />-->
+                            </div>
+
+                            <div class="col-md-2 col-sm-12">
+                                <!--<b><? /*= $tOffer->name; */ ?></b>-->
+                            </div>
+                            <div class="col-md-2 col-sm-12">
+                                      <span class="price">
+                                            <? if ($tOffer->shopProduct->minProductPrice->id == $tOffer->shopProduct->baseProductPrice->id) : ?>
+                                                <span class="old"></span>
+                                                <span class="new"><?= \Yii::$app->money->convertAndFormat($tOffer->shopProduct->minProductPrice->money); ?></span>
+                                            <? else : ?>
+                                                <span class="old"><?= \Yii::$app->money->convertAndFormat($tOffer->shopProduct->baseProductPrice->money); ?></span>
+                                                <span class="new"><?= \Yii::$app->money->convertAndFormat($tOffer->shopProduct->minProductPrice->money); ?></span>
+                                            <? endif; ?>
+                                        </span>
+                            </div>
+                            <div class="col-md-4 col-sm-12" style="text-align: right;">
+
+                                <input type="number" id="sx-number-<?= $tOffer->id; ?>" value="1" name="qty" class=" sx-basket-quantity" style="width: 50px;
+                                        border: #ddd 1px solid;
+                                        border-radius: 0px;" maxlength="3" max="999" min="1">
+                                <a class="btn btn-default btn-primary product-add-cart noradius" href="#"
+                                   onclick="sx.Shop.addProduct(<?= $tOffer->id; ?>, $('#sx-number-<?= $tOffer->id; ?>').val()); return false;"><i
+                                            class="fa fa-cart-plus"></i> В корзину</a>
+
+                                <? /*= \yii\helpers\Html::tag('a', '<i class="fa fa-shopping-cart"></i> <strong>В корзину</strong>', [
+                                        'class' => 'btn btn-primary js-to-cart',
+                                        'type' => 'button',
+                                        'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$tOffer->shopProduct->id}, 1); return false;"),
+                                    ]); */ ?>
+                            </div>
+                        </div>
+                    <? endforeach; ?>
+
+                </div>
+
+
+            </div>
+        </div>
+    <? endif; ?>
+
 
     <div class="container">
 
@@ -355,7 +467,8 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
     <div class="container">
 
         <div class="col-md-12 g-mt-20" id="sx-reviews">
-            <div class="pull-right"><a href="#showReviewFormBlock"  data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div><h2>Отзывы</h2>
+            <div class="pull-right"><a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div>
+            <h2>Отзывы</h2>
         </div>
 
         <?
@@ -399,6 +512,13 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
                     $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
 
+                    $activeDataProvider->query->joinWith('shopProduct');
+                    $activeDataProvider->query->andWhere([
+                        '!=',
+                        'shopProduct.product_type',
+                        \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
+                    ]);
+
                 },
             ]);
             $widgetElements::end();
@@ -435,6 +555,14 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                     $query->leftJoin('shop_viewed_product', '`shop_viewed_product`.`shop_product_id` = `shop_product`.`id`');
                     $query->andWhere(['shop_fuser_id' => \Yii::$app->shop->shopFuser->id]);
                     //$query->orderBy(['shop_viewed_product.created_at' => SORT_DESC]);
+
+                    $query->joinWith('shopProduct');
+                    $query->andWhere([
+                        '!=',
+                        'shopProduct.product_type',
+                        \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
+                    ]);
+
                 },
             ]);
             $widgetElements::end();

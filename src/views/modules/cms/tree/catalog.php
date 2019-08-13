@@ -49,7 +49,7 @@
 
                 $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
                 $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
-                $availabilityFiltersHandler->value = (int) \Yii::$app->shop->is_show_product_only_quantity;
+                $availabilityFiltersHandler->value = (int)\Yii::$app->shop->is_show_product_only_quantity;
 
                 $sortFiltersHandler = new \skeeks\cms\shop\queryFilter\SortFiltersHandler();
 
@@ -74,8 +74,12 @@
                         $activeDataProvider->query->with('shopProduct.minProductPrice');
                         $activeDataProvider->query->with('image');
 
-                        //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
-                        //$activeDataProvider->query->orderBy(['basePrice' => SORT_ASC]);
+                        $activeDataProvider->query->joinWith('shopProduct');
+                        $activeDataProvider->query->andWhere([
+                            '!=',
+                            'shopProduct.product_type',
+                            \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
+                        ]);
                     },
 
                 ]);
@@ -138,11 +142,11 @@
                 <div class="g-mb-20">
                     <? if (!$isShowFilters) : ?>
                     <div style="display: none;">
-                    <? endif; ?>
+                        <? endif; ?>
                         <? $filtersWidget::end(); ?>
-                    <? if (!$isShowFilters) : ?>
-                        </div>
-                    <? endif; ?>
+                        <? if (!$isShowFilters) : ?>
+                    </div>
+                <? endif; ?>
 
                     <!--<div id="stickyblock-start" class="g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
 
