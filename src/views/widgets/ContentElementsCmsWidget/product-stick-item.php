@@ -26,7 +26,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                 <? if ($model->image) : ?>
                     <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
-                            'w' => 260,
+                            'w' => 200,
                             'h' => 200,
                             'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
                         ]), $model->code
