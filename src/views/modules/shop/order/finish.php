@@ -55,7 +55,7 @@ use yii\helpers\Html;
                     [
                         'label' => 'Доставка',
                         'format' => 'raw',
-                        'value' => $model->shopDelivery->name,
+                        'value' => $model->shopDelivery ? $model->shopDelivery->name : "не выбран способ доставки",
                     ],
                     [                      // the owner name of the model
                         'label' => 'Статус',
