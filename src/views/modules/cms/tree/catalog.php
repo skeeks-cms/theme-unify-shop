@@ -128,7 +128,16 @@
                 $filtersWidget->applyToQuery($query);
                 ?>
 
+                <? if (!$isShowFilters) : ?>
+                <div style="display: none;">
+                    <? endif; ?>
 
+                    <? if (\Yii::$app->mobileDetect->isMobile) : ?>
+                        <? $filtersWidget::end(); ?>
+                    <? endif; ?>
+                <? if (!$isShowFilters) : ?>
+                    </div>
+                <? endif; ?>
                 <?= $this->render('@app/views/filters/sorts', [
                     'filtersWidget'              => $filtersWidget,
                     'sortFiltersHandler'         => $sortFiltersHandler,
@@ -141,12 +150,15 @@
             <div class="col-md-3 order-md-1 g-py-20 g-bg-secondary">
                 <div class="g-mb-20">
                     <? if (!$isShowFilters) : ?>
-                    <div style="display: none;">
-                        <? endif; ?>
-                        <? $filtersWidget::end(); ?>
+                        <div style="display: none;">
+                            <? endif; ?>
+
+                            <? if (!\Yii::$app->mobileDetect->isMobile) : ?>
+                            <? $filtersWidget::end(); ?>
+                            <? endif; ?>
                         <? if (!$isShowFilters) : ?>
-                    </div>
-                <? endif; ?>
+                        </div>
+                    <? endif; ?>
 
                     <!--<div id="stickyblock-start" class="g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
 
