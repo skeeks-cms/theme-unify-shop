@@ -585,3 +585,12 @@
     text-decoration: line-through;
     color: #8a8a8a;
 }
+
+/* Иконка корзины для мобильной версии */
+@media (max-width: 768px) {
+    #sx-top-cart {
+        position: absolute;
+        right: 5.64286rem;
+        margin-right: 0 !important;
+    }
+}
