@@ -10,6 +10,7 @@
 /* @var $sortFiltersHandler \skeeks\cms\shop\queryFilter\sortFiltersHandler */
 ?>
 <div class="sorting sx-filters-form">
+    <? if ($sortFiltersHandler) : ?>
     <div class="sort">
         <div class="lbl">
             Сортировать:
@@ -18,11 +19,12 @@
             <?= $sortFiltersHandler->renderVisible(); ?>
         </div>
     </div>
+    <? endif; ?>
     <? if (@$availabilityFiltersHandler) : ?>
         <?= $availabilityFiltersHandler->renderVisible(); ?>
     <? endif; ?>
 </div>
-<div class="row">
+<div class="row g-mt-10">
     <div class="col-md-12 sx-filters-selected-wrapper">
     </div>
 </div>

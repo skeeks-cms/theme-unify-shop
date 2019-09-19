@@ -215,6 +215,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                             ]); ?>
                                         <? endif; ?>
                                     </div>
+                                    <? if (\Yii::$app->shop->is_show_quantity_product) : ?>
                                     <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
                                         <? if ($shopProduct->quantity > 10) : ?>
                                             <span class="row-label">В наличии более 10 шт.</span>
@@ -223,6 +224,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                         <? endif; ?>
 
                                     </div>
+                                    <? endif; ?>
                                 </div>
                             </div>
                         <? else : ?>

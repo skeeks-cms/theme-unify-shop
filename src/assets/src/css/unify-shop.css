@@ -577,7 +577,6 @@
 @media (max-width: 450px) {
     .u-basket {
         margin-right: 80px !important;
-        padding-top: 20px !important;
     }
 }
 
@@ -585,4 +584,13 @@
 .sx-old-price {
     text-decoration: line-through;
     color: #8a8a8a;
+}
+
+/* Иконка корзины для мобильной версии */
+@media (max-width: 768px) {
+    #sx-top-cart {
+        position: absolute;
+        right: 5.64286rem;
+        margin-right: 0 !important;
+    }
 }

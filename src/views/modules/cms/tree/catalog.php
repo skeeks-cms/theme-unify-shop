@@ -33,6 +33,7 @@
                 <? \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::end(); ?>
 
 
+                <a href="#" class="sx-btn-filter btn btn-large btn-primary">Фильтры</a>
 
 
                 <?

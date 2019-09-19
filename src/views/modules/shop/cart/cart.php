@@ -27,18 +27,19 @@ JS
             <div class="row">
 
 
-
                 <? if (\Yii::$app->shop->cart->isEmpty) : ?>
+                <div class="col-sm-12">
                     <!-- EMPTY CART -->
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <strong>Ваша корзина пуста!</strong><br/>
-                            В вашей корзине нет покупок.<br/>
-                            Кликните <a href="/" data-pjax="0">сюда</a> для продолжения покупок. <br/>
-                            <!--<span class="label label-warning">this is just an empty cart example</span>-->
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <strong>Ваша корзина пуста!</strong><br/>
+                                В вашей корзине нет покупок.<br/>
+                                Кликните <a href="/" data-pjax="0">сюда</a> для продолжения покупок. <br/>
+                                <!--<span class="label label-warning">this is just an empty cart example</span>-->
+                            </div>
                         </div>
-                    </div>
                     <!-- /EMPTY CART -->
+                </div>
                 <? else: ?>
                 <div class="col-md-12 g-my-50 sx-steps">
                     <?= \skeeks\cms\shopCartStepsWidget\ShopCartStepsWidget::widget([

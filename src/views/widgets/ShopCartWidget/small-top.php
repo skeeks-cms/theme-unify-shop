@@ -33,7 +33,7 @@ JS
     </a>
 
     <div id="basket-bar" class="u-basket__bar u-dropdown--css-animation u-dropdown--hidden g-brd-top g-brd-2 g-brd-primary g-color-main g-mt-20" aria-labelledby="basket-bar-invoker">
-        <div class="js-scrollbar g-height-280">
+        <div class="js-scrollbar g-height-280  g-pt-15">
 
             <? \skeeks\cms\modules\admin\widgets\Pjax::begin([
                 'id' => 'sx-cart',
