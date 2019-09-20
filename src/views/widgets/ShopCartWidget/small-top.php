@@ -21,7 +21,7 @@ JS
 
 
 <!-- Basket -->
-<div class="u-basket d-inline-block g-valign-middle g-mr-30 g-pt-8" id="sx-top-cart">
+<div class="u-basket d-inline-block g-valign-middle g-mr-10 g-pt-8" id="sx-top-cart">
     <a href="<?= \yii\helpers\Url::to(['/shop/cart']); ?>" id="basket-bar-invoker" class="sx-cart-small-open-trigger u-icon-v1 g-color-main g-text-underline--none--hover g-width-20 g-height-20" aria-controls="basket-bar" aria-haspopup="true" aria-expanded="false" data-dropdown-event="hover" data-dropdown-target="#basket-bar"
        data-dropdown-type="css-animation" data-dropdown-duration="300" data-dropdown-hide-on-scroll="false" data-dropdown-animation-in="fadeIn" data-dropdown-animation-out="fadeOut">
 
