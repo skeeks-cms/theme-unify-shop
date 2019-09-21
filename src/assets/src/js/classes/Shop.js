@@ -17,8 +17,22 @@
                 if (_.size(self.Shop.carts) == 1) {
                     $(".sx-cart-small-open-trigger").click();
                 }
-                $('.sx-count-baskets').empty().append(self.Shop.get('cartData').countShopBaskets);
-                $('.sx-count-quantity').empty().append(self.Shop.get('cartData').quantity);
+                var quantity = self.Shop.get('cartData').quantity;
+                var countShopBaskets = self.Shop.get('cartData').countShopBaskets;
+
+                $('.sx-count-baskets').empty().append(countShopBaskets);
+                $('.sx-count-quantity').empty().append(quantity);
+
+                if (countShopBaskets > 0) {
+                    $('.sx-count-baskets').fadeIn();
+                } else {
+                    $('.sx-count-baskets').fadeOut();
+                }
+                if (quantity > 0) {
+                    $('.sx-count-quantity').fadeIn();
+                } else {
+                    $('.sx-count-quantity').fadeOut();
+                }
             });
         }
     });
