@@ -574,11 +574,6 @@
 .sx-steps li {
     cursor: pointer;
 }
-@media (max-width: 450px) {
-    .u-basket {
-        margin-right: 80px !important;
-    }
-}
 
 
 .sx-old-price {
@@ -586,11 +581,3 @@
     color: #8a8a8a;
 }
 
-/* Иконка корзины для мобильной версии */
-@media (max-width: 768px) {
-    #sx-top-cart {
-        position: absolute;
-        right: 4.64286rem;
-        margin-right: 0 !important;
-    }
-}
