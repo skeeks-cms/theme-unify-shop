@@ -12,39 +12,39 @@
         <div class="toggle-content" style="display: block;">
 
             <span class="clearfix">
-                <span class="pull-right"><?= \Yii::$app->shop->cart->moneyOriginal; ?></span>
+                <span class="float-right"><?= \Yii::$app->shop->cart->moneyOriginal; ?></span>
                 <strong class="pull-left">Товаров:</strong>
             </span>
             <? if (\Yii::$app->shop->cart->moneyDiscount->amount > 0) : ?>
                 <span class="clearfix">
-                    <span class="pull-right"><?= \Yii::$app->shop->cart->moneyDiscount; ?></span>
+                    <span class="float-right"><?= \Yii::$app->shop->cart->moneyDiscount; ?></span>
                     <span class="pull-left">Скидка:</span>
                 </span>
             <? endif; ?>
 
             <? if (\Yii::$app->shop->cart->moneyDelivery->amount > 0) : ?>
                 <span class="clearfix">
-                    <span class="pull-right"><?= \Yii::$app->shop->cart->moneyDelivery; ?></span>
+                    <span class="float-right"><?= \Yii::$app->shop->cart->moneyDelivery; ?></span>
                     <span class="pull-left">Доставка:</span>
                 </span>
             <? endif; ?>
 
             <? if (\Yii::$app->shop->cart->moneyVat->amount > 0) : ?>
                 <span class="clearfix">
-                    <span class="pull-right"><?= \Yii::$app->shop->cart->moneyVat; ?></span>
+                    <span class="float-right"><?= \Yii::$app->shop->cart->moneyVat; ?></span>
                     <span class="pull-left">Налог:</span>
                 </span>
             <? endif; ?>
 
             <? if (\Yii::$app->shop->cart->weight > 0) : ?>
                 <span class="clearfix">
-                    <span class="pull-right"><?= \Yii::$app->shop->cart->weight; ?> г.</span>
+                    <span class="float-right"><?= \Yii::$app->shop->cart->weight; ?> г.</span>
                     <span class="pull-left">Вес:</span>
                 </span>
             <? endif; ?>
             <hr />
             <span class="clearfix">
-                <span class="pull-right size-20"><?= \Yii::$app->shop->cart->money; ?></span>
+                <span class="float-right size-20"><?= \Yii::$app->shop->cart->money; ?></span>
                 <strong class="pull-left">ИТОГ:</strong>
             </span>
             <hr />
