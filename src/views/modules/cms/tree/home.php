@@ -20,20 +20,21 @@ if (\Yii::$app->mobileDetect->isMobile) {
 
     $widget = \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::begin([
         'namespace'       => 'mobile-home-catalog-small',
+        'limit'           => 30,
         'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/sub-catalog-small',
-        'treeParentCode'         => "catalog",
+        'treeParentCode'  => "catalog",
         'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
     ]);
     $widget->activeQuery->with('image');
     \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::end();
 } else {
 
-
     echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
         'namespace'       => 'home-tree-slider',
         'enabledRunCache' => "N",
+        'limit'           => 30,
         'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/revolution-slider',
-        'treeParentCode'         => "catalog",
+        'treeParentCode'  => "catalog",
         //'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
     ]);
 }
