@@ -113,6 +113,19 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
                     <? else: ?>
 
+                        <div id="carouselCus1" class="js-carousel g-pt-10 g-mb-10 sx-stick-slider"
+                             data-infinite="true"
+                             data-fade="true"
+                             data-arrows-classes="u-arrow-v1 g-brd-around g-brd-gray-dark-v5 g-absolute-centered--y g-width-45 g-height-45 g-font-size-25 g-color-gray-dark-v5 g-color-primary--hover rounded-circle"
+                             data-arrow-left-classes="fa fa-angle-left g-left-minus-20"
+                             data-arrow-right-classes="fa fa-angle-right g-right-minus-20"
+                             data-nav-for="#carouselCus2">
+                            <div class="js-slide g-bg-cover">
+                                <!--w-100-->
+                                <img class="img-fluid" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
+                            </div>
+                        </div>
+
                     <? endif; ?>
                 </div>
             </div>
@@ -216,14 +229,14 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                         <? endif; ?>
                                     </div>
                                     <? if (\Yii::$app->shop->is_show_quantity_product) : ?>
-                                    <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
-                                        <? if ($shopProduct->quantity > 10) : ?>
-                                            <span class="row-label">В наличии более 10 шт.</span>
-                                        <? else : ?>
-                                            <span class="row-label">В наличии:</span> <span class="row-value"><?= $shopProduct->quantity; ?> шт.</span>
-                                        <? endif; ?>
+                                        <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
+                                            <? if ($shopProduct->quantity > 10) : ?>
+                                                <span class="row-label">В наличии более 10 шт.</span>
+                                            <? else : ?>
+                                                <span class="row-label">В наличии:</span> <span class="row-value"><?= $shopProduct->quantity; ?> шт.</span>
+                                            <? endif; ?>
 
-                                    </div>
+                                        </div>
                                     <? endif; ?>
                                 </div>
                             </div>
@@ -282,7 +295,8 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
                             <!-- Nav tabs -->
                             <!--u-nav-v1-1-->
-                            <ul class="nav nav-justified  u-nav-v5-1" role="tablist" data-target="nav-1-1-accordion-default-hor-left-icons" data-tabs-mobile-type="accordion" data-btn-classes="btn btn-md btn-block rounded-0 u-btn-outline-lightgray g-mb-20">
+                            <ul class="nav nav-justified  u-nav-v5-1" role="tablist" data-target="nav-1-1-accordion-default-hor-left-icons" data-tabs-mobile-type="accordion"
+                                data-btn-classes="btn btn-md btn-block rounded-0 u-btn-outline-lightgray g-mb-20">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#nav-1-1-accordion-default-hor-left-icons--1" role="tab">
                                         <!--<i class="icon-christmas-037 u-tab-line-icon-pro "></i>-->
