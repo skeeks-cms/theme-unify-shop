@@ -260,7 +260,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                 'toggleButton' => [
                                     'label' => 'Уведомить о поступлении',
                                     'style' => '',
-                                    'class' => 'btn btn-grey-white btn-52 js-out-click-btn',
+                                    'class' => 'btn btn-primary btn-grey-white btn-52 js-out-click-btn',
                                 ],
                             ]); ?>
 
