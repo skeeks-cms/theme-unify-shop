@@ -11,8 +11,40 @@ $this->registerJs(<<<JS
 $.HSCore.components.HSRating.init($('.js-rating-show'), {
   spacing: 2
 });
+
+console.log($(".slick-active"));
+$(".slick-slide").on("click", function() {
+            console.log(1);
+
+    var jElement = $(this).find(".sx-fancybox-gallary");
+    //$(".sx-fancybox-gallary", $(this));
+    jElement.trigger("click");
+    //$(".sx-fancybox-gallary", $(this)).click();
+
+    //$(".sx-fancybox-gallary", $(this)).click();
+    return false;
+});
+
+$('[data-fancybox="images"]').fancybox({
+    
+    thumbs: {
+    autoStart: true, // Display thumbnails on opening
+    hideOnClose: true, // Hide thumbnail grid when closing animation starts
+    parentEl: ".fancybox-container", // Container is injected into this element
+    axis: "x" // Vertical (y) or horizontal (x) scrolling
+  },
+});
+
 JS
 );
+
+$this->registerCss(<<<CSS
+    .slick-current {
+        cursor: zoom-in;
+    }
+CSS
+);
+
 $shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($model);
 $model = $shopProduct->cmsContentElement;
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
@@ -71,13 +103,15 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                             <? foreach ($images as $image) : ?>
                                 <div class="js-slide g-bg-cover">
                                     <!--w-100-->
-                                    <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
-                                        new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                            'w' => 700,
-                                            'h' => 500,
-                                            'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
-                                        ]), $model->code
-                                    ); ?>" alt="<?= $model->name; ?>">
+                                    <a class="sx-fancybox-gallary" data-fancybox="images" href="<?= $image->src; ?>">
+                                        <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
+                                            new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                                'w' => 700,
+                                                'h' => 500,
+                                                'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                                            ]), $model->code
+                                        ); ?>" alt="<?= $model->name; ?>">
+                                    </a>
                                 </div>
                             <? endforeach; ?>
 
