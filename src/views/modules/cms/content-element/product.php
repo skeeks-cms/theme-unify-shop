@@ -22,7 +22,6 @@ $(".slick-slide").on("click", function() {
     //$(".sx-fancybox-gallary", $(this)).click();
 
     //$(".sx-fancybox-gallary", $(this)).click();
-    return false;
 });
 
 $('[data-fancybox="images"]').fancybox({
