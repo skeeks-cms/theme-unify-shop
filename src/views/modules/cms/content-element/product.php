@@ -30,7 +30,12 @@ $('[data-fancybox="images"]').fancybox({
     autoStart: true, // Display thumbnails on opening
     hideOnClose: true, // Hide thumbnail grid when closing animation starts
     parentEl: ".fancybox-container", // Container is injected into this element
-    axis: "x" // Vertical (y) or horizontal (x) scrolling
+    axis: "x", // Vertical (y) or horizontal (x) scrolling
+    
+        // Clicked on the content
+      clickContent: function(current, event) {
+        return current.type === "image" ? "zoom" : false;
+      },
   },
 });
 
