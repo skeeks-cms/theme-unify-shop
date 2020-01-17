@@ -8,20 +8,20 @@
 /* @var $this yii\web\View */
 ?>
 <? if ($this->theme->is_show_home_slider) : ?>
-<?
-$content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'slide'])->one();
-?>
-<?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
-    'namespace'          => 'home-slider',
-    'enabledCurrentTree' => 'N',
-    'orderBy' => 'priority',
-    'order' => SORT_ASC,
-    'enabledRunCache'    => \skeeks\cms\components\Cms::BOOL_N,
-    'content_ids'        => [
-        $content ? $content->id : "",
-    ],
-    'viewFile'           => '@app/views/widgets/ContentElementsCmsWidget/slider-revo-no-full',
-]); ?>
+    <?
+    $content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'slide'])->one();
+    ?>
+    <?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
+        'namespace'          => 'home-slider',
+        'enabledCurrentTree' => 'N',
+        'orderBy'            => 'priority',
+        'order'              => SORT_ASC,
+        'enabledRunCache'    => \skeeks\cms\components\Cms::BOOL_N,
+        'content_ids'        => [
+            $content ? $content->id : "",
+        ],
+        'viewFile'           => '@app/views/widgets/ContentElementsCmsWidget/slider-revo-no-full',
+    ]); ?>
 
 <? endif; ?>
 
@@ -71,6 +71,8 @@ if (\Yii::$app->mobileDetect->isMobile) {
             'label'                => "Популярные товары",
             'enabledPaging'        => "N",
             'enabledRunCache'      => "Y",
+            'orderBy'           =>  'show_counter',
+            'active'               => "Y",
             'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
             'limit'                => 15,
             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
@@ -94,6 +96,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
             'label'                => "Новые поступления",
             'enabledPaging'        => "N",
             'enabledRunCache'      => "Y",
+            'active'               => "Y",
             'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
             'limit'                => 15,
             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
