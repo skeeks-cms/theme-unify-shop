@@ -34,7 +34,8 @@ $toId = \yii\helpers\Html::getInputId($handler, 'to');
                         <?= $form->field($handler, "from")->textInput([
                             'placeholder' => \Yii::$app->money->currencyCode,
                             'id'          => 'sx-filter-price-from',
-                            'value' => $val1,
+                            'value' => $val1 == $min ? "" : $val1,
+                            'placeholder' => $val1 == $min ? $val1 : "",
                             'class' => 'sx-from form-control',
                         ])->label(false); ?>
                     </div>
@@ -43,7 +44,8 @@ $toId = \yii\helpers\Html::getInputId($handler, 'to');
                         <?= $form->field($handler, "to")->textInput([
                             'placeholder' => \Yii::$app->money->currencyCode,
                             'id'          => 'sx-filter-price-to',
-                            'value' => $val2,
+                            'value' => $val2 == $max ? "" : $val2,
+                                    'placeholder' => $val2 == $max ? $val2 : "",
                             'class' => 'sx-to form-control',
                         ])->label(false); ?>
                     </div>
