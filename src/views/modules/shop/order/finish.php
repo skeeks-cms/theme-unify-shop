@@ -15,7 +15,7 @@ use yii\helpers\Html;
 
 <!-- Product page -->
 <!--=== Content Part ===-->
-<section class="container-fluid" style="padding-top: 50px;">
+<section class="container" style="padding-top: 50px;">
     <div class="row">
 
         <div class="col-md-12 g-my-50 sx-steps">
@@ -109,45 +109,45 @@ use yii\helpers\Html;
 
                             <span class="clearfix">
                                 <span
-                                        class="pull-right"><?= \Yii::$app->money->convertAndFormat($model->moneyOriginal); ?></span>
-                                <strong class="pull-left">Товаров:</strong>
+                                        class="float-right"><?= \Yii::$app->money->convertAndFormat($model->moneyOriginal); ?></span>
+                                <strong class="float-left">Товаров:</strong>
                             </span>
                         <? if ($model->moneyDiscount->getValue() > 0) : ?>
                             <span class="clearfix">
                                     <span
-                                            class="pull-right"><?= \Yii::$app->money->convertAndFormat($model->moneyDiscount); ?></span>
-                                    <span class="pull-left">Скидка:</span>
+                                            class="float-right"><?= \Yii::$app->money->convertAndFormat($model->moneyDiscount); ?></span>
+                                    <span class="float-left">Скидка:</span>
                                 </span>
                         <? endif; ?>
 
                         <? if ($model->moneyDelivery->getValue() > 0) : ?>
                             <span class="clearfix">
                                     <span
-                                            class="pull-right"><?= \Yii::$app->money->convertAndFormat($model->moneyDelivery); ?></span>
-                                    <span class="pull-left">Доставка:</span>
+                                            class="float-right"><?= \Yii::$app->money->convertAndFormat($model->moneyDelivery); ?></span>
+                                    <span class="float-left">Доставка:</span>
                                 </span>
                         <? endif; ?>
 
                         <? if ($model->moneyVat->getValue() > 0) : ?>
                             <span class="clearfix">
                                     <span
-                                            class="pull-right"><?= \Yii::$app->money->convertAndFormat($model->moneyVat); ?></span>
-                                    <span class="pull-left">Налог:</span>
+                                            class="float-right"><?= \Yii::$app->money->convertAndFormat($model->moneyVat); ?></span>
+                                    <span class="float-left">Налог:</span>
                                 </span>
                         <? endif; ?>
 
                         <? if ($model->weight > 0) : ?>
                             <span class="clearfix">
-                                    <span class="pull-right"><?= $model->weight; ?> г.</span>
-                                    <span class="pull-left">Вес:</span>
+                                    <span class="float-right"><?= $model->weight; ?> г.</span>
+                                    <span class="float-left">Вес:</span>
                                 </span>
                         <? endif; ?>
                         <hr/>
 
                         <span class="clearfix">
                                 <span
-                                        class="pull-right size-20"><?= \Yii::$app->money->convertAndFormat($model->money); ?></span>
-                                <strong class="pull-left">ИТОГ:</strong>
+                                        class="float-right size-20"><?= \Yii::$app->money->convertAndFormat($model->money); ?></span>
+                                <strong class="float-left">ИТОГ:</strong>
                             </span>
                         <hr/>
                         <? if ($model->allow_payment == \skeeks\cms\components\Cms::BOOL_Y && $model->paySystem) : ?>
