@@ -47,13 +47,13 @@ JS
                         <div class="row align-items-center no-gutters">
                             <div class="col-4 g-pr-20">
                                 <a href="<?= $shopBasket->name; ?>" data-pjax="0" class="u-basket__product-img">
-                                    <img src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($shopBasket->image ? $shopBasket->image->src : null,
+                                    <img src="<?= $shopBasket->image ? \Yii::$app->imaging->thumbnailUrlOnRequest($shopBasket->image ? $shopBasket->image->src : null,
                                         new \skeeks\cms\components\imaging\filters\Thumbnail([
                                             'w' => 100,
                                             'h' => 100,
                                             'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
                                         ])
-                                    ); ?>" alt="<?= $shopBasket->name; ?>">
+                                    ) : \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $shopBasket->name; ?>">
                                 </a>
                             </div>
 

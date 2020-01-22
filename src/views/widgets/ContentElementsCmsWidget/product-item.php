@@ -52,7 +52,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                     ]), $model->code
                 ); ?>" title="<?= \yii\helpers\Html::encode($model->name); ?>" alt="<?= \yii\helpers\Html::encode($model->name); ?>"/>
             <? else : ?>
-                <img class="img-fluid" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
+                <img class="img-fluid to-cart-fly-img" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
             <? endif; ?>
         </a>
     </div>
