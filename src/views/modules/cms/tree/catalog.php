@@ -79,11 +79,15 @@
                         $activeDataProvider->query->with('image');
 
                         $activeDataProvider->query->joinWith('shopProduct');
-                        $activeDataProvider->query->andWhere([
+
+                        \Yii::$app->shop->filterBaseContentElementQuery($activeDataProvider->query);
+
+                        /*$activeDataProvider->query->andWhere([
                             '!=',
                             'shopProduct.product_type',
                             \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
-                        ]);
+                        ]);*/
+
                     },
 
                 ]);

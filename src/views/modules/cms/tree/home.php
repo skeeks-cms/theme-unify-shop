@@ -84,6 +84,11 @@ if (\Yii::$app->mobileDetect->isMobile) {
                 $activeDataProvider->query->with('image');
                 //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
                 $activeDataProvider->query->orderBy(['show_counter' => SORT_DESC]);
+
+                \Yii::$app->shop
+                    ->filterBaseContentElementQuery($activeDataProvider->query)
+                    ->filterByPriceContentElementQuery($activeDataProvider->query)
+                ;
             },
         ]);
         $widgetElements::end();
@@ -106,10 +111,11 @@ if (\Yii::$app->mobileDetect->isMobile) {
                 $activeDataProvider->query->with('shopProduct.baseProductPrice');
                 $activeDataProvider->query->with('shopProduct.minProductPrice');
                 $activeDataProvider->query->with('image');
-                if (!\Yii::$app->shop->is_show_product_no_price) {
-                    $activeDataProvider->query->joinWith('shopProduct.shopProductPrices as pricesFilter');
-                    $activeDataProvider->query->andWhere(['>', '`pricesFilter`.price', 0]);
-                }
+
+                \Yii::$app->shop
+                    ->filterBaseContentElementQuery($activeDataProvider->query)
+                    ->filterByPriceContentElementQuery($activeDataProvider->query)
+                ;
 
                 //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
                 $activeDataProvider->query->orderBy(['published_at' => SORT_DESC]);
