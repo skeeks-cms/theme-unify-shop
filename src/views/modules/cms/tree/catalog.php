@@ -81,7 +81,6 @@
                         $activeDataProvider->query->joinWith('shopProduct');
 
                         \Yii::$app->shop->filterBaseContentElementQuery($activeDataProvider->query);
-
                         /*$activeDataProvider->query->andWhere([
                             '!=',
                             'shopProduct.product_type',
