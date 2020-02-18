@@ -77,9 +77,79 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
         <div class="row">
             <div class="col-lg-8">
                 <div class="sx-product-images g-ml-40 g-mr-40">
-                    <?= $this->render("_product-images", [
-                        'model' => $model
-                    ]); ?>
+                    <?
+                    $images = [];
+                    if ($model->image) {
+                        $images[] = $model->image;
+                    }
+                    if ($model->images) {
+                        $images = \yii\helpers\ArrayHelper::merge($images, $model->images);
+                    }
+                    ?>
+                    <? if ($images) : ?>
+                        <div id="carouselCus1" class="js-carousel g-pt-10 g-mb-10 sx-stick-slider"
+                             data-infinite="true"
+                             data-fade="true"
+                             data-arrows-classes="u-arrow-v1 g-brd-around g-brd-gray-dark-v5 g-absolute-centered--y g-width-45 g-height-45 g-font-size-25 g-color-gray-dark-v5 g-color-primary--hover rounded-circle"
+                             data-arrow-left-classes="fa fa-angle-left g-left-minus-20"
+                             data-arrow-right-classes="fa fa-angle-right g-right-minus-20"
+                             data-nav-for="#carouselCus2">
+
+                            <? foreach ($images as $image) : ?>
+                                <div class="js-slide g-bg-cover">
+                                    <!--w-100-->
+                                    <a class="sx-fancybox-gallary" data-fancybox="images" href="<?= $image->src; ?>">
+                                        <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
+                                            new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                                'w' => 700,
+                                                'h' => 500,
+                                                'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                                            ]), $model->code
+                                        ); ?>" alt="<?= $model->name; ?>">
+                                    </a>
+                                </div>
+                            <? endforeach; ?>
+                        </div>
+
+                        <? if (count($images) > 1) : ?>
+                            <div id="carouselCus2" class="js-carousel text-center u-carousel-v3 g-mx-minus-5 sx-stick-navigation"
+                                 data-infinite="true"
+                                 data-center-mode="true"
+                                 data-slides-show="8"
+                                 data-is-thumbs="true"
+                                 data-focus-on-select="false"
+                                 data-nav-for="#carouselCus1"
+                                 data-arrows-classes="u-arrow-v1 g-absolute-centered--y g-width-45 g-height-45 g-font-size-30 g-color-gray-dark-v5 g-color-primary--hover rounded-circle"
+                                 data-arrow-left-classes="fa fa-angle-left g-left-minus-40"
+                                 data-arrow-right-classes="fa fa-angle-right g-right-minus-40"
+                            >
+                                <? foreach ($images as $image) : ?>
+                                    <div class="js-slide g-cursor-pointer g-px-5">
+                                        <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
+                                            new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                                'w' => 75,
+                                                'h' => 75,
+                                                'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                                            ]), $model->code
+                                        ); ?>" alt="<?= $model->name; ?>">
+                                    </div>
+                                <? endforeach; ?>
+                            </div>
+                        <? endif; ?>
+                    <? else: ?>
+                        <div id="carouselCus1" class="js-carousel g-pt-10 g-mb-10 sx-stick-slider"
+                             data-infinite="true"
+                             data-fade="true"
+                             data-arrows-classes="u-arrow-v1 g-brd-around g-brd-gray-dark-v5 g-absolute-centered--y g-width-45 g-height-45 g-font-size-25 g-color-gray-dark-v5 g-color-primary--hover rounded-circle"
+                             data-arrow-left-classes="fa fa-angle-left g-left-minus-20"
+                             data-arrow-right-classes="fa fa-angle-right g-right-minus-20"
+                             data-nav-for="#carouselCus2">
+                            <div class="js-slide g-bg-cover">
+                                <!--w-100-->
+                                <img class="img-fluid" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
+                            </div>
+                        </div>
+                    <? endif; ?>
                 </div>
             </div>
 
@@ -263,6 +333,110 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
             </div>
         </div>
     </div>
+
+    <? if ($shopProduct->isTradeOffers()) : ?>
+        <div class="container" style="background: #f1f1f1;">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Предложения</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+
+                    <?
+                    $query = $shopProduct->getTradeOffers();
+                    $baseQuery = clone $query;
+
+                    $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
+
+                    $eavFiltersHandler = new \skeeks\cms\eavqueryfilter\CmsEavQueryFilterHandler([
+                        'baseQuery' => $baseQuery,
+                    ]);
+                    $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
+                    $rpQuery = $eavFiltersHandler->getRPQuery();
+                    $eavFiltersHandler->initRPByQuery($rpQuery);
+
+                    $filtersWidget
+                        ->registerHandler($eavFiltersHandler);
+                    $filtersWidget->loadFromRequest();
+                    $filtersWidget->applyToQuery($query);
+
+                    $filtersWidget::end();
+
+                    /**
+                     * @var \skeeks\cms\shop\models\ShopCmsContentElement $tOffer
+                     */
+                    //$tradeOffers = $shopCmsContentElement->getTradeOffers()->with("relatedProperties")->with("relatedElementProperties")->all();
+                    $tradeOffers = $query->all();
+                    ?>
+                </div>
+                <div class="col-md-9">
+                    <? foreach ($tradeOffers as $tOffer) : ?>
+                        <div class="row sx-price-block">
+                            <div class="col-md-2 col-sm-12">
+                                <img src="<?= \skeeks\cms\helpers\Image::getSrc(
+                                    \Yii::$app->imaging->thumbnailUrlOnRequest($tOffer->image ? $tOffer->image->src : null,
+                                        new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                            'w' => 50,
+                                            'h' => 50,
+                                            'm' => \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                                        ]), $model->code
+                                    )); ?>" title="<?= $model->name; ?>" alt="<?= $model->name; ?>" class="img_list_catalog" style="max-height: 50px; max-width: 50px;"/>
+                                Код: <?= $tOffer->id; ?>
+                            </div>
+                            <div class="col-md-2 col-sm-12">
+                                <b style="line-height: 20px;">
+                                    <?
+                                    $color = trim($tOffer->relatedPropertiesModel->getSmartAttribute('color'));
+                                    $title = $tOffer->relatedPropertiesModel->getSmartAttribute('packing')." ".$tOffer->relatedPropertiesModel->getSmartAttribute('measure').($color ? " - ".$color : "");
+                                    echo(trim($title) ? $title : $tOffer->name);
+                                    ?>
+                                </b>
+                                <!--
+                                      <img class="img-responsive" src="<? /*= \skeeks\cms\helpers\Image::getSrc($tOffer->image ? $tOffer->image->src : ""); */ ?>" />-->
+                            </div>
+
+                            <div class="col-md-2 col-sm-12">
+                                <!--<b><? /*= $tOffer->name; */ ?></b>-->
+                            </div>
+                            <div class="col-md-2 col-sm-12">
+                                      <span class="price">
+                                            <? if ($tOffer->shopProduct->minProductPrice->id == $tOffer->shopProduct->baseProductPrice->id) : ?>
+                                                <span class="old"></span>
+                                                <span class="new"><?= \Yii::$app->money->convertAndFormat($tOffer->shopProduct->minProductPrice->money); ?></span>
+                                            <? else : ?>
+                                                <span class="old"><?= \Yii::$app->money->convertAndFormat($tOffer->shopProduct->baseProductPrice->money); ?></span>
+                                                <span class="new"><?= \Yii::$app->money->convertAndFormat($tOffer->shopProduct->minProductPrice->money); ?></span>
+                                            <? endif; ?>
+                                        </span>
+                            </div>
+                            <div class="col-md-4 col-sm-12" style="text-align: right;">
+
+                                <input type="number" id="sx-number-<?= $tOffer->id; ?>" value="1" name="qty" class=" sx-basket-quantity" style="width: 50px;
+                                        border: #ddd 1px solid;
+                                        border-radius: 0px;" maxlength="3" max="999" min="1">
+                                <a class="btn btn-default btn-primary product-add-cart noradius" href="#"
+                                   onclick="sx.Shop.addProduct(<?= $tOffer->id; ?>, $('#sx-number-<?= $tOffer->id; ?>').val()); return false;"><i
+                                            class="fa fa-cart-plus"></i> В корзину</a>
+
+                                <? /*= \yii\helpers\Html::tag('a', '<i class="fa fa-shopping-cart"></i> <strong>В корзину</strong>', [
+                                        'class' => 'btn btn-primary js-to-cart',
+                                        'type' => 'button',
+                                        'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$tOffer->shopProduct->id}, 1); return false;"),
+                                    ]); */ ?>
+                            </div>
+                        </div>
+                    <? endforeach; ?>
+
+                </div>
+
+
+            </div>
+        </div>
+    <? endif; ?>
 
 
     <div class="container">
