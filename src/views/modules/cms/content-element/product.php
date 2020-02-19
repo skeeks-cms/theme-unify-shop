@@ -11,42 +11,25 @@ $this->registerJs(<<<JS
 $.HSCore.components.HSRating.init($('.js-rating-show'), {
   spacing: 2
 });
-
-$(".slick-slide").on("click", function() {
-    var jElement = $(this).find(".sx-fancybox-gallary");
-    jElement.trigger("click");
-});
-
-$('[data-fancybox="images"]').fancybox({
-    
-    thumbs: {
-    autoStart: true, // Display thumbnails on opening
-    hideOnClose: true, // Hide thumbnail grid when closing animation starts
-    parentEl: ".fancybox-container", // Container is injected into this element
-    axis: "x", // Vertical (y) or horizontal (x) scrolling
-    
-      clickContent: function(current, event) {
-        return current.type === "image" ? "zoom" : false;
-      },
-  },
-});
-
 JS
-);
-
-$this->registerCss(<<<CSS
-    .slick-current {
-        cursor: zoom-in;
-    }
-CSS
 );
 
 $shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($model);
 $model = $shopProduct->cmsContentElement;
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
-$reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
 $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
+$reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
+
+$shopOfferChooseHelper = null;
+if ($shopProduct->isOffersProduct) {
+    $shopOfferChooseHelper = new \skeeks\cms\shop\helpers\ShopOfferChooseHelper([
+        'shopProduct' => $shopProduct
+    ]);
+    
+}
+
+
 ?>
 <section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper" itemscope itemtype="http://schema.org/Product">
     <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?><?= $priceHelper->basePrice->money; ?>"/>
@@ -78,13 +61,12 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
             <div class="col-lg-8">
                 <div class="sx-product-images g-ml-40 g-mr-40">
                     <?= $this->render("_product-images", [
-                        'model' => $model
+                        'model' => $model,
                     ]); ?>
                 </div>
             </div>
 
             <div class="col-lg-4">
-
                 <div class="product-info ss-product-info">
                     <div class="product-info-header">
                         <div class="topmost-row">
@@ -122,86 +104,18 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                                 </div>
                             </div>
                         </div>
-                        <!--<h1 class="h3 g-color-gray-dark-v2" itemprop="name">
-                            <? /*= $model->name; */ ?>
-                        </h1>-->
-                        <div class="product-price g-mt-10 g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                            <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
-                            <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
-                            <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
-                            <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
-                            <link itemprop="availability" href="http://schema.org/InStock">
 
-                            <? if ($priceHelper) : ?>
-                                <?
-                                $prefix = "";
-                                if ($shopProduct->isTradeOffers()) {
-                                    $prefix = "от ";
-                                }
-                                ?>
-                                <? if ($priceHelper->hasDiscount) : ?>
-                                    <span class="current ss-price sx-old-price h1"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></span>
-                                    <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $prefix; ?><?= $priceHelper->minPrice->money; ?></span>
-                                <? else: ?>
-                                    <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $prefix; ?><?= $priceHelper->minPrice->money; ?></span>
-                                <? endif; ?>
-                            <? endif; ?>
-                        </div>
-                        <? if ($shopProduct->quantity > 0) : ?>
-                            <div class="product-control g-mt-10">
-                                <div class="control-group group-submit g-mr-10 g-mb-15">
-                                    <div class="buttons-row ">
-                                        <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
-                                            <? if (\Yii::$app->shop->is_show_button_no_price) : ?>
-                                                <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
-                                                    'class'   => 'btn btn-xxl u-btn-primary g-rounded-50 js-to-cart to-cart-fly-btn g-font-size-18',
-                                                    'type'    => 'button',
-                                                    'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
-                                                ]); ?>
-                                            <? else : ?>
-                                                <a class="btn btn-xxl u-btn-primary g-rounded-50 g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
-
-                                            <? endif; ?>
-                                        <? else : ?>
-                                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
-                                                'class'   => 'btn btn-xxl u-btn-primary g-rounded-50 js-to-cart to-cart-fly-btn g-font-size-18',
-                                                'type'    => 'button',
-                                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
-                                            ]); ?>
-                                        <? endif; ?>
-                                    </div>
-                                    <? if (\Yii::$app->shop->is_show_quantity_product) : ?>
-                                        <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
-                                            <? if ($shopProduct->quantity > 10) : ?>
-                                                <span class="row-label">В наличии более 10 шт.</span>
-                                            <? else : ?>
-                                                <span class="row-label">В наличии:</span> <span class="row-value"><?= $shopProduct->quantity; ?> шт.</span>
-                                            <? endif; ?>
-                                        </div>
-                                    <? endif; ?>
-                                </div>
-                            </div>
-                        <? else : ?>
-                            <?= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
-                                'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
-                                'product_id'       => $model->id,
-                                'size'             => "modal-dialog-350",
-                                'success_modal_id' => 'readySubscribeModal',
-                                'id'               => 'modalWait',
-                                'class'            => 'b-modal b-modal-wait',
-                                //'header' => '<div class="b-modal__title h2">Жду товар</div>',
-                                /*'closeButton' => [
-                                        'tag'   => 'button',
-                                        'class' => 'close',
-                                        'label' => '1111111',
-                                    ],*/
-                                'toggleButton' => [
-                                    'label' => 'Уведомить о поступлении',
-                                    'style' => '',
-                                    'class' => 'btn btn-primary btn-grey-white btn-52 js-out-click-btn',
-                                ],
-                            ]); ?>
-                        <? endif; ?>
+                        <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
+                        
+                        <?= $this->render("_product-price", [
+                            'model'       => $model,
+                            'shopProduct' => $shopProduct,
+                            'priceHelper' => $priceHelper,
+                            'shopOfferChooseHelper' => $shopOfferChooseHelper,
+                        ]); ?>
+                        
+                        <? $pjax::end(); ?>
+                        
                         <? if ($model->description_short) : ?>
                             <div class="sx-description-short g-color-gray-dark-v4">
                                 <?= $model->description_short; ?>
@@ -258,7 +172,8 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 
                         </div>
                     </div>
-
+                    
+                    
                 </div>
             </div>
         </div>

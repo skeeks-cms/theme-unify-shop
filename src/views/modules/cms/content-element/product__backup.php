@@ -205,7 +205,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
                             <? if ($priceHelper) : ?>
                                 <?
                                 $prefix = "";
-                                if ($shopProduct->isTradeOffers()) {
+                                if ($shopProduct->isOffersProduct) {
                                     $prefix = "от ";
                                 }
                                 ?>
@@ -334,7 +334,7 @@ $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
         </div>
     </div>
 
-    <? if ($shopProduct->isTradeOffers()) : ?>
+    <? if ($shopProduct->isOffersProduct) : ?>
         <div class="container" style="background: #f1f1f1;">
 
             <div class="row">

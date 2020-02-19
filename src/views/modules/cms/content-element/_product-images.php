@@ -6,6 +6,36 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
+$this->registerJs(<<<JS
+
+$(".slick-slide").on("click", function() {
+    var jElement = $(this).find(".sx-fancybox-gallary");
+    jElement.trigger("click");
+});
+
+$('[data-fancybox="images"]').fancybox({
+    
+    thumbs: {
+    autoStart: true, // Display thumbnails on opening
+    hideOnClose: true, // Hide thumbnail grid when closing animation starts
+    parentEl: ".fancybox-container", // Container is injected into this element
+    axis: "x", // Vertical (y) or horizontal (x) scrolling
+    
+      clickContent: function(current, event) {
+        return current.type === "image" ? "zoom" : false;
+      },
+  },
+});
+
+JS
+);
+
+$this->registerCss(<<<CSS
+    .slick-current {
+        cursor: zoom-in;
+    }
+CSS
+);
 ?>
 <?
 $images = [];

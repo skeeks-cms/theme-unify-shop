@@ -76,7 +76,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                 <? if ($priceHelper) : ?>
                     <?
                     $prefix = "";
-                    if ($shopProduct->isTradeOffers()) {
+                    if ($shopProduct->isOffersProduct) {
                         $prefix = "от ";
                     }
                     ?>
@@ -93,7 +93,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
             <div class="card-prod--actions">
                 <? if ($priceHelper && (float)$priceHelper->minMoney->getAmount() == 0) : ?>
-                    <? if ($shopProduct->quantity > 0 && \Yii::$app->shop->is_show_button_no_price && !$shopProduct->isTradeOffers()) : ?>
+                    <? if ($shopProduct->quantity > 0 && \Yii::$app->shop->is_show_button_no_price && !$shopProduct->isOffersProduct) : ?>
                         <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>В корзину", [
                             'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type'    => 'button',
@@ -109,7 +109,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                     <? endif; ?>
 
                 <? else : ?>
-                    <? if ($shopProduct->quantity > 0 && !$shopProduct->isTradeOffers()) : ?>
+                    <? if ($shopProduct->quantity > 0 && !$shopProduct->isOffersProduct) : ?>
                         <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>В корзину", [
                             'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type'    => 'button',

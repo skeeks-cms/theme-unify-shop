@@ -9,6 +9,7 @@
  *
  */
 /* @var $this yii\web\View */
+/* @var $shopProduct \skeeks\cms\shop\models\ShopProduct */
 //$shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($model);
 $shopProduct = $model->shopProduct;
 
@@ -46,7 +47,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                 <? if ($priceHelper && (float)$priceHelper->minPrice->money->amount > 0) : ?>
                     <?
                     $prefix = "";
-                    if ($shopProduct->isTradeOffers()) {
+                    if ($shopProduct->isOffersProduct) {
                         $prefix = "от ";
                     }
                     ?>
