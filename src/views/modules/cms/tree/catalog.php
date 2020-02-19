@@ -9,10 +9,10 @@
 /* @var $model \skeeks\cms\models\CmsTree */
 ?>
 <section class="g-mt-0 g-pb-0">
-    <div class="container">
+    <div class="container sx-container">
         <? /* $pjax = \skeeks\cms\widgets\Pjax::begin(); */ ?>
         <div class="row">
-            <div class="col-md-9 order-md-2 g-py-20">
+            <div class="order-md-2 g-py-20 g-px-15 sx-content-col-main">
                 <?= $this->render('@app/views/breadcrumbs', [
                     'model' => $model,
                 ]) ?>
@@ -145,7 +145,7 @@
                 <? $widgetElements::end(); ?>
 
             </div>
-            <div class="col-md-3 order-md-1 g-py-20 g-bg-secondary">
+            <div class="order-md-1 g-py-20 g-px-15 g-bg-secondary sx-content-col-left">
                 <div class="g-mb-20">
                     <? if (!$isShowFilters) : ?>
                     <div style="display: none;">

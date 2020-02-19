@@ -64,7 +64,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
 
 
 <? if (\Yii::$app->shop->shopContents && \Yii::$app->mobileDetect->isDesktop) : ?>
-    <div class="container g-mt-40 g-mb-40">
+    <div class="container sx-container g-mt-40 g-mb-40">
         <?
         $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-poupular-products", [
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
@@ -94,7 +94,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
         $widgetElements::end();
         ?>
     </div>
-    <div class="container g-mt-40 g-mb-40">
+    <div class="container sx-container g-mt-40 g-mb-40">
         <?
         $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-new-products", [
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
@@ -128,7 +128,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
 <? endif; ?>
 <? if ($model->description_full) : ?>
     <!-- What People Say -->
-    <section class="container g-pt-10 g-pb-10">
+    <section class="container sx-container g-pt-10 g-pb-10">
         <div class="row justify-content-between">
             <div class="col-lg-12 flex-lg-unordered g-mt-20--lg g-mb-20">
                 <div class="mb-2">
@@ -144,7 +144,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
     <!-- End What People Say -->
 <? endif; ?>
 <!-- Blog News -->
-<section class="container g-pt-10 g-pb-10">
+<section class="container sx-container g-pt-10 g-pb-10">
     <?
     $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-news", [
         'viewFile'                   => '@app/views/widgets/ContentElementsCmsWidget/news-masonry',

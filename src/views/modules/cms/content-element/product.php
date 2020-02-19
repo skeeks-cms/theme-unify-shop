@@ -45,7 +45,7 @@ if ($shopProduct->isOffersProduct) {
     <? if ($model->image) : ?>
         <link itemprop="image" href="<?= $model->image->absoluteSrc; ?>">
     <? endif; ?>
-    <div class="container g-py-20">
+    <div class="container sx-container g-py-20">
 
         <div class="row">
             <div class="col-md-12">
