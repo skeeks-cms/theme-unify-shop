@@ -43,16 +43,21 @@
     padding: 15px 0;
     background: #fff;
     margin: 0 auto 40px;
-    max-width: 300px;
+    /*max-width: 300px;*/
 }
 
+
+.card-prod .card-prod--photo img {
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
 .card-prod .card-prod--photo {
     /*width:250px;
     height:250px;*/
     /*margin:0 auto 15px;*/
     margin: 0 0 10px 0;
     text-align: center;
-
 }
 
 .card-prod .card-prod--inner:after, .card-prod .card-prod--inner:before, .card-prod .card-prod--labels:after, .card-prod .card-prod--labels:before {
@@ -580,4 +585,5 @@
     text-decoration: line-through;
     color: #8a8a8a;
 }
+
 
