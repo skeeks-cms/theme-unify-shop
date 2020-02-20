@@ -155,6 +155,7 @@
             </div>
             <div class="order-md-1 g-py-20 g-px-15 g-bg-secondary sx-content-col-left">
 
+                <? if (\Yii::$app->unifyShopTheme->catalog_is_show_subtree_col_left) : ?>
                 <?
 
                 $model = \Yii::$app->cms->currentTree;
@@ -215,6 +216,8 @@
                 </div>
 
 
+                <? endif; ?>
+                
                 <div class="g-mb-20">
                     <? if (!$isShowFilters) : ?>
                     <div style="display: none;">
