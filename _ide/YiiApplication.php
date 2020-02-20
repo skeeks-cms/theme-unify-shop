@@ -13,6 +13,7 @@ use common\components\TelegramComponent;
 use common\components\unify\TemplateUnify;
 use common\themes\unify\SkeeksUnifyTheme;
 use kartik\mpdf\Pdf;
+use skeeks\cms\themes\unifyshop\components\UnifyShopThemeSettingsComponent;
 use skeeks\cms\themes\unifyshop\UnifyShopTheme;
 use skeeks\crm\components\TinkoffIntegrationApi;
 use v3project\themes\mega\ThemeMega;
@@ -20,7 +21,8 @@ use yii\base\Theme;
 
 
 /**
- * @property View|PView            $view
+ * @property View|PView                      $view
+ * @property UnifyShopThemeSettingsComponent $unifyShop
  *
  * Class Application
  * @package yii\web

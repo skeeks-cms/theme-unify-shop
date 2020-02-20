@@ -20,6 +20,8 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 ?>
 <article class="card-prod h-100 to-cart-fly-wrapper">
     <div class="card-prod--labels">
+        <!--<div class="card-prod--label red">11</div>
+                        <div class="clear"></div>-->
         <? /*
                     if ( $enum->id == 141) : */ ?><!--
                         <div class="card-prod--label red"><? /*=$enum->value;*/ ?></div>

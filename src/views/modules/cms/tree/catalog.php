@@ -99,6 +99,7 @@
                     $eavFiltersHandler = new \skeeks\cms\eavqueryfilter\CmsEavQueryFilterHandler([
                         'baseQuery' => $baseQuery,
                     ]);
+                    $eavFiltersHandler->openedPropertyIds = \Yii::$app->shop->open_filter_property_ids;
                     $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
                     $rpQuery = $eavFiltersHandler->getRPQuery();
 
