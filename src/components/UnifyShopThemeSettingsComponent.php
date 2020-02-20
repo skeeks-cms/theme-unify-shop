@@ -40,6 +40,11 @@ class UnifyShopThemeSettingsComponent extends Component
     public $catalog_img_preview_width = 260;
     public $catalog_img_preview_crop = ManipulatorInterface::THUMBNAIL_INSET;
 
+    public $product_slider_items = 6;
+    public $product_slider_img_preview_width = 200;
+    public $product_slider_img_preview_height = 200;
+    public $product_slider_img_preview_crop = ManipulatorInterface::THUMBNAIL_INSET;
+
     /**
      * Можно задать название и описание компонента
      * @return array
@@ -47,7 +52,7 @@ class UnifyShopThemeSettingsComponent extends Component
     static public function descriptorConfig()
     {
         return array_merge(parent::descriptorConfig(), [
-            'name' => 'Настройки темы unify (Магазин)',
+            'name' => 'Настройки темы Unify (Магазин)',
             'image' => [
                 UnifyThemeAsset::class,
                 'img/template-preview.png',
@@ -77,12 +82,16 @@ class UnifyShopThemeSettingsComponent extends Component
                 [
                     'catalog_img_preview_height',
                     'catalog_img_preview_width',
+                    'product_slider_items',
+                    'product_slider_img_preview_width',
+                    'product_slider_img_preview_height',
                 ],
                 'integer',
             ],
             [
                 [
                     'catalog_img_preview_crop',
+                    'product_slider_img_preview_crop',
                 ],
                 'string',
             ],
@@ -131,6 +140,24 @@ class UnifyShopThemeSettingsComponent extends Component
                     ],
                 ],
             ],
+            'stick' => [
+                'class' => FieldSet::class,
+                'name' => \Yii::t('skeeks/shop/app', 'Слайдеры товаров'),
+
+                'fields' => [
+
+                    'product_slider_items',
+                    'product_slider_img_preview_width',
+                    'product_slider_img_preview_height',
+                    'product_slider_img_preview_crop' => [
+                        'class' => SelectField::class,
+                        'items' => [
+                            ManipulatorInterface::THUMBNAIL_INSET => 'Сохранять формат исходной картинки',
+                            ManipulatorInterface::THUMBNAIL_OUTBOUND => 'Обрезать под размер'
+                        ]
+                    ],
+                ],
+            ],
 
             /*'filters' => [
                 'class' => FieldSet::class,
@@ -155,6 +182,11 @@ class UnifyShopThemeSettingsComponent extends Component
                 'catalog_img_preview_width' => 'Ширина превью картинки товара',
                 'catalog_img_preview_height' => 'Высота превью картинки товара',
                 'catalog_img_preview_crop' => 'Режим обрезки превью картинки товара',
+                
+                'product_slider_items' => 'Количество товаров в слайдере',
+                'product_slider_img_preview_width' => 'Ширина превью картинки товара',
+                'product_slider_img_preview_height' => 'Высота превью картинки товара',
+                'product_slider_img_preview_crop' => 'Режим обрезки превью картинки товара',
             ]
         );
     }

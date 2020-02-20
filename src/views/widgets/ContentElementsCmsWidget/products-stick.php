@@ -30,12 +30,12 @@ if (!\Yii::$app->shop->is_show_product_no_price)   {
             'class' => 'js-carousel g-pb-0 g-mx-minus-10',
             'tag'   => 'div',
             'data'  => [
-                'slidesToShow' => 6,
+                'slidesToShow' => \Yii::$app->unifyShopTheme->product_slider_items,
                 'responsive' =>  [
                     [
                         'breakpoint' => 2600,
                         'settings'     => [
-                          'slidesToShow' => 6,
+                          'slidesToShow' => \Yii::$app->unifyShopTheme->product_slider_items,
                         ]
                     ],
                     [

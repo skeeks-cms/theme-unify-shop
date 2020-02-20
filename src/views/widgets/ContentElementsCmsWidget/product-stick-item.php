@@ -27,9 +27,9 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                 <? if ($model->image) : ?>
                     <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
-                            'w' => 200,
-                            'h' => 200,
-                            'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                            'w' => \Yii::$app->unifyShopTheme->product_slider_img_preview_width,
+                            'h' => \Yii::$app->unifyShopTheme->product_slider_img_preview_height,
+                            'm' => \Yii::$app->unifyShopTheme->product_slider_img_preview_crop,
                         ]), $model->code
                     ); ?>" alt="<?= $model->name; ?>">
                 <? else : ?>
