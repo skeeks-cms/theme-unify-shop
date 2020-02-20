@@ -12,15 +12,6 @@ if (!\Yii::$app->shop->is_show_product_no_price)   {
     $query->joinWith('shopProduct.shopProductPrices as pricesFilter');
     $query->andWhere(['>','`pricesFilter`.price',0]);
 }
-$this->registerCss(<<<CSS
-.slick-slide {
-    text-align: center;
-}
-.slick-slide img {
-    display: inline;
-}
-CSS
-);
 ?>
 <? if ($query->count()) : ?>
 

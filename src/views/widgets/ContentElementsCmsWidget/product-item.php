@@ -48,9 +48,9 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             <? if ($model->image) : ?>
                 <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
-                        'w' => 260,
-                        'h' => 200,
-                        'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                        'w' => \Yii::$app->unifyShopTheme->catalog_img_preview_width,
+                        'h' => \Yii::$app->unifyShopTheme->catalog_img_preview_height,
+                        'm' => \Yii::$app->unifyShopTheme->catalog_img_preview_crop,
                     ]), $model->code
                 ); ?>" title="<?= \yii\helpers\Html::encode($model->name); ?>" alt="<?= \yii\helpers\Html::encode($model->name); ?>"/>
             <? else : ?>

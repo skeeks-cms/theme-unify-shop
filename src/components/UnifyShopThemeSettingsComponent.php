@@ -6,12 +6,15 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 namespace skeeks\cms\themes\unifyshop\components;
+use Imagine\Image\ManipulatorInterface;
+use skeeks\cms\backend\widgets\ActiveFormBackend;
 use skeeks\cms\base\Component;
 use skeeks\cms\components\Cms;
 use skeeks\cms\models\CmsAgent;
 use skeeks\cms\models\CmsContent;
 use skeeks\cms\models\CmsContentProperty;
 use skeeks\cms\models\CmsUser;
+use skeeks\cms\modules\admin\widgets\BlockTitleWidget;
 use skeeks\cms\shop\models\ShopCart;
 use skeeks\cms\shop\models\ShopOrderStatus;
 use skeeks\cms\shop\models\ShopPersonType;
@@ -30,8 +33,12 @@ use yii\widgets\ActiveForm;
  */
 class UnifyShopThemeSettingsComponent extends Component
 {
+    public $catalog_is_show_subtree = true;
+    public $catalog_is_show_subtree_col_left = false;
 
-    public $collection_item_view = 'v2';
+    public $catalog_img_preview_height = 200;
+    public $catalog_img_preview_width = 260;
+    public $catalog_img_preview_crop = ManipulatorInterface::THUMBNAIL_INSET;
 
     /**
      * Можно задать название и описание компонента
@@ -48,81 +55,106 @@ class UnifyShopThemeSettingsComponent extends Component
         ]);
     }
 
+    /**
+     * @return ActiveForm
+     */
+    public function beginConfigForm()
+    {
+        return ActiveFormBackend::begin();
+    }
+
     public function rules()
     {
         return ArrayHelper::merge(parent::rules(), [
             [
                 [
-                    'is_show_popular_collection',
-                    'is_show_new_collection',
-
-                    'is_show_home_modern_catalog',
-                    'is_show_home_old_catalog',
-                    'is_show_home_slider',
+                    'catalog_is_show_subtree',
+                    'catalog_is_show_subtree_col_left',
                 ],
                 'boolean',
             ],
-            ['collection_item_view', 'string']
+            [
+                [
+                    'catalog_img_preview_height',
+                    'catalog_img_preview_width',
+                ],
+                'integer',
+            ],
+            [
+                [
+                    'catalog_img_preview_crop',
+                ],
+                'string',
+            ],
         ]);
     }
 
     public function getConfigFormFields()
     {
         return [
-            'main' => [
+            'catalog' => [
                 'class' => FieldSet::class,
-                'name' => \Yii::t('skeeks/shop/app', 'Main'),
+                'name' => \Yii::t('skeeks/shop/app', 'Каталог'),
 
                 'fields' => [
 
-                    'is_show_popular_collection' => [
-                        'class' => BoolField::class,
-                        'allowNull' => false,
-                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
-                    ],
-                    'is_show_new_collection' => [
-                        'class' => BoolField::class,
-                        'allowNull' => false,
-                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
-                    ],
-                    'is_show_home_modern_catalog' => [
-                        'class' => BoolField::class,
-                        'allowNull' => false,
-                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
-                    ],
-                    'is_show_home_old_catalog' => [
-                        'class' => BoolField::class,
-                        'allowNull' => false,
-                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
-                    ],
-                    'is_show_home_slider' => [
-                        'class' => BoolField::class,
-                        'allowNull' => false,
-                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
-                    ],
-                    'collection_item_view' => [
-                        'class' => SelectField::class,
-                        'items' => [
-                            'v1' => 'Вариант 1 (маленькие блоки как на tesser.ru)',
-                            'v2' => 'Вариант 2 (Большие фото со всплывающей кнопкой Подробнее)',
-                        ],
+                    [
+                        'class'   => HtmlBlock::class,
+                        'content' => BlockTitleWidget::widget(['content' => 'Подразделы']),
                     ],
 
+
+                    'catalog_is_show_subtree' => [
+                        'class' => BoolField::class,
+                        'allowNull' => false,
+                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
+                    ],
+                    'catalog_is_show_subtree_col_left' => [
+                        'class' => BoolField::class,
+                        'allowNull' => false,
+                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
+                    ],
+
+                    [
+                        'class'   => HtmlBlock::class,
+                        'content' => BlockTitleWidget::widget(['content' => 'Товары']),
+                    ],
+
+                    'catalog_img_preview_width',
+                    'catalog_img_preview_height',
+                    'catalog_img_preview_crop' => [
+                        'class' => SelectField::class,
+                        'items' => [
+                            ManipulatorInterface::THUMBNAIL_INSET => 'Сохранять формат исходной картинки',
+                            ManipulatorInterface::THUMBNAIL_OUTBOUND => 'Обрезать под размер'
+                        ]
+                    ],
                 ],
             ],
+
+            /*'filters' => [
+                'class' => FieldSet::class,
+                'name' => \Yii::t('skeeks/shop/app', 'Фильтры'),
+
+                'fields' => [
+                    'filters_is_show_subtree' => [
+                        'class' => BoolField::class,
+                        'allowNull' => false,
+                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
+                    ],
+                ],
+            ],*/
         ];
     }
 
     public function attributeLabels()
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
-                'is_show_popular_collection' => 'Показывать слайдер с популярными коллекциями на главной?',
-                'is_show_new_collection' => 'Показывать слайдер с новыми коллекциями на главной?',
-                'collection_item_view'             => "Вариант отображения коллекции",
-
-                'is_show_home_modern_catalog'=> "Показывать современный каталог на главной",
-                'is_show_home_old_catalog'=> "Показывать обычный каталог на главной",
-                'is_show_home_slider'=> "Показывать слайдер на главной",
+                'catalog_is_show_subtree' => 'Показывать подразделы в каталоге?',
+                'catalog_is_show_subtree_col_left' => 'Показывать подразделы в блоке слева перед фильтрами?',
+                'catalog_img_preview_width' => 'Ширина превью картинки товара',
+                'catalog_img_preview_height' => 'Высота превью картинки товара',
+                'catalog_img_preview_crop' => 'Режим обрезки превью картинки товара',
             ]
         );
     }

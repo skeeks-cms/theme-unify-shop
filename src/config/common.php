@@ -7,7 +7,7 @@
  */
 return [
     'components' => [
-        'unifyShop'   =>  [
+        'unifyShopTheme'   =>  [
             'class' => 'skeeks\cms\themes\unifyshop\components\UnifyShopThemeSettingsComponent',
         ],
     ],

@@ -22,7 +22,7 @@ use yii\base\Theme;
 
 /**
  * @property View|PView                      $view
- * @property UnifyShopThemeSettingsComponent $unifyShop
+ * @property UnifyShopThemeSettingsComponent $unifyShopTheme
  *
  * Class Application
  * @package yii\web
