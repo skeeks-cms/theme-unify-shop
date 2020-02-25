@@ -24,7 +24,7 @@ $('.sx-filter-action').on('click', function()
 JS
 );
 ?>
-<a href="#" class="sx-filter-action g-color-primary--hover <?= $handler->value == '-popular' ? "active g-color-primary g-font-weight-600" : "" ; ?>" data-filter="productfilters-sort" data-filter-value="-popular">Популярные</a>
-<a href="#" class="sx-filter-action g-color-primary--hover <?= $handler->value == 'price' ? "active g-color-primary g-font-weight-600" : "" ; ?>" data-filter="productfilters-sort" data-filter-value="price">Сначала дешевые</a>
-<a href="#" class="sx-filter-action g-color-primary--hover <?= $handler->value == '-price' ? "active g-color-primary g-font-weight-600" : "" ; ?>" data-filter="productfilters-sort" data-filter-value="-price">Сначала дорогие</a>
-<a href="#" class="sx-filter-action g-color-primary--hover <?= $handler->value == '-new' ? "active g-color-primary g-font-weight-600" : "" ; ?>" data-filter="productfilters-sort" data-filter-value="-new">Сначала новые</a>
+<a href="#" class="sx-filter-action g-color-primary--hover <?= $handler->value == '-popular' ? "active g-color-primary g-font-weight-600" : "" ; ?>" data-filter="productfilters-sort" data-filter-value="-popular"><?= \Yii::t("skeeks/unify", "Popular"); ?></a>
+<a href="#" class="sx-filter-action g-color-primary--hover <?= $handler->value == 'price' ? "active g-color-primary g-font-weight-600" : "" ; ?>" data-filter="productfilters-sort" data-filter-value="price"><?= \Yii::t("skeeks/unify-shop", "Cheap first"); ?></a>
+<a href="#" class="sx-filter-action g-color-primary--hover <?= $handler->value == '-price' ? "active g-color-primary g-font-weight-600" : "" ; ?>" data-filter="productfilters-sort" data-filter-value="-price"><?= \Yii::t("skeeks/unify-shop", "Dear first"); ?></a>
+<a href="#" class="sx-filter-action g-color-primary--hover <?= $handler->value == '-new' ? "active g-color-primary g-font-weight-600" : "" ; ?>" data-filter="productfilters-sort" data-filter-value="-new"><?= \Yii::t("skeeks/unify", "New"); ?></a>

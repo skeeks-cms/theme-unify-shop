@@ -7,6 +7,18 @@
  */
 return [
     'components' => [
+        'i18n' => [
+            'translations' => [
+                'skeeks/unify-shop' => [
+                    'class'    => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@skeeks/cms/themes/unifyshop/messages',
+                    'fileMap'  => [
+                        'skeeks/unify-shop' => 'main.php',
+                    ],
+                ],
+            ],
+        ],
+
         'unifyShopTheme'   =>  [
             'class' => 'skeeks\cms\themes\unifyshop\components\UnifyShopThemeSettingsComponent',
         ],

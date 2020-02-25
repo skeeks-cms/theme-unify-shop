@@ -13,7 +13,7 @@
     <? if ($sortFiltersHandler) : ?>
     <div class="sort">
         <div class="lbl">
-            Сортировать:
+            <?= \Yii::t("skeeks/unify", "Sorting"); ?>:
         </div>
         <div class="vals">
             <?= $sortFiltersHandler->renderVisible(); ?>

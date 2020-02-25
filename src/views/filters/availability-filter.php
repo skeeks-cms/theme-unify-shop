@@ -28,5 +28,5 @@ JS
 ?>
 <div class="checkbox in-stock">
     <input type="checkbox" <?= $handler->value == 1 ? "checked" : "" ; ?> id="check-in-stock" />
-    <label for="check-in-stock" class="sx-label">В наличии</label>
+    <label for="check-in-stock" class="sx-label"><?= \Yii::t("skeeks/unify-shop", "In stock"); ?></label>
 </div>

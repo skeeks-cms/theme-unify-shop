@@ -57,9 +57,9 @@
                 <? if (\Yii::$app->shop->is_show_quantity_product) : ?>
                     <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
                         <? if ($shopProduct->quantity > 10) : ?>
-                            <span class="row-label">В наличии более 10 шт.</span>
+                            <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock over 10"); ?></span>
                         <? else : ?>
-                            <span class="row-label">В наличии:</span> <span class="row-value"><?= $shopProduct->quantity; ?> шт.</span>
+                            <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock"); ?>:</span> <span class="row-value"><?= $shopProduct->quantity; ?> шт.</span>
                         <? endif; ?>
                     </div>
                 <? endif; ?>
@@ -149,9 +149,9 @@
                     <? if (\Yii::$app->shop->is_show_quantity_product) : ?>
                         <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
                             <? if ($offerShopProduct->quantity > 10) : ?>
-                                <span class="row-label">В наличии более 10 шт.</span>
+                                <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock over 10"); ?></span>
                             <? else : ?>
-                                <span class="row-label">В наличии:</span> <span class="row-value"><?= $offerShopProduct->quantity; ?> шт.</span>
+                                <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock"); ?>:</span> <span class="row-value"><?= $offerShopProduct->quantity; ?> шт.</span>
                             <? endif; ?>
                         </div>
                     <? endif; ?>
