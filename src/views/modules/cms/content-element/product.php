@@ -6,6 +6,7 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
+/* @var $model \skeeks\cms\shop\models\ShopCmsContentElement */
 skeeks\assets\unify\base\UnifyHsRatingAsset::register($this);
 $this->registerJs(<<<JS
 $.HSCore.components.HSRating.init($('.js-rating-show'), {
@@ -14,8 +15,7 @@ $.HSCore.components.HSRating.init($('.js-rating-show'), {
 JS
 );
 
-$shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($model);
-$model = $shopProduct->cmsContentElement;
+$shopProduct = $model->shopProduct;
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
 $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');

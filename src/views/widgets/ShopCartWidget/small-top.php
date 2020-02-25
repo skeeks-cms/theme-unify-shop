@@ -31,15 +31,17 @@ JS
 
     <? if (!\Yii::$app->mobileDetect->isMobile) : ?>
         <? $pjax = \skeeks\cms\widgets\Pjax::begin([
-            'isBlock'      => 'false',
+            'isBlock' => 'false',
             'id'      => 'sx-cart',
             'options' => [
                 'tag' => 'span',
             ],
         ]); ?>
-        <a href="<?= \yii\helpers\Url::to(['/shop/cart']); ?>" id="basket-bar-invoker" class="" data-pjax="0">
-            <?= \Yii::$app->shop->cart->money; ?>
-        </a>
+        <? if (\Yii::$app->shop->cart->money->amount > 0) : ?>
+            <a href="<?= \yii\helpers\Url::to(['/shop/cart']); ?>" id="basket-bar-invoker" class="" data-pjax="0">
+                <?= \Yii::$app->shop->cart->money; ?>
+            </a>
+        <? endif; ?>
         <? $pjax::end(); ?>
     <? endif; ?>
 </div>
