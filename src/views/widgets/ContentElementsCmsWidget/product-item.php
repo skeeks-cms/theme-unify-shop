@@ -79,7 +79,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                     <?
                     $prefix = "";
                     if ($shopProduct->isOffersProduct) {
-                        $prefix = "от ";
+                        $prefix = \Yii::t('skeeks/unify-shop', 'from') . " ";
                     }
                     ?>
                     <? if ($priceHelper->hasDiscount && (float)$priceHelper->minMoney->getAmount() > 0) : ?>
@@ -96,7 +96,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             <div class="card-prod--actions">
                 <? if ($priceHelper && (float)$priceHelper->minMoney->getAmount() == 0) : ?>
                     <? if ($shopProduct->quantity > 0 && \Yii::$app->shop->is_show_button_no_price && !$shopProduct->isOffersProduct) : ?>
-                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>В корзину", [
+                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>" . \Yii::t('skeeks/unify-shop', 'To cart'), [
                             'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type'    => 'button',
                             'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
@@ -112,7 +112,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
                 <? else : ?>
                     <? if ($shopProduct->quantity > 0 && !$shopProduct->isOffersProduct) : ?>
-                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>В корзину", [
+                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>" . \Yii::t('skeeks/unify-shop', 'To cart'), [
                             'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type'    => 'button',
                             'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),

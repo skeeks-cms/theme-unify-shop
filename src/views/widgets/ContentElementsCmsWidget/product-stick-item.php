@@ -48,7 +48,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                     <?
                     $prefix = "";
                     if ($shopProduct->isOffersProduct) {
-                        $prefix = "от ";
+                        $prefix = \Yii::t('skeeks/unify-shop', 'from') . " ";
                     }
                     ?>
                     <? if ($priceHelper->hasDiscount) : ?>

@@ -37,7 +37,7 @@
                 <div class="buttons-row ">
                     <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
                         <? if (\Yii::$app->shop->is_show_button_no_price) : ?>
-                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
+                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> ' . \Yii::t('skeeks/unify-shop', 'Add to cart'), [
                                 'class'   => 'btn btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                 'type'    => 'button',
                                 'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
@@ -47,7 +47,7 @@
 
                         <? endif; ?>
                     <? else : ?>
-                        <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
+                        <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> ' . \Yii::t('skeeks/unify-shop', 'Add to cart'), [
                             'class'   => 'btn btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                             'type'    => 'button',
                             'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
@@ -129,7 +129,7 @@
                     <div class="buttons-row ">
                         <? if ($offerShopProduct->minProductPrice && $offerShopProduct->minProductPrice->price == 0) : ?>
                             <? if (\Yii::$app->shop->is_show_button_no_price) : ?>
-                                <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
+                                <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> ' . \Yii::t('skeeks/unify-shop', 'Add to cart'), [
                                     'class'   => 'btn btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                     'type'    => 'button',
                                     'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, 1); return false;"),
@@ -139,7 +139,7 @@
 
                             <? endif; ?>
                         <? else : ?>
-                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> Добавить в корзину', [
+                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> ' . \Yii::t('skeeks/unify-shop', 'Add to cart'), [
                                 'class'   => 'btn btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                 'type'    => 'button',
                                 'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, 1); return false;"),
