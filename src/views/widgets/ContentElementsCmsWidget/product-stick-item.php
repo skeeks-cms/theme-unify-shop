@@ -43,7 +43,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
         <div class="media text-center">
             <!-- Product Info -->
-            <div class="d-flex flex-column">
+            <div class="d-flex flex-column" style="width: 100%;">
                 <? if ($priceHelper && (float)$priceHelper->minPrice->money->amount > 0) : ?>
                     <?
                     $prefix = "";
@@ -60,11 +60,11 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                 <? endif; ?>
 
 
-                <h4 class="h6 g-color-black mb-1">
+                <div class="g-color-black mb-1">
                     <a class="u-link-v5 g-color-black g-color-primary--hover" href="<?= $model->url; ?>" title="<?= $model->name; ?>">
                         <?= $model->name; ?>
                     </a>
-                </h4>
+                </div>
                 <? if ($model->cmsTree) : ?>
                     <a class="d-inline-block g-color-gray-dark-v5 g-font-size-13" href="<?= $model->cmsTree->url; ?>"><?= $model->cmsTree->name; ?></a>
                 <? endif; ?>
