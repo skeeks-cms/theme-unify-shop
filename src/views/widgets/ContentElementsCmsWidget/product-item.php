@@ -71,7 +71,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
         <? /* endif; */ ?>
 
         <div class="card-prod--title">
-            <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0" class="g-color-gray-dark-v2 g-font-weight-600 g-line-height-1"><?= $model->name; ?></a>
+            <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0" class="sx-card-prod--title-a"><?= $model->name; ?></a>
         </div>
         <? if (isset($shopProduct)) : ?>
             <div class="card-prod--price">
@@ -83,11 +83,11 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                     }
                     ?>
                     <? if ($priceHelper->hasDiscount && (float)$priceHelper->minMoney->getAmount() > 0) : ?>
-                        <div class="old sx-old-price" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></div>
-                        <div class="new sx-new-price g-color-primary g-font-size-20" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
+                        <div class="old sx-old-price sx-list-old-price" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></div>
+                        <div class="new sx-new-price sx-list-new-price g-color-primary" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
                     <? else : ?>
                         <? if ((float)$priceHelper->minMoney->getAmount() > 0) : ?>
-                            <div class="new sx-new-price g-color-primary g-font-size-20" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
+                            <div class="new sx-new-price sx-list-new-price g-color-primary" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
                         <? endif; ?>
                     <? endif; ?>
                 <? endif; ?>

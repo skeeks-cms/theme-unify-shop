@@ -100,8 +100,6 @@
 
 .card-prod .card-prod--title {
     font-weight: 600;
-    font-size: 14px;
-    line-height: 18px;
     min-height: 36px;
     margin: 0 0 16px;
 }
@@ -121,8 +119,8 @@
 
 .card-prod .card-prod--price .new {
     line-height: 34px;
-    font-weight: 700;
-    font-size: 1em;
+    /*font-weight: 700;
+    font-size: 1em;*/
 }
 
 .card-prod .card-prod--price .old {
@@ -319,6 +317,18 @@
     -webkit-border-radius: 3px;
     border-radius: 3px;
     border: 1px solid transparent;
+}
+
+.sx-card-prod--title-a {
+    color: #333;
+    font-weight: bold;
+    line-height: 1;
+    font-size: 14px;
+}
+
+.sx-list-new-price {
+    font-size: 20px;
+    font-weight: 700;
 }
 
 @media (min-width: 992px) {
