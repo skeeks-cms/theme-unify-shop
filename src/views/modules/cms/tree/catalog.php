@@ -11,10 +11,19 @@
 <section class="g-mt-0 g-pb-0">
     <div class="container sx-container">
         <? /* $pjax = \skeeks\cms\widgets\Pjax::begin(); */ ?>
+        <div class="row" style="background: #d3d3cd;">
+            <div class="col-md-6">
+
+            </div>
+            <div class="col-md-6">
+
+            </div>
+        </div>
         <div class="row">
             <div class="order-md-2 g-py-20 g-px-15 sx-content-col-main">
                 <?= $this->render('@app/views/breadcrumbs', [
                     'model' => $model,
+                    'isShowLast' => true,
                 ]) ?>
                 <div class="g-color-gray-dark-v1 g-font-size-16 sx-content">
                     <?= $model->description_full; ?>
@@ -217,7 +226,7 @@
 
 
                 <? endif; ?>
-                
+
                 <div class="g-mb-20">
                     <? if (!$isShowFilters) : ?>
                     <div style="display: none;">

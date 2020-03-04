@@ -59,7 +59,7 @@
                         <? if ($shopProduct->quantity > 10) : ?>
                             <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock over 10"); ?></span>
                         <? else : ?>
-                            <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock"); ?>:</span> <span class="row-value"><?= $shopProduct->quantity; ?> шт.</span>
+                            <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock"); ?>:</span> <span class="row-value"><?= $shopProduct->quantity; ?> <?= $shopProduct->measure->symbol; ?></span>
                         <? endif; ?>
                     </div>
                 <? endif; ?>
