@@ -12,7 +12,7 @@
     <table class="table table-striped">
         <? $counter = 0; ?>
         <? foreach ($attributes as $code => $value ) :
-            if (!in_array($code, ['propertySameProducts','video', 'simillar'])) : ?>
+            if ($value) : ?>
                 <tr>
                     <td>
                         <? $property = $widget->model->relatedPropertiesModel->getRelatedProperty($code); ?>
@@ -21,7 +21,12 @@
                             <i class="far fa-question-circle" title="<?= $property->hint; ?>"></i>
                         <? endif; ?>
                     </td>
-                    <td class="rtd"><?= $value; ?></td>
+                    <td class="rtd">
+                        <?= $value; ?>
+                        <? if ($property->cms_measure_code) : ?>
+                            <?= $property->cmsMeasure->asShortText; ?>
+                        <? endif; ?>
+                    </td>
                 </tr>
             <? endif; ?>
         <? endforeach; ?>
