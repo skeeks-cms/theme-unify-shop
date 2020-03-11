@@ -50,7 +50,11 @@
             var jToCartFlyImg = $('.to-cart-fly-img', jToCartWrapper);
             if (!jToCartFlyImg[0]) {
                 jToCartFlyImg = $('.sx-stick-slider .slick-current img', jToCartWrapper);
-                console.log(jToCartFlyImg);
+            } else {
+                if (jToCartFlyImg.length > 1) {
+                    jToCartFlyImg = $(jToCartFlyImg[0]);
+                    console.log(jToCartFlyImg);
+                }
             }
 
             var jToCartFlyImgFly = jToCartFlyImg
