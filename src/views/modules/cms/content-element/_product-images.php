@@ -6,6 +6,7 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
+/* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
 $this->registerJs(<<<JS
 
 $(".slick-slide").on("click", function() {
@@ -38,13 +39,32 @@ CSS
 );
 ?>
 <?
+
 $images = [];
-if ($model->image) {
-    $images[] = $model->image;
+if ($shopOfferChooseHelper && $shopOfferChooseHelper->offerCmsContentElement) {
+    if ($shopOfferChooseHelper->offerCmsContentElement->image) {
+        $images[] = $shopOfferChooseHelper->offerCmsContentElement->image;
+    } elseif ($model->image) {
+        $images[] = $model->image;
+    }
+
+    if ($shopOfferChooseHelper->offerCmsContentElement->images) {
+        $images = \yii\helpers\ArrayHelper::merge($images, $shopOfferChooseHelper->offerCmsContentElement->images);
+    } elseif ($model->images) {
+        $images = \yii\helpers\ArrayHelper::merge($images, $model->images);
+    }
+
+} else {
+    if ($model->image) {
+        $images[] = $model->image;
+    }
+
+    if ($model->images) {
+        $images = \yii\helpers\ArrayHelper::merge($images, $model->images);
+    }
 }
-if ($model->images) {
-    $images = \yii\helpers\ArrayHelper::merge($images, $model->images);
-}
+
+
 ?>
 <? if ($images) : ?>
     <div id="carouselCus1" class="js-carousel g-pt-10 g-mb-10 sx-stick-slider"

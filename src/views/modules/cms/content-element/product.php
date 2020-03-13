@@ -26,7 +26,6 @@ if ($shopProduct->isOffersProduct) {
     $shopOfferChooseHelper = new \skeeks\cms\shop\helpers\ShopOfferChooseHelper([
         'shopProduct' => $shopProduct,
     ]);
-
 }
 
 
@@ -62,7 +61,9 @@ if ($shopProduct->isOffersProduct) {
             <div class="col-lg-8">
                 <div class="sx-product-images g-ml-40 g-mr-40">
                     <?= $this->render("_product-images", [
-                        'model' => $model,
+                        'model'                 => $model,
+                        'shopOfferChooseHelper' => $shopOfferChooseHelper,
+
                     ]); ?>
                 </div>
             </div>
