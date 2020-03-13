@@ -24,9 +24,9 @@ $reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Coun
 $shopOfferChooseHelper = null;
 if ($shopProduct->isOffersProduct) {
     $shopOfferChooseHelper = new \skeeks\cms\shop\helpers\ShopOfferChooseHelper([
-        'shopProduct' => $shopProduct
+        'shopProduct' => $shopProduct,
     ]);
-    
+
 }
 
 
@@ -57,6 +57,7 @@ if ($shopProduct->isOffersProduct) {
             </div>
         </div>
 
+        <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
         <div class="row">
             <div class="col-lg-8">
                 <div class="sx-product-images g-ml-40 g-mr-40">
@@ -105,17 +106,15 @@ if ($shopProduct->isOffersProduct) {
                             </div>
                         </div>
 
-                        <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
-                        
+
                         <?= $this->render("_product-price", [
-                            'model'       => $model,
-                            'shopProduct' => $shopProduct,
-                            'priceHelper' => $priceHelper,
+                            'model'                 => $model,
+                            'shopProduct'           => $shopProduct,
+                            'priceHelper'           => $priceHelper,
                             'shopOfferChooseHelper' => $shopOfferChooseHelper,
                         ]); ?>
-                        
-                        <? $pjax::end(); ?>
-                        
+
+
                         <? if ($model->description_short) : ?>
                             <div class="sx-description-short g-color-gray-dark-v4">
                                 <?= $model->description_short; ?>
@@ -172,11 +171,13 @@ if ($shopProduct->isOffersProduct) {
 
                         </div>
                     </div>
-                    
-                    
+
+
                 </div>
             </div>
         </div>
+        <? $pjax::end(); ?>
+
     </div>
 
 
