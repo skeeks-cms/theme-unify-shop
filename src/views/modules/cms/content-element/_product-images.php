@@ -9,10 +9,12 @@
 /* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
 $this->registerJs(<<<JS
 
-$(".slick-slide").on("click", function() {
+_.delay(function() {
+    $(".slick-slide").on("click", function() {
     var jElement = $(this).find(".sx-fancybox-gallary");
     jElement.trigger("click");
 });
+}, 500);
 
 $('[data-fancybox="images"]').fancybox({
     
