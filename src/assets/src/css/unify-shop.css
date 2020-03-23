@@ -530,10 +530,9 @@
     margin: 0 5px;
     position: relative;
 }
+
 .sx-product-card-wrapper .sx-stick-navigation .slick-current:before {
-}
-.sx-product-card-wrapper .sx-stick-navigation .slick-current:before {
-    border: 1px solid #f577bf;
+    border: 1px solid #949494;
     content: '';
     position: absolute;
     z-index: 2;

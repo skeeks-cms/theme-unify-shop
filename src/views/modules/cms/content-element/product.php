@@ -71,44 +71,16 @@ if ($shopProduct->isOffersProduct) {
             <div class="col-lg-4">
                 <div class="product-info ss-product-info">
                     <div class="product-info-header">
-                        <div class="topmost-row">
-                            <div class="row no-gutters">
-                                <div class="col-5">
-                                    <div data-product-id="<?= $model->id; ?>" class="item-lot">Код:&nbsp;<?= $model->id; ?></div>
-                                </div>
-                                <div class="col-7">
-                                    <div class="feedback-review cf float-right">
-                                        <? if ($rating > 0) : ?>
-                                            <div class="product-rating float-right" itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
-                                                <div class="js-rating-show g-color-yellow" data-rating="<?= $rating; ?>"></div>
-                                                <meta itemprop="ratingValue" content="<?= $rating ? $rating : 0; ?>">
-                                                <meta itemprop="reviewCount" content="<?= $reviews2Count ? $reviews2Count : 0; ?>">
-                                            </div>
-                                        <? else : ?>
-                                            <div class="product-rating float-right">
-                                                <div class="js-rating-show g-color-yellow" data-rating="<?= $rating; ?>"></div>
-                                            </div>
-                                        <? endif; ?>
-
-                                        <div class="sx-feedback-links float-right g-mr-10">
-                                            <a href="#sx-reviews" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed  g-brd-primary--hover g-color-primary--hover">
-                                                <?
-                                                echo \Yii::t(
-                                                    'app',
-                                                    '{n, plural, =0{нет отзывов} =1{один отзыв} one{# отзыв} few{# отзыва} many{# отзывов} other{# отзыва}}',
-                                                    ['n' => $reviews2Count]
-                                                );
-                                                ?>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
 
 
-                        <?= $this->render("_product-price", [
+                        <?= $this->render("@app/views/modules/cms/content-element/_product-right-top-info", [
+                            'model'                 => $model,
+                            'shopProduct'           => $shopProduct,
+                            'priceHelper'           => $priceHelper,
+                            'shopOfferChooseHelper' => $shopOfferChooseHelper,
+                        ]); ?>
+
+                        <?= $this->render("@app/views/modules/cms/content-element/_product-price", [
                             'model'                 => $model,
                             'shopProduct'           => $shopProduct,
                             'priceHelper'           => $priceHelper,
@@ -126,51 +98,15 @@ if ($shopProduct->isOffersProduct) {
                                 </p>
                             </div>
                         <? endif; ?>
-                        <div class="sx-product-delivery-info g-mt-20">
-                            <!-- Nav tabs -->
-                            <!--u-nav-v1-1-->
-                            <ul class="nav nav-justified  u-nav-v5-1" role="tablist" data-target="nav-1-1-accordion-default-hor-left-icons" data-tabs-mobile-type="accordion"
-                                data-btn-classes="btn btn-md btn-block rounded-0 u-btn-outline-lightgray g-mb-20">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#nav-1-1-accordion-default-hor-left-icons--1" role="tab">
-                                        <!--<i class="icon-christmas-037 u-tab-line-icon-pro "></i>-->
-                                        <i class="fas fa-truck g-mr-3"></i>
-                                        Условия доставки
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#nav-1-1-accordion-default-hor-left-icons--2" role="tab">
-                                        <!--<i class="icon-communication-025 u-tab-line-icon-pro g-mr-3"></i>-->
-                                        <i class="far fa-question-circle g-mr-3"></i>
-                                        Помощь
-                                    </a>
-                                </li>
 
-                            </ul>
+                        <?= $this->render("@app/views/modules/cms/content-element/_product-right-bottom-info", [
+                            'model'                 => $model,
+                            'shopProduct'           => $shopProduct,
+                            'priceHelper'           => $priceHelper,
+                            'shopOfferChooseHelper' => $shopOfferChooseHelper,
+                        ]); ?>
 
-                            <!-- Tab panes -->
-                            <div id="nav-1-1-accordion-default-hor-left-icons" class="tab-content">
-                                <div class="tab-pane fade show active" id="nav-1-1-accordion-default-hor-left-icons--1" role="tabpanel">
-                                    <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::beginWidget('product-delivery-short'); ?>
-                                    <p>Ближайшая дата доставки: 31 мар. 2019 г.</p>
-                                    <p>Способы доставки: курьер, Почта России</p>
-                                    <p>Регионы доставки: вся Россия</p>
-                                    <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::end(); ?>
-                                </div>
 
-                                <div class="tab-pane fade" id="nav-1-1-accordion-default-hor-left-icons--2" role="tabpanel">
-                                    <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::beginWidget('product-help-short'); ?>
-                                    <p class="g-font-weight-600">Проблема с добавлением товара в корзину?</p>
-                                    <p>Если у вас появилась сложность с добавлением товара в корзину, вы можете позвонить по номеру
-                                        <a href="tel:<?= $this->theme->phone; ?>"><?= $this->theme->phone; ?></a> и оформить заказ по телефону.</p>
-                                    <p>Пожалуйста, сообщите, какие проблемы с добавлением товара в корзину вы испытываете:</p>
-                                    <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::end(); ?>
-                                </div>
-                            </div>
-
-                            <!-- End Nav tabs -->
-
-                        </div>
                     </div>
 
 
@@ -212,24 +148,26 @@ if ($shopProduct->isOffersProduct) {
     </div>
 </section>
 
-<section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
-    <div class="container">
+<? if (\Yii::$app->unifyShopTheme->is_allow_product_review) : ?>
+    <section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
+        <div class="container">
 
-        <div class="col-md-12 g-mt-20" id="sx-reviews">
-            <div class="float-right"><a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div>
-            <h2>Отзывы</h2>
+            <div class="col-md-12 g-mt-20" id="sx-reviews">
+                <div class="float-right"><a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div>
+                <h2>Отзывы</h2>
+            </div>
+
+            <?
+            $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
+                'namespace'         => 'Reviews2Widget',
+                'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
+                'cmsContentElement' => $model,
+            ]);
+            $widgetReviews::end();
+            ?>
         </div>
-
-        <?
-        $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-            'namespace'         => 'Reviews2Widget',
-            'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-            'cmsContentElement' => $model,
-        ]);
-        $widgetReviews::end();
-        ?>
-    </div>
-</section>
+    </section>
+<? endif; ?>
 
 
 <section class="g-brd-gray-light-v4 g-brd-top g-mt-20">

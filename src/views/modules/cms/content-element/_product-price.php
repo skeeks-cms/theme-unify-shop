@@ -22,12 +22,13 @@
         <link itemprop="availability" href="http://schema.org/InStock">
 
         <? if ($priceHelper) : ?>
-
             <? if ($priceHelper->hasDiscount) : ?>
                 <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
                 <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
             <? else: ?>
-                <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                <? if ((float) $priceHelper->minPrice->money->amount > 0) : ?>
+                    <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                <? endif; ?>
             <? endif; ?>
         <? endif; ?>
     </div>
@@ -44,7 +45,6 @@
                             ]); ?>
                         <? else : ?>
                             <a class="btn btn-xxl u-btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
-
                         <? endif; ?>
                     <? else : ?>
                         <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> ' . \Yii::t('skeeks/unify-shop', 'Add to cart'), [
@@ -115,7 +115,9 @@
                     <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
                     <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
                 <? else: ?>
-                    <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                    <? if ((float) $priceHelper->minPrice->money->amount > 0) : ?>
+                        <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                    <? endif; ?>
                 <? endif; ?>
             <? endif; ?>
         </div>

@@ -45,6 +45,8 @@ class UnifyShopThemeSettingsComponent extends Component
     public $product_slider_img_preview_height = 200;
     public $product_slider_img_preview_crop = ManipulatorInterface::THUMBNAIL_INSET;
 
+    public $is_allow_product_review = true;
+
     /**
      * Можно задать название и описание компонента
      * @return array
@@ -75,6 +77,7 @@ class UnifyShopThemeSettingsComponent extends Component
                 [
                     'catalog_is_show_subtree',
                     'catalog_is_show_subtree_col_left',
+                    'is_allow_product_review',
                 ],
                 'boolean',
             ],
@@ -159,6 +162,20 @@ class UnifyShopThemeSettingsComponent extends Component
                 ],
             ],
 
+            'product' => [
+                'class' => FieldSet::class,
+                'name' => \Yii::t('skeeks/shop/app', 'Карточка товара'),
+
+                'fields' => [
+
+                    'is_allow_product_review' => [
+                        'class' => BoolField::class,
+                        'allowNull' => false,
+                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
+                    ],
+                ],
+            ],
+
             /*'filters' => [
                 'class' => FieldSet::class,
                 'name' => \Yii::t('skeeks/shop/app', 'Фильтры'),
@@ -187,6 +204,8 @@ class UnifyShopThemeSettingsComponent extends Component
                 'product_slider_img_preview_width' => 'Ширина превью картинки товара',
                 'product_slider_img_preview_height' => 'Высота превью картинки товара',
                 'product_slider_img_preview_crop' => 'Режим обрезки превью картинки товара',
+
+                'is_allow_product_review' => 'Разрешено добавлять отзывы?',
             ]
         );
     }
