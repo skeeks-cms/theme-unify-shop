@@ -18,8 +18,7 @@ JS
 $shopProduct = $model->shopProduct;
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
-$rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
-$reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
+
 
 $shopOfferChooseHelper = null;
 if ($shopProduct->isOffersProduct) {

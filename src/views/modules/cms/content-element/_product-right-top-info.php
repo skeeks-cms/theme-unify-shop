@@ -10,7 +10,8 @@
 /* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
 /* @var $shopProduct \skeeks\cms\shop\models\ShopProduct */
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
-
+$rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
+$reviews2Count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
 ?>
 
 <div class="topmost-row">
