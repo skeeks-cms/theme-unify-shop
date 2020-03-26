@@ -19,7 +19,29 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
 ?>
 <article class="card-prod h-100 to-cart-fly-wrapper">
+    
+    <?
+        $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $shopProduct->id])->exists();
+        ?>
+        <div class="sx-favorite-product"
+             data-added-icon-class="fas fa-heart"
+             data-not-added-icon-class="far fa-heart"
+             data-is-added="<?= (int)$isAdded ?>"
+             data-product_id="<?= (int)$shopProduct->id ?>"
+        >
+            <a href="#" class="sx-favorite-product-trigger" data-pjax="0" style="font-size: 22px;">
+                <? if ($isAdded) : ?>
+                    <i class="fas fa-heart"></i>
+                <? else : ?>
+                    <i class="far fa-heart"></i>
+                <? endif; ?>
+            </a>
+        </div>
+    
     <div class="card-prod--labels">
+
+        
+        
         <!--<div class="card-prod--label red">11</div>
                         <div class="clear"></div>-->
         <? /*
@@ -33,16 +55,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                         <div class="clear"></div>
                     --><? /* endif; */ ?>
     </div>
-    <? if ($priceHelper->hasDiscount) : ?>
-        <? $percent = (int)($priceHelper->percent * 100); ?>
-        <? if ($percent > 0) : ?>
-            <div class="card-prod--sale">
-                <div><span class="number">-<?= $percent; ?></span><span class="percent">%</span></div>
-                <div class="caption">скидка</div>
-            </div>
-        <? endif; ?>
-
-    <? endif; ?>
+    
     <div class="card-prod--photo">
         <a href="<?= $model->url; ?>" data-pjax="0">
             <? if ($model->image) : ?>
@@ -57,83 +70,113 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                 <img class="img-fluid to-cart-fly-img" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
             <? endif; ?>
         </a>
+        <? if ($priceHelper->hasDiscount) : ?>
+            <? $percent = (int)($priceHelper->percent * 100); ?>
+            <? if ($percent > 0) : ?>
+                <div class="card-prod--sale">
+                    <div><span class="number">-<?= $percent; ?></span><span class="percent">%</span></div>
+                    <div class="caption">скидка</div>
+                </div>
+            <? endif; ?>
+    
+        <? endif; ?>
     </div>
     <div class="card-prod--inner">
 
+        <? if (isset($shopProduct)) : ?>
+                <div class="">
+                    <? if ($priceHelper) : ?>
+                        <?
+                        $prefix = "";
+                        if ($shopProduct->isOffersProduct) {
+                            $prefix = \Yii::t('skeeks/unify-shop', 'from')." ";
+                        }
+                        ?>
+                        <? if ($priceHelper->hasDiscount && (float)$priceHelper->minMoney->getAmount() > 0) : ?>
+                            <span class="new sx-new-price sx-list-new-price g-color-primary" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></span>
+                            <span class="old sx-old-price sx-list-old-price" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></span>
+                        <? else : ?>
+                            <? if ((float)$priceHelper->minMoney->getAmount() > 0) : ?>
+                                <div class="new sx-new-price sx-list-new-price g-color-primary" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
+                            <? endif; ?>
+                        <? endif; ?>
+                    <? endif; ?>
+                </div>
+        <? endif; ?>
         <div class="card-prod--reviews">
 
-        <? /* if ($model->relatedPropertiesModel->getSmartAttribute('typeConstruct')) : $prop = $model->relatedPropertiesModel->getSmartAttribute('typeConstruct'); */ ?>
-        <!--<div class="card-prod--category">
+            <? /* if ($model->relatedPropertiesModel->getSmartAttribute('typeConstruct')) : $prop = $model->relatedPropertiesModel->getSmartAttribute('typeConstruct'); */ ?>
+            <!--<div class="card-prod--category">
                     <? /* if ($model->cmsTree) : */ ?>
                         <a href="<? /*= $model->cmsTree->url; */ ?>"><? /*= $model->cmsTree->name; */ ?></a>
                     <? /* endif; */ ?>
                 </div>-->
-        <? /* endif; */ ?>
+            <? /* endif; */ ?>
 
-        <div class="card-prod--title">
-            <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0" class="sx-card-prod--title-a"><?= $model->name; ?></a>
-        </div>
-        <? if (isset($shopProduct)) : ?>
-            <div class="card-prod--price">
-                <? if ($priceHelper) : ?>
-                    <?
-                    $prefix = "";
-                    if ($shopProduct->isOffersProduct) {
-                        $prefix = \Yii::t('skeeks/unify-shop', 'from') . " ";
-                    }
-                    ?>
-                    <? if ($priceHelper->hasDiscount && (float)$priceHelper->minMoney->getAmount() > 0) : ?>
-                        <div class="old sx-old-price sx-list-old-price" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></div>
-                        <div class="new sx-new-price sx-list-new-price g-color-primary" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
-                    <? else : ?>
-                        <? if ((float)$priceHelper->minMoney->getAmount() > 0) : ?>
+            <div class="card-prod--title">
+                <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0" class="sx-card-prod--title-a g-text-underline--none--hover"><?= $model->name; ?></a>
+            </div>
+            <? if (isset($shopProduct)) : ?>
+                <div class="card-prod--price" style="display: none;">
+                    <? if ($priceHelper) : ?>
+                        <?
+                        $prefix = "";
+                        if ($shopProduct->isOffersProduct) {
+                            $prefix = \Yii::t('skeeks/unify-shop', 'from')." ";
+                        }
+                        ?>
+                        <? if ($priceHelper->hasDiscount && (float)$priceHelper->minMoney->getAmount() > 0) : ?>
+                            <div class="old sx-old-price sx-list-old-price" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></div>
                             <div class="new sx-new-price sx-list-new-price g-color-primary" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
+                        <? else : ?>
+                            <? if ((float)$priceHelper->minMoney->getAmount() > 0) : ?>
+                                <div class="new sx-new-price sx-list-new-price g-color-primary" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
+                            <? endif; ?>
                         <? endif; ?>
                     <? endif; ?>
-                <? endif; ?>
-            </div>
+                </div>
 
-            <div class="card-prod--actions">
-                <? if ($priceHelper && (float)$priceHelper->minMoney->getAmount() == 0) : ?>
-                    <? if ($shopProduct->quantity > 0 && \Yii::$app->shop->is_show_button_no_price && !$shopProduct->isOffersProduct) : ?>
-                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>" . \Yii::t('skeeks/unify-shop', 'To cart'), [
-                            'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
-                            'type'    => 'button',
-                            'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
-                        ]); ?>
+                <div class="card-prod--actions" style="float: left;">
+                    <? if ($priceHelper && (float)$priceHelper->minMoney->getAmount() == 0) : ?>
+                        <? if ($shopProduct->quantity > 0 && \Yii::$app->shop->is_show_button_no_price && !$shopProduct->isOffersProduct) : ?>
+                            <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>".\Yii::t('skeeks/unify-shop', 'To cart'), [
+                                'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
+                                'type'    => 'button',
+                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                            ]); ?>
+
+                        <? else : ?>
+                            <?= \yii\helpers\Html::tag('a', "Подробнее", [
+                                'class' => 'btn btn-primary',
+                                'href'  => $model->url,
+                                'data'  => ['pjax' => 0],
+                            ]); ?>
+                        <? endif; ?>
 
                     <? else : ?>
-                        <?= \yii\helpers\Html::tag('a', "Подробнее", [
-                            'class' => 'btn btn-primary',
-                            'href'  => $model->url,
-                            'data'  => ['pjax' => 0],
-                        ]); ?>
+                        <? if ($shopProduct->quantity > 0 && !$shopProduct->isOffersProduct) : ?>
+                            <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>".\Yii::t('skeeks/unify-shop', 'To cart'), [
+                                'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
+                                'type'    => 'button',
+                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                            ]); ?>
+                        <? else : ?>
+                            <?= \yii\helpers\Html::tag('a', "Подробнее", [
+                                'class' => 'btn btn-primary',
+                                'href'  => $model->url,
+                                'data'  => ['pjax' => 0],
+                            ]); ?>
+                        <? endif; ?>
                     <? endif; ?>
-
-                <? else : ?>
-                    <? if ($shopProduct->quantity > 0 && !$shopProduct->isOffersProduct) : ?>
-                        <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>" . \Yii::t('skeeks/unify-shop', 'To cart'), [
-                            'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
-                            'type'    => 'button',
-                            'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
-                        ]); ?>
-                    <? else : ?>
-                        <?= \yii\helpers\Html::tag('a', "Подробнее", [
-                            'class' => 'btn btn-primary',
-                            'href'  => $model->url,
-                            'data'  => ['pjax' => 0],
-                        ]); ?>
-                    <? endif; ?>
-                <? endif; ?>
-            </div>
-        <? endif; ?>
-    </div>
-    <div class="card-prod--hidden">
-        <div class="card-prod--inner">
-            <div class="with-icon-group">
+                </div>
+            <? endif; ?>
+        </div>
+        <div class="card-prod--hidden">
+            <div class="card-prod--inner">
+                <div class="with-icon-group">
 
 
+                </div>
             </div>
         </div>
-    </div>
 </article>

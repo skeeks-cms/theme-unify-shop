@@ -52,6 +52,7 @@
     padding-left: 10px;
     padding-right: 10px;
 }
+
 .card-prod .card-prod--photo {
     /*width:250px;
     height:250px;*/
@@ -390,12 +391,12 @@
 
 .card-prod--sale {
     position: absolute;
-    top: 22px;
-    right: 34px;
+    top: 15px;
+    left: 15px;
     width: 58px;
     height: 58px;
     text-align: center;
-    background: #ffde09;
+    background: #ffde09d4;
     -webkit-border-radius: 50%;
     border-radius: 50%;
     z-index: 5;
@@ -418,9 +419,6 @@
 }
 
 
-
-
-
 /**
  * Рейтинги звездочки
  */
@@ -430,6 +428,7 @@
     white-space: nowrap;
     display: block;
 }
+
 .rating-container .rating {
     cursor: default;
     position: relative;
@@ -440,11 +439,13 @@
 }
 
 .product-rating .rating-container .rating .empty-stars .star {
-    background-image:url("../images/star-empty.svg");
+    background-image: url("../images/star-empty.svg");
 }
+
 .product-rating .rating-container .rating .filled-stars .star {
     background-image: url(../images/star-fill.svg);
 }
+
 .product-rating .rating-container .rating .star {
     width: 11px;
     min-width: 11px;
@@ -452,6 +453,7 @@
     cursor: default;
     margin: 0 1px;
 }
+
 .rating-container .star {
     display: inline-block;
     margin: 0 3px;
@@ -467,12 +469,14 @@
     display: flex;
     cursor: default;
 }
+
 .rating-animate .filled-stars {
     transition: width 0.25s ease;
     -o-transition: width 0.25s ease;
     -moz-transition: width 0.25s ease;
     -webkit-transition: width 0.25s ease;
 }
+
 .rating-container .filled-stars {
     position: absolute;
     left: 0;
@@ -484,6 +488,7 @@
     -webkit-text-stroke: 1px #777;
     text-shadow: 1px 1px #999;
 }
+
 .rating-container .filled-stars {
     color: #fa6;
     -webkit-text-stroke: unset;
@@ -497,6 +502,7 @@
     -webkit-justify-content: flex-end;
     justify-content: flex-end;
 }
+
 .product-rating {
     font-size: .5rem;
     height: 22px;
@@ -515,10 +521,6 @@
     -webkit-align-items: center;
     align-items: center;
 }
-
-
-
-
 
 
 /**
@@ -567,19 +569,18 @@
 }
 
 
-
 /**
  * Маленькие табы в товаре
  */
-.sx-product-card-wrapper .sx-product-delivery-info .tab-pane  {
+.sx-product-card-wrapper .sx-product-delivery-info .tab-pane {
     background: #fafafa;
     padding: 20px;
 }
-.sx-product-card-wrapper .sx-product-delivery-info .tab-pane p  {
+
+.sx-product-card-wrapper .sx-product-delivery-info .tab-pane p {
     margin-bottom: 5px;
     font-size: 13px;
 }
-
 
 
 /**
@@ -596,12 +597,24 @@
 }
 
 
-
-
 .slick-slide {
     text-align: center;
 }
+
 .slick-slide img {
     display: inline;
     margin: auto;
+}
+
+
+.card-prod .sx-favorite-product {
+    position: absolute;
+    right: 25px;
+    top: 22px;
+    zoom: 1;
+    z-index: 5;
+    display: none;
+}
+.card-prod:hover .sx-favorite-product {
+    display: block;
 }

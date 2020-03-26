@@ -38,7 +38,7 @@ JS
             ],
         ]); ?>
         <? if (\Yii::$app->shop->cart->money->amount > 0) : ?>
-            <a href="<?= \yii\helpers\Url::to(['/shop/cart']); ?>" id="basket-bar-invoker" class="" data-pjax="0">
+            <a href="<?= \yii\helpers\Url::to(['/shop/cart']); ?>" id="basket-bar-invoker" class="g-text-underline--none--hover" data-pjax="0">
                 <?= \Yii::$app->shop->cart->money; ?>
             </a>
         <? endif; ?>

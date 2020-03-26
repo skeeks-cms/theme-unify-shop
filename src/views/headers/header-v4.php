@@ -7,8 +7,5 @@
  */
 ?>
 <?= $this->render('@skeeks/cms/themes/unify/views/headers/header-v4', [
-    'content' => \skeeks\cms\shop\widgets\cart\ShopCartWidget::widget([
-        'namespace' => 'ShopCartWidget-small-top',
-        'viewFile'  => '@app/views/widgets/ShopCartWidget/small-top',
-    ]),
+    'content' => $this->render("@app/views/headers/_header_shop"),
 ]); ?>
