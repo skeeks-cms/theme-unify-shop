@@ -26,8 +26,8 @@ if ($shopProduct->isOffersProduct) {
         'shopProduct' => $shopProduct,
     ]);
 }
-
-
+$singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage::beginWidget('product-page');
+$singlPage::end();
 ?>
 <section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper" itemscope itemtype="http://schema.org/Product">
     <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?><?= $priceHelper->basePrice->money; ?>"/>
@@ -35,20 +35,21 @@ if ($shopProduct->isOffersProduct) {
     <meta itemprop="description" content="<?= $model->description_short ? $model->description_short : '-'; ?>"/>
     <meta itemprop="sku" content="<?= $model->id; ?>"/>
 
-    <? if ($model->relatedPropertiesModel->getAttribute('brand')) : ?>
-        <meta itemprop="brand" content="<?= $model->relatedPropertiesModel->getSmartAttribute('brand'); ?>"/>
-    <? else : ?>
-        <meta itemprop="brand" content="<?= \Yii::$app->view->theme->title; ?>"/>
-    <? endif; ?>
+    <?/* if ($model->relatedPropertiesModel->getAttribute('brand')) : */?><!--
+        <meta itemprop="brand" content="<?/*= $model->relatedPropertiesModel->getSmartAttribute('brand'); */?>"/>
+    <?/* else : */?>
+        <meta itemprop="brand" content="<?/*= \Yii::$app->view->theme->title; */?>"/>
+    --><?/* endif; */?>
     <? if ($model->image) : ?>
         <link itemprop="image" href="<?= $model->image->absoluteSrc; ?>">
     <? endif; ?>
-    <div class="container sx-container g-py-20">
 
+    <div class="container sx-container g-py-20">
         <div class="row">
             <div class="col-md-12">
                 <?= $this->render('@app/views/breadcrumbs', [
                     'model' => $model,
+                    'isShowH1' => $singlPage->is_show_title_in_breadcrumbs
                     /*'isShowLast' => true,
                     'isShowH1'   => false,*/
                 ]); ?>
@@ -57,7 +58,7 @@ if ($shopProduct->isOffersProduct) {
 
         <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-md-<?= $singlPage->width_col_images; ?>">
                 <div class="sx-product-images g-ml-40 g-mr-40">
                     <?= $this->render("_product-images", [
                         'model'                 => $model,
@@ -67,8 +68,11 @@ if ($shopProduct->isOffersProduct) {
                 </div>
             </div>
 
-            <div class="col-lg-4">
+            <div class="col-md-<?= $singlPage->width_col_short_info; ?>">
                 <div class="product-info ss-product-info">
+                    <? if ($singlPage->is_show_title_in_short_description) : ?>
+                        <h1 class="h4 g-font-weight-600"><?= $model->seoName; ?></h1>
+                    <? endif; ?>
                     <div class="product-info-header">
 
 
@@ -88,10 +92,10 @@ if ($shopProduct->isOffersProduct) {
 
 
                         <? if ($model->description_short) : ?>
-                            <div class="sx-description-short g-color-gray-dark-v4">
+                            <div class="sx-description-short">
                                 <?= $model->description_short; ?>
                                 <p>
-                                    <a href="#sx-description" class="sx-scroll-to g-color-gray-dark-v2 g-font-size-13 sx-dashed g-brd-primary--hover g-color-primary--hover">
+                                    <a href="#sx-description" class="sx-scroll-to g-font-size-13 sx-dashed g-brd-primary--hover g-color-primary--hover">
                                         Подробнее
                                     </a>
                                 </p>
@@ -146,6 +150,7 @@ if ($shopProduct->isOffersProduct) {
 
     </div>
 </section>
+
 
 <? if (\Yii::$app->unifyShopTheme->is_allow_product_review) : ?>
     <section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
