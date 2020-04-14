@@ -12,6 +12,12 @@
 //$shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($model);
 $shopProduct = $model->shopProduct;
 
+//Если этот товар привязан к главному
+$infoModel = $model;
+if ($shopProduct->main_pid) {
+    $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
+}
+    
 $count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
 $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 //$v3ProductElement = new \v3toys\parsing\models\V3toysProductContentElement($model->toArray());
@@ -58,16 +64,16 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
     
     <div class="card-prod--photo">
         <a href="<?= $model->url; ?>" data-pjax="0">
-            <? if ($model->image) : ?>
-                <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
+            <? if ($infoModel->image) : ?>
+                <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->image ? $infoModel->image->src : null,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => \Yii::$app->unifyShopTheme->catalog_img_preview_width,
                         'h' => \Yii::$app->unifyShopTheme->catalog_img_preview_height,
                         'm' => \Yii::$app->unifyShopTheme->catalog_img_preview_crop,
                     ]), $model->code
-                ); ?>" title="<?= \yii\helpers\Html::encode($model->name); ?>" alt="<?= \yii\helpers\Html::encode($model->name); ?>"/>
+                ); ?>" title="<?= \yii\helpers\Html::encode($infoModel->name); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->name); ?>"/>
             <? else : ?>
-                <img class="img-fluid to-cart-fly-img" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
+                <img class="img-fluid to-cart-fly-img" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $infoModel->name; ?>">
             <? endif; ?>
         </a>
         <? if ($priceHelper->hasDiscount) : ?>
@@ -114,7 +120,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             <? /* endif; */ ?>
 
             <div class="card-prod--title">
-                <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0" class="sx-card-prod--title-a g-text-underline--none--hover"><?= $model->name; ?></a>
+                <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0" class="sx-card-prod--title-a g-text-underline--none--hover"><?= $infoModel->name; ?></a>
             </div>
             <? if (isset($shopProduct)) : ?>
                 <div class="card-prod--price" style="display: none;">

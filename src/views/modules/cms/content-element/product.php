@@ -18,6 +18,11 @@ JS
 $shopProduct = $model->shopProduct;
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
+//Если этот товар привязан к главному
+$infoModel = $model;
+if ($shopProduct->main_pid) {
+    $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
+}
 
 
 $shopOfferChooseHelper = null;
@@ -30,25 +35,20 @@ $singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPag
 $singlPage::end();
 ?>
 <section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper" itemscope itemtype="http://schema.org/Product">
-    <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?><?= $priceHelper->basePrice->money; ?>"/>
+    <meta itemprop="name" content="<?= \yii\helpers\Html::encode($infoModel->name); ?><?= $priceHelper->basePrice->money; ?>"/>
     <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
-    <meta itemprop="description" content="<?= $model->description_short ? $model->description_short : '-'; ?>"/>
+    <meta itemprop="description" content="<?= $infoModel->description_short ? $infoModel->description_short : '-'; ?>"/>
     <meta itemprop="sku" content="<?= $model->id; ?>"/>
-
-    <?/* if ($model->relatedPropertiesModel->getAttribute('brand')) : */?><!--
-        <meta itemprop="brand" content="<?/*= $model->relatedPropertiesModel->getSmartAttribute('brand'); */?>"/>
-    <?/* else : */?>
-        <meta itemprop="brand" content="<?/*= \Yii::$app->view->theme->title; */?>"/>
-    --><?/* endif; */?>
-    <? if ($model->image) : ?>
-        <link itemprop="image" href="<?= $model->image->absoluteSrc; ?>">
+    
+    <? if ($infoModel->image) : ?>
+        <link itemprop="image" href="<?= $infoModel->image->absoluteSrc; ?>">
     <? endif; ?>
 
     <div class="container sx-container g-py-20">
         <div class="row">
             <div class="col-md-12">
                 <?= $this->render('@app/views/breadcrumbs', [
-                    'model' => $model,
+                    'model' => $infoModel,
                     'isShowH1' => $singlPage->is_show_title_in_breadcrumbs
                     /*'isShowLast' => true,
                     'isShowH1'   => false,*/
@@ -61,7 +61,7 @@ $singlPage::end();
             <div class="col-md-<?= $singlPage->width_col_images; ?>">
                 <div class="sx-product-images g-ml-40 g-mr-40">
                     <?= $this->render("_product-images", [
-                        'model'                 => $model,
+                        'model'                 => $infoModel,
                         'shopOfferChooseHelper' => $shopOfferChooseHelper,
 
                     ]); ?>
@@ -91,9 +91,9 @@ $singlPage::end();
                         ]); ?>
 
 
-                        <? if ($model->description_short) : ?>
+                        <? if ($infoModel->description_short) : ?>
                             <div class="sx-description-short">
-                                <?= $model->description_short; ?>
+                                <?= $infoModel->description_short; ?>
                                 <p>
                                     <a href="#sx-description" class="sx-scroll-to g-font-size-13 sx-dashed g-brd-primary--hover g-color-primary--hover">
                                         Подробнее
@@ -103,7 +103,7 @@ $singlPage::end();
                         <? endif; ?>
 
                         <?= $this->render("@app/views/modules/cms/content-element/_product-right-bottom-info", [
-                            'model'                 => $model,
+                            'model'                 => $infoModel,
                             'shopProduct'           => $shopProduct,
                             'priceHelper'           => $priceHelper,
                             'shopOfferChooseHelper' => $shopOfferChooseHelper,
@@ -129,7 +129,7 @@ $singlPage::end();
                 <?
 
                 $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
-                    'model'                   => $model,
+                    'model'                   => $infoModel,
                     'visible_properties'      => @$visible_items,
                     'visible_only_has_values' => true,
                     'viewFile'                => '@app/views/widgets/RpWidget/default',
@@ -139,11 +139,11 @@ $singlPage::end();
 
             </div>
         </div>
-        <? if ($model->description_full) : ?>
+        <? if ($infoModel->description_full) : ?>
             <div class="row">
                 <div class="col-md-12 sx-content" id="sx-description">
                     <h2>Описание</h2>
-                    <?= $model->description_full; ?>
+                    <?= $infoModel->description_full; ?>
                 </div>
             </div>
         <? endif; ?>

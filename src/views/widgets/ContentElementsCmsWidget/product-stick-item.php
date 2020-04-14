@@ -13,6 +13,12 @@
 //$shopProduct = \skeeks\cms\shop\models\ShopProduct::getInstanceByContentElement($model);
 $shopProduct = $model->shopProduct;
 
+//Если этот товар привязан к главному
+$infoModel = $model;
+if ($shopProduct->main_pid) {
+    $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
+}
+
 $count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
 $rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 //$v3ProductElement = new \v3toys\parsing\models\V3toysProductContentElement($model->toArray());
@@ -23,17 +29,17 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
     <div class="g-px-10">
         <!-- Product -->
         <figure class="g-pos-rel g-mb-10">
-            <a class="" href="<?= $model->url; ?>" title="<?= $model->name; ?>">
-                <? if ($model->image) : ?>
-                    <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : null,
+            <a class="" href="<?= $model->url; ?>" title="<?= $infoModel->name; ?>">
+                <? if ($infoModel->image) : ?>
+                    <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->image ? $infoModel->image->src : null,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
                             'w' => \Yii::$app->unifyShopTheme->product_slider_img_preview_width,
                             'h' => \Yii::$app->unifyShopTheme->product_slider_img_preview_height,
                             'm' => \Yii::$app->unifyShopTheme->product_slider_img_preview_crop,
-                        ]), $model->code
-                    ); ?>" alt="<?= $model->name; ?>">
+                        ]), $infoModel->code
+                    ); ?>" alt="<?= $infoModel->name; ?>">
                 <? else : ?>
-                    <img class="img-fluid" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
+                    <img class="img-fluid" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $infoModel->name; ?>">
                 <? endif; ?>
             </a>
             <!--<figcaption class="w-100 g-bg-primary g-bg-black--hover text-center g-pos-abs g-bottom-0 g-transition-0_2 g-py-5">
@@ -61,8 +67,8 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
 
                 <div class="g-color-black mb-1">
-                    <a class="g-color-primary--hover sx-card-prod--title-a" href="<?= $model->url; ?>" title="<?= $model->name; ?>">
-                        <?= $model->name; ?>
+                    <a class="g-color-primary--hover sx-card-prod--title-a" href="<?= $model->url; ?>" title="<?= $infoModel->name; ?>">
+                        <?= $infoModel->name; ?>
                     </a>
                 </div>
                 <? if ($model->cmsTree) : ?>
