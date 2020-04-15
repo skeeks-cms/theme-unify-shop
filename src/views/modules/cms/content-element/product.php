@@ -203,12 +203,13 @@ $singlPage::end();
 
                     $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
 
-                    $activeDataProvider->query->joinWith('shopProduct');
-                    $activeDataProvider->query->andWhere([
+                    /*$activeDataProvider->query->andWhere([
                         '!=',
                         'shopProduct.product_type',
                         \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
-                    ]);
+                    ]);*/
+                    
+                    \Yii::$app->shop->filterBaseContentElementQuery($activeDataProvider->query);
 
                 },
             ]);
@@ -247,13 +248,7 @@ $singlPage::end();
                     $query->andWhere(['shop_fuser_id' => \Yii::$app->shop->shopFuser->id]);
                     //$query->orderBy(['shop_viewed_product.created_at' => SORT_DESC]);
 
-                    $query->joinWith('shopProduct');
-                    $query->andWhere([
-                        '!=',
-                        'shopProduct.product_type',
-                        \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
-                    ]);
-
+                    \Yii::$app->shop->filterBaseContentElementQuery($query);
                 },
             ]);
             $widgetElements::end();
