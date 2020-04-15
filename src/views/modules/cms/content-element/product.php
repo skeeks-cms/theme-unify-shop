@@ -21,7 +21,13 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 //Если этот товар привязан к главному
 $infoModel = $model;
 if ($shopProduct->main_pid) {
-    $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
+    if ($shopProduct->shopMainProduct->isOfferProduct) {
+        $element = $shopProduct->shopMainProduct->cmsContentElement;
+        $infoModel = $element->parentContentElement;
+        $infoModel->name = $element->name;
+    } else {
+        $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
+    }
 }
 
 

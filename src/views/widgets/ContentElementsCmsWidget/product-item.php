@@ -15,7 +15,13 @@ $shopProduct = $model->shopProduct;
 //Если этот товар привязан к главному
 $infoModel = $model;
 if ($shopProduct->main_pid) {
-    $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
+    if ($shopProduct->shopMainProduct->isOfferProduct) {
+        $element = $shopProduct->shopMainProduct->cmsContentElement;
+        $infoModel = $element->parentContentElement;
+        $infoModel->name = $element->name;
+    } else {
+        $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
+    }
 }
     
 $count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
