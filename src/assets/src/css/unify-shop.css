@@ -619,3 +619,28 @@
 .card-prod:hover .sx-favorite-product {
     display: block;
 }
+
+
+
+
+
+.sx-quantity-group div {
+    border-bottom: 1px solid #ddd !important;
+    height: 36px;
+    font-size: 22px;
+}
+.sx-quantity-group .sx-quantity-input {
+    background: none;
+    max-width: 100px;
+    text-align: center;
+    border: none;
+    padding: 2px 0px;
+    color: black;
+    font-size: 20px;
+}
+
+.sx-minus, .sx-plus {
+    padding-left: 0px;
+    padding-right: 0px;
+    cursor: pointer;
+}

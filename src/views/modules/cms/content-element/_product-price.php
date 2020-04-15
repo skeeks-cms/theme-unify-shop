@@ -24,30 +24,85 @@
         <? if ($priceHelper) : ?>
             <? if ($priceHelper->hasDiscount) : ?>
                 <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
-                <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary">
+                    <?= $priceHelper->minPrice->money; ?>
+                    <? if ($shopProduct->measure_ratio != 1) : ?>
+                        / <?= $shopProduct->measure->symbol; ?>
+                    <? endif; ?>
+                </span>
             <? else: ?>
-                <? if ((float) $priceHelper->minPrice->money->amount > 0) : ?>
-                    <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
+                    <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary">
+                        <?= $priceHelper->minPrice->money; ?>
+                        <? if ($shopProduct->measure_ratio != 1) : ?>
+                            / <?= $shopProduct->measure->symbol; ?>
+                        <? endif; ?>
+                    </span>
                 <? endif; ?>
             <? endif; ?>
         <? endif; ?>
     </div>
+
+    <div class="d-flex flex-row">
+        <span class="d-flex flex-row sx-quantity-group">
+            <div class="my-auto sx-minus">-</div>
+            <div class="my-auto">
+                <input
+                        value="<?= $shopProduct->measure_ratio; ?>"
+                        class="form-control sx-quantity-input"
+                        data-measure_ratio="<?= $shopProduct->measure_ratio; ?>"
+                />
+            </div>
+            <div class="my-auto sx-plus">+</div>
+        </span>
+        <div class="my-auto g-ml-10">
+            <?= $shopProduct->measure->symbol; ?>
+        </div>
+
+        <? if ($shopProduct->measure_matches_jsondata) : ?>
+            <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
+                <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
+                <? if ($shopProduct->measure_ratio >= $count) : ?>
+                    <div class="my-auto g-ml-10">
+                        =
+                    </div>
+                    <div class="my-auto g-ml-10">
+                        <?
+                        if ($count / $shopProduct->measure_ratio >= 1) {
+                            echo $count / $shopProduct->measure_ratio;
+                        } else {
+                            echo round($shopProduct->measure_ratio / $count);
+                        }
+                        ?>
+                        <?= $measure->symbol; ?>
+                    </div>
+                <? else: ?>
+                    <div class="my-auto g-ml-10" style="color: gray; font-size: 12px;">
+                        (1<?= $measure->symbol; ?> = <?= $count; ?><?= $shopProduct->measure->symbol; ?>)
+                    </div>
+                <? endif; ?>
+
+
+            <? endforeach; ?>
+        <? endif; ?>
+    </div>
+
     <? if ($shopProduct->quantity > 0) : ?>
-        <div class="product-control g-mt-10">
-            <div class="control-group group-submit g-mr-10 g-mb-15">
+        <div class="g-mt-10">
+            <div class="control-group group-submit g-mb-15">
                 <div class="buttons-row ">
                     <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
                         <? if (\Yii::$app->shop->is_show_button_no_price) : ?>
-                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> ' . \Yii::t('skeeks/unify-shop', 'Add to cart'), [
-                                'class'   => 'btn btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
+                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
+                                'class'   => 'btn btn-block btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                 'type'    => 'button',
-                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                             ]); ?>
                         <? else : ?>
-                            <a class="btn btn-xxl u-btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
+                            <a class="btn btn-block btn-xxl u-btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
                         <? endif; ?>
                     <? else : ?>
-                        <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> ' . \Yii::t('skeeks/unify-shop', 'Add to cart'), [
+                        <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
                             'class'   => 'btn btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                             'type'    => 'button',
                             'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
@@ -57,7 +112,7 @@
                 <? if (\Yii::$app->shop->is_show_quantity_product) : ?>
                     <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
                         <? if ($shopProduct->quantity > 10) : ?>
-                            <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock over 10"); ?></span>
+                            <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock over 10"); ?> <?= $shopProduct->measure->symbol; ?></span>
                         <? else : ?>
                             <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock"); ?>:</span> <span class="row-value"><?= $shopProduct->quantity; ?> <?= $shopProduct->measure->symbol; ?></span>
                         <? endif; ?>
@@ -115,7 +170,7 @@
                     <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
                     <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
                 <? else: ?>
-                    <? if ((float) $priceHelper->minPrice->money->amount > 0) : ?>
+                    <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
                         <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
                     <? endif; ?>
                 <? endif; ?>
@@ -123,7 +178,7 @@
         </div>
 
         <?= $shopOfferChooseHelper->render(); ?>
-        
+
 
         <? if ($offerShopProduct->quantity > 0) : ?>
             <div class="product-control g-mt-10">
@@ -131,7 +186,7 @@
                     <div class="buttons-row ">
                         <? if ($offerShopProduct->minProductPrice && $offerShopProduct->minProductPrice->price == 0) : ?>
                             <? if (\Yii::$app->shop->is_show_button_no_price) : ?>
-                                <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> ' . \Yii::t('skeeks/unify-shop', 'Add to cart'), [
+                                <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
                                     'class'   => 'btn btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                     'type'    => 'button',
                                     'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, 1); return false;"),
@@ -141,7 +196,7 @@
 
                             <? endif; ?>
                         <? else : ?>
-                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> ' . \Yii::t('skeeks/unify-shop', 'Add to cart'), [
+                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
                                 'class'   => 'btn btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                 'type'    => 'button',
                                 'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, 1); return false;"),
@@ -151,9 +206,9 @@
                     <? if (\Yii::$app->shop->is_show_quantity_product) : ?>
                         <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
                             <? if ($offerShopProduct->quantity > 10) : ?>
-                                <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock over 10"); ?></span>
+                                <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock over 10"); ?> <?= $offerShopProduct->measure->symbol; ?></span>
                             <? else : ?>
-                                <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock"); ?>:</span> <span class="row-value"><?= $offerShopProduct->quantity; ?> шт.</span>
+                                <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock"); ?>:</span> <span class="row-value"><?= $offerShopProduct->quantity; ?> <?= $offerShopProduct->measure->symbol; ?></span>
                             <? endif; ?>
                         </div>
                     <? endif; ?>

@@ -6,6 +6,75 @@
  */
 (function ($) {
 
+    $("body").on("click", ".sx-quantity-group .sx-plus", function () {
+        var jGroup = $(this).closest(".sx-quantity-group");
+        var jInput = $(".sx-quantity-input", jGroup);
+        var measure_ratio = Number(jInput.data("measure_ratio")) || 1;
+        var newVal = Number(jInput.val()) + measure_ratio;
+        
+        var count = newVal / measure_ratio;
+        count = Math.round(count);
+
+        newVal = count * measure_ratio;
+        newVal = Math.floor(newVal * 100) / 100 ;
+        jInput.val(newVal);
+        jInput.focus().change();
+        return false;
+    });
+
+    $("body").on("click", ".sx-quantity-group .sx-minus", function () {
+        var jGroup = $(this).closest(".sx-quantity-group");
+        var jInput = $(".sx-quantity-input", jGroup);
+        var measure_ratio = parseFloat(jInput.data("measure_ratio")) || 1;
+        var newVal = parseFloat(jInput.val()) - measure_ratio;
+        jInput.val(newVal);
+        jInput.focus();
+        jInput.change();
+        return false;
+    });
+
+    $("body").on("updatewidth", ".sx-quantity-group .sx-quantity-input", function () {
+        var measure_ratio = Number($(this).data("measure_ratio")) || 1;
+        var newVal = $(this).val();
+        
+        
+        var length = (String(newVal).length - 1) || 1;
+        $(this).attr("size", length);
+    });
+    
+    $("body").on("keyup", ".sx-quantity-group .sx-quantity-input", function () {
+        $(this).trigger("updatewidth");
+    });
+    
+    $("body").on("change", ".sx-quantity-group .sx-quantity-input", function () {
+        
+        var measure_ratio = Number($(this).data("measure_ratio")) || 1;
+        var newVal = $(this).val();
+        
+        if (Number($(this).val()) < measure_ratio) {
+            $(this).val(measure_ratio).focus();
+            $(this).trigger("updatewidth");
+            return false;
+        }
+        
+        var count = newVal / measure_ratio;
+        count = Math.round(count);
+
+        newVal = count * measure_ratio;
+        newVal = Math.floor(newVal * 100) / 100 ;
+        
+        $(this).val(newVal).focus();
+        
+        $(this).trigger("updatewidth");
+        
+        /*if (Number($(this).val()) > 999) {
+            $(this).val(999).focus();
+        }*/
+        return false;
+    });
+            
+    $(".sx-quantity-group .sx-quantity-input").trigger("updatewidth");
+        
     $(document).ready(function () {
 
         $(document).on('pjax:complete', function (e) {
@@ -99,7 +168,7 @@
 
 
         });
-      
+
 
     });
 
