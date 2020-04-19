@@ -15,7 +15,7 @@ $shopProduct = $model->shopProduct;
 
 //Если этот товар привязан к главному
 $infoModel = $model;
-if ($shopProduct->main_pid) {
+if ($shopProduct && $shopProduct->main_pid) {
     if ($shopProduct->shopMainProduct->isOfferProduct) {
         $element = $shopProduct->shopMainProduct->cmsContentElement;
         $infoModel = $element->parentContentElement;
