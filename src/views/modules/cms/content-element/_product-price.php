@@ -24,7 +24,7 @@
         <? if ($priceHelper) : ?>
             <? if ($priceHelper->hasDiscount) : ?>
                 <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
-                <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary">
+                <span class="current ss-price sx-new-price h1 g-color-primary">
                     <?= $priceHelper->minPrice->money; ?>
                     <? if ($shopProduct->measure_ratio != 1) : ?>
                         / <?= $shopProduct->measure->symbol; ?>
@@ -32,7 +32,7 @@
                 </span>
             <? else: ?>
                 <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
-                    <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary">
+                    <span class="current ss-price sx-new-price h1 g-color-primary">
                         <?= $priceHelper->minPrice->money; ?>
                         <? if ($shopProduct->measure_ratio != 1) : ?>
                             / <?= $shopProduct->measure->symbol; ?>
@@ -103,7 +103,7 @@
                         <? endif; ?>
                     <? else : ?>
                         <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
-                            'class'   => 'btn btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
+                            'class'   => 'btn btn-xxl btn-block u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                             'type'    => 'button',
                             'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
                         ]); ?>
@@ -168,10 +168,10 @@
             <? if ($priceHelper) : ?>
                 <? if ($priceHelper->hasDiscount) : ?>
                     <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
-                    <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                    <span class="current ss-price sx-new-price h1 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
                 <? else: ?>
                     <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
-                        <span class="current ss-price sx-new-price h1 g-font-weight-600 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                        <span class="current ss-price sx-new-price h1 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
                     <? endif; ?>
                 <? endif; ?>
             <? endif; ?>

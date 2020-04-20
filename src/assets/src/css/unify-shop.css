@@ -99,18 +99,13 @@
     text-decoration: none;
 }
 
-.card-prod .card-prod--title {
+.card-prod--title {
     font-weight: 600;
     min-height: 36px;
     margin: 0 0 16px;
+    line-height: 19px;
 }
 
-/*.card-prod .card-prod--title a{
-    border-bottom:solid 2px transparent
-}*/
-/*.card-prod .card-prod--title a:hover{
-    border-bottom-color:rgba(0,154,207,.7)
-}*/
 .card-prod .card-prod--price {
     float: left;
     height: 34px;
@@ -322,7 +317,6 @@
 }
 
 .sx-card-prod--title-a {
-    color: #333;
     font-weight: bold;
     line-height: 1;
     font-size: 14px;
@@ -643,4 +637,9 @@
     padding-left: 0px;
     padding-right: 0px;
     cursor: pointer;
+}
+
+
+.sx-new-price  {
+    font-weight: 600;
 }

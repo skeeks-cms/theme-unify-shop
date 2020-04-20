@@ -198,7 +198,7 @@
                         <? if ($parent && $parent->activeChildren) : ?>
 
                             <div class="u-heading-v3-1 g-mb-10">
-                                <h2 class="h5 u-heading-v3__title g-font-weight-600 text-uppercase g-brd-primary ">
+                                <h2 class="h5 u-heading-v3__title sx-col-left-title g-brd-primary ">
                                     <?= \Yii::t('skeeks/unify', 'Categories'); ?>
                                 </h2>
                             </div>
@@ -209,7 +209,7 @@
 
                                     <li class="g-brd-bottom g-brd-gray-light-v4 g-pb-10 g-mb-12">
                                         <i class="fas fa-angle-right g-color-gray-dark-v5 g-mr-5"></i>
-                                        <a class="<?= $child->id == $model->id ? "active g-color-primary" : "g-color-gray-dark-v1"; ?> u-link-v5 g-color-primary--hover"
+                                        <a class="<?= $child->id == $model->id ? "active g-color-primary" : "sx-main-text-color"; ?> u-link-v5 g-color-primary--hover"
                                            href="<?= $child->url; ?>">
                                             <?= $child->name; ?>
                                             <!--<i class="fas fa-leaf float-right align-middle" style="color: gray;"></i>-->

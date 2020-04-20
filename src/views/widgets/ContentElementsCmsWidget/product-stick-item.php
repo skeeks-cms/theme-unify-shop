@@ -72,8 +72,8 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                 <? endif; ?>
 
 
-                <div class="g-color-black mb-1">
-                    <a class="g-color-primary--hover sx-card-prod--title-a" href="<?= $model->url; ?>" title="<?= $infoModel->name; ?>">
+                <div class="g-color-black mb-1 card-prod--title">
+                    <a class="sx-main-text-color g-color-primary--hover g-text-underline--none--hover sx-card-prod--title-a" href="<?= $model->url; ?>" title="<?= $infoModel->name; ?>">
                         <?= $infoModel->name; ?>
                     </a>
                 </div>

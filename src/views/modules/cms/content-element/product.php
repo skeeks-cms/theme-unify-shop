@@ -74,7 +74,7 @@ $singlPage::end();
                 </div>
             </div>
 
-            <div class="col-md-<?= $singlPage->width_col_short_info; ?>">
+            <div class="col-md-<?= $singlPage->width_col_short_info; ?> sx-col-product-info">
                 <div class="product-info ss-product-info">
                     <? if ($singlPage->is_show_title_in_short_description) : ?>
                         <h1 class="h4 g-font-weight-600"><?= $model->seoName; ?></h1>

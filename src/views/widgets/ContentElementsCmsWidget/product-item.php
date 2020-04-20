@@ -126,7 +126,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             <? /* endif; */ ?>
 
             <div class="card-prod--title">
-                <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0" class="sx-card-prod--title-a g-text-underline--none--hover"><?= $infoModel->name; ?></a>
+                <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0" class="sx-card-prod--title-a sx-main-text-color g-text-underline--none--hover"><?= $infoModel->name; ?></a>
             </div>
             <? if (isset($shopProduct)) : ?>
                 <div class="card-prod--price" style="display: none;">
