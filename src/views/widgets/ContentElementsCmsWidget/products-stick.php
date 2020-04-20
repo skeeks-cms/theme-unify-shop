@@ -17,7 +17,7 @@ if (!\Yii::$app->shop->is_show_product_no_price)   {
 
     <? if ($widget->label) : ?>
         <div class="text-center mx-auto g-max-width-600 g-mb-20">
-            <h2 class="g-color-gray-dark-v2 mb-4"><?= $widget->label; ?></h2>
+            <h2 class="mb-4"><?= $widget->label; ?></h2>
             <!--<p class="lead">We want to create a range of beautiful, practical and modern outerwear that doesn't cost the earth – but let's you still live life in style.</p>-->
         </div>
     <? endif; ?>
