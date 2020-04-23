@@ -28,14 +28,6 @@
 
 <?
 
-
-$catalog = \skeeks\cms\models\CmsTree::find()->where([
-    'dir' => 'catalog',
-])->andWhere([
-    '>',
-    'image_id',
-    0,
-])->one();
 if (\Yii::$app->mobileDetect->isMobile) {
 
     $widget = \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::begin([
