@@ -112,9 +112,13 @@
 
 
                 if ($isShowFilters) {
-                    $eavFiltersHandler = new \skeeks\cms\eavqueryfilter\CmsEavQueryFilterHandler([
+                    $eavFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopEavQueryFilterHandler([
                         'baseQuery' => $baseQuery,
                     ]);
+                    
+                    /*$eavFiltersHandler = new \skeeks\cms\eavqueryfilter\CmsEavQueryFilterHandler([
+                        'baseQuery' => $baseQuery,
+                    ]);*/
                     $eavFiltersHandler->openedPropertyIds = \Yii::$app->shop->open_filter_property_ids;
                     $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
                     $rpQuery = $eavFiltersHandler->getRPQuery();
