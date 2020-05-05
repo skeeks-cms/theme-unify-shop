@@ -5,28 +5,20 @@
  * @license https://cms.skeeks.com/license/
  * @author Semenov Alexander <semenov@skeeks.com>
  */
+
 namespace skeeks\cms\themes\unifyshop\components;
+
 use Imagine\Image\ManipulatorInterface;
 use skeeks\cms\backend\widgets\ActiveFormBackend;
 use skeeks\cms\base\Component;
-use skeeks\cms\components\Cms;
 use skeeks\cms\models\CmsAgent;
-use skeeks\cms\models\CmsContent;
-use skeeks\cms\models\CmsContentProperty;
-use skeeks\cms\models\CmsUser;
 use skeeks\cms\modules\admin\widgets\BlockTitleWidget;
-use skeeks\cms\shop\models\ShopCart;
-use skeeks\cms\shop\models\ShopOrderStatus;
-use skeeks\cms\shop\models\ShopPersonType;
-use skeeks\cms\shop\models\ShopTypePrice;
 use skeeks\cms\themes\unify\assets\UnifyThemeAsset;
 use skeeks\yii2\form\fields\BoolField;
 use skeeks\yii2\form\fields\FieldSet;
 use skeeks\yii2\form\fields\HtmlBlock;
 use skeeks\yii2\form\fields\SelectField;
-use skeeks\yii2\form\fields\TextareaField;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 /**
  * @author Semenov Alexander <semenov@skeeks.com>
@@ -54,7 +46,7 @@ class UnifyShopThemeSettingsComponent extends Component
     static public function descriptorConfig()
     {
         return array_merge(parent::descriptorConfig(), [
-            'name' => 'Настройки темы Unify (Магазин)',
+            'name'  => 'Настройки темы Unify (Магазин)',
             'image' => [
                 UnifyThemeAsset::class,
                 'img/template-preview.png',
@@ -106,7 +98,7 @@ class UnifyShopThemeSettingsComponent extends Component
         return [
             'catalog' => [
                 'class' => FieldSet::class,
-                'name' => \Yii::t('skeeks/shop/app', 'Каталог'),
+                'name'  => \Yii::t('skeeks/shop/app', 'Каталог'),
 
                 'fields' => [
 
@@ -116,14 +108,14 @@ class UnifyShopThemeSettingsComponent extends Component
                     ],
 
 
-                    'catalog_is_show_subtree' => [
-                        'class' => BoolField::class,
-                        'allowNull' => false,
+                    'catalog_is_show_subtree'          => [
+                        'class'       => BoolField::class,
+                        'allowNull'   => false,
                         'formElement' => BoolField::ELEMENT_RADIO_LIST,
                     ],
                     'catalog_is_show_subtree_col_left' => [
-                        'class' => BoolField::class,
-                        'allowNull' => false,
+                        'class'       => BoolField::class,
+                        'allowNull'   => false,
                         'formElement' => BoolField::ELEMENT_RADIO_LIST,
                     ],
 
@@ -134,18 +126,18 @@ class UnifyShopThemeSettingsComponent extends Component
 
                     'catalog_img_preview_width',
                     'catalog_img_preview_height',
-                    'catalog_img_preview_crop' => [
+                    'catalog_img_preview_crop'         => [
                         'class' => SelectField::class,
                         'items' => [
-                            ManipulatorInterface::THUMBNAIL_INSET => 'Сохранять формат исходной картинки',
-                            ManipulatorInterface::THUMBNAIL_OUTBOUND => 'Обрезать под размер'
-                        ]
+                            ManipulatorInterface::THUMBNAIL_INSET    => 'Сохранять формат исходной картинки',
+                            ManipulatorInterface::THUMBNAIL_OUTBOUND => 'Обрезать под размер',
+                        ],
                     ],
                 ],
             ],
-            'stick' => [
+            'stick'   => [
                 'class' => FieldSet::class,
-                'name' => \Yii::t('skeeks/shop/app', 'Слайдеры товаров'),
+                'name'  => \Yii::t('skeeks/shop/app', 'Слайдеры товаров'),
 
                 'fields' => [
 
@@ -155,22 +147,22 @@ class UnifyShopThemeSettingsComponent extends Component
                     'product_slider_img_preview_crop' => [
                         'class' => SelectField::class,
                         'items' => [
-                            ManipulatorInterface::THUMBNAIL_INSET => 'Сохранять формат исходной картинки',
-                            ManipulatorInterface::THUMBNAIL_OUTBOUND => 'Обрезать под размер'
-                        ]
+                            ManipulatorInterface::THUMBNAIL_INSET    => 'Сохранять формат исходной картинки',
+                            ManipulatorInterface::THUMBNAIL_OUTBOUND => 'Обрезать под размер',
+                        ],
                     ],
                 ],
             ],
 
             'product' => [
                 'class' => FieldSet::class,
-                'name' => \Yii::t('skeeks/shop/app', 'Карточка товара'),
+                'name'  => \Yii::t('skeeks/shop/app', 'Карточка товара'),
 
                 'fields' => [
 
                     'is_allow_product_review' => [
-                        'class' => BoolField::class,
-                        'allowNull' => false,
+                        'class'       => BoolField::class,
+                        'allowNull'   => false,
                         'formElement' => BoolField::ELEMENT_RADIO_LIST,
                     ],
                 ],
@@ -194,16 +186,16 @@ class UnifyShopThemeSettingsComponent extends Component
     public function attributeLabels()
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
-                'catalog_is_show_subtree' => 'Показывать подразделы в каталоге?',
+                'catalog_is_show_subtree'          => 'Показывать подразделы в каталоге?',
                 'catalog_is_show_subtree_col_left' => 'Показывать подразделы в блоке слева перед фильтрами?',
-                'catalog_img_preview_width' => 'Ширина превью картинки товара',
-                'catalog_img_preview_height' => 'Высота превью картинки товара',
-                'catalog_img_preview_crop' => 'Режим обрезки превью картинки товара',
-                
-                'product_slider_items' => 'Количество товаров в слайдере',
-                'product_slider_img_preview_width' => 'Ширина превью картинки товара',
+                'catalog_img_preview_width'        => 'Ширина превью картинки товара',
+                'catalog_img_preview_height'       => 'Высота превью картинки товара',
+                'catalog_img_preview_crop'         => 'Режим обрезки превью картинки товара',
+
+                'product_slider_items'              => 'Количество товаров в слайдере',
+                'product_slider_img_preview_width'  => 'Ширина превью картинки товара',
                 'product_slider_img_preview_height' => 'Высота превью картинки товара',
-                'product_slider_img_preview_crop' => 'Режим обрезки превью картинки товара',
+                'product_slider_img_preview_crop'   => 'Режим обрезки превью картинки товара',
 
                 'is_allow_product_review' => 'Разрешено добавлять отзывы?',
             ]

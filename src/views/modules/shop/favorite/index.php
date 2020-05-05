@@ -71,7 +71,7 @@
                         \Yii::$app->shop->filterBaseContentElementQuery($activeDataProvider->query);
                         $activeDataProvider->query->joinWith("shopProduct.shopFavoriteProducts as fav");
                         $activeDataProvider->query->andWhere(['is not', "fav.id", null]);
-                        $activeDataProvider->query->andWhere(["fav.shop_cart_id" => \Yii::$app->shop->cart->id]);
+                        $activeDataProvider->query->andWhere(["fav.shop_user_id" => \Yii::$app->shop->shopUser->id]);
 
                     },
 
