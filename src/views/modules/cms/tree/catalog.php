@@ -11,18 +11,10 @@
 <section class="g-mt-0 g-pb-0">
     <div class="container sx-container">
         <? /* $pjax = \skeeks\cms\widgets\Pjax::begin(); */ ?>
-        <div class="row" style="background: #d3d3cd;">
-            <div class="col-md-6">
-
-            </div>
-            <div class="col-md-6">
-
-            </div>
-        </div>
         <div class="row">
             <div class="order-md-2 g-py-20 g-px-15 sx-content-col-main">
                 <?= $this->render('@app/views/breadcrumbs', [
-                    'model' => $model,
+                    'model'      => $model,
                     'isShowLast' => true,
                 ]) ?>
                 <div class="g-color-gray-dark-v1 g-font-size-16 sx-content">
@@ -48,8 +40,11 @@
                     <? if (!\Yii::$app->unifyShopTheme->catalog_is_show_subtree) : ?>
                 </div>
             <? endif; ?>
+
                 <div class="row">
-                    <div class="col-6"><a href="#" class="sx-btn-filter btn btn-block g-valign-middle text-left">Фильтры <i class="fa fa-angle-down pull-right g-pt-5" aria-hidden="true"></i></a></div>
+                    <? if (\Yii::$app->unifyShopTheme->catalog_is_allow_filters) : ?>
+                        <div class="col-6"><a href="#" class="sx-btn-filter btn btn-block g-valign-middle text-left">Фильтры <i class="fa fa-angle-down pull-right g-pt-5" aria-hidden="true"></i></a></div>
+                    <? endif; ?>
                     <div class="col-6 sx-sorting-block"><a href="#" class="sx-btn-sort btn btn-block g-valign-middle text-left">Сортировка <i class="fa fa-angle-down pull-right g-pt-5" aria-hidden="true"></i></a></div>
                 </div>
 
@@ -64,6 +59,10 @@
                     } else {
                         $isShowFilters = false;
                     }
+                }
+
+                if (!\Yii::$app->unifyShopTheme->catalog_is_allow_filters) {
+                    $isShowFilters = false;
                 }
 
                 $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
@@ -115,7 +114,7 @@
                     $eavFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopEavQueryFilterHandler([
                         'baseQuery' => $baseQuery,
                     ]);
-                    
+
                     /*$eavFiltersHandler = new \skeeks\cms\eavqueryfilter\CmsEavQueryFilterHandler([
                         'baseQuery' => $baseQuery,
                     ]);*/
@@ -166,80 +165,82 @@
                 <? $widgetElements::end(); ?>
 
             </div>
-            <div class="order-md-1 g-py-20 g-px-15 g-bg-secondary sx-content-col-left">
+
+            <div class="order-md-1 g-py-20 g-px-15 g-bg-secondary sx-content-col-left" style="">
 
                 <? if (\Yii::$app->unifyShopTheme->catalog_is_show_subtree_col_left) : ?>
-                <?
+                    <?
 
-                $model = \Yii::$app->cms->currentTree;
-                $menuName = $model ? $model->name : "Меню";
-                $parent = $model;
-                if ($model) {
+                    $model = \Yii::$app->cms->currentTree;
+                    $menuName = $model ? $model->name : "Меню";
+                    $parent = $model;
+                    if ($model) {
 
-                    if ($model->activeChildren) {
-                        $parent = $model;
-                    } elseif ($model->parent) {
-                        $parent = $model->parent;
-                    } elseif (isset($model->parents[1])) {
-                        $parent = $model->parents[1];
-                        $menuName = $parent->name;
+                        if ($model->activeChildren) {
+                            $parent = $model;
+                        } elseif ($model->parent) {
+                            $parent = $model->parent;
+                        } elseif (isset($model->parents[1])) {
+                            $parent = $model->parents[1];
+                            $menuName = $parent->name;
 
-                        if (!$parent->activeChildren) {
+                            if (!$parent->activeChildren) {
+                                $parent = $model->parents[0];
+                            }
+                        } else {
                             $parent = $model->parents[0];
                         }
-                    } else {
-                        $parent = $model->parents[0];
                     }
-                }
-                ?>
-                <div class="g-mb-20">
-                    <div
-                            id="stickyblock-start"
-                            class="g-pa-5 js-sticky-block"
-                            data-start-point="#stickyblock-start" data-end-point=".sx-footer"
-                    >
+                    ?>
+                    <div class="g-mb-20">
+                        <div
+                                id="stickyblock-start"
+                                class="g-pa-5 js-sticky-block"
+                                data-start-point="#stickyblock-start" data-end-point=".sx-footer"
+                        >
 
-                        <? if ($parent && $parent->activeChildren) : ?>
+                            <? if ($parent && $parent->activeChildren) : ?>
 
-                            <div class="u-heading-v3-1 g-mb-10">
-                                <h2 class="h5 u-heading-v3__title sx-col-left-title g-brd-primary ">
-                                    <?= \Yii::t('skeeks/unify', 'Categories'); ?>
-                                </h2>
-                            </div>
+                                <div class="u-heading-v3-1 g-mb-10">
+                                    <h2 class="h5 u-heading-v3__title sx-col-left-title g-brd-primary ">
+                                        <?= \Yii::t('skeeks/unify', 'Categories'); ?>
+                                    </h2>
+                                </div>
 
-                            <ul class="list-unstyled mb-0 sx-col-menu">
+                                <ul class="list-unstyled mb-0 sx-col-menu">
 
-                                <? foreach ($parent->activeChildren as $child) : ?>
+                                    <? foreach ($parent->activeChildren as $child) : ?>
 
-                                    <li class="g-brd-bottom g-brd-gray-light-v4 g-pb-10 g-mb-12">
-                                        <i class="fas fa-angle-right g-color-gray-dark-v5 g-mr-5"></i>
-                                        <a class="<?= $child->id == $model->id ? "active g-color-primary" : "sx-main-text-color"; ?> u-link-v5 g-color-primary--hover"
-                                           href="<?= $child->url; ?>">
-                                            <?= $child->name; ?>
-                                            <!--<i class="fas fa-leaf float-right align-middle" style="color: gray;"></i>-->
-                                        </a>
-                                    </li>
-                                <? endforeach; ?>
+                                        <li class="g-brd-bottom g-brd-gray-light-v4 g-pb-10 g-mb-12">
+                                            <i class="fas fa-angle-right g-color-gray-dark-v5 g-mr-5"></i>
+                                            <a class="<?= $child->id == $model->id ? "active g-color-primary" : "sx-main-text-color"; ?> u-link-v5 g-color-primary--hover"
+                                               href="<?= $child->url; ?>">
+                                                <?= $child->name; ?>
+                                                <!--<i class="fas fa-leaf float-right align-middle" style="color: gray;"></i>-->
+                                            </a>
+                                        </li>
+                                    <? endforeach; ?>
 
-                            </ul>
+                                </ul>
 
-                        <? endif; ?>
+                            <? endif; ?>
 
+                        </div>
                     </div>
-                </div>
 
 
                 <? endif; ?>
 
+
+                <? if (!$isShowFilters) : ?>
                 <div class="g-mb-20">
-                    <? if (!$isShowFilters) : ?>
                     <div style="display: none;">
                         <? endif; ?>
                         <? $filtersWidget::end(); ?>
                         <? if (!$isShowFilters) : ?>
                     </div>
-                <? endif; ?>
                 </div>
+            <? endif; ?>
 
                 <!--<div id="stickyblock-start" class="g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
 
@@ -250,6 +251,7 @@
                     <?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
                         'namespace'          => 'ContentElementsCmsWidget-left-news',
                         'viewFile'           => '@app/views/widgets/ContentElementsCmsWidget/left-news',
+                        'label'              => 'Новости',
                         'content_ids'        => [
                             $content ? $content->id : "",
                         ],
