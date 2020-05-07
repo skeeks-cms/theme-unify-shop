@@ -21,6 +21,10 @@ $this->registerCss(<<<CSS
 {
     font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
+
+.tp-thumb-title {
+    overflow: hidden;
+}
 CSS
 );
 
