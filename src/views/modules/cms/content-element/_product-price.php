@@ -267,7 +267,7 @@
                     <div class="buttons-row ">
                         <?= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
                             'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
-                            'product_id'       => $shopOfferChooseWidget->offerCmsContentElement->id,
+                            'product_id'       => $offerShopProduct->id,
                             'size'             => "modal-dialog-350",
                             'success_modal_id' => 'readySubscribeModal',
                             'id'               => 'modalWait',

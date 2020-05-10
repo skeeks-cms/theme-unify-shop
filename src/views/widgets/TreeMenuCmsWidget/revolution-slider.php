@@ -154,7 +154,7 @@ JS
         <ul>
             <? if ($trees = $widget->activeQuery->all()) : ?>
                 <? foreach ($trees as $key => $tree) : ?>
-                    <? if ($tree->image) : ?>
+                    <? if ($tree->mainImage) : ?>
 
                         <li data-index="rs-<?= $tree->id; ?>"
                             data-transition="fade"
@@ -164,7 +164,7 @@ JS
                             data-easein="default"
                             data-easeout="default"
                             data-masterspeed="300"
-                            data-thumb="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($tree->image ? $tree->image->src : null,
+                            data-thumb="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($tree->mainImage ? $tree->mainImage->src : null,
                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
                                     'w' => 150,
                                     'h' => 100,
@@ -175,7 +175,7 @@ JS
                             data-saveperformance="off"
                             data-title="<?= $tree->name; ?>">
 
-                            <img class="rev-slidebg" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($tree->image ? $tree->image->src : null,
+                            <img class="rev-slidebg" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($tree->mainImage ? $tree->mainImage->src : null,
                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
                                     'w' => 0,
                                     'h' => 600,
