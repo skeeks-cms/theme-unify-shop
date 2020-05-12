@@ -105,7 +105,7 @@
                         <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
                             'class'   => 'btn btn-xxl btn-block u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                             'type'    => 'button',
-                            'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
+                            'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                         ]); ?>
                     <? endif; ?>
                 </div>
@@ -236,7 +236,7 @@
                                 <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
                                     'class'   => 'btn btn-xxl btn-block u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                     'type'    => 'button',
-                                    'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, 1); return false;"),
+                                    'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                                 ]); ?>
                             <? else : ?>
                                 <a class="btn btn-xxl u-btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
@@ -246,7 +246,7 @@
                             <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
                                 'class'   => 'btn btn-xxl btn-block u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                 'type'    => 'button',
-                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, 1); return false;"),
+                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                             ]); ?>
                         <? endif; ?>
                     </div>

@@ -43,7 +43,7 @@ $singlPage::end();
 <section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper" itemscope itemtype="http://schema.org/Product">
     <meta itemprop="name" content="<?= \yii\helpers\Html::encode($infoModel->name); ?><?= $priceHelper->basePrice->money; ?>"/>
     <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
-    <meta itemprop="description" content="<?= $infoModel->description_short ? $infoModel->description_short : '-'; ?>"/>
+    <meta itemprop="description" content="<?= $infoModel->description_short ? \yii\helpers\Html::encode($infoModel->description_short) : '-'; ?>"/>
     <meta itemprop="sku" content="<?= $model->id; ?>"/>
     
     <? if ($infoModel->image) : ?>
