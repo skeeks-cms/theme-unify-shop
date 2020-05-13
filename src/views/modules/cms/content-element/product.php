@@ -45,7 +45,7 @@ $singlPage::end();
     <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
     <meta itemprop="description" content="<?= $infoModel->description_short ? \yii\helpers\Html::encode($infoModel->description_short) : '-'; ?>"/>
     <meta itemprop="sku" content="<?= $model->id; ?>"/>
-    
+
     <? if ($infoModel->image) : ?>
         <link itemprop="image" href="<?= $infoModel->image->absoluteSrc; ?>">
     <? endif; ?>
@@ -54,7 +54,7 @@ $singlPage::end();
         <div class="row">
             <div class="col-md-12">
                 <?= $this->render('@app/views/breadcrumbs', [
-                    'model' => $infoModel,
+                    'model'    => $infoModel,
                     'isShowH1' => $singlPage->is_show_title_in_breadcrumbs
                     /*'isShowLast' => true,
                     'isShowH1'   => false,*/
@@ -129,22 +129,25 @@ $singlPage::end();
 
     <div class="container">
 
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Характеристики</h2>
-                <?
+        <?
+        $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
+            'model'                   => $infoModel,
+            'visible_properties'      => @$visible_items,
+            'visible_only_has_values' => true,
+            'viewFile'                => '@app/views/widgets/RpWidget/default',
+        ]);
+        /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/
+        ?>
 
-                $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
-                    'model'                   => $infoModel,
-                    'visible_properties'      => @$visible_items,
-                    'visible_only_has_values' => true,
-                    'viewFile'                => '@app/views/widgets/RpWidget/default',
-                ]); ?>
-                <? /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/ ?>
-                <? \skeeks\cms\rpViewWidget\RpViewWidget::end(); ?>
-
+        <? if ($widget->visibleRpAttributes) : ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Характеристики</h2>
+                    <? $widget::end(); ?>
+                </div>
             </div>
-        </div>
+        <? endif; ?>
+
         <? if ($infoModel->description_full) : ?>
             <div class="row">
                 <div class="col-md-12 sx-content" id="sx-description">
@@ -153,7 +156,6 @@ $singlPage::end();
                 </div>
             </div>
         <? endif; ?>
-
     </div>
 </section>
 
@@ -162,106 +164,33 @@ $singlPage::end();
     <section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
         <div class="container">
 
-            <div class="col-md-12 g-mt-20" id="sx-reviews">
-                <div class="float-right"><a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div>
-                <h2>Отзывы</h2>
-            </div>
+            <div class="row">
+                <div class="col-md-12 g-mt-20" id="sx-reviews">
+                    <div class="float-right"><a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div>
+                    <h2>Отзывы</h2>
+                </div>
 
-            <?
-            $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-                'namespace'         => 'Reviews2Widget',
-                'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-                'cmsContentElement' => $model,
-            ]);
-            $widgetReviews::end();
-            ?>
+                <?
+                $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
+                    'namespace'         => 'Reviews2Widget',
+                    'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
+                    'cmsContentElement' => $model,
+                ]);
+                $widgetReviews::end();
+                ?>
+            </div>
         </div>
     </section>
 <? endif; ?>
 
 
-<section class="g-brd-gray-light-v4 g-brd-top g-mt-20">
+<?= $this->render("@app/views/modules/cms/content-element/_product-bottom-info", [
+    'model'                 => $infoModel,
+    'shopProduct'           => $shopProduct,
+    'priceHelper'           => $priceHelper,
+    'shopOfferChooseHelper' => $shopOfferChooseHelper,
+]); ?>
 
-    <? if (\Yii::$app->shop->shopContents) : ?>
-        <?
-        $treeIds = [];
-        if ($model->cmsTree && $model->cmsTree->parent) {
-            $treeIds = \yii\helpers\ArrayHelper::map($model->cmsTree->parent->children, 'id', 'id');
-        }
-        ?>
-        <div class="container g-mt-20 g-mb-40 ">
-            <?
-            $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-similar-products", [
-                'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
-                'label'                => "Рекомендуем также",
-                'enabledPaging'        => "N",
-                'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
-                'tree_ids'             => $treeIds,
-                'limit'                => 15,
-                'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
-                'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
-                    $activeDataProvider->query->with('shopProduct');
-                    $activeDataProvider->query->with('shopProduct.baseProductPrice');
-                    $activeDataProvider->query->with('shopProduct.minProductPrice');
-                    $activeDataProvider->query->with('image');
-                    //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
-                    //$activeDataProvider->query->orderBy(['show_counter' => SORT_DESC]);
-
-                    $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
-
-                    /*$activeDataProvider->query->andWhere([
-                        '!=',
-                        'shopProduct.product_type',
-                        \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
-                    ]);*/
-                    
-                    \Yii::$app->shop->filterBaseContentElementQuery($activeDataProvider->query);
-
-                },
-            ]);
-            $widgetElements::end();
-            ?>
-        </div>
-    <? endif; ?>
-</section>
-
-
-<section class="g-brd-gray-light-v4 g-brd-top g-mt-20">
-
-    <? if (\Yii::$app->shop->shopContents) : ?>
-        <?
-        $treeIds = [];
-        if ($model->cmsTree && $model->cmsTree->parent) {
-            $treeIds = \yii\helpers\ArrayHelper::map($model->cmsTree->parent->children, 'id', 'id');
-        }
-        ?>
-        <div class="container g-mt-20 g-mb-40 ">
-            <?
-            $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-viewed-products", [
-                'viewFile'            => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
-                'label'               => "Просмотренные товары",
-                'enabledPaging'       => "N",
-                'content_ids'         => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
-                //'tree_ids'             => $treeIds,
-                'enabledSearchParams' => "N",
-                'enabledCurrentTree'  => "N",
-                'limit'               => 15,
-                'contentElementClass' => \skeeks\cms\shop\models\ShopCmsContentElement::class,
-                'activeQueryCallback' => function (\yii\db\ActiveQuery $query) use ($model) {
-                    $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
-                    $query->leftJoin('shop_product', '`shop_product`.`id` = `cms_content_element`.`id`');
-                    $query->leftJoin('shop_viewed_product', '`shop_viewed_product`.`shop_product_id` = `shop_product`.`id`');
-                    $query->andWhere(['shop_user_id' => \Yii::$app->shop->shopUser->id]);
-                    //$query->orderBy(['shop_viewed_product.created_at' => SORT_DESC]);
-
-                    \Yii::$app->shop->filterBaseContentElementQuery($query);
-                },
-            ]);
-            $widgetElements::end();
-            ?>
-        </div>
-    <? endif; ?>
-</section>
 
 
 <?

@@ -37,6 +37,7 @@
                     $countSubTree = $widget->activeQuery->count();
                     ?>
                     <? \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::end(); ?>
+
                     <? if (!\Yii::$app->unifyShopTheme->catalog_is_show_subtree) : ?>
                 </div>
             <? endif; ?>
