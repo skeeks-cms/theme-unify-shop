@@ -41,7 +41,7 @@ JS
 );
 ?>
 
-<section class="reviews-section--left">
+<section class="col-md-12">
 <? if ($widget->dataProvider->query->count()>0) : ?>
     <? if ($widget->enabledPjaxPagination == \skeeks\cms\components\Cms::BOOL_Y) : ?>
         <? \skeeks\cms\modules\admin\widgets\Pjax::begin([
@@ -83,13 +83,7 @@ JS
         <? \skeeks\cms\modules\admin\widgets\Pjax::end(); ?>
     <? endif; ?>
 <? else : ?>
-    <div class="container">
-        <div class="row">
-           <div class="col-sm-12">
                <p>Ваш отзыв может стать первым.</p>
-           </div>
-        </div>
-    </div>
 <? endif; ?>
 </section><!--.reviews-section--left-->
 

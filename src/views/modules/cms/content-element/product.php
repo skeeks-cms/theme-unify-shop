@@ -38,6 +38,7 @@ if ($shopProduct->isOffersProduct) {
     ]);
 }
 $singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage::beginWidget('product-page');
+$singlPage->addCss();
 $singlPage::end();
 ?>
 <section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper" itemscope itemtype="http://schema.org/Product">
@@ -74,8 +75,8 @@ $singlPage::end();
                 </div>
             </div>
 
-            <div class="col-md-<?= $singlPage->width_col_short_info; ?> sx-col-product-info">
-                <div class="product-info ss-product-info">
+            <div class="col-md-<?= 12 - $singlPage->width_col_images; ?> sx-col-product-info">
+                <div class="sx-right-product-info product-info ss-product-info" style="min-height: 100%;">
                     <? if ($singlPage->is_show_title_in_short_description) : ?>
                         <h1 class="h4 g-font-weight-600"><?= $model->seoName; ?></h1>
                     <? endif; ?>
@@ -126,62 +127,16 @@ $singlPage::end();
 
     </div>
 
-
-    <div class="container">
-
-        <?
-        $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
-            'model'                   => $infoModel,
-            'visible_properties'      => @$visible_items,
-            'visible_only_has_values' => true,
-            'viewFile'                => '@app/views/widgets/RpWidget/default',
-        ]);
-        /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/
-        ?>
-
-        <? if ($widget->visibleRpAttributes) : ?>
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Характеристики</h2>
-                    <? $widget::end(); ?>
-                </div>
-            </div>
-        <? endif; ?>
-
-        <? if ($infoModel->description_full) : ?>
-            <div class="row">
-                <div class="col-md-12 sx-content" id="sx-description">
-                    <h2>Описание</h2>
-                    <?= $infoModel->description_full; ?>
-                </div>
-            </div>
-        <? endif; ?>
-    </div>
 </section>
 
 
-<? if (\Yii::$app->unifyShopTheme->is_allow_product_review) : ?>
-    <section class="g-brd-gray-light-v4 g-brd-top g-mt-20 g-mb-20">
-        <div class="container">
 
-            <div class="row">
-                <div class="col-md-12 g-mt-20" id="sx-reviews">
-                    <div class="float-right"><a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div>
-                    <h2>Отзывы</h2>
-                </div>
-
-                <?
-                $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-                    'namespace'         => 'Reviews2Widget',
-                    'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-                    'cmsContentElement' => $model,
-                ]);
-                $widgetReviews::end();
-                ?>
-            </div>
-        </div>
-    </section>
-<? endif; ?>
+<?= $this->render("@app/views/modules/cms/content-element/_product-info-" . $singlPage->info_block_view_type, [
+    'model'                 => $infoModel,
+    'shopProduct'           => $shopProduct,
+    'priceHelper'           => $priceHelper,
+    'shopOfferChooseHelper' => $shopOfferChooseHelper,
+]); ?>
 
 
 <?= $this->render("@app/views/modules/cms/content-element/_product-bottom-info", [

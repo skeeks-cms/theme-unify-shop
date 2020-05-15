@@ -12,7 +12,7 @@
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
 
 ?>
-<div class="sx-product-delivery-info g-mt-20">
+<div class="sx-product-delivery-info g-mt-20" style="display: none;">
     <!-- Nav tabs -->
     <!--u-nav-v1-1-->
     <ul class="nav nav-justified  u-nav-v5-1" role="tablist" data-target="nav-1-1-accordion-default-hor-left-icons" data-tabs-mobile-type="accordion"
