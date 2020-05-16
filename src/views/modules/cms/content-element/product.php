@@ -101,11 +101,13 @@ $singlPage::end();
                         <? if ($infoModel->description_short) : ?>
                             <div class="sx-description-short">
                                 <?= $infoModel->description_short; ?>
-                                <p>
-                                    <a href="#sx-description" class="sx-scroll-to g-font-size-13 sx-dashed g-brd-primary--hover g-color-primary--hover">
-                                        Подробнее
-                                    </a>
-                                </p>
+                                <? if ($infoModel->description_full) : ?>
+                                    <p>
+                                        <a href="#sx-description" class="sx-scroll-to g-font-size-13 sx-dashed g-brd-primary--hover g-color-primary--hover">
+                                            Подробнее
+                                        </a>
+                                    </p>
+                                <? endif; ?>
                             </div>
                         <? endif; ?>
 
