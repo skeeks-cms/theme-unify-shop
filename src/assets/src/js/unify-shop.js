@@ -42,6 +42,10 @@
         $(this).attr("size", length);
     });
     
+    $(document).on('pjax:complete', function (e) {
+        $(".sx-quantity-group .sx-quantity-input").trigger("updatewidth");
+    });
+    
     $("body").on("keyup", ".sx-quantity-group .sx-quantity-input", function () {
         $(this).trigger("updatewidth");
     });

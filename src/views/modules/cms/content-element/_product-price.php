@@ -10,7 +10,24 @@
 /* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
 /* @var $shopProduct \skeeks\cms\shop\models\ShopProduct */
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
-
+$this->registerJs(<<<JS
+$("body").on("click", ".sx-not-select-offer", function() {
+    var hasError = false;
+    $("#sx-select-offer input").each(function() {
+        if (!$(this).val()) {
+            hasError = true;
+            $(this).closest(".sx-choose-property-group").addClass("sx-need-select");
+        }
+    });
+    if (hasError) {
+        $(".sx-not-select-offer-message").show();
+    } else {
+        $(".sx-not-select-offer-message").hide();
+    }
+    return false;
+});
+JS
+);
 ?>
 <? if ($shopProduct->isSimpleProduct) : ?>
 
@@ -121,9 +138,9 @@
             </div>
         </div>
     <? else : ?>
-        <div class="product-control g-mt-10">
-            <div class="control-group group-submit g-mr-10 g-mb-15">
-                <div class="buttons-row ">
+        <div class="g-mt-10">
+                <div class="control-group group-submit g-mb-15">
+                    <div class="buttons-row ">
                     <?= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
                         'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
                         'product_id'       => $model->id,
@@ -140,7 +157,7 @@
                         'toggleButton'     => [
                             'label' => 'Уведомить о поступлении',
                             'style' => '',
-                            'class' => 'btn btn-primary btn-grey-white btn-52 js-out-click-btn btn-xxl g-font-size-18',
+                            'class' => 'btn btn-primary btn-block btn-grey-white btn-52 js-out-click-btn btn-xxl g-font-size-18',
                         ],
                     ]); ?>
                 </div>
@@ -239,8 +256,7 @@
                                     'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                                 ]); ?>
                             <? else : ?>
-                                <a class="btn btn-xxl u-btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
-
+                                <a class="btn btn-xxl btn-block btn-block u-btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
                             <? endif; ?>
                         <? else : ?>
                             <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
@@ -262,8 +278,8 @@
                 </div>
             </div>
         <? else : ?>
-            <div class="product-control g-mt-10">
-                <div class="control-group group-submit g-mr-10 g-mb-15">
+            <div class="g-mt-10">
+                <div class="control-group group-submit g-mb-15">
                     <div class="buttons-row ">
                         <?= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
                             'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
@@ -281,7 +297,7 @@
                             'toggleButton'     => [
                                 'label' => 'Уведомить о поступлении',
                                 'style' => '',
-                                'class' => 'btn btn-primary btn-xxl btn-grey-white btn-52 js-out-click-btn g-font-size-18',
+                                'class' => 'btn btn-primary btn-block btn-xxl btn-grey-white btn-52 js-out-click-btn g-font-size-18',
                             ],
                         ]); ?>
                     </div>
@@ -293,6 +309,34 @@
         <? endif; ?>
 
 
+    <? else : ?>
+        <div class="product-price g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+            <? if ($priceHelper) : ?>
+                <div class="">
+                    <? if ($priceHelper->hasDiscount) : ?>
+                        <span class="current ss-price h3 sx-old-price"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->basePrice->money; ?></span>
+                        <span class="current ss-price h1 sx-new-price g-color-primary"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minPrice->money; ?></span>
+                    <? else: ?>
+                        <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
+                            <span class="current ss-price h1 sx-new-price g-color-primary"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minPrice->money; ?></span>
+                        <? endif; ?>
+                    <? endif; ?>
+                </div>
+            <? endif; ?>
+        </div>
+        <?= $shopOfferChooseHelper->render(); ?>
+
+        <div class="g-mt-10">
+            <div class="sx-not-select-offer-message" style="display: none; color: red; text-align: center; padding-bottom: 5px;">Уточните ваш выбор</div>
+            <div class="control-group group-submit g-mb-15">
+                <div class="buttons-row ">
+                    <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
+                        'class'   => 'btn btn-xxl btn-block u-btn-primary g-font-size-18 disabled sx-not-select-offer',
+                        'type'    => 'button',
+                    ]); ?>
+                </div>
+            </div>
+        </div>
     <? endif; ?>
 
 
