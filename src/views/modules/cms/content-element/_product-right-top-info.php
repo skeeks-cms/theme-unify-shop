@@ -10,12 +10,14 @@
 /* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
 /* @var $shopProduct \skeeks\cms\shop\models\ShopProduct */
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
+
 ?>
 
 <div class="topmost-row">
     <div class="row no-gutters">
         <div class="col-5">
-            <div data-product-id="<?= $shopOfferChooseHelper->offerCmsContentElement ? $shopOfferChooseHelper->offerCmsContentElement->id : $model->id; ?>" class="item-lot">Код:&nbsp;<?= $shopOfferChooseHelper->offerCmsContentElement ? $shopOfferChooseHelper->offerCmsContentElement->id : $model->id; ?></div>
+            <div data-product-id="<?= ($shopOfferChooseHelper && $shopOfferChooseHelper->offerCmsContentElement) ? $shopOfferChooseHelper->offerCmsContentElement->id : $model->id; ?>" class="item-lot">
+                Код:&nbsp;<?= $shopOfferChooseHelper && $shopOfferChooseHelper->offerCmsContentElement ? $shopOfferChooseHelper->offerCmsContentElement->id : $model->id; ?></div>
         </div>
 
         <div class="col-7">
