@@ -15,7 +15,7 @@
 <div class="topmost-row">
     <div class="row no-gutters">
         <div class="col-5">
-            <div data-product-id="<?= $model->id; ?>" class="item-lot">Код:&nbsp;<?= $model->id; ?></div>
+            <div data-product-id="<?= $shopOfferChooseHelper->offerCmsContentElement ? $shopOfferChooseHelper->offerCmsContentElement->id : $model->id; ?>" class="item-lot">Код:&nbsp;<?= $shopOfferChooseHelper->offerCmsContentElement ? $shopOfferChooseHelper->offerCmsContentElement->id : $model->id; ?></div>
         </div>
 
         <div class="col-7">

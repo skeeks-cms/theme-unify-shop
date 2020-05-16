@@ -16,6 +16,18 @@ JS
 );
 
 $shopProduct = $model->shopProduct;
+//TODO: доработать страницу оффера
+if ($shopProduct->isOfferProduct) {
+    $shopProductOffer = $shopProduct;
+    $shopProduct = $shopProduct->shopProductWhithOffers;
+    $model = $shopProduct->cmsContentElement;
+    $shopOfferChooseHelper = new \skeeks\cms\shop\helpers\ShopOfferChooseHelper([
+        'shopProduct' => $shopProduct,
+    ]);
+    $shopOfferChooseHelper->chooseModel->offer_id = $shopProductOffer->id;
+}
+
+
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
 //Если этот товар привязан к главному
@@ -37,6 +49,9 @@ if ($shopProduct->isOffersProduct) {
         'shopProduct' => $shopProduct,
     ]);
 }
+
+
+
 $singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage::beginWidget('product-page');
 $singlPage->addCss();
 $singlPage::end();
