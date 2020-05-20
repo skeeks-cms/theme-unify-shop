@@ -25,10 +25,6 @@ use yii\widgets\ActiveForm;
  */
 class UnifyShopThemeSettingsComponent extends Component
 {
-    public $catalog_is_allow_filters = true;
-    public $catalog_is_show_subtree = true;
-    public $catalog_is_show_subtree_col_left = false;
-
     public $catalog_img_preview_height = 200;
     public $catalog_img_preview_width = 260;
     public $catalog_img_preview_crop = ManipulatorInterface::THUMBNAIL_INSET;
@@ -37,8 +33,6 @@ class UnifyShopThemeSettingsComponent extends Component
     public $product_slider_img_preview_width = 200;
     public $product_slider_img_preview_height = 200;
     public $product_slider_img_preview_crop = ManipulatorInterface::THUMBNAIL_INSET;
-
-    public $is_allow_product_review = true;
 
     /**
      * Можно задать название и описание компонента
@@ -66,15 +60,7 @@ class UnifyShopThemeSettingsComponent extends Component
     public function rules()
     {
         return ArrayHelper::merge(parent::rules(), [
-            [
-                [
-                    'catalog_is_show_subtree',
-                    'catalog_is_show_subtree_col_left',
-                    'is_allow_product_review',
-                    'catalog_is_allow_filters',
-                ],
-                'boolean',
-            ],
+      
             [
                 [
                     'catalog_img_preview_height',
@@ -103,28 +89,6 @@ class UnifyShopThemeSettingsComponent extends Component
                 'name'  => \Yii::t('skeeks/shop/app', 'Каталог'),
 
                 'fields' => [
-
-                    [
-                        'class'   => HtmlBlock::class,
-                        'content' => BlockTitleWidget::widget(['content' => 'Подразделы']),
-                    ],
-
-
-                    'catalog_is_allow_filters'          => [
-                        'class'       => BoolField::class,
-                        'allowNull'   => false,
-                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
-                    ],
-                    'catalog_is_show_subtree'          => [
-                        'class'       => BoolField::class,
-                        'allowNull'   => false,
-                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
-                    ],
-                    'catalog_is_show_subtree_col_left' => [
-                        'class'       => BoolField::class,
-                        'allowNull'   => false,
-                        'formElement' => BoolField::ELEMENT_RADIO_LIST,
-                    ],
 
                     [
                         'class'   => HtmlBlock::class,
@@ -161,7 +125,7 @@ class UnifyShopThemeSettingsComponent extends Component
                 ],
             ],
 
-            'product' => [
+            /*'product' => [
                 'class' => FieldSet::class,
                 'name'  => \Yii::t('skeeks/shop/app', 'Карточка товара'),
 
@@ -173,7 +137,7 @@ class UnifyShopThemeSettingsComponent extends Component
                         'formElement' => BoolField::ELEMENT_RADIO_LIST,
                     ],
                 ],
-            ],
+            ],*/
 
             /*'filters' => [
                 'class' => FieldSet::class,
@@ -193,8 +157,6 @@ class UnifyShopThemeSettingsComponent extends Component
     public function attributeLabels()
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
-                'catalog_is_show_subtree'          => 'Показывать подразделы в каталоге?',
-                'catalog_is_show_subtree_col_left' => 'Показывать подразделы в блоке слева перед фильтрами?',
                 'catalog_img_preview_width'        => 'Ширина превью картинки товара',
                 'catalog_img_preview_height'       => 'Высота превью картинки товара',
                 'catalog_img_preview_crop'         => 'Режим обрезки превью картинки товара',
@@ -203,9 +165,6 @@ class UnifyShopThemeSettingsComponent extends Component
                 'product_slider_img_preview_width'  => 'Ширина превью картинки товара',
                 'product_slider_img_preview_height' => 'Высота превью картинки товара',
                 'product_slider_img_preview_crop'   => 'Режим обрезки превью картинки товара',
-
-                'is_allow_product_review' => 'Разрешено добавлять отзывы?',
-                'catalog_is_allow_filters' => 'Включить фильтры на сайте?',
             ]
         );
     }

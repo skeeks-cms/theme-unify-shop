@@ -30,6 +30,11 @@ class ShopProductSinglPage extends Widget
      * @var bool
      */
     public $is_show_title_in_short_description = false;
+
+    /**
+     * @var bool
+     */
+    public $is_allow_product_review = true;
     /**
      * @var int
      */
@@ -44,7 +49,7 @@ class ShopProductSinglPage extends Widget
     public static function descriptorConfig()
     {
         return array_merge(parent::descriptorConfig(), [
-            'name' => \Yii::t('skeeks/shop/app', 'Отображение товара на детальной странице'),
+            'name' => \Yii::t('skeeks/shop/app', 'Настройки страницы товара'),
         ]);
     }
 
@@ -57,6 +62,7 @@ class ShopProductSinglPage extends Widget
             'right_bg_color' => \Yii::t('skeeks/shop/app', 'Цвет фона'),
             'right_padding' => \Yii::t('skeeks/shop/app', 'Отступы внутри блока'),
             'info_block_view_type' => \Yii::t('skeeks/shop/app', 'Вариант отображения детальной информации'),
+            'is_allow_product_review' => \Yii::t('skeeks/shop/app', 'Включить отзывы?'),
         ]);
     }
     public function attributeHints()
@@ -72,6 +78,7 @@ class ShopProductSinglPage extends Widget
         return ArrayHelper::merge(parent::rules(), [
             [['is_show_title_in_short_description'], 'boolean'],
             [['is_show_title_in_breadcrumbs'], 'boolean'],
+            [['is_allow_product_review'], 'boolean'],
             [['info_block_view_type'], 'string'],
             [['width_col_images'], 'integer'],
             [['right_bg_color'], 'string'],
@@ -157,6 +164,17 @@ class ShopProductSinglPage extends Widget
                             'v1' => 'Стандартное отображение',
                             'v2' => 'Сворачиваемые блоки',
                         ]
+                    ],
+                ]
+            ],
+            'additional' => [
+                'class' => FieldSet::class,
+                'name' => 'Прочее',
+                'fields' => [
+
+                    'is_allow_product_review' => [
+                        'class' => BoolField::class,
+                        'allowNull' => false,
                     ],
                 ]
             ],

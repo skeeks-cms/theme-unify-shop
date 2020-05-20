@@ -9,6 +9,7 @@
 /* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
 /* @var $shopProduct \skeeks\cms\shop\models\ShopProduct */
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
+/* @var $singlPage \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage */
 /* @var $this yii\web\View */
 ?>
 <?
@@ -65,7 +66,7 @@ CSS
 
                     <? endif; ?>
 
-                    <? if (\Yii::$app->unifyShopTheme->is_allow_product_review) : ?>
+                    <? if ($singlPage->is_allow_product_review) : ?>
 
                         <div class="card">
                             <div class="card-header" id="sx-reviews-header">

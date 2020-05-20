@@ -30,25 +30,31 @@
 
 if (\Yii::$app->mobileDetect->isMobile) {
 
-    $widget = \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::begin([
-        'namespace'       => 'mobile-home-catalog-small',
-        'limit'           => 30,
-        'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/sub-catalog-small',
-        'treeParentCode'  => "catalog",
-        'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
-    ]);
+    $catalogTree = \skeeks\cms\models\CmsTree::find()->cmsSite()->joinWith('treeType as treeType')->andWhere(['treeType.code' => 'catalog'])->orderBy(['level' => SORT_ASC])->limit(1)->one();
+    $config = [];
+    if ($catalogTree) {
+        $config['parent_tree_id'] = $catalogTree->id;
+    }
+    $widget = \skeeks\cms\cmsWidgets\tree\TreeCmsWidget::beginWidget('mobile-home-catalog-small', $config);
+    $widget->descriptor->name = 'Разделы каталога (мобильная версия)';
+    $widget->viewFile = '@app/views/widgets/TreeMenuCmsWidget/sub-catalog-small';
     $widget->activeQuery->with('image');
-    \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::end();
+    $widget::end();
+    
 } else {
 
-    echo \skeeks\cms\cmsWidgets\treeMenu\TreeMenuCmsWidget::widget([
-        'namespace'       => 'home-tree-slider',
-        'enabledRunCache' => "N",
-        'limit'           => 30,
-        'viewFile'        => '@app/views/widgets/TreeMenuCmsWidget/revolution-slider',
-        'treeParentCode'  => "catalog",
-        //'enabledRunCache' => \skeeks\cms\components\Cms::BOOL_N,
-    ]);
+    $catalogTree = \skeeks\cms\models\CmsTree::find()->cmsSite()->joinWith('treeType as treeType')->andWhere(['treeType.code' => 'catalog'])->orderBy(['level' => SORT_ASC])->limit(1)->one();
+    $config = [];
+    if ($catalogTree) {
+        $config['parent_tree_id'] = $catalogTree->id;
+    }
+    $widget = \skeeks\cms\cmsWidgets\tree\TreeCmsWidget::beginWidget('home-tree-slider', $config);
+    $widget->descriptor->name = 'Слайдер разделов';
+    $widget->viewFile = '@app/views/widgets/TreeCmsWidget/revolution-slider';
+    $widget->is_has_image_only = true;
+    $widget->activeQuery->with('image');
+    $widget::end();
+
 }
 
 

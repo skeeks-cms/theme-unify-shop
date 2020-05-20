@@ -99,6 +99,7 @@ $singlPage::end();
 
 
                         <?= $this->render("@app/views/modules/cms/content-element/_product-right-top-info", [
+                            'singlPage'                 => $singlPage,
                             'model'                 => $model,
                             'shopProduct'           => $shopProduct,
                             'priceHelper'           => $priceHelper,
@@ -149,6 +150,7 @@ $singlPage::end();
 
 
 <?= $this->render("@app/views/modules/cms/content-element/_product-info-" . $singlPage->info_block_view_type, [
+    'singlPage'                 => $singlPage,
     'model'                 => $infoModel,
     'shopProduct'           => $shopProduct,
     'priceHelper'           => $priceHelper,

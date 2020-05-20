@@ -10,6 +10,7 @@
 /* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
 /* @var $shopProduct \skeeks\cms\shop\models\ShopProduct */
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
+/* @var $singlPage \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage */
 
 ?>
 
@@ -21,7 +22,7 @@
         </div>
 
         <div class="col-7">
-            <? if (\Yii::$app->unifyShopTheme->is_allow_product_review) : ?>
+            <? if ($singlPage->is_allow_product_review) : ?>
                 <?
                 $messages = \skeeks\cms\reviews2\models\Reviews2Message::findAllowedForElement($model)->all();
                 $rating = \skeeks\cms\reviews2\models\Reviews2Message::getRatingForMessages($messages);
