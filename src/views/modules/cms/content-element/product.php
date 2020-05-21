@@ -79,7 +79,7 @@ $singlPage::end();
         </div>
 
         <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
-        <div class="row">
+        <div class="row g-mt-20">
             <div class="col-md-<?= $singlPage->width_col_images; ?>">
                 <div class="sx-product-images g-ml-40 g-mr-40">
                     <?= $this->render("_product-images", [

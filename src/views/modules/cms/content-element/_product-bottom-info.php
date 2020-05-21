@@ -83,7 +83,7 @@ $q
 
     <? if ($widgetElements->dataProvider->query->count()) : ?>
         <section class="g-brd-gray-light-v4 g-brd-top">
-            <div class="container g-mt-20 g-mb-40 ">
+            <div class="container sx-container g-mt-20 g-mb-40 ">
                 <? $widgetElements::end(); ?>
             </div>
         </section>
@@ -115,7 +115,7 @@ $q
 
     <? if ($widgetElements2->dataProvider->query->count()) : ?>
         <section class="g-brd-gray-light-v4 g-brd-top">
-            <div class="container g-mt-20 g-mb-40 ">
+            <div class="container sx-container g-mt-20 g-mb-40 ">
                 <? $widgetElements2::end(); ?>
             </div>
         </section>
