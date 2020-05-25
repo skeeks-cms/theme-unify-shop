@@ -64,15 +64,7 @@ CSS
                         <?php endif; ?>
                     </div>
                 </div>
-                <?php if($model->shopOrderStatus->email_notify_description) : ?>
-                    <div class="row">
-
-                            <div class="g-brd-primary" style="background: #fafafa; border-left: 5px solid; padding: 20px; 10px;">
-                                <?php echo $model->shopOrderStatus->email_notify_description; ?>
-                            </div>
-
-                    </div>
-                <?php endif; ?>
+                
 
                 <?php if ($model->shopDelivery) : ?>
                     <div class="row sx-data-row">
@@ -83,6 +75,16 @@ CSS
                     </div>
                 <?php endif; ?>
 
+                <?php if($model->shopOrderStatus->email_notify_description) : ?>
+                    <div class="row" style="margin-top: 20px;">
+
+                            <div class="g-brd-primary" style="background: #fafafa; border-left: 5px solid; padding: 20px; 10px;">
+                                <?php echo $model->shopOrderStatus->email_notify_description; ?>
+                            </div>
+
+                    </div>
+                <?php endif; ?>
+                
             </div>
         </div>
 
