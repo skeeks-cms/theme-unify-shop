@@ -12,6 +12,12 @@
 \skeeks\cms\themes\unifyshop\assets\ShopUnifyCartAsset::register($this);
 \skeeks\cms\shop\widgets\ShopGlobalWidget::widget();
 
+$this->registerCss(<<<CSS
+    .sx-shop-checkout-widget .custom-radio:hover {
+        background: #efefef;
+    }
+CSS
+);
 $this->registerJs(<<<JS
     (function(sx, $, _)
     {
