@@ -8,165 +8,184 @@
 /* @var $this yii\web\View */
 /* @var $model \skeeks\cms\shop\models\ShopOrder */
 use yii\helpers\Html;
+$this->registerCss(<<<CSS
+.sx-detail-order, .sx-buyer-info {
+    font-size: 16px;
+}
+.sx-data .sx-data-row {
+    padding: 5px 0;
+}
+.sx-data .sx-data-row:nth-of-type(2n+1) {
+    background-color: #f7f7f7;
+}
 
+CSS
+);
 ?>
-
 
 
 <!-- Product page -->
 <!--=== Content Part ===-->
-<section class="container" style="padding-top: 50px;">
+<section class="container sx-detail-order-page" style="padding: 40px 0;">
     <div class="row">
-
-        <div class="col-md-12 g-my-50 sx-steps">
-            <?= \skeeks\cms\shopCartStepsWidget\ShopCartStepsWidget::widget([
-                'viewFile' => '@app/views/modules/shop/cart/_steps',
-            ]); ?>
+        <div class="col-12">
+            <h1 style="margin-bottom: 0px;">Заказ <span class="g-color-primary">№<?= $model->id; ?></span> на сумму <span class="g-color-primary"><?= \Yii::$app->money->convertAndFormat($model->moneyOriginal); ?></span>
+            </h1>
+            <p style="color: gray;">от <?= \Yii::$app->formatter->asDatetime($model->created_at); ?></p>
         </div>
+    </div>
 
-        <div class="col-sm-12">
-            <h4>Заказ №<?= $model->id; ?> от <?= \Yii::$app->formatter->asDatetime($model->created_at); ?> </h4>
+    <div class="sx-detail-order sx-data">
+        <div class="col-12">
 
-
-            <?= \yii\widgets\DetailView::widget([
-                'model' => $model,
-                'template' => "<tr><th>{label}</th><td style='width:50%;'>{value}</td></tr>",
-                'attributes' => [
-                    /*[                      // the owner name of the model
-                        'label' => 'Номер заказа',
-                        'format' => 'raw',
-                        'value' => $model->id,
-                    ],*/
-                    /*[                      // the owner name of the model
-                        'label' => 'Создан',
-                        'format' => 'raw',
-                        'value' => \Yii::$app->formatter->asDatetime($model->created_at),
-                    ],*/
-                    [                      // the owner name of the model
-                        'label' => 'Сумма заказа',
-                        'format' => 'raw',
-                        'value' => \Yii::$app->money->convertAndFormat($model->moneyOriginal),
-                    ],
-                    [                      // the owner name of the model
-                        'label' => 'Способ оплаты',
-                        'format' => 'raw',
-                        'value' => $model->paySystem ? $model->paySystem->name : "не задана платежная система",
-                    ],
-                    [
-                        'label' => 'Доставка',
-                        'format' => 'raw',
-                        'value' => $model->shopDelivery ? $model->shopDelivery->name : "не выбран способ доставки",
-                    ],
-                    [                      // the owner name of the model
-                        'label' => 'Статус',
-                        'format' => 'raw',
-                        'value' => Html::tag('span', $model->status->name, ['style' => 'color: ' . $model->status->color]),
-                    ],
-                    [                      // the owner name of the model
-                        'label' => 'Оплата',
-                        'format' => 'raw',
-                        'value' => $model->payed == 'Y' ? "<span style='color: green;'>Оплачен</span>" : "<span style='color: red;'>Не оплачен</span>",
-                    ],
-                    [                      // the owner name of the model
-                        'attribute' => 'Заказ отменен',
-                        'label' => 'Заказ отменен',
-                        'format' => 'raw',
-                        'value' => $model->reason_canceled,
-                        'visible' => $model->canceled == 'Y',
-                    ],
-                ]
-            ]) ?>
-
-            <? if ($model->buyer) : ?>
-                <h4>Данные покупателя: </h4>
-
-                <div class="table-responsive">
-                    <?= \yii\widgets\DetailView::widget([
-                        'model' => $model->buyer->relatedPropertiesModel,
-                        'template' => "<tr><th style='width: 50%; '>{label}</th><td style='width:50%;'>{value}</td></tr>",
-                        'attributes' => ( isset($model->buyer) && isset($model->buyer->relatedPropertiesModel) ) ? array_keys($model->buyer->relatedPropertiesModel->toArray()) : []
-                    ]) ?>
+            <div class="row sx-data-row">
+                <div class="col-3">Статус</div>
+                <div class="col-9">
+                    <?php echo Html::tag('span', $model->status->name, ['style' => 'color: '.$model->status->color]); ?>
                 </div>
-            <? endif; ?>
-            <h4>Содержимое заказа: </h4>
+            </div>
+            <div class="row sx-data-row">
+                <div class="col-3">Оплата</div>
+                <div class="col-9">
+                    <?php if ($model->payed == 'Y') : ?>
+                        <span style='color: green;'>Оплачен</span>
+                    <?php else: ?>
+                        <!--<span style='color: gray;'>Не оплачен</span>-->
+                    <?php endif; ?>
+
+                    <?php if ($model->paySystem) : ?>
+                        <?php echo \skeeks\cms\helpers\StringHelper::ucfirst($model->paySystem->name); ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php if ($model->shopDelivery) : ?>
+                <div class="row sx-data-row">
+                    <div class="col-3">Доставка</div>
+                    <div class="col-9">
+                        <?php echo $model->shopDelivery->name; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+        </div>
+    </div>
+
+
+    <?php if ($model->shopBuyer) : ?>
+        <div class="sx-buyer-info" style="    
+                    margin-top: 20px;
+                    /*background: #f8f8f8;*/
+                    /*padding: 20px;*/
+                ">
+            <div class="row">
+                <div class="col-12">
+                    <h4>Данные покупателя</h4>
+                </div>
+            </div>
+            <div class="sx-data">
+                <div class="col-12">
+                    <?php foreach ($model->shopBuyer->relatedPropertiesModel->toArray() as $k => $v) : ?>
+                        <div class="row sx-data-row">
+                            <div class="col-3"><?php echo \yii\helpers\ArrayHelper::getValue($model->shopBuyer->relatedPropertiesModel->attributeLabels(), $k); ?>
+                            </div>
+                            <div class="col-9">
+                                <?php echo $v; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <div class="sx-order-items" style="margin-top: 20px;">
+        <h4>Содержимое заказа</h4>
+        <div class="">
+
             <!-- cart content -->
             <?= \skeeks\cms\shopCartItemsWidget\ShopCartItemsListWidget::widget([
                 'dataProvider' => new \yii\data\ActiveDataProvider([
-                    'query' => $model->getShopBaskets(),
+                    'query'      => $model->getShopBaskets(),
                     'pagination' =>
                         [
                             'defaultPageSize' => 100,
-                            'pageSizeLimit' => [1, 100],
+                            'pageSizeLimit'   => [1, 100],
                         ],
                 ]),
-                'footerView'    => false,
-                'itemView'      => '@skeeks/cms/shopCartItemsWidget/views/items-list-order-item',
+                'footerView'   => false,
+                'itemView'     => '@skeeks/cms/shopCartItemsWidget/views/items-list-order-item',
             ]); ?>
-            <!-- /cart content -->
-            <div class="toggle-transparent toggle-bordered-full clearfix">
-                <div class="toggle active" style="display: block;">
-                    <div class="toggle-content" style="display: block;">
+        </div>
+
+        <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6 float-right">
+                <!-- /cart content -->
+                <div class="toggle-transparent toggle-bordered-full clearfix" style="background: #fcfcfc; padding: 20px; border:rgba(0,0,0,0.05) 1px solid; border-top-width: 0;">
+                    <div class="toggle active" style="display: block;">
+                        <div class="toggle-content" style="display: block;">
 
                             <span class="clearfix">
                                 <span
                                         class="float-right"><?= \Yii::$app->money->convertAndFormat($model->moneyOriginal); ?></span>
-                                <strong class="float-left">Товаров:</strong>
+                                <span class="float-left">Товары</span>
                             </span>
-                        <? if ($model->moneyDiscount->getValue() > 0) : ?>
-                            <span class="clearfix">
+                            <? if ($model->moneyDiscount->getValue() > 0) : ?>
+                                <span class="clearfix">
                                     <span
                                             class="float-right"><?= \Yii::$app->money->convertAndFormat($model->moneyDiscount); ?></span>
-                                    <span class="float-left">Скидка:</span>
+                                    <span class="float-left">Скидка</span>
                                 </span>
-                        <? endif; ?>
+                            <? endif; ?>
 
-                        <? if ($model->moneyDelivery->getValue() > 0) : ?>
-                            <span class="clearfix">
+                            <? if ($model->moneyDelivery->getValue() > 0) : ?>
+                                <span class="clearfix">
                                     <span
                                             class="float-right"><?= \Yii::$app->money->convertAndFormat($model->moneyDelivery); ?></span>
-                                    <span class="float-left">Доставка:</span>
+                                    <span class="float-left">Доставка</span>
                                 </span>
-                        <? endif; ?>
+                            <? endif; ?>
 
-                        <? if ($model->moneyVat->getValue() > 0) : ?>
-                            <span class="clearfix">
+                            <? if ($model->moneyVat->getValue() > 0) : ?>
+                                <span class="clearfix">
                                     <span
                                             class="float-right"><?= \Yii::$app->money->convertAndFormat($model->moneyVat); ?></span>
-                                    <span class="float-left">Налог:</span>
+                                    <span class="float-left">Налог</span>
                                 </span>
-                        <? endif; ?>
+                            <? endif; ?>
 
-                        <? if ($model->weight > 0) : ?>
-                            <span class="clearfix">
+                            <? if ($model->weight > 0) : ?>
+                                <span class="clearfix">
                                     <span class="float-right"><?= $model->weight; ?> г.</span>
-                                    <span class="float-left">Вес:</span>
+                                    <span class="float-left">Вес</span>
                                 </span>
-                        <? endif; ?>
-                        <hr/>
+                            <? endif; ?>
+                            <hr style="margin: 5px 0;"/>
 
-                        <span class="clearfix">
+                            <span class="clearfix">
                                 <span
                                         class="float-right size-20"><?= \Yii::$app->money->convertAndFormat($model->money); ?></span>
-                                <strong class="float-left">ИТОГ:</strong>
+                                <strong class="float-left">ИТОГО</strong>
                             </span>
-                        <hr/>
-                        <? if ($model->allow_payment == \skeeks\cms\components\Cms::BOOL_Y && $model->paySystem) : ?>
-                            <? if ($model->paySystem->paySystemHandler && !$model->paid_at) : ?>
-                                <?= Html::a("Оплатить", $model->payUrl, [
-                                    'class' => 'btn btn-lg btn-primary'
-                                ]); ?>
-                            <? else : ?>
+                            <? if ($model->allow_payment == \skeeks\cms\components\Cms::BOOL_Y && $model->paySystem) : ?>
+                                <? if ($model->paySystem->paySystemHandler && !$model->paid_at) : ?>
+                                    <?= Html::a("Оплатить", $model->payUrl, [
+                                        'class' => 'btn btn-lg btn-primary',
+                                    ]); ?>
+                                <? else : ?>
 
+                                <? endif; ?>
+                            <? else : ?>
+                                <? if ($model->paySystem && $model->paySystem->paySystemHandler) : ?>
+                                    В настоящий момент, заказ находится в стадии проверки и сборки. Его можно будет оплатить позже.
+                                <? endif; ?>
                             <? endif; ?>
-                        <? else : ?>
-                            <? if ($model->paySystem && $model->paySystem->paySystemHandler) : ?>
-                                В настоящий момент, заказ находится в стадии проверки и сборки. Его можно будет оплатить позже.
-                            <? endif; ?>
-                        <? endif; ?>
+                        </div>
+                    </div>
                     </div>
                 </div>
-            </div>
         </div>
+
     </div>
 
 </section>
