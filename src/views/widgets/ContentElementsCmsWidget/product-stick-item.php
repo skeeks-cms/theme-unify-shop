@@ -17,8 +17,9 @@ $shopProduct = $model->shopProduct;
 $infoModel = $model;
 if ($shopProduct && $shopProduct->main_pid) {
     if ($shopProduct->shopMainProduct->isOfferProduct) {
-        $element = $shopProduct->shopMainProduct->cmsContentElement;
-        $infoModel = $element->parentContentElement;
+        $shopWithOffers = $shopProduct->shopMainProduct->shopProductWhithOffers;
+        $element = $shopWithOffers->cmsContentElement;
+        $infoModel = $element;
         $infoModel->name = $element->name;
     } else {
         $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
