@@ -53,7 +53,7 @@ CSS
                 <div class="row sx-data-row">
                     <div class="col-3">Оплата</div>
                     <div class="col-9">
-                        <?php if ($model->payed == 'Y') : ?>
+                        <?php if ($model->paid_at) : ?>
                             <span style='color: green;'>Оплачен</span>
                         <?php else: ?>
                             <!--<span style='color: gray;'>Не оплачен</span>-->
@@ -75,11 +75,11 @@ CSS
                     </div>
                 <?php endif; ?>
 
-                <?php if($model->shopOrderStatus->email_notify_description) : ?>
+                <?php if($model->shopOrderStatus->order_page_description) : ?>
                     <div class="row" style="margin-top: 20px;">
 
                             <div class="g-brd-primary" style="background: #fafafa; border-left: 5px solid; padding: 20px; 10px;">
-                                <?php echo $model->shopOrderStatus->email_notify_description; ?>
+                                <?php echo $model->shopOrderStatus->order_page_description; ?>
                             </div>
 
                     </div>
