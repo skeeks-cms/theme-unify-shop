@@ -75,15 +75,23 @@ CSS
                     </div>
                 <?php endif; ?>
 
-                <?php if($model->shopOrderStatus->order_page_description) : ?>
+                <?php if($model->lastStatusLog && $model->lastStatusLog->comment) : ?>
                     <div class="row" style="margin-top: 20px;">
-
-                            <div class="g-brd-primary" style="background: #fafafa; border-left: 5px solid; padding: 20px; 10px;">
-                                <?php echo $model->shopOrderStatus->order_page_description; ?>
-                            </div>
-
+                        <div class="g-brd-primary" style="background: #fafafa; border-left: 5px solid; padding: 20px; 10px;">
+                            <?php echo nl2br($model->lastStatusLog->comment); ?>
+                        </div>
                     </div>
                 <?php endif; ?>
+                
+                <?php if($model->shopOrderStatus->order_page_description) : ?>
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="g-brd-primary" style="background: #fafafa; border-left: 5px solid; padding: 20px; 10px;">
+                            <?php echo $model->shopOrderStatus->order_page_description; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                
+                
                 
             </div>
         </div>
