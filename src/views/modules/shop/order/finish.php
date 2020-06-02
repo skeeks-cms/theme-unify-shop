@@ -44,7 +44,7 @@ CSS
                     <div class="col-3">Статус</div>
                     <div class="col-9">
                         <?php echo Html::tag('span', $model->shopOrderStatus->name, ['style' => "padding: 2px 5px; color: {$model->shopOrderStatus->color}; background: {$model->shopOrderStatus->bg_color};"]); ?>
-                        <?php if($model->shopOrderStatus->description) : ?>
+                        <?php if ($model->shopOrderStatus->description) : ?>
                             <i class="far fa-question-circle" title="<?php echo $model->shopOrderStatus->description; ?>"></i>
                         <?php endif; ?>
 
@@ -64,7 +64,7 @@ CSS
                         <?php endif; ?>
                     </div>
                 </div>
-                
+
 
                 <?php if ($model->shopDelivery) : ?>
                     <div class="row sx-data-row">
@@ -75,26 +75,76 @@ CSS
                     </div>
                 <?php endif; ?>
 
-                <?php if($model->lastStatusLog && $model->lastStatusLog->comment) : ?>
+                <?php if ($model->lastStatusLog && $model->lastStatusLog->comment) : ?>
                     <div class="row" style="margin-top: 20px;">
                         <div class="g-brd-primary" style="background: #fafafa; border-left: 5px solid; padding: 20px; 10px;">
                             <?php echo nl2br($model->lastStatusLog->comment); ?>
                         </div>
                     </div>
                 <?php endif; ?>
-                
-                <?php if($model->shopOrderStatus->order_page_description) : ?>
+
+                <?php if ($model->shopOrderStatus->order_page_description) : ?>
                     <div class="row" style="margin-top: 20px;">
                         <div class="g-brd-primary" style="background: #fafafa; border-left: 5px solid; padding: 20px; 10px;">
                             <?php echo $model->shopOrderStatus->order_page_description; ?>
                         </div>
                     </div>
                 <?php endif; ?>
-                
-                
-                
             </div>
         </div>
+
+        <?php if ($model->shopOrderStatus->clientAvailbaleStatuses) : ?>
+
+            <div style="margin-top: 20px; background: #fafafa; padding: 15px;" class="sx-user-actions">
+                <p>Выберите действие:</p>
+                <?php foreach ($model->shopOrderStatus->clientAvailbaleStatuses as $availableStatus) : ?>
+                    <button class="btn btn-xl btn-primary sx-btn-status"
+                            style="margin-right: 20px; background: <?= $availableStatus->bg_color; ?>; border-color: <?= $availableStatus->bg_color; ?>; color: <?= $availableStatus->color; ?>"
+                            data-status_id="<?php echo $availableStatus->id; ?>"
+                    >
+                        <?= $availableStatus->btnName; ?>
+                    </button>
+                <?php endforeach; ?>
+
+                <?php if ($model->shopOrderStatus->autoNextShopOrderStatus) : ?>
+                    Внимание. Статус вашего заказа будет изменен на "<?php echo $model->shopOrderStatus->autoNextShopOrderStatus->name; ?>" автоматически <?php echo \Yii::$app->formatter->asRelativeTime($model->lastStatusLog->created_at + $model->shopOrderStatus->auto_next_status_time); ?>
+                <?php endif; ?>
+
+            </div>
+
+
+            <?
+            $this->registerJs(<<<JS
+$("body").on("click", ".sx-btn-status", function() {
+    var newStatus = $(this).data("status_id");
+    var AjaxQuery = sx.ajax.preparePostQuery();
+    
+    AjaxQuery.setData({
+        'status_id': newStatus,
+        'act': 'change'
+    });
+    
+    var AjaxHandler = new sx.classes.AjaxHandlerStandartRespose(AjaxQuery, {
+        'blockerSelector' : '.sx-user-actions'
+    });
+    AjaxHandler.on("success", function() {
+        setTimeout(function() {
+            window.location.reload();
+        }, 1000);
+    });
+    
+    AjaxQuery.execute();
+});
+JS
+            );
+
+            ?>
+
+
+        <?php endif; ?>
+
+
+
 
 
         <?php if ($model->shopBuyer) : ?>
