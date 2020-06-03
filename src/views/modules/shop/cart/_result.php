@@ -6,49 +6,74 @@
  * @date 09.10.2015
  */
 /* @var $this yii\web\View */
+\skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
+$this->registerJs(<<<JS
+
+$(window).on('load', function () {
+        // initialization of sticky blocks
+    setTimeout(function() { // important in this case
+      $.HSCore.components.HSStickyBlock.init('.js-sticky-block');
+    }, 1);
+    
+    $(document).on('pjax:complete', function() {
+      $.HSCore.components.HSStickyBlock.init('.js-sticky-block');
+    })
+
+  });
+JS
+);
+
 ?>
-<div class="g-bg-gray-light-v5 g-pa-20 g-pb-50 mb-4">
-    <div class="toggle active" style="display: block;">
-        <div class="toggle-content" style="display: block;">
+<div
+        id="stickyblock-start"
+        class="g-pa-5 js-sticky-block"
+        data-start-point="#stickyblock-start"
+        data-has-sticky-header="true"
+        data-end-point=".sx-footer"
+>
+    <div class="g-bg-gray-light-v5 g-pa-20 g-pb-50 mb-4">
+        <div class="toggle active" style="display: block;">
+            <div class="toggle-content" style="display: block;">
 
             <span class="clearfix">
                 <span class="float-right"><?= \Yii::$app->shop->cart->moneyOriginal; ?></span>
                 <strong class="pull-left">Товаров:</strong>
             </span>
-            <? if (\Yii::$app->shop->cart->moneyDiscount->amount > 0) : ?>
-                <span class="clearfix">
+                <? if (\Yii::$app->shop->cart->moneyDiscount->amount > 0) : ?>
+                    <span class="clearfix">
                     <span class="float-right"><?= \Yii::$app->shop->cart->moneyDiscount; ?></span>
                     <span class="pull-left">Скидка:</span>
                 </span>
-            <? endif; ?>
+                <? endif; ?>
 
-            <? if (\Yii::$app->shop->cart->moneyDelivery->amount > 0) : ?>
-                <span class="clearfix">
+                <? if (\Yii::$app->shop->cart->moneyDelivery->amount > 0) : ?>
+                    <span class="clearfix">
                     <span class="float-right"><?= \Yii::$app->shop->cart->moneyDelivery; ?></span>
                     <span class="pull-left">Доставка:</span>
                 </span>
-            <? endif; ?>
+                <? endif; ?>
 
-            <? if (\Yii::$app->shop->cart->moneyVat->amount > 0) : ?>
-                <span class="clearfix">
+                <? if (\Yii::$app->shop->cart->moneyVat->amount > 0) : ?>
+                    <span class="clearfix">
                     <span class="float-right"><?= \Yii::$app->shop->cart->moneyVat; ?></span>
                     <span class="pull-left">Налог:</span>
                 </span>
-            <? endif; ?>
+                <? endif; ?>
 
-            <? if (\Yii::$app->shop->cart->weight > 0) : ?>
-                <span class="clearfix">
+                <? if (\Yii::$app->shop->cart->weight > 0) : ?>
+                    <span class="clearfix">
                     <span class="float-right"><?= \Yii::$app->shop->cart->weight; ?> г.</span>
                     <span class="pull-left">Вес:</span>
                 </span>
-            <? endif; ?>
-            <hr />
-            <span class="clearfix">
+                <? endif; ?>
+                <hr/>
+                <span class="clearfix">
                 <span class="float-right size-20"><?= \Yii::$app->shop->cart->money; ?></span>
                 <strong class="pull-left">ИТОГ:</strong>
             </span>
-            <hr />
-            <?= $submit; ?>
+                <hr/>
+                <?= $submit; ?>
+            </div>
         </div>
     </div>
 </div>
