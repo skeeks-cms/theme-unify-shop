@@ -93,6 +93,14 @@ CSS
             </div>
         </div>
 
+        <? if ($model->shopOrderStatus->is_payment_allowed && $model->paySystem && $model->paySystem->paySystemHandler && !$model->paid_at) : ?>
+            <div style="margin-top: 20px; background: #fafafa; padding: 15px;">
+                <?= Html::a("Оплатить", $model->payUrl, [
+                    'class' => 'btn btn-xl btn-primary',
+                ]); ?>
+            </div>
+        <? endif; ?>
+
         <?php if ($model->shopOrderStatus->clientAvailbaleStatuses) : ?>
 
             <div style="margin-top: 20px; background: #fafafa; padding: 15px;" class="sx-user-actions">
@@ -243,18 +251,12 @@ JS
                                         class="float-right size-20"><?= \Yii::$app->money->convertAndFormat($model->money); ?></span>
                                 <strong class="float-left">ИТОГО</strong>
                             </span>
-                                <? if ($model->allow_payment == \skeeks\cms\components\Cms::BOOL_Y && $model->paySystem) : ?>
-                                    <? if ($model->paySystem->paySystemHandler && !$model->paid_at) : ?>
+                                <? if ($model->shopOrderStatus->is_payment_allowed && $model->paySystem && $model->paySystem->paySystemHandler && !$model->paid_at) : ?>
+                                    <div class="float-right" style="margin-top: 15px;">
                                         <?= Html::a("Оплатить", $model->payUrl, [
                                             'class' => 'btn btn-lg btn-primary',
                                         ]); ?>
-                                    <? else : ?>
-
-                                    <? endif; ?>
-                                <? else : ?>
-                                    <? if ($model->paySystem && $model->paySystem->paySystemHandler) : ?>
-                                        В настоящий момент, заказ находится в стадии проверки и сборки. Его можно будет оплатить позже.
-                                    <? endif; ?>
+                                    </div>
                                 <? endif; ?>
                             </div>
                         </div>
