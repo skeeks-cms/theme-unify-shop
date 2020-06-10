@@ -54,13 +54,17 @@ CSS
                     <div class="col-3">Оплата</div>
                     <div class="col-9">
                         <?php if ($model->paid_at) : ?>
-                            <span style='color: green;'>Оплачен</span>
+                            <?php
+                            $title = \Yii::$app->formatter->asDatetime($model->paid_at);
+                            if ($model->paySystem) {
+                                $title .= " ".\skeeks\cms\helpers\StringHelper::ucfirst($model->paySystem->name);
+                            }
+                            ?>
+                            <span style='color: green;' title="<?php echo $title; ?>"><i class="fas fa-check"></i> оплачен</span>
                         <?php else: ?>
-                            <!--<span style='color: gray;'>Не оплачен</span>-->
-                        <?php endif; ?>
-
-                        <?php if ($model->paySystem) : ?>
-                            <?php echo \skeeks\cms\helpers\StringHelper::ucfirst($model->paySystem->name); ?>
+                            <?php if ($model->paySystem) : ?>
+                                <?php echo \skeeks\cms\helpers\StringHelper::ucfirst($model->paySystem->name); ?>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -97,11 +101,14 @@ CSS
             <div style="margin-top: 20px; background: #fafafa; padding: 15px;">
                 <?= Html::a("Оплатить", $model->payUrl, [
                     'class' => 'btn btn-xl btn-primary',
+                    'style' => 'margin-right: 20px;',
                 ]); ?>
+                <?php if ($model->shopOrderStatus->autoNextShopOrderStatus) : ?>
+                    Внимание. Статус вашего заказа будет изменен на "<?php echo $model->shopOrderStatus->autoNextShopOrderStatus->name; ?>" автоматически <?php echo \Yii::$app->formatter->asRelativeTime($model->lastStatusLog->created_at + $model->shopOrderStatus->auto_next_status_time); ?>
+                <?php endif; ?>
             </div>
-        <? endif; ?>
 
-        <?php if ($model->shopOrderStatus->clientAvailbaleStatuses) : ?>
+        <? elseif ($model->shopOrderStatus->clientAvailbaleStatuses) : ?>
 
             <div style="margin-top: 20px; background: #fafafa; padding: 15px;" class="sx-user-actions">
                 <p>Выберите действие:</p>
