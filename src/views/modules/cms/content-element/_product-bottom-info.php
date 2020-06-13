@@ -59,7 +59,7 @@ $q
         'limit'                => 15,
         'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
         'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
-            $activeDataProvider->query->with('shopProduct');
+            //$activeDataProvider->query->with('shopProduct');
             $activeDataProvider->query->with('shopProduct.baseProductPrice');
             $activeDataProvider->query->with('shopProduct.minProductPrice');
             $activeDataProvider->query->with('image');

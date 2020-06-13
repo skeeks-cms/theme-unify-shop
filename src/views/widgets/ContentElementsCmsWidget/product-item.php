@@ -24,8 +24,6 @@ if ($shopProduct->main_pid) {
     }
 }
     
-$count = $model->relatedPropertiesModel->getSmartAttribute('reviews2Count');
-$rating = $model->relatedPropertiesModel->getSmartAttribute('reviews2Rating');
 //$v3ProductElement = new \v3toys\parsing\models\V3toysProductContentElement($model->toArray());
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
