@@ -44,11 +44,9 @@ CSS
 
 $images = [];
 if ($shopOfferChooseHelper && $shopOfferChooseHelper->offerCmsContentElement) {
-    if ($shopOfferChooseHelper->offerCmsContentElement->image) {
-        $images[] = $shopOfferChooseHelper->offerCmsContentElement->image;
-    } elseif ($model->image) {
-        $images[] = $model->image;
-    }
+    if ($mainImage = $shopOfferChooseHelper->offerCmsContentElement->mainProductImage) {
+        $images[] = $mainImage;
+    } 
 
     if ($shopOfferChooseHelper->offerCmsContentElement->images) {
         $images = \yii\helpers\ArrayHelper::merge($images, $shopOfferChooseHelper->offerCmsContentElement->images);
@@ -57,8 +55,8 @@ if ($shopOfferChooseHelper && $shopOfferChooseHelper->offerCmsContentElement) {
     }
 
 } else {
-    if ($model->image) {
-        $images[] = $model->image;
+    if ($model->mainProductImage) {
+        $images[] = $model->mainProductImage;
     }
 
     if ($model->images) {
