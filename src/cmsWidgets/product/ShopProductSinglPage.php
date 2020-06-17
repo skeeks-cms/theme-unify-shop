@@ -163,6 +163,7 @@ class ShopProductSinglPage extends Widget
                         'items' => [
                             'v1' => 'Стандартное отображение',
                             'v2' => 'Сворачиваемые блоки',
+                            'v3' => 'Табы',
                         ]
                     ],
                 ]

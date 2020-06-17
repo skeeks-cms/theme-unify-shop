@@ -643,3 +643,11 @@
 .sx-new-price  {
     font-weight: 600;
 }
+
+
+.sx-product-info-wrapper .nav-item {
+    font-size: 25px;
+}
+.sx-product-info-wrapper .nav-link.active {
+    font-weight: bold;
+}
