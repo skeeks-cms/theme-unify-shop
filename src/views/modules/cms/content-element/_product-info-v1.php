@@ -11,10 +11,18 @@
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
 /* @var $singlPage \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage */
 /* @var $this yii\web\View */
+$infoModel = $model;
+if ($shopProduct->main_pid) {
+    if ($shopProduct->shopMainProduct->isOfferProduct) {
+        $infoModel = $shopProduct->shopMainProduct->shopProductWhithOffers->cmsContentElement;
+    } else {
+        $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
+    }
+}
 ?>
 <?
 $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
-    'model'                   => $model,
+    'model'                   => $infoModel,
     'visible_only_has_values' => true,
     'viewFile'                => '@app/views/widgets/RpWidget/default',
 ]);
@@ -33,11 +41,11 @@ $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties
             </div>
         <? endif; ?>
 
-        <? if ($model->description_full) : ?>
+        <? if ($model->productDescriptionFull) : ?>
             <div class="row">
                 <div class="col-md-12 sx-content" id="sx-description">
                     <h2>Описание</h2>
-                    <?= $model->description_full; ?>
+                    <?= $model->productDescriptionFull; ?>
                 </div>
             </div>
         <? endif; ?>

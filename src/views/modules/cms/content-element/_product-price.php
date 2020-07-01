@@ -168,8 +168,10 @@ JS
         </div>
     <? endif; ?>
 
-<? elseif ($shopProduct->isOffersProduct) : ?>
+<? elseif ($shopProduct->isOffersProduct || $shopProduct->isOfferProduct) : ?>
+
     <? if ($shopOfferChooseHelper->offerCmsContentElement) : ?>
+
         <?
         $offerShopProduct = $shopOfferChooseHelper->offerCmsContentElement->shopProduct;
         $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($shopOfferChooseHelper->offerCmsContentElement);

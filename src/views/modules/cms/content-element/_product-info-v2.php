@@ -11,10 +11,19 @@
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
 /* @var $singlPage \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage */
 /* @var $this yii\web\View */
+//Если этот товар привязан к главному
+$infoModel = $model;
+if ($shopProduct->main_pid) {
+    if ($shopProduct->shopMainProduct->isOfferProduct) {
+        $infoModel = $shopProduct->shopMainProduct->shopProductWhithOffers->cmsContentElement;
+    } else {
+        $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
+    }
+}
 ?>
 <?
 $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
-    'model'                   => $model,
+    'model'                   => $infoModel,
     'visible_only_has_values' => true,
     'viewFile'                => '@app/views/widgets/RpWidget/default',
 ]);
@@ -49,7 +58,7 @@ CSS
                         </div>
                     <? endif; ?>
 
-                    <? if ($model->description_full) : ?>
+                    <? if ($model->productDescriptionFull) : ?>
 
                         <div class="card">
                             <div class="card-header" id="sx-description-header">
@@ -59,7 +68,7 @@ CSS
                             </div>
                             <div id="sx-description" class="collapse" aria-labelledby="sx-description-header" data-parent="#sx-product-info-accordion">
                                 <div class="card-body">
-                                    <?= $model->description_full; ?>
+                                    <?= $model->productDescriptionFull; ?>
                                 </div>
                             </div>
                         </div>

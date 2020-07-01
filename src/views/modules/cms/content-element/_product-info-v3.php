@@ -11,10 +11,20 @@
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
 /* @var $singlPage \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage */
 /* @var $this yii\web\View */
+
+//Если этот товар привязан к главному
+$infoModel = $model;
+if ($shopProduct->main_pid) {
+    if ($shopProduct->shopMainProduct->isOfferProduct) {
+        $infoModel = $shopProduct->shopMainProduct->shopProductWhithOffers->cmsContentElement;
+    } else {
+        $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
+    }
+}
 ?>
 <?
 $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
-    'model'                   => $model,
+    'model'                   => $infoModel,
     'visible_only_has_values' => true,
     'viewFile'                => '@app/views/widgets/RpWidget/default',
 ]);
@@ -35,7 +45,7 @@ JS
                 </li>
             <? endif; ?>
 
-            <? if ($model->description_full) : ?>
+            <? if ($model->productDescriptionFull) : ?>
                 <li class="nav-item">
                     <a class="nav-link sx-main-text-color g-px-0--md g-mr-30--md" data-toggle="tab" href="#sx-description" role="tab">Описание</a>
                 </li>
@@ -56,10 +66,10 @@ JS
                     </div>
                 </div>
             <? endif; ?>
-            <? if ($model->description_full) : ?>
+            <? if ($model->productDescriptionFull) : ?>
                 <div class="tab-pane fade show" id="sx-description" role="tabpanel">
                     <div class="card-body-1">
-                        <?= $model->description_full; ?>
+                        <?= $model->productDescriptionFull; ?>
                     </div>
                 </div>
             <? endif; ?>

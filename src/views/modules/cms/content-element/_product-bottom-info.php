@@ -10,6 +10,8 @@
 /* @var $shopProduct \skeeks\cms\shop\models\ShopProduct */
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
 /* @var $this yii\web\View */
+
+
 ?>
 
 <?

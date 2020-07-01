@@ -43,25 +43,13 @@ CSS
 <?
 
 $images = [];
-if ($shopOfferChooseHelper && $shopOfferChooseHelper->offerCmsContentElement) {
-    if ($mainImage = $shopOfferChooseHelper->offerCmsContentElement->mainProductImage) {
-        $images[] = $mainImage;
-    } 
 
-    if ($shopOfferChooseHelper->offerCmsContentElement->images) {
-        $images = \yii\helpers\ArrayHelper::merge($images, $shopOfferChooseHelper->offerCmsContentElement->images);
-    } elseif ($model->images) {
-        $images = \yii\helpers\ArrayHelper::merge($images, $model->images);
-    }
+if ($model->mainProductImage) {
+    $images[] = $model->mainProductImage;
+}
 
-} else {
-    if ($model->mainProductImage) {
-        $images[] = $model->mainProductImage;
-    }
-
-    if ($model->images) {
-        $images = \yii\helpers\ArrayHelper::merge($images, $model->images);
-    }
+if ($productImages = $model->productImages) {
+    $images = \yii\helpers\ArrayHelper::merge($images, $productImages);
 }
 
 
