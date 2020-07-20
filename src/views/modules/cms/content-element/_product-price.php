@@ -109,7 +109,7 @@ JS
             <div class="control-group group-submit g-mb-15">
                 <div class="buttons-row ">
                     <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
-                        <? if (\Yii::$app->shop->is_show_button_no_price) : ?>
+                        <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
                             <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
                                 'class'   => 'btn btn-block btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                 'type'    => 'button',
@@ -126,7 +126,7 @@ JS
                         ]); ?>
                     <? endif; ?>
                 </div>
-                <? if (\Yii::$app->shop->is_show_quantity_product) : ?>
+                <? if (\Yii::$app->skeeks->site->shopSite->is_show_quantity_product) : ?>
                     <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
                         <? if ($shopProduct->quantity > 10) : ?>
                             <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock over 10"); ?> <?= $shopProduct->measure->symbol; ?></span>
@@ -251,7 +251,7 @@ JS
                 <div class="control-group group-submit g-mb-15">
                     <div class="buttons-row ">
                         <? if ($offerShopProduct->minProductPrice && $offerShopProduct->minProductPrice->price == 0) : ?>
-                            <? if (\Yii::$app->shop->is_show_button_no_price) : ?>
+                            <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
                                 <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
                                     'class'   => 'btn btn-xxl btn-block u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                     'type'    => 'button',
@@ -268,7 +268,7 @@ JS
                             ]); ?>
                         <? endif; ?>
                     </div>
-                    <? if (\Yii::$app->shop->is_show_quantity_product) : ?>
+                    <? if (\Yii::$app->skeeks->site->shopSite->is_show_quantity_product) : ?>
                         <div class="availability-row available" style=""><!-- 'available' || 'not-available' || '' -->
                             <? if ($offerShopProduct->quantity > 10) : ?>
                                 <span class="row-label"><?= \Yii::t("skeeks/unify-shop", "In stock over 10"); ?> <?= $offerShopProduct->measure->symbol; ?></span>

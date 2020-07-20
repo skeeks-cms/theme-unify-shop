@@ -41,7 +41,7 @@
 
                 $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
                 $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
-                $availabilityFiltersHandler->value = (int)\Yii::$app->shop->is_show_product_only_quantity;
+                $availabilityFiltersHandler->value = (int)\Yii::$app->skeeks->site->shopSite->is_show_product_no_price;
 
                 $sortFiltersHandler = new \skeeks\cms\shop\queryFilter\SortFiltersHandler();
 
@@ -85,13 +85,14 @@
                     $eavFiltersHandler = new \skeeks\cms\eavqueryfilter\CmsEavQueryFilterHandler([
                         'baseQuery' => $baseQuery,
                     ]);
-                    $eavFiltersHandler->openedPropertyIds = \Yii::$app->shop->open_filter_property_ids;
+                    $eavFiltersHandler->openedPropertyIds = \Yii::$app->skeeks->site->shopSite->open_filter_property_ids;
                     $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
                     $rpQuery = $eavFiltersHandler->getRPQuery();
 
-                    if (\Yii::$app->shop->show_filter_property_ids) {
-                        $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => \Yii::$app->shop->show_filter_property_ids]);
+                    if ($show_filter_property_ids = \Yii::$app->skeeks->site->shopSite->show_filter_property_ids) {
+                        $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => $show_filter_property_ids]);
                     }
+                 
                     /*$rpQuery->andWhere([
                         'cmap.cms_content_id' => $model->tree_id,
                     ]);*/

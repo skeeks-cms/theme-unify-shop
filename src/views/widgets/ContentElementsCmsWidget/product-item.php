@@ -148,7 +148,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
                 <div class="card-prod--actions" style="float: left;">
                     <? if ($priceHelper && (float)$priceHelper->minMoney->getAmount() == 0) : ?>
-                        <? if ($shopProduct->quantity > 0 && \Yii::$app->shop->is_show_button_no_price && !$shopProduct->isOffersProduct) : ?>
+                        <? if ($shopProduct->quantity > 0 && \Yii::$app->skeeks->site->shopSite->is_show_button_no_price && !$shopProduct->isOffersProduct) : ?>
                             <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>".\Yii::t('skeeks/unify-shop', 'To cart'), [
                                 'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                                 'type'    => 'button',

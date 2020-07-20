@@ -48,7 +48,12 @@
             <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::beginWidget('product-help-short'); ?>
             <p class="g-font-weight-600">Проблема с добавлением товара в корзину?</p>
             <p>Если у вас появилась сложность с добавлением товара в корзину, вы можете позвонить по номеру
-                <a href="tel:<?= $this->theme->phone; ?>"><?= $this->theme->phone; ?></a> и оформить заказ по телефону.</p>
+                <?php if(\Yii::$app->skeeks->site->cmsSitePhone) : ?>
+                    <a href="tel:<?= \Yii::$app->skeeks->site->cmsSitePhone->value; ?>"><?= \Yii::$app->skeeks->site->cmsSitePhone->value; ?></a> 
+                <?php endif; ?>
+                
+                
+                и оформить заказ по телефону.</p>
             <p>Пожалуйста, сообщите, какие проблемы с добавлением товара в корзину вы испытываете:</p>
             <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::end(); ?>
         </div>
