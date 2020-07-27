@@ -8,6 +8,7 @@
 /* @var $this yii\web\View */
 /* @var $widget \skeeks\cms\shop\widgets\cart\ShopCartWidget */
 \skeeks\cms\themes\unifyshop\assets\ShopUnifyCartAsset::register($this);
+\skeeks\cms\shop\widgets\ShopGlobalWidget::widget();
 $this->registerJs(<<<JS
     (function(sx, $, _)
     {
