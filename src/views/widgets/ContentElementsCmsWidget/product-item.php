@@ -127,26 +127,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                 <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0" class="sx-card-prod--title-a sx-main-text-color g-text-underline--none--hover"><?= $infoModel->name; ?></a>
             </div>
             <? if (isset($shopProduct)) : ?>
-                <div class="card-prod--price" style="display: none;">
-                    <? if ($priceHelper) : ?>
-                        <?
-                        $prefix = "";
-                        if ($shopProduct->isOffersProduct) {
-                            $prefix = \Yii::t('skeeks/unify-shop', 'from')." ";
-                        }
-                        ?>
-                        <? if ($priceHelper->hasDiscount && (float)$priceHelper->minMoney->getAmount() > 0) : ?>
-                            <div class="old sx-old-price sx-list-old-price" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></div>
-                            <div class="new sx-new-price sx-list-new-price g-color-primary" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
-                        <? else : ?>
-                            <? if ((float)$priceHelper->minMoney->getAmount() > 0) : ?>
-                                <div class="new sx-new-price sx-list-new-price g-color-primary" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></div>
-                            <? endif; ?>
-                        <? endif; ?>
-                    <? endif; ?>
-                </div>
-
-                <div class="card-prod--actions" style="float: left;">
+                <div class="card-prod--actions">
                     <? if ($priceHelper && (float)$priceHelper->minMoney->getAmount() == 0) : ?>
                         <? if ($shopProduct->quantity > 0 && \Yii::$app->skeeks->site->shopSite->is_show_button_no_price && !$shopProduct->isOffersProduct) : ?>
                             <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>".\Yii::t('skeeks/unify-shop', 'To cart'), [
@@ -181,12 +162,12 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                 </div>
             <? endif; ?>
         </div>
-        <div class="card-prod--hidden">
+        <!--<div class="card-prod--hidden">
             <div class="card-prod--inner">
                 <div class="with-icon-group">
 
 
                 </div>
             </div>
-        </div>
+        </div>-->
 </article>

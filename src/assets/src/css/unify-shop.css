@@ -36,16 +36,19 @@
 
 .card-prod {
     border: 1px solid transparent;
-    border-bottom: none;
+    /*border-bottom: none;*/
     -webkit-border-radius: 3px 3px 0 0;
-    border-radius: 3px 3px 0 0;
+    border-radius: 3px 3px 3px 3px;
     position: relative;
     padding: 5px 0;
     background: #fff;
-    margin: 0 auto 40px;
+    margin: 0 auto 5px;
     /*max-width: 300px;*/
 }
 
+.product-item {
+    margin-bottom: 20px;
+}
 
 .card-prod .card-prod--photo img {
     width: 100%;
@@ -79,7 +82,7 @@
 }
 
 .card-prod .card-prod--inner {
-    padding: 0 15px;
+    padding: 0 10px 10px 10px;
     zoom: 1;
 }
 
@@ -130,7 +133,7 @@
 }
 
 .card-prod .card-prod--actions {
-    float: right;
+    /*float: right;*/
     position: relative;
 }
 
@@ -329,7 +332,7 @@
 
 @media (min-width: 992px) {
     .card-prod .card-prod--actions {
-        visibility: hidden;
+        /*visibility: hidden;*/
     }
 
     .card-prod.hover, .card-prod:hover {
