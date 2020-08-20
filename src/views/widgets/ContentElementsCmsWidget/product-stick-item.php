@@ -61,12 +61,12 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
                     <?
                     $prefix = "";
                     if ($shopProduct->isOffersProduct) {
-                        $prefix = \Yii::t('skeeks/unify-shop', 'from') . " ";
+                        $prefix = \Yii::t('skeeks/unify-shop', 'from')." ";
                     }
                     ?>
                     <? if ($priceHelper->hasDiscount) : ?>
-                        <div class="sx-old-price sx-list-old-price old"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></div>
                         <span class="d-block sx-new-price sx-list-new-price g-color-primary g-font-size-20"><?= $prefix; ?><?= $priceHelper->minMoney; ?></span>
+                        <div><span class="sx-old-price sx-list-old-price old"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></span></div>
                     <? else : ?>
                         <span class="d-block sx-new-price sx-list-new-price g-color-primary g-font-size-20"><?= $prefix; ?><?= $priceHelper->minMoney; ?></span>
                     <? endif; ?>

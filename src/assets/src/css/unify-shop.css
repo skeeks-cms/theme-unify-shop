@@ -590,8 +590,25 @@
 
 
 .sx-old-price {
-    text-decoration: line-through;
+    /*text-decoration: line-through;*/
+    position: relative;
     color: #8a8a8a;
+}
+
+.sx-old-price:before {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 50%;
+  right: 0;
+  border-top: 1px solid;
+  border-color: inherit;
+
+  -webkit-transform:rotate(-8deg);
+  -moz-transform:rotate(-8deg);
+  -ms-transform:rotate(-8deg);
+  -o-transform:rotate(-8deg);
+  transform:rotate(-8deg);
 }
 
 

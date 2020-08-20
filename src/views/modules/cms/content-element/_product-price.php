@@ -40,17 +40,18 @@ JS
 
         <? if ($priceHelper) : ?>
             <? if ($priceHelper->hasDiscount) : ?>
-                <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
+
                 <span class="current ss-price sx-new-price h1 g-color-primary">
-                    <?= $priceHelper->minPrice->money; ?>
+                    <?= $priceHelper->minMoney; ?>
                     <? if ($shopProduct->measure_ratio != 1) : ?>
                         / <?= $shopProduct->measure->symbol; ?>
                     <? endif; ?>
                 </span>
+                <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
             <? else: ?>
                 <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
                     <span class="current ss-price sx-new-price h1 g-color-primary">
-                        <?= $priceHelper->minPrice->money; ?>
+                        <?= $priceHelper->minMoney; ?>
                         <? if ($shopProduct->measure_ratio != 1) : ?>
                             / <?= $shopProduct->measure->symbol; ?>
                         <? endif; ?>
@@ -139,8 +140,8 @@ JS
         </div>
     <? else : ?>
         <div class="g-mt-10">
-                <div class="control-group group-submit g-mb-15">
-                    <div class="buttons-row ">
+            <div class="control-group group-submit g-mb-15">
+                <div class="buttons-row ">
                     <?= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
                         'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
                         'product_id'       => $model->id,
@@ -186,11 +187,11 @@ JS
             <link itemprop="availability" href="http://schema.org/InStock">
             <? if ($priceHelper) : ?>
                 <? if ($priceHelper->hasDiscount) : ?>
+                    <span class="current ss-price sx-new-price h1 g-color-primary"><?= $priceHelper->minMoney; ?></span>
                     <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
-                    <span class="current ss-price sx-new-price h1 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
                 <? else: ?>
                     <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
-                        <span class="current ss-price sx-new-price h1 g-color-primary"><?= $priceHelper->minPrice->money; ?></span>
+                        <span class="current ss-price sx-new-price h1 g-color-primary"><?= $priceHelper->minMoney; ?></span>
                     <? endif; ?>
                 <? endif; ?>
             <? endif; ?>
@@ -283,7 +284,7 @@ JS
             <div class="g-mt-10">
                 <div class="control-group group-submit g-mb-15">
                     <div class="buttons-row ">
-                        <?/*= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
+                        <? /*= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
                             'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
                             'product_id'       => $offerShopProduct->id,
                             'size'             => "modal-dialog-350",
@@ -295,7 +296,7 @@ JS
                                 'style' => '',
                                 'class' => 'btn btn-primary btn-block btn-xxl btn-grey-white btn-52 js-out-click-btn g-font-size-18',
                             ],
-                        ]); */?>
+                        ]); */ ?>
                     </div>
                     <div class="availability-row available" style="">
                         <span class="row-value">Товара нет</span>
@@ -310,11 +311,11 @@ JS
             <? if ($priceHelper) : ?>
                 <div class="">
                     <? if ($priceHelper->hasDiscount) : ?>
+                        <span class="current ss-price h1 sx-new-price g-color-primary"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minMoney; ?></span>
                         <span class="current ss-price h3 sx-old-price"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->basePrice->money; ?></span>
-                        <span class="current ss-price h1 sx-new-price g-color-primary"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minPrice->money; ?></span>
                     <? else: ?>
                         <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
-                            <span class="current ss-price h1 sx-new-price g-color-primary"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minPrice->money; ?></span>
+                            <span class="current ss-price h1 sx-new-price g-color-primary"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minMoney; ?></span>
                         <? endif; ?>
                     <? endif; ?>
                 </div>
@@ -327,8 +328,8 @@ JS
             <div class="control-group group-submit g-mb-15">
                 <div class="buttons-row ">
                     <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
-                        'class'   => 'btn btn-xxl btn-block u-btn-primary g-font-size-18 disabled sx-not-select-offer',
-                        'type'    => 'button',
+                        'class' => 'btn btn-xxl btn-block u-btn-primary g-font-size-18 disabled sx-not-select-offer',
+                        'type'  => 'button',
                     ]); ?>
                 </div>
             </div>
