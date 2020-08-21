@@ -42,6 +42,16 @@ if ($shopProduct->isOfferProduct) {
     }
 }
 
+
+$infoModel = $model;
+if ($shopProduct->main_pid) {
+if ($shopProduct->shopMainProduct->isOfferProduct) {
+    $infoModel = $shopProduct->shopMainProduct->shopProductWhithOffers->cmsContentElement;
+} else {
+    $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
+}
+}
+
 //Работа с ценой
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
@@ -112,6 +122,31 @@ $singlPage::end();
                         ]); ?>
 
 
+                        <?php
+                        /**
+                         * @var $shopCmsContentProperty \skeeks\cms\shop\models\ShopCmsContentProperty
+                         */
+                        if($shopCmsContentProperty = \skeeks\cms\shop\models\ShopCmsContentProperty::find()->where(['is_vendor' => 1])->one()) : ?>
+                            <?php 
+                            $brandId = $infoModel->relatedPropertiesModel->getAttribute($shopCmsContentProperty->cmsContentProperty->code);
+                            $brand = \skeeks\cms\models\CmsContentElement::findOne((int)$brandId);
+                            ?>
+                            <?php if($brand) : ?>
+                            <div class="sx-short-brand-info row g-mb-20" style="background: #92929212;
+    padding: 5px;">
+                                <div class="col-md-6 my-auto">
+                                Бренд: <?php echo $brand->name; ?>
+                                </div>
+                                <?php if($brand->image) : ?>
+                                <div class="col-md-6 my-auto" style=" text-align: right;">
+                                    <img src="<?php echo $brand->image->src; ?>" style="max-height: 40px;" />
+                                </div>
+                                <?php endif; ?>
+                                
+                            </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        
                         <? if ($model->productDescriptionShort) : ?>
                             <div class="sx-description-short">
                                 <?= $model->productDescriptionShort; ?>
