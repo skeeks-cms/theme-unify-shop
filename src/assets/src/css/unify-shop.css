@@ -680,3 +680,7 @@
 .sx-order-items .sx-order-item {
     padding: 10px;
 }
+
+.sx-order-item-properties p {
+    margin-bottom: 0px;
+}

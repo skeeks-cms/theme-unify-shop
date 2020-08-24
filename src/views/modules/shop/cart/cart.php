@@ -111,7 +111,14 @@ JS
                                         </div>
 
                                         <div class="sx-order-item-price">
-                                            <?= $orderItem->moneyOriginal; ?> / <?= $orderItem->measure_name; ?>
+                                            <? if ($orderItem->moneyOriginal->getAmount() == $orderItem->money->getAmount()) : ?>
+                                                <?= $orderItem->moneyOriginal; ?>
+                                            <? else : ?>
+                                                <?= $orderItem->money; ?>
+                                                <span class="line-through nopadding-left sx-old-price"><?= $orderItem->moneyOriginal; ?></span>
+                                            <? endif; ?>
+
+                                            <? /*= $orderItem->moneyOriginal; */ ?> / <?= $orderItem->measure_name; ?>
                                         </div>
                                     </div>
                                     <div class="col my-auto" style="max-width: 19px;">
