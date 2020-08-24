@@ -126,8 +126,8 @@ JS
                         </div>
                     </div>
                 <? else: ?>
-                    <div class="my-auto g-ml-10" style="color: gray; font-size: 12px;">
-                        (1<?= $measure->symbol; ?> = <?= $count; ?><?= $shopProduct->measure->symbol; ?>)
+                    <div class="my-auto g-ml-10" style="color: gray; font-size: 14px;">
+                        в 1 <?= $measure->symbol; ?> <?= $count; ?> <?= $shopProduct->measure->symbol; ?>
                     </div>
                 <? endif; ?>
                 </div>
@@ -245,7 +245,8 @@ JS
         <? if ($offerShopProduct->quantity > 0) : ?>
 
 
-            <div class="d-flex flex-row sx-quantity-wrapper">
+            <div class="sx-quantity-wrapper">
+                <div class="d-flex flex-row">
                 <span class="d-flex flex-row sx-quantity-group">
                     <div class="my-auto sx-minus">-</div>
                     <div class="my-auto">
@@ -257,8 +258,9 @@ JS
                     </div>
                     <div class="my-auto sx-plus">+</div>
                 </span>
-                <div class="my-auto g-ml-10">
-                    <?= $offerShopProduct->measure->symbol; ?>
+                    <div class="my-auto g-ml-10">
+                        <?= $offerShopProduct->measure->symbol; ?>
+                    </div>
                 </div>
 
                 <? if ($shopProduct->measure_matches_jsondata) : ?>
@@ -298,7 +300,7 @@ JS
                             </div>
                         <? else: ?>
                             <div class="my-auto g-ml-10" style="color: gray; font-size: 12px;">
-                                (1<?= $measure->symbol; ?> = <?= $count; ?><?= $shopProduct->measure->symbol; ?>)
+                                в 1 <?= $measure->symbol; ?> <?= $count; ?> <?= $shopProduct->measure->symbol; ?>
                             </div>
                         <? endif; ?>
 
