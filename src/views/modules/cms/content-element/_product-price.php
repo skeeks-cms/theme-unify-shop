@@ -71,8 +71,9 @@ JS
         <? endif; ?>
     </div>
 
-    <div class="d-flex flex-row">
-        <span class="d-flex flex-row sx-quantity-group">
+    <div class="sx-quantity-wrapper">
+        <div class="d-flex flex-row">
+        <span class="d-flex flex-row sx-quantity-group sx-main-quantity-group">
             <div class="my-auto sx-minus">-</div>
             <div class="my-auto">
                 <input
@@ -83,32 +84,53 @@ JS
             </div>
             <div class="my-auto sx-plus">+</div>
         </span>
-        <div class="my-auto g-ml-10">
-            <?= $shopProduct->measure->symbol; ?>
+            <div class="my-auto g-ml-10">
+                <?= $shopProduct->measure->symbol; ?>
+            </div>
         </div>
 
         <? if ($shopProduct->measure_matches_jsondata) : ?>
             <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
                 <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
                 <? if ($shopProduct->measure_ratio >= $count) : ?>
-                    <div class="my-auto g-ml-10">
+                    <div class="row">
+                    <!--<div class="my-auto g-ml-10">
                         =
-                    </div>
-                    <div class="my-auto g-ml-10">
-                        <?
-                        if ($count / $shopProduct->measure_ratio >= 1) {
-                            echo $count / $shopProduct->measure_ratio;
-                        } else {
-                            echo round($shopProduct->measure_ratio / $count);
-                        }
-                        ?>
-                        <?= $measure->symbol; ?>
+                    </div>-->
+                    <div class="my-auto g-ml-10 d-flex flex-row">
+                        <span class="d-flex flex-row sx-quantity-group sx-secondary-quantity-group">
+                            <div class="my-auto sx-minus">-</div>
+                            <div class="my-auto">
+                                <input
+                                        value="<?
+                                        if ($count / $shopProduct->measure_ratio >= 1) {
+                                            echo $count / $shopProduct->measure_ratio;
+                                        } else {
+                                            echo round($shopProduct->measure_ratio / $count);
+                                        }
+                                        ?>"
+                                        class="form-control sx-quantity-input"
+                                        data-measure_ratio="<?
+                                        if ($count / $shopProduct->measure_ratio >= 1) {
+                                            echo $count / $shopProduct->measure_ratio;
+                                        } else {
+                                            echo round($shopProduct->measure_ratio / $count);
+                                        }
+                                        ?>"
+                                />
+                            </div>
+                            <div class="my-auto sx-plus">+</div>
+                        </span>
+                        <div class="my-auto g-ml-10">
+                            <?= $measure->symbol; ?>
+                        </div>
                     </div>
                 <? else: ?>
                     <div class="my-auto g-ml-10" style="color: gray; font-size: 12px;">
                         (1<?= $measure->symbol; ?> = <?= $count; ?><?= $shopProduct->measure->symbol; ?>)
                     </div>
                 <? endif; ?>
+                </div>
 
 
             <? endforeach; ?>
@@ -223,7 +245,7 @@ JS
         <? if ($offerShopProduct->quantity > 0) : ?>
 
 
-            <div class="d-flex flex-row">
+            <div class="d-flex flex-row sx-quantity-wrapper">
                 <span class="d-flex flex-row sx-quantity-group">
                     <div class="my-auto sx-minus">-</div>
                     <div class="my-auto">
@@ -239,26 +261,44 @@ JS
                     <?= $offerShopProduct->measure->symbol; ?>
                 </div>
 
-                <? if ($offerShopProduct->measure_matches_jsondata) : ?>
-                    <? foreach ($offerShopProduct->measureMatches as $code => $count) : ?>
+                <? if ($shopProduct->measure_matches_jsondata) : ?>
+                    <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
                         <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
-                        <? if ($offerShopProduct->measure_ratio >= $count) : ?>
+                        <? if ($shopProduct->measure_ratio >= $count) : ?>
                             <div class="my-auto g-ml-10">
                                 =
                             </div>
-                            <div class="my-auto g-ml-10">
-                                <?
-                                if ($count / $offerShopProduct->measure_ratio >= 1) {
-                                    echo $count / $offerShopProduct->measure_ratio;
-                                } else {
-                                    echo round($offerShopProduct->measure_ratio / $count);
-                                }
-                                ?>
-                                <?= $measure->symbol; ?>
+                            <div class="my-auto g-ml-10 d-flex flex-row">
+                        <span class="d-flex flex-row sx-quantity-group sx-secondary-quantity-group">
+                            <div class="my-auto sx-minus">-</div>
+                            <div class="my-auto">
+                                <input
+                                        value="<?
+                                        if ($count / $shopProduct->measure_ratio >= 1) {
+                                            echo $count / $shopProduct->measure_ratio;
+                                        } else {
+                                            echo round($shopProduct->measure_ratio / $count);
+                                        }
+                                        ?>"
+                                        class="form-control sx-quantity-input"
+                                        data-measure_ratio="<?
+                                        if ($count / $shopProduct->measure_ratio >= 1) {
+                                            echo $count / $shopProduct->measure_ratio;
+                                        } else {
+                                            echo round($shopProduct->measure_ratio / $count);
+                                        }
+                                        ?>"
+                                />
+                            </div>
+                            <div class="my-auto sx-plus">+</div>
+                        </span>
+                                <div class="my-auto g-ml-10">
+                                    <?= $measure->symbol; ?>
+                                </div>
                             </div>
                         <? else: ?>
                             <div class="my-auto g-ml-10" style="color: gray; font-size: 12px;">
-                                (1<?= $measure->symbol; ?> = <?= $count; ?><?= $offerShopProduct->measure->symbol; ?>)
+                                (1<?= $measure->symbol; ?> = <?= $count; ?><?= $shopProduct->measure->symbol; ?>)
                             </div>
                         <? endif; ?>
 

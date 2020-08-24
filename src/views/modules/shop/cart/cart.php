@@ -87,7 +87,7 @@ JS
                                                 <? endforeach; ?>
                                             </div>
                                         <? endif; ?>
-                                        <div class="d-flex flex-row">
+                                        <div class="d-flex flex-row sx-quantity-wrapper">
                                             <!--<input type="number" value="<? /*= round($orderItem->quantity); */ ?>" name="qty"
                                                            class="sx-basket-quantity" maxlength="3" max="999" min="1"
                                                            data-basket_id="<? /*= $orderItem->id; */ ?>"/>-->
