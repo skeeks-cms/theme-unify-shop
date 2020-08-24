@@ -53,7 +53,7 @@ if ($shopProduct->shopMainProduct->isOfferProduct) {
 }
 
 //Работа с ценой
-$priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
+$priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
 
 $singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage::beginWidget('product-page');
 $singlPage->addCss();

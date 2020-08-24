@@ -48,6 +48,16 @@ JS
                     <? endif; ?>
                 </span>
                 <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
+                <?
+                $info = [];
+                foreach ($priceHelper->applyedDiscounts as $shopDiscount) {
+                    $info[] = $shopDiscount->notes;
+                }
+                $infoDisocount = implode("", $info);
+                ?>
+                <span class="sx-price-info h4">
+                    <i class="far fa-question-circle" title="<?php echo $infoDisocount; ?>"></i>
+                </span>
             <? else: ?>
                 <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
                     <span class="current ss-price sx-new-price h1 g-color-primary">
@@ -189,6 +199,16 @@ JS
                 <? if ($priceHelper->hasDiscount) : ?>
                     <span class="current ss-price sx-new-price h1 g-color-primary"><?= $priceHelper->minMoney; ?></span>
                     <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
+                    <?
+                    $info = [];
+                    foreach ($priceHelper->applyedDiscounts as $shopDiscount) {
+                        $info[] = $shopDiscount->notes;
+                    }
+                    $infoDisocount = implode("", $info);
+                    ?>
+                    <span class="sx-price-info h4">
+                    <i class="far fa-question-circle" title="<?php echo $infoDisocount; ?>"></i>
+                </span>
                 <? else: ?>
                     <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
                         <span class="current ss-price sx-new-price h1 g-color-primary"><?= $priceHelper->minMoney; ?></span>
@@ -313,6 +333,16 @@ JS
                     <? if ($priceHelper->hasDiscount) : ?>
                         <span class="current ss-price h1 sx-new-price g-color-primary"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minMoney; ?></span>
                         <span class="current ss-price h3 sx-old-price"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->basePrice->money; ?></span>
+                        <?
+                        $info = [];
+                        foreach ($priceHelper->applyedDiscounts as $shopDiscount) {
+                            $info[] = $shopDiscount->notes;
+                        }
+                        $infoDisocount = implode("", $info);
+                        ?>
+                        <span class="sx-price-info h4">
+                    <i class="far fa-question-circle" title="<?php echo $infoDisocount; ?>"></i>
+                </span>
                     <? else: ?>
                         <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
                             <span class="current ss-price h1 sx-new-price g-color-primary"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minMoney; ?></span>
