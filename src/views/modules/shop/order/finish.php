@@ -247,7 +247,7 @@ JS
 
                                 <? if ($model->weight > 0) : ?>
                                     <span class="clearfix">
-                                    <span class="float-right"><?= $model->weight; ?> г.</span>
+                                    <span class="float-right"><?= $model->weightFormatted; ?></span>
                                     <span class="float-left">Вес</span>
                                 </span>
                                 <? endif; ?>

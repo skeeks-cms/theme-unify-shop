@@ -676,3 +676,7 @@
 .sx-product-info-wrapper .nav-link.active {
     font-weight: bold;
 }
+
+.sx-order-items .sx-order-item {
+    padding: 10px;
+}
