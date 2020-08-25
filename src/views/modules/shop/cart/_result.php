@@ -26,7 +26,7 @@ JS
 ?>
 <div
         id="stickyblock-start"
-        class="g-pa-5 js-sticky-block"
+        class="js-sticky-block"
         data-start-point="#stickyblock-start"
         data-has-sticky-header="true"
         data-end-point=".sx-footer"
