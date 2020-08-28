@@ -107,14 +107,18 @@ $singlPage::end();
                     <div class="product-info-header">
 
 
-                        <?= $this->render("@app/views/modules/cms/content-element/_product-right-top-info", [
+                        <?
+                                                /*var_dump($shopOfferChooseHelper);die;*/
+
+                        echo $this->render("@app/views/modules/cms/content-element/_product-right-top-info", [
                             'singlPage'   => $singlPage,
                             'model'       => $model,
                             //'shopProduct'           => $shopProduct,
                             'priceHelper' => $priceHelper,
                         ]); ?>
 
-                        <?= $this->render("@app/views/modules/cms/content-element/_product-price", [
+                        <?
+                        echo $this->render("@app/views/modules/cms/content-element/_product-price", [
                             'model'                 => $model,
                             'shopProduct'           => $shopProduct,
                             'priceHelper'           => $priceHelper,
