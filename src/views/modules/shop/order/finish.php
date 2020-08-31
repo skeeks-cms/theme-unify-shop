@@ -30,8 +30,13 @@ CSS
     <div class="col-12">
         <div class="row">
             <div class="col-12">
-                <h1 style="margin-bottom: 0px;">Заказ <span class="g-color-primary">№<?= $model->id; ?></span> на сумму <span
+                <h1 style="margin-bottom: 0px;">Заказ <span class="g-color-primary">№<?= $model->id; ?></span> 
+                    <?php if((float) $model->moneyOriginal->amount > 0) : ?>
+                        на сумму <span
                             class="g-color-primary"><?= \Yii::$app->money->convertAndFormat($model->moneyOriginal); ?></span>
+                    <?php endif; ?>
+                    
+                    
                 </h1>
                 <p style="color: gray;">от <?= \Yii::$app->formatter->asDatetime($model->created_at); ?></p>
             </div>

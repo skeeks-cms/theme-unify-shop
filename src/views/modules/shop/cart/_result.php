@@ -31,14 +31,18 @@ JS
         data-has-sticky-header="true"
         data-end-point=".sx-footer"
 >
-    <div class="g-bg-gray-light-v5 g-pa-20 g-pb-50 mb-4">
+    <div class="g-bg-gray-light-v5 g-pa-20 g-pb-20 mb-4">
         <div class="toggle active" style="display: block;">
+
+            <?php if ((float)\Yii::$app->shop->shopUser->shopOrder->money->amount > 0) : ?>
+
+
             <div class="toggle-content" style="display: block;">
 
-                
-            <?/*= \skeeks\cms\shopDiscountCoupon\ShopDiscountCouponWidget::widget(); */?>
-                
-            <span class="clearfix">
+
+                <? /*= \skeeks\cms\shopDiscountCoupon\ShopDiscountCouponWidget::widget(); */ ?>
+
+                <span class="clearfix">
                 <span class="float-right"><?= \Yii::$app->shop->shopUser->shopOrder->moneyOriginal; ?></span>
                 <strong class="pull-left">Товаров:</strong>
             </span>
@@ -75,6 +79,8 @@ JS
                 <strong class="pull-left">ИТОГ:</strong>
             </span>
                 <hr/>
+                <?php endif; ?>
+
                 <?= $submit; ?>
             </div>
         </div>
