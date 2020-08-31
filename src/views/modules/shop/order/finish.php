@@ -75,6 +75,11 @@ CSS
                         <div class="col-3">Доставка</div>
                         <div class="col-9">
                             <?php echo $model->shopDelivery->name; ?>
+                            <?php if ((float)$model->moneyDelivery->amount > 0) : ?>
+                                <span style="margin-left: 10px;">
+                                    <?php echo $model->moneyDelivery; ?>
+                            </span>
+                            <? endif; ?>
                         </div>
                     </div>
                 <?php endif; ?>
