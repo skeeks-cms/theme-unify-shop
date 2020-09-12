@@ -22,7 +22,7 @@ JS
 
 
 <!-- Basket -->
-<div class="u-basket d-inline-block g-valign-middle g-mx-0 g-mr-10 g-mr-15--lg" id="sx-top-cart">
+<div class="sx-header-menu-item" id="sx-top-cart">
     <a href="<?= \yii\helpers\Url::to(['/shop/cart']); ?>" class="sx-cart-small-open-trigger g-color-main g-text-underline--none--hover g-bg-cover" style="font-size: 24px !important;">
             <span class="u-badge-v1--sm g-top-5 g-right-5 g-color-white g-bg-primary g-rounded-50x sx-count-quantity" style="<?= \Yii::$app->shop->cart->quantity > 0 ? "" : "display: none;"; ?>">
                 <?= \Yii::$app->shop->cart->quantity ? (int) \Yii::$app->shop->cart->quantity : ""; ?>

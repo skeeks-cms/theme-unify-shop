@@ -9,7 +9,7 @@
 ?>
 
 <? $favoriteProducts = \Yii::$app->shop->cart->getShopFavoriteProducts()->count(); ?>
-    <div class="sx-favorite-products d-inline-block g-valign-middle g-mx-20--lg"
+    <div class="sx-header-menu-item sx-favorite-products"
          data-total="<?= $favoriteProducts; ?>"
     >
         <a href="<?= \yii\helpers\Url::to(['/shop/favorite']) ?>" data-pjax="0" class="g-text-underline--none--hover" style="font-size: 24px !important; position: relative;">
