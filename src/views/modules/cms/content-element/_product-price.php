@@ -41,31 +41,54 @@ JS
         <? if ($priceHelper) : ?>
             <? if ($priceHelper->hasDiscount) : ?>
 
-                <span class="current ss-price sx-new-price h1 g-color-primary">
+                <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip">
                     <?= $priceHelper->minMoney; ?>
                     <? if ($shopProduct->measure_ratio != 1) : ?>
                         / <?= $shopProduct->measure->symbol; ?>
                     <? endif; ?>
                 </span>
-                <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
+                <span class="current ss-price sx-old-price h3" title="Базовая цена, доступная для всех" data-toggle="tooltip"><?= $priceHelper->basePrice->money; ?></span>
                 <?
-                $info = [];
-                foreach ($priceHelper->applyedDiscounts as $shopDiscount) {
-                    $info[] = $shopDiscount->notes;
-                }
-                $infoDisocount = implode("", $info);
-                ?>
-                <span class="sx-price-info h4">
-                    <i class="far fa-question-circle" title="<?php echo $infoDisocount; ?>"></i>
-                </span>
+                        $info = [];
+                        foreach ($priceHelper->applyedDiscounts as $shopDiscount) {
+                            $info[] = $shopDiscount->notes;
+                        }
+
+                        if ($canViewTypePrices = \Yii::$app->shop->canViewTypePrices) {
+                            foreach ($canViewTypePrices as $canViewTypePrice)
+                            {
+                                $p = $shopProduct->getShopProductPrices()->andWhere(['type_price_id' => $canViewTypePrice->id])->one();
+                                $info[] = $p->money . " — " . $canViewTypePrice->name;
+                            }
+                        }
+                        $infoDisocount = implode("<br />", $info);
+                        ?>
+                        <span class="sx-price-info h4">
+                            <i class="far fa-question-circle" title="<?php echo $infoDisocount; ?>" data-toggle="tooltip" data-html="true"></i>
+                        </span>
             <? else: ?>
                 <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
-                    <span class="current ss-price sx-new-price h1 g-color-primary">
+                    <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip">
                         <?= $priceHelper->minMoney; ?>
                         <? if ($shopProduct->measure_ratio != 1) : ?>
                             / <?= $shopProduct->measure->symbol; ?>
                         <? endif; ?>
                     </span>
+
+                    <?php if ($canViewTypePrices = \Yii::$app->shop->canViewTypePrices) : ?>
+                        <?php foreach ($canViewTypePrices as $canViewTypePrice) : ?>
+                            <?php
+                            $p = $shopProduct->getShopProductPrices()->andWhere(['type_price_id' => $canViewTypePrice->id])->one();
+                            ?>
+                            <?php if($p && $canViewTypePrice->id != $priceHelper->minPrice->type_price_id) : ?>
+                                <div class="current ss-price h3 sx-new-price sx-second-price"><span title="<b><?php echo $canViewTypePrice->name; ?></b><br><?php echo $canViewTypePrice->description; ?>" data-html="true" data-toggle="tooltip"><?= $p->money; ?></span>
+                                    <span class="sx-price-info h4" title="<b><?php echo $canViewTypePrice->name; ?></b><br><?php echo $canViewTypePrice->description; ?>" data-html="true" data-toggle="tooltip">
+                                        <i class="far fa-question-circle"></i>
+                                    </span>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 <? endif; ?>
             <? endif; ?>
         <? endif; ?>
@@ -219,21 +242,45 @@ JS
             <link itemprop="availability" href="http://schema.org/InStock">
             <? if ($priceHelper) : ?>
                 <? if ($priceHelper->hasDiscount) : ?>
-                    <span class="current ss-price sx-new-price h1 g-color-primary"><?= $priceHelper->minMoney; ?></span>
-                    <span class="current ss-price sx-old-price h3"><?= $priceHelper->basePrice->money; ?></span>
+                    <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip"><?= $priceHelper->minMoney; ?></span>
+                    <span class="current ss-price sx-old-price h3" title="Базовая цена, доступная для всех" data-toggle="tooltip"><?= $priceHelper->basePrice->money; ?></span>
                     <?
-                    $info = [];
-                    foreach ($priceHelper->applyedDiscounts as $shopDiscount) {
-                        $info[] = $shopDiscount->notes;
-                    }
-                    $infoDisocount = implode("", $info);
-                    ?>
-                    <span class="sx-price-info h4">
-                    <i class="far fa-question-circle" title="<?php echo $infoDisocount; ?>"></i>
-                </span>
+                        $info = [];
+                        foreach ($priceHelper->applyedDiscounts as $shopDiscount) {
+                            $info[] = $shopDiscount->notes;
+                        }
+
+                        if ($canViewTypePrices = \Yii::$app->shop->canViewTypePrices) {
+                            foreach ($canViewTypePrices as $canViewTypePrice)
+                            {
+                                $p = $shopProduct->getShopProductPrices()->andWhere(['type_price_id' => $canViewTypePrice->id])->one();
+                                $info[] = $p->money . " — " . $canViewTypePrice->name;
+                            }
+                        }
+                        $infoDisocount = implode("<br />", $info);
+                        ?>
+                        <span class="sx-price-info h4">
+                            <i class="far fa-question-circle" title="<?php echo $infoDisocount; ?>" data-toggle="tooltip" data-html="true"></i>
+                        </span>
                 <? else: ?>
                     <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
-                        <span class="current ss-price sx-new-price h1 g-color-primary"><?= $priceHelper->minMoney; ?></span>
+                        <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip"><?= $priceHelper->minMoney; ?></span>
+
+                        <?php if ($canViewTypePrices = \Yii::$app->shop->canViewTypePrices) : ?>
+                            <?php foreach ($canViewTypePrices as $canViewTypePrice) : ?>
+                                <?php
+                                $p = $offerShopProduct->getShopProductPrices()->andWhere(['type_price_id' => $canViewTypePrice->id])->one();
+                                ?>
+                                <?php if($p && $canViewTypePrice->id != $priceHelper->minPrice->type_price_id) : ?>
+                                    <div class="current ss-price h3 sx-new-price sx-second-price"><span title="<b><?php echo $canViewTypePrice->name; ?></b><br><?php echo $canViewTypePrice->description; ?>" data-html="true" data-toggle="tooltip"><?= $p->money; ?></span>
+                                        <span class="sx-price-info h4" title="<b><?php echo $canViewTypePrice->name; ?></b><br><?php echo $canViewTypePrice->description; ?>" data-html="true" data-toggle="tooltip">
+                                            <i class="far fa-question-circle"></i>
+                                        </span>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+
                     <? endif; ?>
                 <? endif; ?>
             <? endif; ?>
@@ -373,21 +420,45 @@ JS
             <? if ($priceHelper) : ?>
                 <div class="">
                     <? if ($priceHelper->hasDiscount) : ?>
-                        <span class="current ss-price h1 sx-new-price g-color-primary"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minMoney; ?></span>
-                        <span class="current ss-price h3 sx-old-price"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->basePrice->money; ?></span>
+                        <span class="current ss-price h1 sx-new-price g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minMoney; ?></span>
+                        <span class="current ss-price h3 sx-old-price" title="Базовая цена, доступная для всех" data-toggle="tooltip"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->basePrice->money; ?></span>
                         <?
                         $info = [];
                         foreach ($priceHelper->applyedDiscounts as $shopDiscount) {
                             $info[] = $shopDiscount->notes;
                         }
-                        $infoDisocount = implode("", $info);
+
+                        if ($canViewTypePrices = \Yii::$app->shop->canViewTypePrices) {
+                            foreach ($canViewTypePrices as $canViewTypePrice)
+                            {
+                                $p = $shopProduct->getShopProductPrices()->andWhere(['type_price_id' => $canViewTypePrice->id])->one();
+                                $info[] = $p->money . " — " . $canViewTypePrice->name;
+                            }
+                        }
+                        $infoDisocount = implode("<br />", $info);
                         ?>
                         <span class="sx-price-info h4">
-                    <i class="far fa-question-circle" title="<?php echo $infoDisocount; ?>"></i>
-                </span>
+                            <i class="far fa-question-circle" title="<?php echo $infoDisocount; ?>" data-toggle="tooltip" data-html="true"></i>
+                        </span>
                     <? else: ?>
                         <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
-                            <span class="current ss-price h1 sx-new-price g-color-primary"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minMoney; ?></span>
+                            <span class="current ss-price h1 sx-new-price g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $priceHelper->minMoney; ?></span>
+
+                            <?php if ($canViewTypePrices = \Yii::$app->shop->canViewTypePrices) : ?>
+                                <?php foreach ($canViewTypePrices as $canViewTypePrice) : ?>
+                                    <?php
+                                    $p = $shopProduct->getShopProductPrices()->andWhere(['type_price_id' => $canViewTypePrice->id])->one();
+                                    ?>
+                                    <?php if($p && $canViewTypePrice->id != $priceHelper->minPrice->type_price_id) : ?>
+                                        <div class="current ss-price h3 sx-new-price sx-second-price"><span title="<b><?php echo $canViewTypePrice->name; ?></b><br><?php echo $canViewTypePrice->description; ?>" data-html="true" data-toggle="tooltip"><?= \Yii::t('skeeks/unify-shop', 'from'); ?> <?= $p->money; ?></span>
+                                            <span class="sx-price-info h4" title="<b><?php echo $canViewTypePrice->name; ?></b><br><?php echo $canViewTypePrice->description; ?>" data-html="true" data-toggle="tooltip">
+                                                <i class="far fa-question-circle"></i>
+                                            </span>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+
                         <? endif; ?>
                     <? endif; ?>
                 </div>

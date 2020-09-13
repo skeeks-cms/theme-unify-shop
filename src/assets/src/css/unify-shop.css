@@ -589,6 +589,9 @@
 }
 
 
+.sx-second-price {
+    color: #8a8a8a;
+}
 .sx-old-price {
     /*text-decoration: line-through;*/
     position: relative;
