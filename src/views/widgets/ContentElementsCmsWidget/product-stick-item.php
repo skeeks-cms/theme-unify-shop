@@ -33,10 +33,10 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
 ?>
 <div class="js-slide">
-    <div class="g-px-10">
+    <div class="g-px-5">
         <!-- Product -->
         <figure class="g-pos-rel g-mb-10">
-            <a class="" href="<?= $model->url; ?>" title="<?= $infoModel->name; ?>">
+            <a class="" href="<?= $model->url; ?>" target="_blank" title="<?= $infoModel->name; ?>">
                 <? if ($infoModel->image) : ?>
                     <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->image ? $infoModel->image->src : null,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
@@ -74,13 +74,13 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 
 
                 <div class="g-color-black mb-1 card-prod--title">
-                    <a class="sx-main-text-color g-color-primary--hover g-text-underline--none--hover sx-card-prod--title-a" href="<?= $model->url; ?>" title="<?= $infoModel->name; ?>">
+                    <a class="sx-main-text-color g-color-primary--hover g-text-underline--none--hover sx-card-prod--title-a" target="_blank" href="<?= $model->url; ?>" title="<?= $infoModel->name; ?>">
                         <?= $infoModel->name; ?>
                     </a>
                 </div>
-                <? if ($model->cmsTree) : ?>
-                    <a class="d-inline-block g-color-gray-dark-v5 g-font-size-13" href="<?= $model->cmsTree->url; ?>"><?= $model->cmsTree->name; ?></a>
-                <? endif; ?>
+                <?/* if ($model->cmsTree) : */?><!--
+                    <a class="d-inline-block g-color-gray-dark-v5 g-font-size-13" href="<?/*= $model->cmsTree->url; */?>"><?/*= $model->cmsTree->name; */?></a>
+                --><?/* endif; */?>
 
             </div>
             <!-- End Product Info -->

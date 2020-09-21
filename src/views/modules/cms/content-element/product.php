@@ -8,10 +8,13 @@
 /* @var $this yii\web\View */
 /* @var $model \skeeks\cms\shop\models\ShopCmsContentElement */
 skeeks\assets\unify\base\UnifyHsRatingAsset::register($this);
+\skeeks\assets\unify\base\UnifyHsPopupAsset::register($this);
+
 $this->registerJs(<<<JS
 $.HSCore.components.HSRating.init($('.js-rating-show'), {
   spacing: 2
 });
+sx.Shop.trigger("viewProduct");
 JS
 );
 $shopOfferChooseHelper = null;
