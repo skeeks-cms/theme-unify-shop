@@ -80,9 +80,6 @@ $this->registerCss(<<<CSS
         left: 55%;
     }
     
-    .slick-slide:focus {
-      outline: 0 none;
-    }
     
     .slick-transform-off .slick-track {
         -webkit-transform: none !important;
