@@ -37,6 +37,59 @@ $this->registerCss(<<<CSS
     .slick-current {
         cursor: zoom-in;
     }
+
+    .js-carousel .sx-images-carousel-arrows {
+        color: #999;
+        z-index: 10;
+        width: 45px;
+        height: 45px;
+        position: absolute;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        /*border: 1px solid #999;*/
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 25px;
+        font-family: hs-icons;
+    }
+
+    .js-carousel .sx-images-carousel-arrows.sx-left {
+        left: -20px;
+    }
+    .js-carousel .sx-images-carousel-arrows.sx-right {
+        right: -20px;
+    }
+
+    .js-carousel .sx-images-carousel-arrows::before {
+        display: inline-block;
+        top: 50%;
+        left: 50%;
+        vertical-align: top;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        -ms-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        position: absolute;
+    }
+
+    .js-carousel .sx-images-carousel-arrows.sx-left::before {
+        left: 45%;
+    }
+    .js-carousel .sx-images-carousel-arrows.sx-right::before {
+        left: 55%;
+    }
+    
+    .slick-slide:focus {
+      outline: 0 none;
+    }
+    
+    .slick-transform-off .slick-track {
+        -webkit-transform: none !important;
+        -ms-transform: none !important;
+        transform: none !important;
+    }
+
 CSS
 );
 ?>
@@ -58,9 +111,9 @@ if ($productImages = $model->productImages) {
     <div id="carouselCus1" class="js-carousel g-pt-10 g-mb-10 sx-stick-slider"
          data-infinite="true"
          data-fade="true"
-         data-arrows-classes="u-arrow-v1 g-brd-around g-brd-gray-dark-v5 g-absolute-centered--y g-width-45 g-height-45 g-font-size-25 g-color-gray-dark-v5 g-color-primary--hover rounded-circle"
-         data-arrow-left-classes="fa fa-angle-left g-left-minus-20"
-         data-arrow-right-classes="fa fa-angle-right g-right-minus-20"
+         data-arrows-classes="u-arrow-v1 g-color-primary--hover sx-images-carousel-arrows"
+         data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left g-left-minus-20"
+         data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right g-right-minus-20"
          data-nav-for="#carouselCus2">
 
         <? foreach ($images as $image) : ?>

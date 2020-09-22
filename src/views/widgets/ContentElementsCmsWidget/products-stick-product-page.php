@@ -60,8 +60,8 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price)   {
                 ],
 
                 'arrows-classes'      => "u-arrow-v1 g-absolute-centered--y g-width-45 g-height-45 g-font-size-30 g-color-gray-dark-v5 g-color-primary--hover rounded-circle",
-                'arrow-left-classes'  => "fa fa-angle-left g-left-0",
-                'arrow-right-classes' => "fa fa-angle-right g-right-0",
+                'arrow-left-classes'  => "hs-icon hs-icon-arrow-left g-left-0",
+                'arrow-right-classes' => "hs-icon hs-icon-arrow-right g-right-0",
             ],
         ],
         'itemOptions'  => [
