@@ -688,6 +688,26 @@
     margin-bottom: 0px;
 }
 
+.btn-select-option {
+    color: #333;
+    border-color: #333;
+    background-color: transparent;
+}
+.btn-select-option .sx-no-check {
+    opacity: 0.5;
+}
+.btn-select-option:hover .sx-no-check {
+    opacity: 1;
+}
+.btn-select-option:focus, .btn-select-option.active {
+  color: #fff;
+  background-color: #333;
+}
+.btn-select-option:hover {
+  color: #fff;
+  background-color: #333;
+}
+
 /**
  * Оформление шагов в корзине
  */

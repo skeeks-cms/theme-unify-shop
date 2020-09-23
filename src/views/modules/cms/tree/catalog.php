@@ -6,7 +6,9 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
-/* @var $model \skeeks\cms\models\CmsTree */
+/** 
+ * @var $model \skeeks\cms\models\CmsTree 
+ */
 $catalogSettings = \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogPage::beginWidget("catalog");
 $catalogSettings::end();
 
@@ -43,6 +45,14 @@ $catalogSettings::end();
                 </div>
                 <?
                 $isShowFilters = (bool)$catalogSettings->is_allow_filters;
+                /**
+                 * @var $model \skeeks\cms\models\Tree
+                 */
+                if ($maxLevelTree = $model->getDescendants()->limit(1)->orderBy(['level' => SORT_DESC])->one()) {
+                    if (($maxLevelTree->level - $model->level) > 1) {
+                        $isShowFilters = false;
+                    }
+                }
 
                 $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
                 $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
