@@ -5,11 +5,11 @@
  * @copyright 2010 SkeekS (СкикС)
  * @date 26.07.2015
  */
+
 namespace skeeks\cms\themes\unifyshop\assets;
 
 use skeeks\assets\unify\base\UnifyHsCarouselAsset;
 use skeeks\assets\unify\base\UnifyHsScrollbarAsset;
-use skeeks\cms\themes\unify\assets\UnifyDefaultAsset;
 use skeeks\cms\themes\unify\assets\UnifyThemeAsset;
 use yii\web\AssetBundle;
 
@@ -21,7 +21,7 @@ class UnifyThemeShopAsset extends AssetBundle
     public $sourcePath = '@skeeks/cms/themes/unifyshop/assets/src';
 
     public $css = [
-        'css/unify-shop.css'
+        'css/unify-shop.css',
     ];
     public $js = [
         'vendor/jquery.transform2d.js',
@@ -30,6 +30,6 @@ class UnifyThemeShopAsset extends AssetBundle
     public $depends = [
         UnifyThemeAsset::class,
         UnifyHsScrollbarAsset::class,
-        UnifyHsCarouselAsset::class
+        UnifyHsCarouselAsset::class,
     ];
 }
