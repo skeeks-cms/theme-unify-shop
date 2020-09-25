@@ -107,6 +107,7 @@
     min-height: 36px;
     margin: 0 0 16px;
     line-height: 19px;
+    overflow: hidden;
 }
 
 .card-prod .card-prod--price {
