@@ -48,10 +48,13 @@ $catalogSettings::end();
                 /**
                  * @var $model \skeeks\cms\models\Tree
                  */
-                if ($maxLevelTree = $model->getDescendants()->limit(1)->orderBy(['level' => SORT_DESC])->one()) {
+                /*if ($maxLevelTree = $model->getDescendants()->limit(1)->orderBy(['level' => SORT_DESC])->one()) {
                     if (($maxLevelTree->level - $model->level) > 1) {
                         $isShowFilters = false;
                     }
+                }*/
+                if ($model->activeChildren) {
+                    $isShowFilters = false;
                 }
 
                 $filtersWidget = \skeeks\cms\themes\unify\widgets\filters\FiltersWidget::begin();
