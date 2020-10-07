@@ -7,7 +7,7 @@
  */
 /* @var $this yii\web\View */
 ?>
-<? if ($this->theme->is_show_home_slider) : ?>
+<? if ($this->theme->is_show_home_slider && !\Yii::$app->mobileDetect->isMobile) : ?>
     <?
     $content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'slide'])->one();
     ?>
