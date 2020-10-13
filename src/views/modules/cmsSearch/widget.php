@@ -7,6 +7,7 @@
  */
 /* @var $this   yii\web\View */
 /* @var $widget \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget */
+
 ?>
 
 <? echo \yii\widgets\ListView::widget([

@@ -24,8 +24,9 @@
                         <?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
                             'namespace' => 'ContentElementsCmsWidget-search-result',
                             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
-                            'viewFile' => '@app/views/modules/cmsSearch/widget',
+                            'viewFile' => '@app/views/widgets/ContentElementsCmsWidget/products-list',
                             'enabledCurrentTree' => \skeeks\cms\components\Cms::BOOL_N,
+                            'pageSize' => 12,
                             'active' => "Y",
                             'dataProviderCallback' => function (\yii\data\ActiveDataProvider $dataProvider) {
                                 \Yii::$app->cmsSearch->buildElementsQuery($dataProvider->query);
