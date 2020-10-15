@@ -68,7 +68,7 @@ JS
             <? endif; ?>
             <? if ($model->productDescriptionFull) : ?>
                 <div class="tab-pane fade show" id="sx-description" role="tabpanel">
-                    <div class="card-body-1">
+                    <div class="card-body-1 sx-content">
                         <?= $model->productDescriptionFull; ?>
                     </div>
                 </div>
