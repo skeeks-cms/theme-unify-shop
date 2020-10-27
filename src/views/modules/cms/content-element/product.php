@@ -146,7 +146,7 @@ $singlPage::end();
                                 </div>
                                 <?php if($brand->image) : ?>
                                 <div class="col-md-4 my-auto" style=" text-align: right;">
-                                    <img src="<?php echo $brand->image->src; ?>" style="max-height: 40px;" />
+                                    <img class="img-fluid" src="<?php echo $brand->image->src; ?>" style="max-height: 40px;" />
                                 </div>
                                 <?php endif; ?>
                                 
