@@ -7,22 +7,6 @@
  */
 /* @var $this yii\web\View */
 \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
-$this->registerJs(<<<JS
-
-$(window).on('load', function () {
-        // initialization of sticky blocks
-    setTimeout(function() { // important in this case
-      $.HSCore.components.HSStickyBlock.init('.js-sticky-block');
-    }, 1);
-    
-    $(document).on('pjax:complete', function() {
-      $.HSCore.components.HSStickyBlock.init('.js-sticky-block');
-    })
-
-  });
-JS
-);
-
 ?>
 <div
         id="stickyblock-start"
