@@ -24,10 +24,10 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
         'class' => '',
         'tag'   => 'div',
     ],
-    'itemOptions'  => [
+    'itemOptions'  => \yii\helpers\ArrayHelper::merge([
         'tag'   => 'div',
         'class' => 'col-lg-4 col-sm-6 product-item',
-    ],
+    ], (array) @$itemOptions),
     'pager'        => [
         'container' =>  '.list-view-products',
         'item' =>  '.product-item',

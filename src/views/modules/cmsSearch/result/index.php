@@ -33,6 +33,11 @@
                                 \Yii::$app->cmsSearch->logResult($dataProvider);
                                 \Yii::$app->shop->filterBaseContentElementQuery($dataProvider->query);
                             },
+                            'params' => [
+                                'itemOptions' => [
+                                    'class' => 'col-lg-3 col-sm-6 product-item'
+                                ]
+                            ]
                         ]) ?>
                     </div>
                 </div>
