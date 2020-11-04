@@ -38,46 +38,29 @@ $this->registerCss(<<<CSS
         cursor: zoom-in;
     }
 
-    .js-carousel .sx-images-carousel-arrows {
+    .js-carousel .sx-arrows {
         color: #999;
         z-index: 10;
-        width: 45px;
-        height: 45px;
-        position: absolute;
-        top: 50%;
+        position: absolute !important;
+        top: 50% !important;
         -webkit-transform: translateY(-50%);
         -ms-transform: translateY(-50%);
         transform: translateY(-50%);
-        /*border: 1px solid #999;*/
-        border-radius: 50%;
+        -webkit-backface-visibility: hidden;
         cursor: pointer;
-        font-size: 25px;
-        font-family: hs-icons;
     }
-
-    .js-carousel .sx-images-carousel-arrows.sx-left {
+    
+    .js-carousel .sx-arrows.sx-left {
         left: -20px;
     }
-    .js-carousel .sx-images-carousel-arrows.sx-right {
+    .js-carousel .sx-arrows.sx-right {
         right: -20px;
     }
-
-    .js-carousel .sx-images-carousel-arrows::before {
-        display: inline-block;
-        top: 50%;
-        left: 50%;
-        vertical-align: top;
-        -webkit-transform: translateX(-50%) translateY(-50%);
-        -ms-transform: translateX(-50%) translateY(-50%);
-        transform: translateX(-50%) translateY(-50%);
-        position: absolute;
-    }
-
-    .js-carousel .sx-images-carousel-arrows.sx-left::before {
-        left: 45%;
-    }
-    .js-carousel .sx-images-carousel-arrows.sx-right::before {
-        left: 55%;
+    
+    .js-carousel .sx-images-carousel-arrows {
+        /*width: 45px;
+        height: 45px;*/
+        font-size: 25px;
     }
     
     
@@ -105,16 +88,16 @@ if ($productImages = $model->productImages) {
 
 ?>
 <? if ($images) : ?>
-    <div id="carouselCus1" class="js-carousel g-pt-10 g-mb-10 sx-stick-slider"
+    <div id="carouselCus1" class="js-carousel sx-stick-slider"
          data-infinite="true"
          data-fade="true"
-         data-arrows-classes="u-arrow-v1 g-color-primary--hover sx-images-carousel-arrows"
-         data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left g-left-minus-20"
-         data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right g-right-minus-20"
+         data-arrows-classes="g-color-primary--hover sx-arrows sx-images-carousel-arrows"
+         data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left"
+         data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right"
          data-nav-for="#carouselCus2">
 
         <? foreach ($images as $image) : ?>
-            <div class="js-slide g-bg-cover">
+            <div class="js-slide">
                 <!--w-100-->
                 <a class="sx-fancybox-gallary" data-fancybox="images" href="<?= $image->src; ?>">
                     <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
@@ -130,19 +113,19 @@ if ($productImages = $model->productImages) {
     </div>
 
     <? if (count($images) > 1) : ?>
-        <div id="carouselCus2" class="js-carousel text-center u-carousel-v3 g-mx-minus-5 sx-stick-navigation"
+        <div id="carouselCus2" class="js-carousel text-center g-mx-minus-5 sx-stick-navigation"
              data-infinite="true"
              data-center-mode="true"
              data-slides-show="8"
              data-is-thumbs="true"
              data-focus-on-select="false"
              data-nav-for="#carouselCus1"
-             data-arrows-classes="u-arrow-v1 g-absolute-centered--y g-width-45 g-height-45 g-font-size-30 g-color-gray-dark-v5 g-color-primary--hover rounded-circle"
-             data-arrow-left-classes="fa fa-angle-left g-left-minus-40"
-             data-arrow-right-classes="fa fa-angle-right g-right-minus-40"
+             data-arrows-classes="sx-arrows g-color-primary--hover"
+             data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left"
+             data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right"
         >
             <? foreach ($images as $image) : ?>
-                <div class="js-slide g-cursor-pointer g-px-5">
+                <div class="js-slide">
                     <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
                             'w' => 75,
@@ -155,12 +138,12 @@ if ($productImages = $model->productImages) {
         </div>
     <? endif; ?>
 <? else: ?>
-    <div id="carouselCus1" class="js-carousel g-pt-10 g-mb-10 sx-stick-slider"
+    <div id="carouselCus1" class="js-carousel sx-stick-slider"
          data-infinite="true"
          data-fade="true"
          data-arrows-classes="u-arrow-v1 g-brd-around g-brd-gray-dark-v5 g-absolute-centered--y g-width-45 g-height-45 g-font-size-25 g-color-gray-dark-v5 g-color-primary--hover rounded-circle"
-         data-arrow-left-classes="fa fa-angle-left g-left-minus-20"
-         data-arrow-right-classes="fa fa-angle-right g-right-minus-20"
+         data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left"
+         data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right"
          data-nav-for="#carouselCus2">
         <div class="js-slide g-bg-cover">
             <!--w-100-->

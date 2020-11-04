@@ -93,9 +93,9 @@ $singlPage::end();
         </div>
 
 
-        <div class="row g-mt-20">
+        <div class="row" style="margin-top: 20px;">
             <div class="col-md-<?= $singlPage->width_col_images; ?>">
-                <div class="sx-product-images g-ml-40 g-mr-40">
+                <div class="sx-product-images">
                     <?= $this->render("_product-images", [
                         'model' => $model,
                     ]); ?>
