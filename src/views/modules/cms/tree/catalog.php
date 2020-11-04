@@ -6,18 +6,18 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
-/** 
- * @var $model \skeeks\cms\models\CmsTree 
+/**
+ * @var $model \skeeks\cms\models\CmsTree
  */
 $catalogSettings = \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogPage::beginWidget("catalog");
 $catalogSettings::end();
 
 ?>
-<section class="g-mt-0 g-pb-0">
+<section class="">
     <div class="container sx-container">
         <? /* $pjax = \skeeks\cms\widgets\Pjax::begin(); */ ?>
         <div class="row">
-            <div class="order-md-2 g-py-20 g-px-15 sx-content-col-main">
+            <div class="order-md-2 sx-content-col-main">
                 <?= $this->render('@app/views/breadcrumbs', [
                     'model'      => $model,
                     'isShowLast' => true,
@@ -37,6 +37,7 @@ $catalogSettings::end();
                     $widget::end();
                     ?>
                 <? endif; ?>
+
                 <div class="row">
                     <? if ($catalogSettings->is_allow_filters) : ?>
                         <div class="col-6"><a href="#" class="sx-btn-filter btn btn-block g-valign-middle text-left">Фильтры <i class="fa fa-angle-down pull-right g-pt-5" aria-hidden="true"></i></a></div>
@@ -72,9 +73,9 @@ $catalogSettings::end();
 
 
                 $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("shop-product-list", [
-                    'pageSize'             => 15,
-                    'active'               => "Y",
-                    'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::className(),
+                    'pageSize'            => 15,
+                    'active'              => "Y",
+                    'contentElementClass' => \skeeks\cms\shop\models\ShopCmsContentElement::className(),
                 ]);
 
                 $widgetElements->viewFile = '@app/views/widgets/ContentElementsCmsWidget/products-list';
@@ -102,7 +103,7 @@ $catalogSettings::end();
                     if ($show_filter_property_ids = \Yii::$app->skeeks->site->shopSite->show_filter_property_ids) {
                         $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => $show_filter_property_ids]);
                     }
-                    
+
                     /*$rpQuery->andWhere([
                         'cmap.cms_content_id' => $model->tree_id,
                     ]);*/
@@ -143,7 +144,7 @@ $catalogSettings::end();
 
             </div>
 
-            <div class="order-md-1 g-py-20 g-px-15 g-bg-secondary sx-content-col-left" style="">
+            <div class="order-md-1 g-bg-secondary sx-content-col-left" style="">
                 <?= $this->render('@app/views/modules/cms/tree/_catalog-left-col', [
                     'catalogSettings' => $catalogSettings,
                     'filtersWidget'   => $filtersWidget,
