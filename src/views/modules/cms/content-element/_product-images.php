@@ -147,7 +147,7 @@ if ($productImages = $model->productImages) {
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
                             'w' => 75,
                             'h' => 75,
-                            'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                            'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
                         ]), $model->code
                     ); ?>" alt="<?= $model->name; ?>">
                 </div>
