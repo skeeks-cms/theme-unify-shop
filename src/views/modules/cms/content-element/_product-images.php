@@ -7,6 +7,7 @@
  */
 /* @var $this yii\web\View */
 /* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
+\skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
 $this->registerJs(<<<JS
 
 _.delay(function() {
@@ -34,42 +35,9 @@ JS
 );
 
 $this->registerCss(<<<CSS
-    .slick-current {
-        cursor: zoom-in;
-    }
-
-    .js-carousel .sx-arrows {
-        color: #999;
-        z-index: 10;
-        position: absolute !important;
-        top: 50% !important;
-        -webkit-transform: translateY(-50%);
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);
-        -webkit-backface-visibility: hidden;
-        cursor: pointer;
-    }
-    
-    .js-carousel .sx-arrows.sx-left {
-        left: -20px;
-    }
-    .js-carousel .sx-arrows.sx-right {
-        right: -20px;
-    }
-    
-    .js-carousel .sx-images-carousel-arrows {
-        /*width: 45px;
-        height: 45px;*/
-        font-size: 25px;
-    }
-    
-    
-    .slick-transform-off .slick-track {
-        -webkit-transform: none !important;
-        -ms-transform: none !important;
-        transform: none !important;
-    }
-
+.slick-current {
+    cursor: zoom-in;
+}
 CSS
 );
 ?>
@@ -88,12 +56,12 @@ if ($productImages = $model->productImages) {
 
 ?>
 <? if ($images) : ?>
-    <div id="carouselCus1" class="js-carousel sx-stick-slider"
+    <div id="carouselCus1" class="js-carousel sx-stick sx-stick-slider"
          data-infinite="true"
          data-fade="true"
-         data-arrows-classes="g-color-primary--hover sx-arrows sx-images-carousel-arrows"
-         data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left"
-         data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right"
+         data-arrows-classes="g-color-primary--hover sx-arrows sx-images-carousel-arrows sx-color-silver"
+         data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left sx-minus-20"
+         data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right sx-minus-20"
          data-nav-for="#carouselCus2">
 
         <? foreach ($images as $image) : ?>
@@ -113,14 +81,14 @@ if ($productImages = $model->productImages) {
     </div>
 
     <? if (count($images) > 1) : ?>
-        <div id="carouselCus2" class="js-carousel text-center g-mx-minus-5 sx-stick-navigation"
+        <div id="carouselCus2" class="js-carousel text-center g-mx-minus-5 sx-stick sx-stick-navigation"
              data-infinite="true"
              data-center-mode="true"
              data-slides-show="8"
              data-is-thumbs="true"
              data-focus-on-select="false"
              data-nav-for="#carouselCus1"
-             data-arrows-classes="sx-arrows g-color-primary--hover"
+             data-arrows-classes="sx-arrows g-color-primary--hover sx-color-silver"
              data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left"
              data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right"
         >
@@ -138,7 +106,7 @@ if ($productImages = $model->productImages) {
         </div>
     <? endif; ?>
 <? else: ?>
-    <div id="carouselCus1" class="js-carousel sx-stick-slider"
+    <div id="carouselCus1" class="js-carousel sx-stick sx-stick-slider"
          data-infinite="true"
          data-fade="true"
          data-arrows-classes="u-arrow-v1 g-brd-around g-brd-gray-dark-v5 g-absolute-centered--y g-width-45 g-height-45 g-font-size-25 g-color-gray-dark-v5 g-color-primary--hover rounded-circle"

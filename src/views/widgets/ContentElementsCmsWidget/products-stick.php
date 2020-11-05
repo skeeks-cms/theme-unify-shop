@@ -7,6 +7,9 @@
  */
 /* @var $this   yii\web\View */
 /* @var $widget \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget */
+
+\skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
+
 $query = $widget->dataProvider->query;
 if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price)   {
     $query->joinWith('shopProduct.shopProductPrices as pricesFilter');
@@ -27,7 +30,7 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price)   {
         'itemView'     => 'product-stick-item',
         'emptyText'    => '',
         'options'      => [
-            'class' => 'js-carousel g-pb-0 g-mx-minus-10',
+            'class' => 'js-carousel sx-stick',
             'tag'   => 'div',
             'data'  => [
                 'slidesToShow' => (int)\Yii::$app->unifyShopTheme->product_slider_items,
@@ -59,9 +62,9 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price)   {
 
                 ],
 
-                'arrows-classes'      => "u-arrow-v1 g-absolute-centered--y g-width-45 g-height-45 g-font-size-30 g-color-gray-dark-v5 g-color-primary--hover rounded-circle",
-                'arrow-left-classes'  => "hs-icon hs-icon-arrow-left g-left-0",
-                'arrow-right-classes' => "hs-icon hs-icon-arrow-right g-right-0",
+                'arrows-classes'      => "g-color-primary--hover sx-arrows sx-color-silver",
+                'arrow-left-classes'  => "hs-icon hs-icon-arrow-left sx-left",
+                'arrow-right-classes' => "hs-icon hs-icon-arrow-right sx-right",
             ],
         ],
         'itemOptions'  => [
