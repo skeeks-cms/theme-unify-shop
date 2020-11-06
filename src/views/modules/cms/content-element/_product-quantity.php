@@ -26,7 +26,7 @@ CSS
          */
         $forOrder = 0;
         if ($sources = \skeeks\cms\shop\models\ShopImportCmsSite::find()->cmsSite()->sort()->all()) : ?>
-            <div style="margin-top: 10px; font-size: 13px;" class="sx-quantities-wrapper">
+            <div style="margin-top: 10px;" class="sx-quantities-wrapper">
                 <?php foreach ($sources as $source) : ?>
                     <?php
                     $sourceProduct = $shopProduct->shopMainProduct->getShopAttachedProducts()->joinWith("cmsContentElement as cmsContentElement")
