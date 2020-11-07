@@ -26,15 +26,15 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
     ],
     'itemOptions'  => \yii\helpers\ArrayHelper::merge([
         'tag'   => 'div',
-        'class' => 'col-lg-4 col-sm-6 product-item',
+        'class' => 'col-lg-4 col-sm-6 sx-product-card-wrapper',
     ], (array) @$itemOptions),
     'pager'        => [
-        'container' =>  '.list-view-products',
-        'item' =>  '.product-item',
+        'container' =>  '.sx-product-list',
+        'item' =>  '.sx-product-card-wrapper',
         'class' => \skeeks\cms\themes\unify\widgets\ScrollAndSpPager::class
     ],
     //"\n{items}<div class=\"box-paging\">{pager}</div>{summary}<div class='sx-js-pagination'></div>",
     'layout'       => '<div class="row"><div class="col-md-12">{summary}</div></div>
-<div class="no-gutters row list-view-products">{items}</div>
+<div class="no-gutters row sx-product-list">{items}</div>
 <div class="row"><div class="col-md-12">{pager}</div></div>',
 ]) ?>

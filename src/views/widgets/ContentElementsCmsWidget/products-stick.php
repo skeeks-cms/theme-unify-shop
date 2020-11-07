@@ -11,9 +11,9 @@
 \skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
 
 $query = $widget->dataProvider->query;
-if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price)   {
+if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
     $query->joinWith('shopProduct.shopProductPrices as pricesFilter');
-    $query->andWhere(['>','`pricesFilter`.price',0]);
+    $query->andWhere(['>', '`pricesFilter`.price', 0]);
 }
 ?>
 <? if ($query->count()) : ?>
@@ -27,38 +27,42 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price)   {
 
     <? echo \yii\widgets\ListView::widget([
         'dataProvider' => $widget->dataProvider,
-        'itemView'     => 'product-stick-item',
+        'itemView'     => 'product-item',
         'emptyText'    => '',
+        'itemOptions'  => \yii\helpers\ArrayHelper::merge([
+            'tag'   => 'div',
+            'class' => 'sx-product-card-wrapper',
+        ], (array)@$itemOptions),
         'options'      => [
-            'class' => 'js-carousel sx-stick',
+            'class' => 'js-carousel sx-stick sx-products-stick',
             'tag'   => 'div',
             'data'  => [
                 'slidesToShow' => (int)\Yii::$app->unifyShopTheme->product_slider_items,
-                'responsive' =>  [
+                'responsive'   => [
                     [
                         'breakpoint' => 2600,
-                        'settings'     => [
-                          'slidesToShow' => (int)\Yii::$app->unifyShopTheme->product_slider_items,
-                        ]
+                        'settings'   => [
+                            'slidesToShow' => (int)\Yii::$app->unifyShopTheme->product_slider_items,
+                        ],
                     ],
                     [
                         'breakpoint' => 1025,
-                        'settings'     => [
+                        'settings'   => [
                             'slidesToShow' => 4,
-                        ]
+                        ],
                     ],
                     [
                         'breakpoint' => 480,
-                        'settings'     => [
+                        'settings'   => [
                             'slidesToShow' => 2,
-                        ]
+                        ],
                     ],
                     [
                         'breakpoint' => 376,
-                        'settings'     => [
+                        'settings'   => [
                             'slidesToShow' => 1,
-                        ]
-                    ]
+                        ],
+                    ],
 
                 ],
 
@@ -66,9 +70,6 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price)   {
                 'arrow-left-classes'  => "hs-icon hs-icon-arrow-left sx-left",
                 'arrow-right-classes' => "hs-icon hs-icon-arrow-right sx-right",
             ],
-        ],
-        'itemOptions'  => [
-            'tag' => false,
         ],
         'layout'       => '{items}',
     ]) ?>

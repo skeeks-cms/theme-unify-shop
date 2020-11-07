@@ -35,7 +35,7 @@
                             },
                             'params' => [
                                 'itemOptions' => [
-                                    'class' => 'col-lg-3 col-sm-6 product-item'
+                                    'class' => 'col-lg-3 col-sm-6 sx-product-card-wrapper'
                                 ]
                             ]
                         ]) ?>

@@ -5,7 +5,7 @@
  * @license https://cms.skeeks.com/license/
  * @author Semenov Alexander <semenov@skeeks.com>
  */
-namespace skeeks\cms\themes\unifyshop\assets\pages;
+namespace skeeks\cms\themes\unifyshop\assets\components;
 use skeeks\cms\base\AssetBundle;
 use skeeks\cms\shop\assets\ShopAsset;
 use skeeks\cms\themes\unifyshop\assets\UnifyThemeShopAsset;
@@ -13,12 +13,12 @@ use skeeks\cms\themes\unifyshop\assets\UnifyThemeShopAsset;
 /**
  * @author Semenov Alexander <semenov@skeeks.com>
  */
-class ShopUnifyProductPageAsset extends AssetBundle
+class ShopUnifyCartPageAsset extends AssetBundle
 {
-    public $sourcePath = '@skeeks/cms/themes/unifyshop/assets/src/pages/product';
+    public $sourcePath = '@skeeks/cms/themes/unifyshop/assets/src/components/cart-page';
 
     public $css = [
-        'product-page.css'
+        'cart-page.css'
     ];
     public $js = [
 

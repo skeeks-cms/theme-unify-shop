@@ -9,6 +9,7 @@
 ?>
 
 <?
+\skeeks\cms\themes\unifyshop\assets\components\ShopUnifyCartPageAsset::register($this);
 \skeeks\cms\themes\unifyshop\assets\ShopUnifyCartAsset::register($this);
 \skeeks\cms\shop\widgets\ShopGlobalWidget::widget();
 
@@ -61,7 +62,7 @@ JS
                         <!-- CART -->
 
                         <!-- cart content -->
-                        <div id="cartContent" class="g-bg-gray-light-v5 g-pa-20 g-pb-50 mb-4 sx-project-form-wrapper">
+                        <div id="cartContent" class="g-bg-secondary g-pa-20 g-pb-50 mb-4 sx-project-form-wrapper">
 
 
                             <? $checkout = \skeeks\cms\shopCheckout\ShopCheckoutWidget::begin([

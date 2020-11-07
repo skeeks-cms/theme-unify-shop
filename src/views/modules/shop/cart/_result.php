@@ -15,7 +15,7 @@
         data-has-sticky-header="true"
         data-end-point=".sx-footer"
 >
-    <div class="g-bg-gray-light-v5 g-pa-20 g-pb-20 mb-4">
+    <div class="g-bg-secondary g-pa-20 g-pb-20 mb-4">
         <div class="toggle active" style="display: block;">
 
             <?php if ((float)\Yii::$app->shop->shopUser->shopOrder->money->amount > 0) : ?>

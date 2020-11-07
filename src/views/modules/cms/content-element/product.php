@@ -9,7 +9,7 @@
 /* @var $model \skeeks\cms\shop\models\ShopCmsContentElement */
 skeeks\assets\unify\base\UnifyHsRatingAsset::register($this);
 \skeeks\assets\unify\base\UnifyHsPopupAsset::register($this);
-\skeeks\cms\themes\unifyshop\assets\pages\ShopUnifyProductPageAsset::register($this);
+\skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductPageAsset::register($this);
 //\skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
 
 $this->registerJs(<<<JS

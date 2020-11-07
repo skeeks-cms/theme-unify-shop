@@ -7,6 +7,8 @@
  */
 /* @var $this   yii\web\View */
 /* @var $widget \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget */
+\skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
+
 $query = $widget->dataProvider->query;
 if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price)   {
     $query->joinWith('shopProduct.shopProductPrices as pricesFilter');
@@ -24,10 +26,14 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price)   {
 
     <? echo \yii\widgets\ListView::widget([
         'dataProvider' => $widget->dataProvider,
-        'itemView'     => 'product-stick-item',
+        'itemView'     => 'product-item',
         'emptyText'    => '',
+        'itemOptions'  => \yii\helpers\ArrayHelper::merge([
+            'tag'   => 'div',
+            'class' => 'sx-product-card-wrapper',
+        ], (array)@$itemOptions),
         'options'      => [
-            'class' => 'js-carousel g-pb-0 g-mx-minus-10',
+            'class' => 'js-carousel sx-stick sx-products-stick',
             'tag'   => 'div',
             'data'  => [
                 'slidesToShow' => (int)\Yii::$app->unifyShopTheme->product_slider_items,
@@ -35,7 +41,7 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price)   {
                     [
                         'breakpoint' => 2600,
                         'settings'     => [
-                          'slidesToShow' => (int)5,
+                          'slidesToShow' => (int)\Yii::$app->unifyShopTheme->product_slider_items,
                         ]
                     ],
                     [
@@ -63,9 +69,6 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price)   {
                 'arrow-left-classes'  => "hs-icon hs-icon-arrow-left g-left-0",
                 'arrow-right-classes' => "hs-icon hs-icon-arrow-right g-right-0",
             ],
-        ],
-        'itemOptions'  => [
-            'tag' => false,
         ],
         'layout'       => '{items}',
     ]) ?>

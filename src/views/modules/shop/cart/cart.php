@@ -6,7 +6,7 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
-
+\skeeks\cms\themes\unifyshop\assets\components\ShopUnifyCartPageAsset::register($this);
 \skeeks\cms\themes\unifyshop\assets\ShopUnifyCartAsset::register($this);
 \skeeks\cms\shop\widgets\ShopGlobalWidget::widget();
 $this->registerJs(<<<JS
@@ -60,7 +60,7 @@ JS
 
                         ]); */ ?>
 
-                        <div class="sx-order-items g-bg-gray-light-v5">
+                        <div class="sx-order-items g-bg-secondary">
                             <?php echo $this->render("_cart-order-items"); ?>
                         </div>
 

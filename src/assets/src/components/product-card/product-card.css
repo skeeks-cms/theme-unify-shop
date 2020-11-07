@@ -1,0 +1,131 @@
+.sx-product-card-wrapper {
+    margin-bottom: 13px;
+}
+
+.sx-product-card {
+    border: 1px solid transparent;
+    /*border-bottom: none;*/
+    -webkit-border-radius: 3px 3px 0 0;
+    border-radius: 3px 3px 3px 3px;
+    position: relative;
+    background: #fff;
+    margin: 0 auto 5px;
+    padding-bottom: 27px;
+    /*max-width: 300px;*/
+}
+
+
+.sx-product-card .sx-product-card--photo img {
+    width: 100%;
+}
+
+.sx-product-card .sx-product-card--photo {
+    padding: 5px 5px 5px 5px;
+    margin: 0 0 5px 0;
+    text-align: center;
+}
+
+.sx-product-card .sx-product-card--info {
+    padding: 0 10px 10px 10px;
+    zoom: 1;
+}
+
+.sx-product-card--title {
+    min-height: 36px;
+    margin: 0 0 16px;
+    line-height: 19px;
+    overflow: hidden;
+}
+
+.sx-product-card .sx-product-card--actions {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+}
+
+.sx-product-card:hover .sx-product-card--photo img {
+    opacity: 0.9;
+}
+
+.sx-product-card.not-available .sx-product-card--info > *, .sx-product-card.not-available .sx-product-card--photo {
+    opacity: .5;
+}
+
+.sx-product-card.not-available .sx-product-card--actions {
+    opacity: 1;
+}
+
+.sx-sx-product-card--title-a {
+    /*font-weight: bold;*/
+    line-height: 1;
+    font-size: 14px;
+}
+
+.sx-list-new-price {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+@media (min-width: 992px) {
+    .sx-product-card .sx-product-card--actions {
+        /*visibility: hidden;*/
+    }
+
+    .sx-product-card.hover, .sx-product-card:hover {
+        border-color: #dfdfdf;
+        z-index: 20;
+    }
+
+    .sx-product-card.hover .sx-product-card--actions, .sx-product-card:hover .sx-product-card--actions {
+        visibility: visible;
+    }
+
+
+    .sx-product-card.hover {
+        z-index: 21;
+    }
+}
+
+
+.sx-product-card--sale {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 58px;
+    height: 58px;
+    text-align: center;
+    background: #ffde09d4;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    z-index: 5;
+    font-weight: 700;
+    line-height: 16px;
+    padding: 14px 0 0;
+}
+
+.sx-product-card--sale .number {
+    font-size: 1.833333em;
+}
+
+.sx-product-card--sale .percent {
+    font-size: 1.166667em;
+}
+
+.sx-product-card--sale .caption {
+    text-transform: uppercase;
+    font-size: .666667em;
+}
+
+
+.sx-product-card .sx-favorite-product {
+    position: absolute;
+    right: 25px;
+    top: 22px;
+    zoom: 1;
+    z-index: 5;
+    display: none;
+}
+
+.sx-product-card:hover .sx-favorite-product {
+    display: block;
+}

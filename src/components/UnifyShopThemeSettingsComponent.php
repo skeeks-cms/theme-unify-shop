@@ -29,7 +29,7 @@ class UnifyShopThemeSettingsComponent extends Component
     public $catalog_img_preview_width = 260;
     public $catalog_img_preview_crop = ManipulatorInterface::THUMBNAIL_INSET;
 
-    public $product_slider_items = 6;
+    public $product_slider_items = 5;
     public $product_slider_img_preview_width = 200;
     public $product_slider_img_preview_height = 200;
     public $product_slider_img_preview_crop = ManipulatorInterface::THUMBNAIL_INSET;
