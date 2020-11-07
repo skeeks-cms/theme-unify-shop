@@ -10,7 +10,7 @@
 
 <? foreach (\Yii::$app->shop->shopUser->shopOrder->shopOrderItems as $orderItem) : ?>
     <div class="row no-gutters sx-order-item">
-        <div class="col" style="max-width: 180px;">
+        <div class="col" style="max-width: 160px;">
             <a href="<?= $orderItem->url; ?>" data-pjax="0">
                 <img src="<?= \skeeks\cms\helpers\Image::getSrc(
                     \Yii::$app->imaging->getImagingUrl($orderItem->image ? $orderItem->image->src : null, new \skeeks\cms\components\imaging\filters\Thumbnail([
@@ -21,7 +21,7 @@
                 ) ?>" class="sx-lazy" alt="<?= $orderItem->name; ?> title="<?= $orderItem->name; ?> width="150"/>
             </a>
         </div>
-        <div class="col">
+        <div class="col" style="padding: 10px;">
             <?
                 \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductCardAsset::register($this);
             ?>
