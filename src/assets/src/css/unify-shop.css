@@ -38,6 +38,12 @@
     font-weight: 600;
 }
 
+/**
+ * Одинаковая высота товаров в слайдере
+ */
+.sx-products-stick .slick-track {
+    display: flex;
+}
 
 /**
  * Количество + и -

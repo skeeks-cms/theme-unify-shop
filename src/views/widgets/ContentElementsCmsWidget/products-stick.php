@@ -15,6 +15,7 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
     $query->joinWith('shopProduct.shopProductPrices as pricesFilter');
     $query->andWhere(['>', '`pricesFilter`.price', 0]);
 }
+
 ?>
 <? if ($query->count()) : ?>
 

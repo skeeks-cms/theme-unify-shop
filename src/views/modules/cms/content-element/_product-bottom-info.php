@@ -30,7 +30,9 @@ $q
     ->joinWith("shopProduct.shopProductRelations1 as shopProductRelations1")
     ->joinWith("shopProduct.shopProductRelations2 as shopProductRelations2")
     ->andWhere([
-        '!=', 'sp.id', $model->id
+        '!=',
+        'sp.id',
+        $model->id,
     ])
     ->andWhere([
         'or',
@@ -39,7 +41,7 @@ $q
         ["shopProductRelations2.shop_product1_id" => $model->id],
         ["shopProductRelations2.shop_product2_id" => $model->id],
     ]);
-    $q->groupBy(['cmsTree.id']);
+$q->groupBy(['cmsTree.id']);
 
 
 ?>
@@ -92,35 +94,38 @@ $q
     <? endif; ?>
 
 
-    <?
-    $widgetElements2 = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-viewed-products", [
-        'viewFile'            => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
-        'label'               => "Просмотренные товары",
-        'enabledPaging'       => "N",
-        'content_ids'         => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
-        //'tree_ids'             => $treeIds,
-        'enabledSearchParams' => "N",
-        'enabledCurrentTree'  => "N",
-        'limit'               => 15,
-        'contentElementClass' => \skeeks\cms\shop\models\ShopCmsContentElement::class,
-        'activeQueryCallback' => function (\yii\db\ActiveQuery $query) use ($model) {
-            $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
-            $query->leftJoin('shop_product', '`shop_product`.`id` = `cms_content_element`.`id`');
-            $query->leftJoin('shop_viewed_product', '`shop_viewed_product`.`shop_product_id` = `shop_product`.`id`');
-            $query->andWhere(['shop_user_id' => \Yii::$app->shop->shopUser->id]);
-            //$query->orderBy(['shop_viewed_product.created_at' => SORT_DESC]);
+    <?php if (\Yii::$app->shop->shopUser) : ?>
 
-            \Yii::$app->shop->filterBaseContentElementQuery($query);
-        },
-    ]);
-    ?>
+        <?
+        $widgetElements2 = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-viewed-products", [
+            'viewFile'            => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
+            'label'               => "Просмотренные товары",
+            'enabledPaging'       => "N",
+            'content_ids'         => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+            //'tree_ids'             => $treeIds,
+            'enabledSearchParams' => "N",
+            'enabledCurrentTree'  => "N",
+            'limit'               => 15,
+            'contentElementClass' => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+            'activeQueryCallback' => function (\yii\db\ActiveQuery $query) use ($model) {
+                $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
+                $query->innerJoin('shop_product', '`shop_product`.`id` = `cms_content_element`.`id`');
+                $query->innerJoin('shop_viewed_product', '`shop_viewed_product`.`shop_product_id` = `shop_product`.`id`');
+                $query->andWhere(['shop_user_id' => \Yii::$app->shop->shopUser->id]);
+                //$query->orderBy(['shop_viewed_product.created_at' => SORT_DESC]);
 
-    <? if ($widgetElements2->dataProvider->query->count()) : ?>
-        <section class="g-brd-gray-light-v4 g-brd-top">
-            <div class="container sx-container g-mt-20 g-mb-40 ">
-                <? $widgetElements2::end(); ?>
-            </div>
-        </section>
+                \Yii::$app->shop->filterBaseContentElementQuery($query);
+            },
+        ]);
+        ?>
+
+        <? if ($widgetElements2->dataProvider->query->count()) : ?>
+            <section class="g-brd-gray-light-v4 g-brd-top">
+                <div class="container sx-container g-mt-20 g-mb-40 ">
+                    <? $widgetElements2::end(); ?>
+                </div>
+            </section>
+        <? endif; ?>
     <? endif; ?>
 
 <? endif; ?>

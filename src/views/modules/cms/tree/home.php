@@ -64,6 +64,8 @@ if (\Yii::$app->mobileDetect->isMobile) {
 <? if (\Yii::$app->shop->shopContents && \Yii::$app->mobileDetect->isDesktop) : ?>
     <div class="container sx-container g-mt-40 g-mb-40">
         <?
+        \skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
+        \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductCardAsset::register($this);
         $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-poupular-products", [
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
             'label'                => "Популярные товары",
