@@ -7,38 +7,38 @@
 (function ($) {
 
     $("body").on("click", ".sx-quantity-group .sx-plus", function () {
-        
+
         var jWrapper = $(this).closest(".sx-quantity-wrapper");
         $(".sx-plus", jWrapper).trigger("up");
         return false;
     });
-    
+
     $("body").on("click", ".sx-quantity-group .sx-minus", function () {
         var jWrapper = $(this).closest(".sx-quantity-wrapper");
         $(".sx-minus", jWrapper).trigger("down");
         return false;
     });
-    
+
     $("body").on("up", ".sx-quantity-group .sx-plus", function () {
         //$(this).addClass("sx-clicked");
-        
-        
+
+
         var jGroup = $(this).closest(".sx-quantity-group");
         var jInput = $(".sx-quantity-input", jGroup);
         var measure_ratio = Number(jInput.data("measure_ratio")) || 1;
         var newVal = Number(jInput.val()) + measure_ratio;
-        
+
         var count = newVal / measure_ratio;
         count = Math.round(count);
 
         newVal = count * measure_ratio;
-        newVal = Math.floor(newVal * 100) / 100 ;
+        newVal = Math.floor(newVal * 100) / 100;
         jInput.val(newVal);
         jInput.focus().change();
-        
+
         //var jWrapper = $(this).closest(".sx-quantity-wrapper");
         //$(".sx-plus", jWrapper).not(".sx-clicked").click();
-        
+
         //$(this).removeClass("sx-clicked");
         return false;
     });
@@ -57,20 +57,20 @@
     $("body").on("updatewidth", ".sx-quantity-group .sx-quantity-input", function () {
         var measure_ratio = Number($(this).data("measure_ratio")) || 1;
         var newVal = $(this).val();
-        
-        
+
+
         var length = (String(newVal).length - 1) || 1;
         $(this).attr("size", length);
     });
-    
+
     $(document).on('pjax:complete', function (e) {
         $(".sx-quantity-group .sx-quantity-input").trigger("updatewidth");
     });
-    
+
     $("body").on("keyup", ".sx-quantity-group .sx-quantity-input", function () {
         $(this).trigger("updatewidth");
     });
-    
+
     /*$("body").on("change", ".sx-secondary-quantity-group .sx-quantity-input", function () {
         var measure_ratio = Number($(this).data("measure_ratio")) || 1;
         var newVal = $(this).val();
@@ -84,33 +84,33 @@
          console.log("updateValue");
          console.log(data);
     });*/
-    
-    
+
+
     $("body").on("change", ".sx-main-quantity-group .sx-quantity-input", function () {
 
         /*$(this).trigger("updatevalue", {
             'value' : $(this).val()
         });*/
-        
+
         var measure_ratio = Number($(this).data("measure_ratio")) || 1;
         var newVal = $(this).val();
-        
+
         if (Number($(this).val()) < measure_ratio) {
             $(this).val(measure_ratio).focus();
             $(this).trigger("updatewidth");
             return false;
         }
-        
+
         var count = newVal / measure_ratio;
         count = Math.round(count);
 
         newVal = count * measure_ratio;
-        newVal = Math.floor(newVal * 100) / 100 ;
-        
+        newVal = Math.floor(newVal * 100) / 100;
+
         $(this).val(newVal).focus();
-        
+
         $(this).trigger("updatewidth");
-        
+
         /*var jWrapper = $(this).closest(".sx-quantity-wrapper");
         $(".sx-secondary-quantity-group .sx-quantity-input", jWrapper).each(function() {
             $(this).val();
@@ -119,37 +119,42 @@
             newVal = count * measure_ratio;
             newVal = Math.floor(newVal * 100) / 100 ;
         });*/
-        
+
         return false;
     });
-            
+
     $(".sx-quantity-group .sx-quantity-input").trigger("updatewidth");
-        
+
+
+    $(function () {
+        sx.onReady(function () {
+            sx.Shop.on("change", function (e, data) {
+
+                var jCarts = $(".sx-js-cart");
+                if (!jCarts.length) {
+                    return false;
+                }
+
+                var totalQuantity = sx.Shop.get('cartData').quantity;
+                var totalItems = sx.Shop.get('cartData').countShopBaskets;
+                var totalMoney = sx.Shop.get('cartData').money.convertAndFormat;
+
+                if (totalQuantity) {
+                    jCarts.addClass("sx-is-full-cart");
+                } else {
+                    jCarts.removeClass("sx-is-full-cart");
+                }
+
+                $('.sx-total-quantity', jCarts).empty().append(totalQuantity);
+                $('.sx-total-items', jCarts).empty().append(totalItems);
+                $('.sx-total-money', jCarts).empty().append(totalMoney);
+
+            });
+        })
+    })
+
+
     $(document).ready(function () {
-
-
-        /* ==========================================================================
-			Catalog
-			========================================================================== */
-
-        /*$('.card-prod').matchHeight({
-            'byRow' : false
-        });
-
-        $('.card-prod').each(function(){
-            var parent = $(this),
-                classHover = 'hover',
-                dropup = parent.find('.card-prod--actions .dropup');
-
-            dropup.on('show.bs.dropdown', function () {
-                parent.addClass(classHover);
-            });
-            dropup.on('hide.bs.dropdown', function () {
-                parent.removeClass(classHover);
-            });
-        });*/
-
-        // initialization of HSScrollBar component
 
 
         $('body').on("click", '.to-cart-fly-btn', function () {

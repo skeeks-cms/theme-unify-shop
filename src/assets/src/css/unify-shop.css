@@ -70,3 +70,14 @@
     cursor: pointer;
 }
 
+
+
+/**
+ * Доработки корзины
+ */
+.sx-js-cart .sx-total-quantity, .sx-js-cart .sx-total-money {
+    display: none;
+}
+.sx-js-cart.sx-is-full-cart .sx-total-quantity, .sx-js-cart.sx-is-full-cart .sx-total-money {
+    display: inline;
+}

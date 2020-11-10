@@ -42,7 +42,12 @@
     sx.classes.shop.FullCart = sx.classes.shop.CartPjax.extend({
         _init: function () {
             this.applyParentMethod(sx.classes.shop.CartPjax, '_init', []);
+
+            this.on('update', function () {
+                sx.Shop.trigger("update");
+            });
         },
+
         _onDomReady: function () {
             $('body').on('change', '#sx-cart-full input.sx-basket-quantity', function () {
                 sx.Shop.updateBasket($(this).data('basket_id'), $(this).val());

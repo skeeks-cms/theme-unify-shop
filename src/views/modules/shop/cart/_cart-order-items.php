@@ -26,7 +26,7 @@
                 \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductCardAsset::register($this);
             ?>
             <div class="sx-product-card--title text-left" style="min-height: auto;">
-                <a href="<?= $orderItem->url; ?>" class="product_name sx-sx-product-card--title-a g-px-0 sx-main-text-color g-color-primary--hover g-text-underline--none--hover" data-pjax="0">
+                <a href="<?= $orderItem->url; ?>" class="product_name sx-product-card--title-a g-px-0 sx-main-text-color g-color-primary--hover g-text-underline--none--hover" data-pjax="0">
                     <?= $orderItem->name; ?>
                 </a>
             </div>

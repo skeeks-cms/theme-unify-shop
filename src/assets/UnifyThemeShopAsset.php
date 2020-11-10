@@ -9,6 +9,7 @@
 namespace skeeks\cms\themes\unifyshop\assets;
 
 use skeeks\assets\unify\base\UnifyHsScrollbarAsset;
+use skeeks\cms\shop\assets\ShopAsset;
 use skeeks\cms\themes\unify\assets\UnifyThemeAsset;
 use yii\web\AssetBundle;
 
@@ -25,10 +26,19 @@ class UnifyThemeShopAsset extends AssetBundle
     public $js = [
         'vendor/jquery.transform2d.js',
         'js/unify-shop.js',
+        'js/classes/Shop.js',
     ];
     public $depends = [
         UnifyThemeAsset::class,
         UnifyHsScrollbarAsset::class,
-        //UnifyHsCarouselAsset::class,
+        ShopAsset::class
     ];
+
+    public function registerAssetFiles($view)
+    {
+        parent::registerAssetFiles($view);
+
+        \skeeks\cms\shop\widgets\ShopGlobalWidget::widget();
+
+    }
 }
