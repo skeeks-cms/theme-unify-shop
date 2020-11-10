@@ -81,3 +81,11 @@
 .sx-js-cart.sx-is-full-cart .sx-total-quantity, .sx-js-cart.sx-is-full-cart .sx-total-money {
     display: inline;
 }
+
+@media (max-width: 768px) {
+    .sx-js-cart.sx-is-full-cart .sx-total-money {
+        display: none;
+    }
+}
+
+
