@@ -25,5 +25,6 @@ class UnifyShopTheme extends UnifyTheme
         ],
     ];
 
+    public $themeAssetClass = 'skeeks\cms\themes\unifyshop\assets\UnifyThemeShopAsset';
 
 }
