@@ -24,7 +24,11 @@
             <div class="toggle-content" style="display: block;">
 
 
-                <? /*= \skeeks\cms\shopDiscountCoupon\ShopDiscountCouponWidget::widget(); */ ?>
+                <div class="sx-discount-coupons-wrapper">
+                <?= \skeeks\cms\shopDiscountCoupon\ShopDiscountCouponWidget::widget([
+                        'btnSubmitName' => '✓'
+                ]); ?>
+                </div>
 
                 <span class="clearfix">
                 <span class="float-right"><?= \Yii::$app->shop->shopUser->shopOrder->moneyOriginal; ?></span>

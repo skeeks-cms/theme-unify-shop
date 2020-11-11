@@ -38,3 +38,7 @@
 .sx-order-item-properties p {
     color: gray;
 }
+
+.sx-discount-coupons-wrapper {
+    margin-bottom: 20px;
+}
