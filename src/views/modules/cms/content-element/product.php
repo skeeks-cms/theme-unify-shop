@@ -80,7 +80,7 @@ $singlPage::end();
     <?php endif; ?>
 
 
-    <div class="container sx-container g-py-20">
+    <div class="container sx-container">
 
         <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
 

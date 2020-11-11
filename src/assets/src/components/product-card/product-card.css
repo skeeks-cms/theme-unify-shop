@@ -1,5 +1,6 @@
 .sx-product-card-wrapper {
     margin-bottom: 13px;
+    padding-top: 20px;
 }
 
 .sx-product-card {
@@ -128,4 +129,38 @@
 
 .sx-product-card:hover .sx-favorite-product {
     display: block;
+}
+
+
+
+/**
+ * Для мобильной версии
+ */
+@media (max-width: 768px) {
+    .sx-product-card--title {
+        line-height: 1;
+    }
+
+    .sx-product-card--title-a {
+        font-size: 12px;
+    }
+
+    .sx-list-new-price {
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .sx-product-card .sx-product-card--info {
+        padding: 0 5px 5px 5px;
+    }
+
+    .sx-product-card-wrapper {
+        padding-top: 5px;
+    }
+
+    .sx-product-card .sx-favorite-product {
+        display: block;
+        right: 5px;
+        top: 1px;
+    }
 }

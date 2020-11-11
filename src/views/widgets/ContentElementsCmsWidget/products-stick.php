@@ -61,15 +61,15 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
                     [
                         'breakpoint' => 376,
                         'settings'   => [
-                            'slidesToShow' => 1,
+                            'slidesToShow' => 2,
                         ],
                     ],
 
                 ],
 
                 'arrows-classes'      => "g-color-primary--hover sx-arrows sx-color-silver",
-                'arrow-left-classes'  => "hs-icon hs-icon-arrow-left sx-left",
-                'arrow-right-classes' => "hs-icon hs-icon-arrow-right sx-right",
+                'arrow-left-classes'  => "hs-icon hs-icon-arrow-left sx-left sx-minus-20 d-none d-sm-block",
+                'arrow-right-classes' => "hs-icon hs-icon-arrow-right sx-right sx-minus-20 d-none d-sm-block",
             ],
         ],
         'layout'       => '{items}',

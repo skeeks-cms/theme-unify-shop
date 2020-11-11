@@ -26,7 +26,7 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
     ],
     'itemOptions'  => \yii\helpers\ArrayHelper::merge([
         'tag'   => 'div',
-        'class' => 'col-lg-4 col-sm-6 sx-product-card-wrapper',
+        'class' => 'col-lg-4 col-sm-6 col-6 sx-product-card-wrapper',
     ], (array) @$itemOptions),
     'pager'        => [
         'container' =>  '.sx-product-list',
