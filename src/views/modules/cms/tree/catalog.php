@@ -25,6 +25,7 @@ $catalogSettings::end();
                 <div class="sx-content">
                     <?= $model->description_full; ?>
                 </div>
+
                 <? if ($catalogSettings->is_show_subtree_before_products) : ?>
                     <?php
                     $widget = \skeeks\cms\cmsWidgets\tree\TreeCmsWidget::beginWidget('sub-catalog');
@@ -35,6 +36,7 @@ $catalogSettings::end();
                     $widget::end();
                     ?>
                 <? endif; ?>
+
                 <?
                 $isShowFilters = (bool)$catalogSettings->is_allow_filters;
                 if ($model->activeChildren) {
@@ -72,6 +74,8 @@ $catalogSettings::end();
                 $query = $widgetElements->dataProvider->query;
                 $baseQuery = clone $query;
 
+                
+                    
 
                 if ($isShowFilters) {
                     $eavFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopEavQueryFilterHandler([
@@ -137,14 +141,18 @@ $catalogSettings::end();
                     </div>
                 </div>
 
-                <?= $this->render('@app/views/filters/sorts', [
-                    'filtersWidget'              => $filtersWidget,
-                    'sortFiltersHandler'         => $sortFiltersHandler,
-                    'availabilityFiltersHandler' => $availabilityFiltersHandler,
-                ]); ?>
-
-                <div class="row" style="margin-top: 10px;">
-                    <div class="col-md-12 sx-filters-selected-wrapper">
+                <div class="row sx-fast-filters">
+                    <div class="col-12">
+                        <span class="sorting sx-filters-form">
+                            <? if (@$sortFiltersHandler) : ?>
+                                <?php echo $sortFiltersHandler->renderVisible(); ?>
+                            <? endif; ?>
+                            <? if (@$availabilityFiltersHandler) : ?>
+                                <?= $availabilityFiltersHandler->renderVisible(); ?>
+                            <? endif; ?>
+                        </span>
+                        <span class="sx-filters-selected-wrapper">
+                        </span>
                     </div>
                 </div>
 

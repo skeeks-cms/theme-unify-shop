@@ -15,7 +15,7 @@
     <div class="container sx-content">
         <div class="row">
             <div class="col-md-12">
-                <div class="alert alert-info" role="alert">
+                <div class="alert g-bg-secondary" role="alert">
                     <?= Yii::t("skeeks/unify", "You searched"); ?>: <strong><?= \Yii::$app->cmsSearch->searchQuery; ?></strong>
                 </div>
                 <!--=== Content Part ===-->

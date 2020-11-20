@@ -11,26 +11,14 @@
 /* @var $code string */
 $widget = $this->context;
 $id = \yii\helpers\Html::getInputId($handler, 'value');
-
-$this->registerJs(<<<JS
-            
-$('.sx-filter-action').on('click', function()
-{
-    $("[data-value=sx-sort]").val($(this).data('filter-value'));
-    $("[data-value=sx-sort]").change();
-    return false;
-});
-
-JS
-);
 ?>
-<div class="dropdown sx-inline-filter" style="display: inline-block;">
-    <a href="#" class="btn dropdown-toggle sx-btn-white sx-btn-sort-select sx-icon-arrow-down--after" data-toggle="dropdown" style="">
+<div class="dropdown sx-inline-filter">
+    <a href="#" class="btn btn-sm dropdown-toggle btn-primary sx-icon-arrow-down--after sx-fast-filters-btn" data-toggle="dropdown" style="">
         <?php echo $handler->valueAsText; ?>
     </a>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <? foreach ($handler->getSortOptions() as $code => $name) : ?>
-            <a class="dropdown-item sx-select-sort sx-filter-action" href="#" data-filter="productfilters-sort" data-filter-value="<?php echo $code; ?>"><?php echo $name; ?></a>
+            <a class="dropdown-item sx-select-sort sx-filter-action" href="#" data-filter="#<?php echo $id; ?>" data-filter-value="<?php echo $code; ?>"><?php echo $name; ?></a>
         <? endforeach; ?>
     </div>
 </div>
