@@ -23,7 +23,12 @@ $catalogSettings::end();
                     'isShowLast' => true,
                 ]) ?>
 
-                <div class="g-color-gray-dark-v1 g-font-size-16 sx-content">
+                <div class="row">
+                    <div class="col-md-12 sx-filters-selected-wrapper">
+                    </div>
+                </div>
+
+                <div class="sx-content">
                     <?= $model->description_full; ?>
                 </div>
 

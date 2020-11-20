@@ -34,9 +34,9 @@ $toId = \yii\helpers\Html::getInputId($handler, 'to');
                         <?= $form->field($handler, "from")->textInput([
                             'placeholder' => \Yii::$app->money->currencyCode,
                             'id'          => 'sx-filter-price-from',
-                            'value' => $val1 == $min ? "" : $val1,
+                            'value'       => $val1 == $min ? "" : $val1,
                             'placeholder' => $val1 == $min ? $val1 : "",
-                            'class' => 'sx-from form-control',
+                            'class'       => 'sx-from form-control',
                         ])->label(false); ?>
                     </div>
                     <span class="sort-slider__devide">—</span>
@@ -44,9 +44,9 @@ $toId = \yii\helpers\Html::getInputId($handler, 'to');
                         <?= $form->field($handler, "to")->textInput([
                             'placeholder' => \Yii::$app->money->currencyCode,
                             'id'          => 'sx-filter-price-to',
-                            'value' => $val2 == $max ? "" : $val2,
-                                    'placeholder' => $val2 == $max ? $val2 : "",
-                            'class' => 'sx-to form-control',
+                            'value'       => $val2 == $max ? "" : $val2,
+                            'placeholder' => $val2 == $max ? $val2 : "",
+                            'class'       => 'sx-to form-control',
                         ])->label(false); ?>
                     </div>
                 </div>
@@ -60,36 +60,6 @@ $toId = \yii\helpers\Html::getInputId($handler, 'to');
                        data-from="<?= $val1; ?>"
                        data-to="<?= $val2; ?>"
                        data-postfix=" р."/>
-
-
-                <!--<div class="" style="display: block;">
-                    <div class="col-md-6">
-                        <?/*= $form->field($handler, "from")->textInput([
-                            'placeholder' => \Yii::$app->money->currencyCode,
-                            'id'          => 'sx-filter-price-from',
-                        ])->label("От"); */?>
-                    </div>
-                    <div class="col-md-6">
-                        <?/*= $form->field($handler, "to")->textInput([
-                            'placeholder' => \Yii::$app->money->currencyCode,
-                            'id'          => 'sx-filter-price-to',
-                        ])->label("До"); */?>
-                    </div>
-                </div>-->
-
-                <? $this->registerJs(<<<JS
-/*
-$('#sx-filter-price').ionRangeSlider({
-    onFinish: function (data) {
-        $("#sx-filter-price-from").val(data.from);
-        $("#sx-filter-price-to").val(data.to);
-        $("#sx-filter-price-to").change();
-    },
-  
-});*/
-
-JS
-                ); ?>
             </div>
         </div>
     </section>
