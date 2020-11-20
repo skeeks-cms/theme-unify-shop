@@ -22,16 +22,9 @@ $catalogSettings::end();
                     'model'      => $model,
                     'isShowLast' => true,
                 ]) ?>
-
-                <div class="row">
-                    <div class="col-md-12 sx-filters-selected-wrapper">
-                    </div>
-                </div>
-
                 <div class="sx-content">
                     <?= $model->description_full; ?>
                 </div>
-
                 <? if ($catalogSettings->is_show_subtree_before_products) : ?>
                     <?php
                     $widget = \skeeks\cms\cmsWidgets\tree\TreeCmsWidget::beginWidget('sub-catalog');
@@ -42,23 +35,8 @@ $catalogSettings::end();
                     $widget::end();
                     ?>
                 <? endif; ?>
-
-                <div class="row">
-                    <? if ($catalogSettings->is_allow_filters) : ?>
-                        <div class="col-6"><a href="#" class="sx-btn-filter btn btn-block g-valign-middle text-left">Фильтры <i class="fa fa-angle-down pull-right g-pt-5" aria-hidden="true"></i></a></div>
-                    <? endif; ?>
-                    <div class="col-6 sx-sorting-block"><a href="#" class="sx-btn-sort btn btn-block g-valign-middle text-left">Сортировка <i class="fa fa-angle-down pull-right g-pt-5" aria-hidden="true"></i></a></div>
-                </div>
                 <?
                 $isShowFilters = (bool)$catalogSettings->is_allow_filters;
-                /**
-                 * @var $model \skeeks\cms\models\Tree
-                 */
-                /*if ($maxLevelTree = $model->getDescendants()->limit(1)->orderBy(['level' => SORT_DESC])->one()) {
-                    if (($maxLevelTree->level - $model->level) > 1) {
-                        $isShowFilters = false;
-                    }
-                }*/
                 if ($model->activeChildren) {
                     $isShowFilters = false;
                 }
@@ -68,7 +46,6 @@ $catalogSettings::end();
                 $availabilityFiltersHandler->value = (int)\Yii::$app->skeeks->site->shopSite->is_show_product_no_price;
 
                 $sortFiltersHandler = new \skeeks\cms\shop\queryFilter\SortFiltersHandler();
-
                 $availabilityFiltersHandler->viewFileVisible = '@app/views/filters/availability-filter';
                 $sortFiltersHandler->viewFileVisible = '@app/views/filters/sort-filter';
 
@@ -138,12 +115,38 @@ $catalogSettings::end();
                 $filtersWidget->applyToQuery($query);
                 ?>
 
+                <?php if (\Yii::$app->mobileDetect->isMobile) {
+                    \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
+                }; ?>
+                <div class="row sx-mobile-filters-block js-sticky-block" id="sx-mobile-filters-block" data-has-sticky-header="true" data-start-point="#sx-mobile-filters-block" data-end-point=".sx-footer">
+                    <div class="col-12 sx-mobile-filters-block--inner">
+                        <div class="btn-group" style="width: 100%;">
+                            <? if ($isShowFilters) : ?>
+                                <a href="#" class="sx-btn-filter btn sx-btn-white sx-icon-arrow-down--after">Фильтры</a>
+                            <? endif; ?>
+                            <!--<a href="#" class="sx-btn-sort btn sx-btn-white text-left sx-icon-arrow-down--after">Сортировка</a>-->
+                            <a href="#" class="btn dropdown-toggle sx-btn-white sx-btn-sort-select sx-icon-arrow-down--after" data-toggle="dropdown" style="">
+                                <?php echo $sortFiltersHandler->valueAsText; ?>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <? foreach ($sortFiltersHandler->getSortOptions() as $code => $name) : ?>
+                                    <a class="dropdown-item sx-select-sort sx-filter-action" href="#" data-filter="productfilters-sort" data-filter-value="<?php echo $code; ?>"><?php echo $name; ?></a>
+                                <? endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <?= $this->render('@app/views/filters/sorts', [
                     'filtersWidget'              => $filtersWidget,
                     'sortFiltersHandler'         => $sortFiltersHandler,
                     'availabilityFiltersHandler' => $availabilityFiltersHandler,
                 ]); ?>
+
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12 sx-filters-selected-wrapper">
+                    </div>
+                </div>
 
                 <? $widgetElements::end(); ?>
 

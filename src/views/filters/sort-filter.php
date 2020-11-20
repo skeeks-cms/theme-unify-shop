@@ -24,15 +24,9 @@ $('.sx-filter-action').on('click', function()
 JS
 );
 ?>
-<!--<a href="#" class="sx-filter-action g-color-primary--hover <?/*= $handler->value == '-popular' ? "active g-color-primary g-brd-primary" : "" ; */?>" data-filter="productfilters-sort" data-filter-value="-popular"><?/*= \Yii::t("skeeks/unify", "Popular"); */?></a>
-<a href="#" class="sx-filter-action g-color-primary--hover <?/*= $handler->value == 'price' ? "active g-color-primary g-brd-primary" : "" ; */?>" data-filter="productfilters-sort" data-filter-value="price"><?/*= \Yii::t("skeeks/unify-shop", "Cheap first"); */?></a>
-<a href="#" class="sx-filter-action g-color-primary--hover <?/*= $handler->value == '-price' ? "active g-color-primary g-brd-primary" : "" ; */?>" data-filter="productfilters-sort" data-filter-value="-price"><?/*= \Yii::t("skeeks/unify-shop", "Dear first"); */?></a>
-<a href="#" class="sx-filter-action g-color-primary--hover <?/*= $handler->value == '-new' ? "active g-color-primary g-brd-primary" : "" ; */?>" data-filter="productfilters-sort" data-filter-value="-new"><?/*= \Yii::t("skeeks/unify", "New"); */?></a>
--->
 <div class="dropdown sx-inline-filter" style="display: inline-block;">
-    <a href="#" class="btn btn-secondary dropdown-toggle g-text-underline--none--hover" data-toggle="dropdown" style="color: #555;
-background-color: #fff;">
-        <span class="Select-arrow-zone"></span> <?php echo $handler->valueAsText; ?>
+    <a href="#" class="btn dropdown-toggle sx-btn-white sx-btn-sort-select sx-icon-arrow-down--after" data-toggle="dropdown" style="">
+        <?php echo $handler->valueAsText; ?>
     </a>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <? foreach ($handler->getSortOptions() as $code => $name) : ?>
