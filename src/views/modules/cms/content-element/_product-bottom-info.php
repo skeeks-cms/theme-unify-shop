@@ -79,6 +79,7 @@ $q->groupBy(['cmsTree.id']);
             ]);*/
 
             \Yii::$app->shop->filterBaseContentElementQuery($activeDataProvider->query);
+            \Yii::$app->shop->filterByPriceContentElementQuery($activeDataProvider->query);
 
         },
     ]);

@@ -70,6 +70,7 @@ $catalogSettings::end();
                 $widgetElements->dataProvider->query->with('image');
                 $widgetElements->dataProvider->query->joinWith('shopProduct');
                 \Yii::$app->shop->filterBaseContentElementQuery($widgetElements->dataProvider->query);
+                \Yii::$app->shop->filterByPriceContentElementQuery($widgetElements->dataProvider->query);
 
                 $query = $widgetElements->dataProvider->query;
                 $baseQuery = clone $query;
