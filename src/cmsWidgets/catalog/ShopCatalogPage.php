@@ -41,6 +41,11 @@ class ShopCatalogPage extends Widget
      */
     public $is_show_subtree_col_left_no_filters = true;
 
+    /**
+     * @var bool
+     */
+    public $view_file = "left-col";
+
 
     public static function descriptorConfig()
     {
@@ -52,6 +57,7 @@ class ShopCatalogPage extends Widget
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
+            'view_file' => \Yii::t('skeeks/shop/app', 'Шаблон страницы каталога.'),
             'is_allow_filters' => \Yii::t('skeeks/shop/app', 'Включить фильтры?'),
             'is_show_subtree_before_products' => \Yii::t('skeeks/shop/app', 'Показывать подразделы перед товарами?'),
             'is_show_subtree_col_left' => \Yii::t('skeeks/shop/app', 'Показывать подразделы перед фильтрами?'),
@@ -62,6 +68,7 @@ class ShopCatalogPage extends Widget
     public function attributeHints()
     {
         return array_merge(parent::attributeLabels(), [
+            'view_file' => \Yii::t('skeeks/shop/app', ''),
             'is_show_subtree_col_left' => \Yii::t('skeeks/shop/app', 'Показывать фильтры в левой колонке?'),
             'is_show_subtree_col_left_no_filters' => \Yii::t('skeeks/shop/app', 'Если подразделы включены для отображения в левой колонке, показывать их только когда нет фильтров. Или отображать их всегда.'),
         ]);
@@ -74,6 +81,7 @@ class ShopCatalogPage extends Widget
             [['is_show_subtree_before_products'], 'boolean'],
             [['is_show_subtree_col_left'], 'boolean'],
             [['is_show_subtree_col_left_no_filters'], 'boolean'],
+            [['view_file'], 'string'],
         ]);
     }
 
@@ -91,6 +99,19 @@ class ShopCatalogPage extends Widget
     public function getConfigFormFields()
     {
         return [
+            'main' => [
+                'class' => FieldSet::class,
+                'name' => 'Основное',
+                'fields' => [
+                    'view_file' => [
+                        'class' => SelectField::class,
+                        'items' => [
+                            'left-col' => 'С левой колонкой',
+                            'no-col' => 'Без голонок, фильтры в одну строку'
+                        ]
+                    ],
+                ]
+            ],
             'filters' => [
                 'class' => FieldSet::class,
                 'name' => 'Фильтры',
@@ -109,6 +130,12 @@ class ShopCatalogPage extends Widget
                         'class' => BoolField::class,
                         'allowNull' => false
                     ],
+                ]
+            ],
+            'left-col' => [
+                'class' => FieldSet::class,
+                'name' => 'Левая колонка',
+                'fields' => [
                     'is_show_subtree_col_left' => [
                         'class' => BoolField::class,
                         'allowNull' => false
