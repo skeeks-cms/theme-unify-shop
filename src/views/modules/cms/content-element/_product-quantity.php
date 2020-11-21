@@ -38,19 +38,39 @@ CSS
 
                     ?>
                     <?php if ($sourceProduct && $address) : ?>
-                        <div class="d-flex flex-row sx-quantities-row">
-                            <div class="" style="width: 100%; line-height: 1;">
-                                <?php echo $source->senderCmsSite->name; ?>
-                                <?php if ($address) : ?>
-                                    <br/><small style="color: gray;"><?php echo $address->value; ?></small>
-                                    <br/><small style="color: green;">Можно забрать сейчас!</small>
-                                <?php endif; ?>
+                        <?php
+                        /**
+                         * @var \skeeks\cms\shop\models\ShopProduct $sourceProduct
+                         */
+                        if ($sourceProduct->shopStoreProducts) :  ?>
+                            <? foreach ($sourceProduct->shopStoreProducts as $shopStoreProduct) : ?>
+                                <div class="d-flex flex-row sx-quantities-row">
+                                    <div class="" style="width: 100%; line-height: 1;">
+                                        <?php echo $shopStoreProduct->shopStore->name; ?>
+                                        <br/><small style="color: green;">Можно забрать сейчас!</small>
+                                    </div>
+                                    <div class="">
+                                        <b style="float: right;"><?php echo (float) $shopStoreProduct->quantity; ?>&nbsp;<?php echo $sourceProduct->measure->symbol; ?></b>
+        
+                                    </div>
+                                </div>
+                            <? endforeach; ?>
+                        <? else : ?>
+                            <div class="d-flex flex-row sx-quantities-row">
+                                <div class="" style="width: 100%; line-height: 1;">
+                                    <?php echo $source->senderCmsSite->name; ?>
+                                    <?php if ($address) : ?>
+                                        <br/><small style="color: gray;"><?php echo $address->value; ?></small>
+                                        <br/><small style="color: green;">Можно забрать сейчас!</small>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="">
+                                    <b style="float: right;"><?php echo $sourceProduct->quantity; ?>&nbsp;<?php echo $sourceProduct->measure->symbol; ?></b>
+    
+                                </div>
                             </div>
-                            <div class="">
-                                <b style="float: right;"><?php echo $sourceProduct->quantity; ?>&nbsp;<?php echo $sourceProduct->measure->symbol; ?></b>
-
-                            </div>
-                        </div>
+                        <? endif; ?>
+                        
                     <?php endif; ?>
                 <?php endforeach; ?>
                 <?php if ($forOrder) : ?>
