@@ -18,7 +18,7 @@ $id = \yii\helpers\Html::getInputId($handler, 'value');
     </a>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <? foreach ($handler->getOptions() as $code => $name) : ?>
-            <a class="dropdown-item sx-select-sort sx-filter-action" href="#" data-filter="<?php echo $id; ?>" data-filter-value="<?php echo $code; ?>"><?php echo $name; ?></a>
+            <a class="dropdown-item sx-select-sort sx-filter-action" href="#" data-filter="#<?php echo $id; ?>" data-filter-value="<?php echo $code; ?>"><?php echo $name; ?></a>
         <? endforeach; ?>
     </div>
 </div>

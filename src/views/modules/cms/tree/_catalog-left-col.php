@@ -10,7 +10,7 @@
 ?>
 
 <? if ($catalogSettings->is_show_subtree_col_left) : ?>
-    <? if (($catalogSettings->is_show_subtree_col_left_no_filters && !$isShowFilters) || ((bool) $catalogSettings->is_show_subtree_col_left_no_filters !== true)) : ?>
+    <? if (($catalogSettings->is_show_subtree_col_left_no_filters && !$isShowFilters) || ((bool)$catalogSettings->is_show_subtree_col_left_no_filters !== true)) : ?>
         <?
         $model = \Yii::$app->cms->currentTree;
         $menuName = $model ? $model->name : "Меню";
@@ -34,9 +34,7 @@
         }
         ?>
         <div class="sx-col-left-block">
-            <!--<div id="stickyblock-start"
-                 class="g-pa-5 js-sticky-block"
-                 data-start-point="#stickyblock-start" data-end-point=".sx-footer">-->
+
 
             <? if ($parent && $parent->activeChildren) : ?>
 
@@ -59,7 +57,6 @@
 
             <? endif; ?>
 
-            <!--</div>-->
         </div>
 
 
@@ -70,7 +67,14 @@
 <div class="sx-col-left-block">
     <div style="display: none;">
         <? endif; ?>
-        <? $filtersWidget::end(); ?>
+        <?php /*\skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this); */?><!--
+        <div id="stickyblock-start"
+             class="js-sticky-block"
+             data-has-sticky-header="true" 
+             data-start-point="#stickyblock-start" data-end-point=".sx-footer">-->
+
+            <? $filtersWidget::end(); ?>
+        <!--</div>-->
         <? if (!$isShowFilters) : ?>
     </div>
 </div>
