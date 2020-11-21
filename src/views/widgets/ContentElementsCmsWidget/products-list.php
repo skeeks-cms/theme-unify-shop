@@ -12,10 +12,6 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
     $widget->dataProvider->query->andWhere(['>', '`pricesFilter`.price', 0]);
 }
 ?>
-<? if ($widget->label) : ?>
-    <h1 class="size-17 margin-bottom-20"><?= $widget->label; ?></h1>
-<? endif; ?>
-
 <? echo \yii\widgets\ListView::widget([
     'dataProvider' => $widget->dataProvider,
     'itemView'     => '@app/views/widgets/ContentElementsCmsWidget/product-item',
@@ -33,8 +29,10 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
         'item' =>  '.sx-product-card-wrapper',
         'class' => \skeeks\cms\themes\unify\widgets\ScrollAndSpPager::class
     ],
+    'summary' => "Всего товаров: {totalCount}",
     //"\n{items}<div class=\"box-paging\">{pager}</div>{summary}<div class='sx-js-pagination'></div>",
-    'layout'       => '<div class="row"><div class="col-md-12">{summary}</div></div>
-<div class="no-gutters row sx-product-list">{items}</div>
-<div class="row"><div class="col-md-12">{pager}</div></div>',
-]) ?>
+    'layout'       => '<div class="row"><div class="col-md-12 sx-product-list-summary">{summary}</div></div>
+    <div class="no-gutters row sx-product-list">{items}</div>
+    <div class="row"><div class="col-md-12">{pager}</div></div>',
+    ])
+?>

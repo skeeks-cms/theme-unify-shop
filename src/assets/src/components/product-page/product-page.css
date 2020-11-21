@@ -1,6 +1,11 @@
 /**
  * Карточка товара
  */
+.sx-product-card-wrapper {
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
 .sx-product-card-wrapper .sx-stick-slider {
     margin-left: 20px;
     margin-right: 20px;

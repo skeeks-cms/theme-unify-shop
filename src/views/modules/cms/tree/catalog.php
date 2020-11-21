@@ -74,8 +74,6 @@ $catalogSettings::end();
                 $query = $widgetElements->dataProvider->query;
                 $baseQuery = clone $query;
 
-                
-                    
 
                 if ($isShowFilters) {
                     $eavFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopEavQueryFilterHandler([
