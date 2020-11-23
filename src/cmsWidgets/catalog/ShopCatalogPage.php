@@ -23,65 +23,36 @@ use yii\helpers\ArrayHelper;
 class ShopCatalogPage extends Widget
 {
     /**
-     * @var Показывать заголовок в хлебных крошках?
-     */
-    public $is_allow_filters = true;
-
-    /**
-     * @var bool Показывать подразделы перед товарами?
-     */
-    public $is_show_subtree_before_products = true;
-
-    /**
      * @var bool Показывать подразделы перед товарами?
      */
     public $is_show_subtree_col_left = true;
-    /**
-     * @var bool Показывать подразделы перед фильтрами только когда нет фильтров?
-     */
-    public $is_show_subtree_col_left_no_filters = true;
-
-    /**
-     * @var bool
-     */
-    public $view_file = "left-col";
-
+    
 
     public static function descriptorConfig()
     {
         return array_merge(parent::descriptorConfig(), [
-            'name' => \Yii::t('skeeks/shop/app', 'Настройки страницы каталога'),
+            'name' => \Yii::t('skeeks/shop/app', 'Настройки левой колонки'),
         ]);
     }
 
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
-            'view_file' => \Yii::t('skeeks/shop/app', 'Шаблон страницы каталога.'),
-            'is_allow_filters' => \Yii::t('skeeks/shop/app', 'Включить фильтры?'),
-            'is_show_subtree_before_products' => \Yii::t('skeeks/shop/app', 'Показывать подразделы перед товарами?'),
             'is_show_subtree_col_left' => \Yii::t('skeeks/shop/app', 'Показывать подразделы перед фильтрами?'),
-            'is_show_subtree_col_left_no_filters' => \Yii::t('skeeks/shop/app', 'Показывать подразделы перед фильтрами только когда нет фильтров?'),
         ]);
     }
 
     public function attributeHints()
     {
         return array_merge(parent::attributeLabels(), [
-            'view_file' => \Yii::t('skeeks/shop/app', ''),
             'is_show_subtree_col_left' => \Yii::t('skeeks/shop/app', 'Показывать фильтры в левой колонке?'),
-            'is_show_subtree_col_left_no_filters' => \Yii::t('skeeks/shop/app', 'Если подразделы включены для отображения в левой колонке, показывать их только когда нет фильтров. Или отображать их всегда.'),
         ]);
     }
 
     public function rules()
     {
         return ArrayHelper::merge(parent::rules(), [
-            [['is_allow_filters'], 'boolean'],
-            [['is_show_subtree_before_products'], 'boolean'],
             [['is_show_subtree_col_left'], 'boolean'],
-            [['is_show_subtree_col_left_no_filters'], 'boolean'],
-            [['view_file'], 'string'],
         ]);
     }
 
@@ -99,48 +70,12 @@ class ShopCatalogPage extends Widget
     public function getConfigFormFields()
     {
         return [
-            'main' => [
-                'class' => FieldSet::class,
-                'name' => 'Основное',
-                'fields' => [
-                    'view_file' => [
-                        'class' => SelectField::class,
-                        'items' => [
-                            'left-col' => 'С левой колонкой',
-                            'no-col' => 'Без голонок, фильтры в одну строку'
-                        ]
-                    ],
-                ]
-            ],
-            'filters' => [
-                'class' => FieldSet::class,
-                'name' => 'Фильтры',
-                'fields' => [
-                    'is_allow_filters' => [
-                        'class' => BoolField::class,
-                        'allowNull' => false
-                    ],
-                ]
-            ],
-            'sections' => [
-                'class' => FieldSet::class,
-                'name' => 'Разделы',
-                'fields' => [
-                    'is_show_subtree_before_products' => [
-                        'class' => BoolField::class,
-                        'allowNull' => false
-                    ],
-                ]
-            ],
+            
             'left-col' => [
                 'class' => FieldSet::class,
                 'name' => 'Левая колонка',
                 'fields' => [
                     'is_show_subtree_col_left' => [
-                        'class' => BoolField::class,
-                        'allowNull' => false
-                    ],
-                    'is_show_subtree_col_left_no_filters' => [
                         'class' => BoolField::class,
                         'allowNull' => false
                     ],

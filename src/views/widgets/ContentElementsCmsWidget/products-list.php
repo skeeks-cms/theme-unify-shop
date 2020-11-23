@@ -18,7 +18,7 @@
     ],
     'itemOptions'  => \yii\helpers\ArrayHelper::merge([
         'tag'   => 'div',
-        'class' => 'col-lg-4 col-6 sx-product-card-wrapper',
+        'class' => \Yii::$app->unifyShopTheme->prooductListItemCssClasses . ' sx-product-card-wrapper',
     ], (array)@$itemOptions),
     'pager'        => [
         'container' => '.sx-product-list',

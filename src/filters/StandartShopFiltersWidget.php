@@ -35,8 +35,9 @@ class StandartShopFiltersWidget extends FiltersWidget
         $sortFiltersHandler->viewFileVisible = '@app/views/filters/sort-filter';
 
         $this
+            ->registerHandler($sortFiltersHandler, 'sort')
             ->registerHandler($availabilityFiltersHandler, 'availability')
-            ->registerHandler($sortFiltersHandler, 'sort');
+        ;
     }
 
     /**

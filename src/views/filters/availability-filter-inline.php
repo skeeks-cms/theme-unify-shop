@@ -6,18 +6,23 @@
  * @date 13.11.2017
  */
 /* @var $this yii\web\View */
-/* @var $handler \skeeks\cms\shop\queryFilter\SortFiltersHandler */
+/* @var $handler \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler */
 /* @var $form \yii\widgets\ActiveForm */
 /* @var $code string */
 $widget = $this->context;
 $id = \yii\helpers\Html::getInputId($handler, 'value');
 ?>
-<div class="dropdown sx-inline-filter">
-    <a href="#" class="btn btn-sm dropdown-toggle btn-primary sx-icon-arrow-down--after sx-fast-filters-btn" data-toggle="dropdown" style="">
+<div class="sx-hidden-filters">
+    <?= $form->field($handler, 'value')->textInput([
+        'data-value' => 'sx-availability',
+    ]) ?>
+</div>
+<div class="dropdown sx-inline-filter sx-filter-selected">
+    <a href="#" class="dropdown-toggle btn btn-default" data-toggle="dropdown" style="">
         <?php echo $handler->valueAsText; ?>
     </a>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <? foreach ($handler->getSortOptions() as $code => $name) : ?>
+        <? foreach ($handler->getOptions() as $code => $name) : ?>
             <a class="dropdown-item sx-select-sort sx-filter-action" href="#" data-filter="#<?php echo $id; ?>" data-filter-value="<?php echo $code; ?>"><?php echo $name; ?></a>
         <? endforeach; ?>
     </div>

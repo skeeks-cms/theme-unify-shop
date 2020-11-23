@@ -9,12 +9,8 @@
 /**
  * @var $model \skeeks\cms\models\CmsTree
  */
-$catalogSettings = \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogPage::beginWidget("catalog");
-$catalogSettings::end();
-
-echo $this->render("catalog-" . $catalogSettings->view_file, [
-    'model' => $model,
-    'catalogSettings' => $catalogSettings
+echo $this->render("catalog-".\Yii::$app->unifyShopTheme->product_list_view_file, [
+    'model'           => $model
 ]);
 ?>
 

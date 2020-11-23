@@ -10,70 +10,68 @@
 ?>
 
 <? if ($catalogSettings->is_show_subtree_col_left) : ?>
-    <? if (($catalogSettings->is_show_subtree_col_left_no_filters && !$isShowFilters) || ((bool)$catalogSettings->is_show_subtree_col_left_no_filters !== true)) : ?>
-        <?
-        $model = \Yii::$app->cms->currentTree;
-        $menuName = $model ? $model->name : "Меню";
-        $parent = $model;
-        if ($model) {
+    <?
+    $model = \Yii::$app->cms->currentTree;
+    $menuName = $model ? $model->name : "Меню";
+    $parent = $model;
+    if ($model) {
 
-            if ($model->activeChildren) {
-                $parent = $model;
-            } elseif ($model->parent) {
-                $parent = $model->parent;
-            } elseif (isset($model->parents[1])) {
-                $parent = $model->parents[1];
-                $menuName = $parent->name;
+        if ($model->activeChildren) {
+            $parent = $model;
+        } elseif ($model->parent) {
+            $parent = $model->parent;
+        } elseif (isset($model->parents[1])) {
+            $parent = $model->parents[1];
+            $menuName = $parent->name;
 
-                if (!$parent->activeChildren) {
-                    $parent = $model->parents[0];
-                }
-            } else {
+            if (!$parent->activeChildren) {
                 $parent = $model->parents[0];
             }
+        } else {
+            $parent = $model->parents[0];
         }
-        ?>
-        <div class="sx-col-left-block">
+    }
+    ?>
+    <div class="sx-col-left-block">
 
 
-            <? if ($parent && $parent->activeChildren) : ?>
+        <? if ($parent && $parent->activeChildren) : ?>
 
-                <div class="g-mb-10">
-                    <div class="h5 sx-col-left-title">
-                        <?= \Yii::t('skeeks/unify', 'Categories'); ?>
-                    </div>
+            <div class="g-mb-10">
+                <div class="h5 sx-col-left-title">
+                    <?= \Yii::t('skeeks/unify', 'Categories'); ?>
                 </div>
+            </div>
 
-                <ul class="list-unstyled mb-0 sx-col-menu">
-                    <? foreach ($parent->activeChildren as $child) : ?>
-                        <li class="">
-                            <a class="<?= $child->id == $model->id ? "active g-color-primary" : "sx-main-text-color"; ?> u-link-v5 g-color-primary--hover g-text-underline--none--hover"
-                               href="<?= $child->url; ?>">
-                                <?= $child->name; ?>
-                            </a>
-                        </li>
-                    <? endforeach; ?>
-                </ul>
+            <ul class="list-unstyled mb-0 sx-col-menu">
+                <? foreach ($parent->activeChildren as $child) : ?>
+                    <li class="">
+                        <a class="<?= $child->id == $model->id ? "active g-color-primary" : "sx-main-text-color"; ?> u-link-v5 g-color-primary--hover g-text-underline--none--hover"
+                           href="<?= $child->url; ?>">
+                            <?= $child->name; ?>
+                        </a>
+                    </li>
+                <? endforeach; ?>
+            </ul>
 
-            <? endif; ?>
+        <? endif; ?>
 
-        </div>
+    </div>
 
 
-    <? endif; ?>
 <? endif; ?>
 
 <? if (!$isShowFilters) : ?>
 <div class="sx-col-left-block">
     <div style="display: none;">
         <? endif; ?>
-        <?php /*\skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this); */?><!--
+        <?php /*\skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this); */ ?><!--
         <div id="stickyblock-start"
              class="js-sticky-block"
              data-has-sticky-header="true" 
              data-start-point="#stickyblock-start" data-end-point=".sx-footer">-->
 
-            <? $filtersWidget::end(); ?>
+        <? $filtersWidget::end(); ?>
         <!--</div>-->
         <? if (!$isShowFilters) : ?>
     </div>
