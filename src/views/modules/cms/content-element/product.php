@@ -89,8 +89,6 @@ $singlPage::end();
                 <?= $this->render('@app/views/breadcrumbs', [
                     'model'    => $model,
                     'isShowH1' => $singlPage->is_show_title_in_breadcrumbs
-                    /*'isShowLast' => true,
-                    'isShowH1'   => false,*/
                 ]); ?>
             </div>
         </div>
@@ -111,8 +109,6 @@ $singlPage::end();
                         <h1 class="h4 g-font-weight-600"><?= $model->seoName; ?></h1>
                     <? endif; ?>
                     <div class="product-info-header">
-
-
                         <?
                         /*var_dump($shopOfferChooseHelper);die;*/
 
