@@ -8,7 +8,18 @@
 /**
  * @var $this yii\web\View
  * @var $model \skeeks\cms\models\CmsTree
+ * @var \yii\data\ActiveDataProvider $dataProvider
+ * @var \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget $filtersWidget
  */
+
+if ($filtersWidget->getPriceHandler()) {
+    $filtersWidget->getPriceHandler()->viewFile = \Yii::$app->mobileDetect->isMobile ? '@app/views/filters/price-filter' : '@app/views/filters/price-filter-inline';
+}
+
+if ($filtersWidget->getEavHandler()) {
+    $filtersWidget->getEavHandler()->viewFile = \Yii::$app->mobileDetect->isMobile ? '@app/views/filters/eav-filters' : '@app/views/filters/eav-filters-inline';
+}
+
 if (!\Yii::$app->mobileDetect->isMobile) {
     $this->registerCss(<<<CSS
 .sx-filters-block-header {
@@ -24,14 +35,16 @@ CSS
         <div class="row">
             <div class="col-12 sx-catalog-wrapper" style="padding-bottom: 20px; padding-top: 20px;">
                 <?= $this->render('@app/views/breadcrumbs', [
-                    'model'      => $model,
+                    'model'      => @$model,
+                    'title'      => @$title,
                     'isShowLast' => true,
                 ]) ?>
+
                 <div class="sx-content">
-                    <?= $model->description_full; ?>
+                    <?= @$description; ?>
                 </div>
 
-                <? if (\Yii::$app->unifyShopTheme->is_show_catalog_subtree_before_products) : ?>
+                <? if (\Yii::$app->cms->currentTree && \Yii::$app->unifyShopTheme->is_show_catalog_subtree_before_products) : ?>
                     <?php
                     $widget = \skeeks\cms\cmsWidgets\tree\TreeCmsWidget::beginWidget('sub-catalog');
                     $widget->descriptor->name = 'Подразделы каталога';
@@ -42,68 +55,6 @@ CSS
                     ?>
                 <? endif; ?>
 
-                <?
-                $isShowFilters = (bool)\Yii::$app->unifyShopTheme->is_allow_filters;
-                $filtersWidget = \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget::begin();
-
-                $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("shop-product-list", [
-                    'pageSize'            => \Yii::$app->unifyShopTheme->productListPerPageSize,
-                    'active'              => "Y",
-                    'contentElementClass' => \skeeks\cms\shop\models\ShopCmsContentElement::className(),
-                ]);
-
-                $widgetElements->viewFile = '@app/views/widgets/ContentElementsCmsWidget/products-list';
-                $widgetElements->descriptor->name = 'Список товаров';
-                $widgetElements->dataProvider->query->with('shopProduct');
-                $widgetElements->dataProvider->query->with('shopProduct.baseProductPrice');
-                $widgetElements->dataProvider->query->with('shopProduct.minProductPrice');
-                $widgetElements->dataProvider->query->with('image');
-                $widgetElements->dataProvider->query->joinWith('shopProduct');
-                \Yii::$app->shop->filterBaseContentElementQuery($widgetElements->dataProvider->query);
-                \Yii::$app->shop->filterByPriceContentElementQuery($widgetElements->dataProvider->query);
-
-                $query = $widgetElements->dataProvider->query;
-                $baseQuery = clone $query;
-
-                if ($isShowFilters) {
-                    $eavFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopEavQueryFilterHandler([
-                        'baseQuery' => $baseQuery,
-                    ]);
-
-                    $eavFiltersHandler->openedPropertyIds = \Yii::$app->skeeks->site->shopSite->open_filter_property_ids;
-                    $eavFiltersHandler->viewFile = \Yii::$app->mobileDetect->isMobile ? '@app/views/filters/eav-filters' : '@app/views/filters/eav-filters-inline';
-                    $rpQuery = $eavFiltersHandler->getRPQuery();
-
-                    if ($show_filter_property_ids = \Yii::$app->skeeks->site->shopSite->show_filter_property_ids) {
-                        $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => $show_filter_property_ids]);
-                    }
-
-                    if ($model->activeChildren) {
-                        $rpQuery->andWhere([
-                            'or',
-                            ['map.cms_tree_id' => $model->id],
-                            ['map.cms_tree_id' => null],
-                        ]);
-                    }
-
-                    $eavFiltersHandler->initRPByQuery($rpQuery);
-
-                    $priceFiltersHandler = new \skeeks\cms\shop\queryFilter\PriceFiltersHandler([
-                        'baseQuery' => $baseQuery,
-                        'viewFile'  => \Yii::$app->mobileDetect->isMobile ? '@app/views/filters/price-filter' : '@app/views/filters/price-filter-inline',
-                    ]);
-
-                    $filtersWidget
-                        ->registerHandler($priceFiltersHandler);
-
-                    $filtersWidget
-                        ->registerHandler($eavFiltersHandler);
-                }
-                ?>
-                <?
-                $filtersWidget->loadFromRequest();
-                $filtersWidget->applyToQuery($query);
-                ?>
 
                 <?php if (\Yii::$app->mobileDetect->isMobile) {
                     \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
@@ -111,7 +62,7 @@ CSS
                 <div class="row sx-mobile-filters-block js-sticky-block" id="sx-mobile-filters-block" data-has-sticky-header="true" data-start-point="#sx-mobile-filters-block" data-end-point=".sx-footer">
                     <div class="col-12 sx-mobile-filters-block--inner">
                         <div class="btn-group" style="width: 100%;">
-                            <? if ($isShowFilters) : ?>
+                            <? if (\Yii::$app->unifyShopTheme->is_allow_filters) : ?>
                                 <a href="#" class="sx-btn-filter btn sx-btn-white sx-icon-arrow-down--after">Фильтры</a>
                             <? endif; ?>
                             <!--<a href="#" class="sx-btn-sort btn sx-btn-white text-left sx-icon-arrow-down--after">Сортировка</a>-->
@@ -134,7 +85,7 @@ CSS
                         $filtersWidget->getAvailabilityHandler()->viewFile = '@app/views/filters/availability-filter-inline';
                     }
 
-                    $filtersWidget::end(); ?>
+                    echo $filtersWidget->run(); ?>
                 </div>
 
                 <div class="row sx-fast-filters">
@@ -144,7 +95,10 @@ CSS
                     </div>
                 </div>
 
-                <? $widgetElements::end(); ?>
+                <?php echo $this->render("@app/views/products/product-list", [
+                    'dataProvider' => $dataProvider
+                ]); ?>
+
             </div>
 
         </div>

@@ -28,7 +28,7 @@ if (!\Yii::$app->skeeks->site->shopSite->is_show_product_no_price) {
 
     <? echo \yii\widgets\ListView::widget([
         'dataProvider' => $widget->dataProvider,
-        'itemView'     => 'product-item',
+        'itemView'     => '@app/views/products/product-list-item',
         'emptyText'    => '',
         'itemOptions'  => \yii\helpers\ArrayHelper::merge([
             'tag'   => 'div',

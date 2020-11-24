@@ -9,7 +9,9 @@
 namespace skeeks\cms\themes\unifyshop\filters;
 
 
+use skeeks\cms\eavqueryfilter\CmsEavQueryFilterHandler;
 use skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler;
+use skeeks\cms\shop\queryFilter\PriceFiltersHandler;
 use skeeks\cms\themes\unify\queryFilter\SortFiltersHandler;
 use skeeks\cms\themes\unify\widgets\filters\FiltersWidget;
 use yii\helpers\ArrayHelper;
@@ -53,5 +55,20 @@ class StandartShopFiltersWidget extends FiltersWidget
     public function getAvailabilityHandler()
     {
         return ArrayHelper::getValue($this->handlers, 'availability');
+    }
+    /**
+     * @return PriceFiltersHandler
+     */
+    public function getPriceHandler()
+    {
+        return ArrayHelper::getValue($this->handlers, 'price');
+    }
+
+    /**
+     * @return CmsEavQueryFilterHandler
+     */
+    public function getEavHandler()
+    {
+        return ArrayHelper::getValue($this->handlers, 'eav');
     }
 }

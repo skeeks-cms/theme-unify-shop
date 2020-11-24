@@ -5,9 +5,12 @@
  * @license https://cms.skeeks.com/license/
  * @author Semenov Alexander <semenov@skeeks.com>
  */
+
 /**
  * @var $this yii\web\View
  * @var $model \skeeks\cms\models\CmsTree
+ * @var \yii\data\ActiveDataProvider $dataProvider
+ * @var \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget $filtersWidget
  */
 
 $catalogSettings = \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogPage::beginWidget("catalog");
@@ -19,14 +22,16 @@ $catalogSettings::end();
         <div class="row">
             <div class="order-md-2 sx-content-col-main">
                 <?= $this->render('@app/views/breadcrumbs', [
-                    'model'      => $model,
+                    'model'      => @$model,
+                    'title'      => @$title,
                     'isShowLast' => true,
                 ]) ?>
+
                 <div class="sx-content">
-                    <?= $model->description_full; ?>
+                    <?= @$description; ?>
                 </div>
 
-                <? if (\Yii::$app->unifyShopTheme->is_show_catalog_subtree_before_products) : ?>
+                <? if (\Yii::$app->cms->currentTree && \Yii::$app->unifyShopTheme->is_show_catalog_subtree_before_products) : ?>
                     <?php
                     $widget = \skeeks\cms\cmsWidgets\tree\TreeCmsWidget::beginWidget('sub-catalog');
                     $widget->descriptor->name = 'Подразделы каталога';
@@ -37,76 +42,13 @@ $catalogSettings::end();
                     ?>
                 <? endif; ?>
 
-                <?
-                $isShowFilters = (bool)\Yii::$app->unifyShopTheme->is_allow_filters;
-                $filtersWidget = \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget::begin();
-
-                $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("shop-product-list", [
-                    'pageSize'            => \Yii::$app->unifyShopTheme->productListPerPageSize,
-                    'active'              => "Y",
-                    'contentElementClass' => \skeeks\cms\shop\models\ShopCmsContentElement::className(),
-                ]);
-
-                $widgetElements->viewFile = '@app/views/widgets/ContentElementsCmsWidget/products-list';
-                $widgetElements->descriptor->name = 'Список товаров';
-                $widgetElements->dataProvider->query->with('shopProduct');
-                $widgetElements->dataProvider->query->with('shopProduct.baseProductPrice');
-                $widgetElements->dataProvider->query->with('shopProduct.minProductPrice');
-                $widgetElements->dataProvider->query->with('image');
-                $widgetElements->dataProvider->query->joinWith('shopProduct');
-                \Yii::$app->shop->filterBaseContentElementQuery($widgetElements->dataProvider->query);
-                \Yii::$app->shop->filterByPriceContentElementQuery($widgetElements->dataProvider->query);
-
-                $query = $widgetElements->dataProvider->query;
-                $baseQuery = clone $query;
-
-                if ($isShowFilters) {
-                    $eavFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopEavQueryFilterHandler([
-                        'baseQuery' => $baseQuery,
-                    ]);
-
-                    $eavFiltersHandler->openedPropertyIds = \Yii::$app->skeeks->site->shopSite->open_filter_property_ids;
-                    $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
-                    $rpQuery = $eavFiltersHandler->getRPQuery();
-
-                    if ($show_filter_property_ids = \Yii::$app->skeeks->site->shopSite->show_filter_property_ids) {
-                        $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => $show_filter_property_ids]);
-                    }
-
-                    if ($model->activeChildren) {
-                        $rpQuery->andWhere([
-                            'or',
-                            ['map.cms_tree_id' => $model->id],
-                            ['map.cms_tree_id' => null],
-                        ]);
-                    }
-
-                    $eavFiltersHandler->initRPByQuery($rpQuery);
-
-                    $priceFiltersHandler = new \skeeks\cms\shop\queryFilter\PriceFiltersHandler([
-                        'baseQuery' => $baseQuery,
-                        'viewFile'  => '@app/views/filters/price-filter',
-                    ]);
-
-                    $filtersWidget
-                        ->registerHandler($priceFiltersHandler);
-
-                    $filtersWidget
-                        ->registerHandler($eavFiltersHandler);
-                }
-                ?>
-                <?
-                $filtersWidget->loadFromRequest();
-                $filtersWidget->applyToQuery($query);
-                ?>
-
                 <?php if (\Yii::$app->mobileDetect->isMobile) {
                     \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
                 }; ?>
                 <div class="row sx-mobile-filters-block js-sticky-block" id="sx-mobile-filters-block" data-has-sticky-header="true" data-start-point="#sx-mobile-filters-block" data-end-point=".sx-footer">
                     <div class="col-12 sx-mobile-filters-block--inner">
                         <div class="btn-group" style="width: 100%;">
-                            <? if ($isShowFilters) : ?>
+                            <? if (\Yii::$app->unifyShopTheme->is_allow_filters) : ?>
                                 <a href="#" class="sx-btn-filter btn sx-btn-white sx-icon-arrow-down--after">Фильтры</a>
                             <? endif; ?>
                             <!--<a href="#" class="sx-btn-sort btn sx-btn-white text-left sx-icon-arrow-down--after">Сортировка</a>-->
@@ -137,14 +79,16 @@ $catalogSettings::end();
                     </div>
                 </div>
 
-                <? $widgetElements::end(); ?>
+                <?php echo $this->render("@app/views/products/product-list", [
+                    'dataProvider' => $dataProvider
+                ]); ?>
+
             </div>
 
             <div class="order-md-1 g-bg-secondary sx-content-col-left" style="">
-                <?= $this->render('@app/views/modules/cms/tree/_catalog-left-col', [
+                <?= $this->render('@app/views/modules/cms/tree/catalogs/_left-col', [
                     'catalogSettings' => $catalogSettings,
                     'filtersWidget'   => $filtersWidget,
-                    'isShowFilters'   => $isShowFilters,
                 ]); ?>
             </div>
         </div>

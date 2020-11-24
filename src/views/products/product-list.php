@@ -6,11 +6,11 @@
  * @date 25.05.2015
  */
 /* @var $this   yii\web\View */
-/* @var $widget \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget */
+/* @var $dataProvider ADa */
 ?>
 <? echo \yii\widgets\ListView::widget([
-    'dataProvider' => $widget->dataProvider,
-    'itemView'     => '@app/views/widgets/ContentElementsCmsWidget/product-item',
+    'dataProvider' => $dataProvider,
+    'itemView'     => '@app/views/products/product-list-item',
     'emptyText'    => '',
     'options'      => [
         'class' => '',

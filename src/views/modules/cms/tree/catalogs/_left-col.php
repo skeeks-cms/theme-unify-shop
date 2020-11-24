@@ -61,7 +61,7 @@
 
 <? endif; ?>
 
-<? if (!$isShowFilters) : ?>
+<? if (!\Yii::$app->unifyShopTheme->is_allow_filters) : ?>
 <div class="sx-col-left-block">
     <div style="display: none;">
         <? endif; ?>
@@ -71,9 +71,9 @@
              data-has-sticky-header="true" 
              data-start-point="#stickyblock-start" data-end-point=".sx-footer">-->
 
-        <? $filtersWidget::end(); ?>
+        <? echo $filtersWidget->run(); ?>
         <!--</div>-->
-        <? if (!$isShowFilters) : ?>
+        <? if (!\Yii::$app->unifyShopTheme->is_allow_filters) : ?>
     </div>
 </div>
 <? endif; ?>
