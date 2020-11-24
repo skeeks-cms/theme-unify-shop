@@ -58,10 +58,11 @@ if (\Yii::$app->unifyShopTheme->is_allow_filters) {
 $filtersWidget->loadFromRequest();
 $filtersWidget->applyToQuery($dataProvider->query);
 
+/*\Yii::$app->breadcrumbs->createBase()->append(\Yii::t('skeeks/shop/app', 'Favorite products'));*/
 
 echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->unifyShopTheme->product_list_view_file, [
     'dataProvider'  => $dataProvider,
     'filtersWidget' => $filtersWidget,
-    'title'         => "Избранные товары",
+    'title'         => \Yii::t('skeeks/shop/app', 'Favorite products'),
 ]);
 ?>
