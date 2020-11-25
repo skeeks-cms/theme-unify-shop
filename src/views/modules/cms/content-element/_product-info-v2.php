@@ -26,7 +26,7 @@ $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties
     'model'                   => $infoModel,
     'visible_only_has_values' => true,
 ]);
-$widget->viewFile = '@app/views/widgets/RpWidget/' . $singlPage->properties_view_file;
+$widget->viewFile = '@app/views/widgets/RpWidget/'.$singlPage->properties_view_file;
 ?>
 
 <div class="row">
@@ -41,7 +41,7 @@ $widget->viewFile = '@app/views/widgets/RpWidget/' . $singlPage->properties_view
                             <i class="hs-icon hs-icon-arrow-bottom float-right"></i>
                         </a>
                     </div>
-                                             <!--data-parent="#sx-product-info-accordion-->
+                    <!--data-parent="#sx-product-info-accordion-->
 
                     <div id="sx-properties" class="collapse" aria-labelledby="sx-properties-header">
                         <div class="card-body">
@@ -62,7 +62,9 @@ $widget->viewFile = '@app/views/widgets/RpWidget/' . $singlPage->properties_view
                     </div>
                     <div id="sx-description" class="collapse" aria-labelledby="sx-description-header">
                         <div class="card-body">
-                            <?= $model->productDescriptionFull; ?>
+                            <div class="sx-product-description">
+                                <?= $model->productDescriptionFull; ?>
+                            </div>
                         </div>
                     </div>
                 </div>

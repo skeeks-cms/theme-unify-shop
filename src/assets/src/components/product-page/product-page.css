@@ -1,7 +1,7 @@
 /**
  * Карточка товара
  */
-.sx-product-card-wrapper {
+.sx-product-page-wrapper {
     padding-bottom: 20px;
     padding-top: 20px;
 }
@@ -11,19 +11,19 @@
     margin-bottom: 20px;
 }
 
-.sx-product-card-wrapper .sx-stick-slider {
+.sx-product-page-wrapper .sx-stick-slider {
     margin-left: 20px;
     margin-right: 20px;
 }
 
-.sx-product-card-wrapper .sx-stick-navigation .js-slide {
+.sx-product-page-wrapper .sx-stick-navigation .js-slide {
     cursor: pointer;
     border: none;
     margin: 0 0px;
     position: relative;
 }
 
-.sx-product-card-wrapper .sx-stick-navigation .slick-current:before {
+.sx-product-page-wrapper .sx-stick-navigation .slick-current:before {
     border: 1px solid #d2d2d2;
     content: '';
     position: absolute;
@@ -39,34 +39,34 @@
     transition: all .3s ease;
 }
 
-.sx-product-card-wrapper .sx-stick-navigation .slick-slide {
+.sx-product-page-wrapper .sx-stick-navigation .slick-slide {
     opacity: .6;
 }
 
-.sx-product-card-wrapper .sx-stick-navigation .slick-current,
-.sx-product-card-wrapper .sx-stick-navigation .slick-slide:hover {
+.sx-product-page-wrapper .sx-stick-navigation .slick-current,
+.sx-product-page-wrapper .sx-stick-navigation .slick-slide:hover {
     opacity: 1;
 }
 
-.sx-product-card-wrapper .sx-stick-navigation {
+.sx-product-page-wrapper .sx-stick-navigation {
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-.sx-product-card-wrapper .sx-stick-navigation .js-slide {
+.sx-product-page-wrapper .sx-stick-navigation .js-slide {
     padding: 5px;
 }
 
 
-.sx-product-card-wrapper .sx-description-short p {
+.sx-product-page-wrapper .sx-description-short p {
     margin-bottom: 0;
 }
 
-.sx-product-card-wrapper .product-control {
+.sx-product-page-wrapper .product-control {
     display: flex;
 }
 
-.sx-product-card-wrapper .availability-row {
+.sx-product-page-wrapper .availability-row {
     text-align: center;
     color: #3b3937;
     font-size: .8125rem;
@@ -77,12 +77,12 @@
 /**
  * Маленькие табы в товаре
  */
-.sx-product-card-wrapper .sx-product-delivery-info .tab-pane {
+.sx-product-page-wrapper .sx-product-delivery-info .tab-pane {
     background: #fafafa;
     padding: 20px;
 }
 
-.sx-product-card-wrapper .sx-product-delivery-info .tab-pane p {
+.sx-product-page-wrapper .sx-product-delivery-info .tab-pane p {
     margin-bottom: 5px;
     font-size: 13px;
 }
@@ -371,7 +371,7 @@ ul.sx-properties .sx-properties--name:after {
 /**
  * Правки в мобильную версию
  */
-.sx-mobile-product-page .sx-product-card-wrapper {
+.sx-mobile-product-page .sx-product-page-wrapper {
     padding-top: 5px;
     padding-bottom: 0;
 }
@@ -387,3 +387,8 @@ ul.sx-properties .sx-properties--name:after {
     padding-right: 5px;
 }
 
+
+
+.sx-product-description h1, .sx-product-description .h1, .sx-product-description h2, .sx-product-description .h2, .sx-product-description h3, .sx-product-description .h3, .sx-product-description h4, .sx-product-description .h4, .sx-product-description h5, .sx-product-description .h5, .sx-product-description h6, .sx-product-description .h6 {
+    font-size: 1em;
+}

@@ -25,7 +25,7 @@ $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties
     'model'                   => $infoModel,
     'visible_only_has_values' => true,
 ]);
-$widget->viewFile = '@app/views/widgets/RpWidget/' . $singlPage->properties_view_file;
+$widget->viewFile = '@app/views/widgets/RpWidget/'.$singlPage->properties_view_file;
 /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/
 ?>
 
@@ -41,10 +41,12 @@ $widget->viewFile = '@app/views/widgets/RpWidget/' . $singlPage->properties_view
 <? endif; ?>
 
 <? if ($model->productDescriptionFull) : ?>
-    <div class="row">
+    <div class="row" style="margin-top: 20px;">
         <div class="col-md-12 sx-content" id="sx-description">
             <h2>Описание</h2>
-            <?= $model->productDescriptionFull; ?>
+            <div class="sx-product-description">
+                <?= $model->productDescriptionFull; ?>
+            </div>
         </div>
     </div>
 <? endif; ?>

@@ -27,7 +27,7 @@ $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties
     'model'                   => $infoModel,
     'visible_only_has_values' => true,
 ]);
-$widget->viewFile = '@app/views/widgets/RpWidget/' . $singlPage->properties_view_file;
+$widget->viewFile = '@app/views/widgets/RpWidget/'.$singlPage->properties_view_file;
 
 /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/
 $this->registerJs(<<<JS
@@ -68,7 +68,9 @@ JS
     <? if ($model->productDescriptionFull) : ?>
         <div class="tab-pane fade show" id="sx-description" role="tabpanel">
             <div class="card-body-1 sx-content">
-                <?= $model->productDescriptionFull; ?>
+                <div class="sx-product-description">
+                    <?= $model->productDescriptionFull; ?>
+                </div>
             </div>
         </div>
     <? endif; ?>

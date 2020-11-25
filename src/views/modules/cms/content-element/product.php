@@ -65,7 +65,7 @@ $singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPag
 $singlPage->addCss();
 $singlPage::end();
 ?>
-<section class="sx-product-card-wrapper"
+<section class="sx-product-page-wrapper"
     <?php echo(!$shopProduct->isOffersProduct ? 'itemscope itemtype="http://schema.org/Product"' : ""); ?>
 >
 

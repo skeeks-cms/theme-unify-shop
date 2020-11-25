@@ -17,8 +17,9 @@
                     <span class="sx-properties--name">
                         <? $property = $widget->model->relatedPropertiesModel->getRelatedProperty($code); ?>
                         <?= $property->name; ?>
+                        
                         <? if ($property->hint) : ?>
-                            <i class="far fa-question-circle" title="<?= $property->hint; ?>"></i>
+                            <i class="far fa-question-circle" title="<?= $property->hint; ?>" data-toggle="tooltip" style="margin-left: 5px;"></i>
                         <? endif; ?>
                     </span>
                     <span class="sx-properties--value">
