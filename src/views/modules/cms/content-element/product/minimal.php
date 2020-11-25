@@ -30,7 +30,7 @@
         <div class="d-flex flex-row sx-main-product-container">
             <div class="sx-product-page--left-col">
                 <div class="sx-product-images">
-                    <?= $this->render("@app/views/modules/cms/content-element/_product-images", [
+                    <?= $this->render("@app/views/modules/cms/content-element/product/" . $singlPage->images_view_file, [
                         'model' => $model,
                     ]); ?>
                 </div>

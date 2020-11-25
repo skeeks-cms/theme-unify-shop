@@ -48,6 +48,7 @@ class ShopProductSinglPage extends Widget
     public $info_block_view_type = 'v1';
     public $sliders_align = 'center';
     public $properties_view_file = 'two-columns';
+    public $images_view_file = '_product-images';
 
     public static function descriptorConfig()
     {
@@ -68,6 +69,7 @@ class ShopProductSinglPage extends Widget
             'is_allow_product_review'            => \Yii::t('skeeks/shop/app', 'Включить отзывы?'),
             'sliders_align'                      => \Yii::t('skeeks/shop/app', 'Выравнивать слайдеры (похожие товары и ранее просмотренные)'),
             'properties_view_file'               => \Yii::t('skeeks/shop/app', 'Шаблон отображения характеристик'),
+            'images_view_file'                   => \Yii::t('skeeks/shop/app', 'Шаблон галереи картинок'),
         ]);
     }
     public function attributeHints()
@@ -89,6 +91,7 @@ class ShopProductSinglPage extends Widget
             [['right_padding'], 'integer'],
             [['sliders_align'], 'string'],
             [['properties_view_file'], 'string'],
+            [['images_view_file'], 'string'],
         ]);
     }
 
@@ -114,6 +117,19 @@ class ShopProductSinglPage extends Widget
                         'class'       => BoolField::class,
                         'allowNull'   => false,
                         'formElement' => BoolField::ELEMENT_CHECKBOX,
+                    ],
+                ],
+            ],
+            'images'      => [
+                'class'  => FieldSet::class,
+                'name'   => 'Галерея изображений',
+                'fields' => [
+                    'images_view_file' => [
+                        'class' => SelectField::class,
+                        'items' => [
+                            '_product-images'          => 'Превью картинки снизу',
+                            '_product-images-vertical' => 'Превью картинки слева',
+                        ],
                     ],
                 ],
             ],

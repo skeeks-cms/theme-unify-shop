@@ -167,16 +167,16 @@ JS
                     <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
                         <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
                             <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
-                                'class'   => 'btn btn-block btn-xxl u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
+                                'class'   => 'btn btn-block btn-xxl btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                 'type'    => 'button',
                                 'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                             ]); ?>
                         <? else : ?>
-                            <a class="btn btn-block btn-xxl u-btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
+                            <a class="btn btn-block btn-xxl btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
                         <? endif; ?>
                     <? else : ?>
                         <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
-                            'class'   => 'btn btn-xxl btn-block u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
+                            'class'   => 'btn btn-xxl btn-block btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                             'type'    => 'button',
                             'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                         ]); ?>
@@ -362,16 +362,16 @@ JS
                         <? if ($offerShopProduct->minProductPrice && $offerShopProduct->minProductPrice->price == 0) : ?>
                             <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
                                 <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
-                                    'class'   => 'btn btn-xxl btn-block u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
+                                    'class'   => 'btn btn-xxl btn-block btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                     'type'    => 'button',
                                     'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                                 ]); ?>
                             <? else : ?>
-                                <a class="btn btn-xxl btn-block btn-block u-btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
+                                <a class="btn btn-xxl btn-block btn-block btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
                             <? endif; ?>
                         <? else : ?>
                             <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
-                                'class'   => 'btn btn-xxl btn-block u-btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
+                                'class'   => 'btn btn-xxl btn-block btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                 'type'    => 'button',
                                 'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                             ]); ?>
@@ -469,7 +469,7 @@ JS
             <div class="control-group group-submit g-mb-15">
                 <div class="buttons-row ">
                     <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
-                        'class' => 'btn btn-xxl btn-block u-btn-primary g-font-size-18 disabled sx-not-select-offer',
+                        'class' => 'btn btn-xxl btn-block btn-primary g-font-size-18 disabled sx-not-select-offer',
                         'type'  => 'button',
                     ]); ?>
                 </div>

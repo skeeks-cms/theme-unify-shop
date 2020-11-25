@@ -35,7 +35,7 @@
 
             <div class="col-12">
                 <div class="sx-product-images">
-                    <?= $this->render("@app/views/modules/cms/content-element/_product-images", [
+                    <?= $this->render("@app/views/modules/cms/content-element/product/_product-images", [
                         'model' => $model,
                     ]); ?>
                 </div>
