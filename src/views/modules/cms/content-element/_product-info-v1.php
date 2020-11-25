@@ -24,49 +24,46 @@ if ($shopProduct->main_pid) {
 $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
     'model'                   => $infoModel,
     'visible_only_has_values' => true,
-    'viewFile'                => '@app/views/widgets/RpWidget/default',
 ]);
+$widget->viewFile = '@app/views/widgets/RpWidget/' . $singlPage->properties_view_file;
 /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/
 ?>
 
-<section class="sx-product-info-wrapper g-mt-0 g-pb-0">
-    <div class="container sx-container">
 
-        <? if ($widget->visibleRpAttributes) : ?>
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Характеристики</h2>
-                    <? $widget::end(); ?>
-                </div>
-            </div>
-        <? endif; ?>
 
-        <? if ($model->productDescriptionFull) : ?>
-            <div class="row">
-                <div class="col-md-12 sx-content" id="sx-description">
-                    <h2>Описание</h2>
-                    <?= $model->productDescriptionFull; ?>
-                </div>
-            </div>
-        <? endif; ?>
-
-        <? if ($singlPage->is_allow_product_review) : ?>
-            <div class="row">
-                <div class="col-md-12 g-mt-20" id="sx-reviews">
-                    <div class="float-right"><a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div>
-                    <h2>Отзывы</h2>
-                </div>
-
-                <?
-                $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-                    'namespace'         => 'Reviews2Widget',
-                    'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-                    'cmsContentElement' => $model,
-                ]);
-                $widgetReviews::end();
-                ?>
-            </div>
-
-        <? endif; ?>
+<? if ($widget->visibleRpAttributes) : ?>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Характеристики</h2>
+            <? $widget::end(); ?>
+        </div>
     </div>
-</section>
+<? endif; ?>
+
+<? if ($model->productDescriptionFull) : ?>
+    <div class="row">
+        <div class="col-md-12 sx-content" id="sx-description">
+            <h2>Описание</h2>
+            <?= $model->productDescriptionFull; ?>
+        </div>
+    </div>
+<? endif; ?>
+
+<? if ($singlPage->is_allow_product_review) : ?>
+    <div class="row">
+        <div class="col-md-12 g-mt-20" id="sx-reviews">
+            <div class="float-right"><a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a></div>
+            <h2>Отзывы</h2>
+        </div>
+
+        <?
+        $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
+            'namespace'         => 'Reviews2Widget',
+            'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
+            'cmsContentElement' => $model,
+        ]);
+        $widgetReviews::end();
+        ?>
+    </div>
+
+<? endif; ?>

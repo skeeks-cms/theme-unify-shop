@@ -49,6 +49,9 @@ class UnifyShopThemeSettingsComponent extends Component
     public $product_list_count_columns_mobile = 2;
 
 
+    public $product_page_view_file = "default";
+
+
     public function attributeLabels()
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
@@ -67,6 +70,7 @@ class UnifyShopThemeSettingsComponent extends Component
 
             'is_show_catalog_subtree_before_products' => 'Показывать подразделы перед списком товаров?',
             'is_allow_filters'                        => 'Показывать фильтры?',
+            'product_page_view_file'                  => 'Шаблон страницы одного товара',
         ]);
     }
 
@@ -124,6 +128,7 @@ class UnifyShopThemeSettingsComponent extends Component
                     'catalog_img_preview_crop',
                     'product_slider_img_preview_crop',
                     'product_list_view_file',
+                    'product_page_view_file',
                 ],
                 'string',
             ],
@@ -205,13 +210,28 @@ class UnifyShopThemeSettingsComponent extends Component
                 ],
             ],
 
-            'stick' => [
+            'product' => [
+                'class' => FieldSet::class,
+                'name'  => \Yii::t('skeeks/shop/app', 'Товарная страница'),
+
+                'fields' => [
+
+                    'product_page_view_file' => [
+                        'class' => SelectField::class,
+                        'items' => [
+                            'default' => 'Стандартный шаблон',
+                            'minimal' => 'Минималистичный шаблон (описание и характеристики в правой колонке)',
+                        ],
+                    ],
+                ],
+            ],
+            'stick'   => [
                 'class' => FieldSet::class,
                 'name'  => \Yii::t('skeeks/shop/app', 'Слайдеры товаров'),
 
                 'fields' => [
 
-                    'product_slider_items' => [
+                    'product_slider_items'              => [
                         'class' => SelectField::class,
                         'items' => [
                             2 => '2',

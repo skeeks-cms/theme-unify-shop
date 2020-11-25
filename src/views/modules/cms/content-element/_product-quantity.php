@@ -77,7 +77,7 @@ CSS
                     <div class="d-flex flex-row sx-quantities-row">
                         <div class="" style="width: 100%; line-height: 1;">
                             На складе
-                            <br/><small style="color: gray;">Привезем под заказ в течение 2-х дней</small>
+                            <br/><small style="color: gray;">Привезем под заказ</small>
                         </div>
                         <div class="">
                             <?php if ($forOrder > 10) : ?>

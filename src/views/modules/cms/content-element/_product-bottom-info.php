@@ -87,8 +87,8 @@ $q->groupBy(['cmsTree.id']);
     ?>
 
     <? if ($widgetElements->dataProvider->query->count()) : ?>
-        <section class="g-brd-gray-light-v4 g-brd-top">
-            <div class="container sx-container g-mt-20 g-mb-40 ">
+        <section class="sx-products-slider-section">
+            <div class="container sx-container">
                 <? $widgetElements::end(); ?>
             </div>
         </section>
@@ -121,8 +121,8 @@ $q->groupBy(['cmsTree.id']);
         ?>
 
         <? if ($widgetElements2->dataProvider->query->count()) : ?>
-            <section class="g-brd-gray-light-v4 g-brd-top">
-                <div class="container sx-container g-mt-20 g-mb-40 ">
+            <section class="sx-products-slider-section">
+                <div class="container sx-container">
                     <? $widgetElements2::end(); ?>
                 </div>
             </section>

@@ -26,8 +26,9 @@ if ($shopProduct->main_pid) {
 $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
     'model'                   => $infoModel,
     'visible_only_has_values' => true,
-    'viewFile'                => '@app/views/widgets/RpWidget/default',
 ]);
+$widget->viewFile = '@app/views/widgets/RpWidget/' . $singlPage->properties_view_file;
+
 /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/
 $this->registerJs(<<<JS
 $(".nav-link:eq(0)", $(".sx-product-info-wrapper")).click();
@@ -35,65 +36,61 @@ JS
 );
 ?>
 
-<section class="sx-product-info-wrapper g-mt-0 g-pb-20">
-    <div class="container sx-container">
-        <ul class="nav u-nav-v5-1 u-nav-primary g-brd-bottom--md g-brd-gray-light-v4" role="tablist" data-target="nav-5-1-default-hor-border-bottom-left-padding-0" data-tabs-mobile-type="slide-up-down"
-            data-btn-classes="btn btn-md btn-block rounded-0 u-btn-outline-lightgray">
-            <? if ($widget->rpAttributes) : ?>
-                <li class="nav-item">
-                    <a class="nav-link sx-main-text-color g-px-0--md g-mr-30--md active" data-toggle="tab" href="#sx-properties" role="tab">Характеристики</a>
-                </li>
-            <? endif; ?>
+<ul class="nav u-nav-v5-1 u-nav-primary g-brd-bottom--md g-brd-gray-light-v4" role="tablist" data-target="nav-5-1-default-hor-border-bottom-left-padding-0" data-tabs-mobile-type="slide-up-down"
+    data-btn-classes="btn btn-md btn-block rounded-0 u-btn-outline-lightgray">
+    <? if ($widget->rpAttributes) : ?>
+        <li class="nav-item">
+            <a class="nav-link sx-main-text-color g-px-0--md g-mr-30--md active" data-toggle="tab" href="#sx-properties" role="tab">Характеристики</a>
+        </li>
+    <? endif; ?>
 
-            <? if ($model->productDescriptionFull) : ?>
-                <li class="nav-item">
-                    <a class="nav-link sx-main-text-color g-px-0--md g-mr-30--md" data-toggle="tab" href="#sx-description" role="tab">Описание</a>
-                </li>
-            <? endif; ?>
+    <? if ($model->productDescriptionFull) : ?>
+        <li class="nav-item">
+            <a class="nav-link sx-main-text-color g-px-0--md g-mr-30--md" data-toggle="tab" href="#sx-description" role="tab">Описание</a>
+        </li>
+    <? endif; ?>
 
-            <? if ($singlPage->is_allow_product_review) : ?>
-                <li class="nav-item">
-                    <a class="nav-link sx-main-text-color g-px-0--md g-mr-30--md" data-toggle="tab" href="#sx-reviews" role="tab">Отзывы</a>
-                </li>
-            <? endif; ?>
-        </ul>
+    <? if ($singlPage->is_allow_product_review) : ?>
+        <li class="nav-item">
+            <a class="nav-link sx-main-text-color g-px-0--md g-mr-30--md" data-toggle="tab" href="#sx-reviews" role="tab">Отзывы</a>
+        </li>
+    <? endif; ?>
+</ul>
 
-        <div id="nav-5-1-default-hor-border-bottom-left-padding-0" class="tab-content g-pt-20">
-            <? if ($widget->rpAttributes) : ?>
-                <div class="tab-pane fade show active" id="sx-properties" role="tabpanel">
-                    <div class="card-body-1">
-                        <? $widget::end(); ?>
-                    </div>
-                </div>
-            <? endif; ?>
-            <? if ($model->productDescriptionFull) : ?>
-                <div class="tab-pane fade show" id="sx-description" role="tabpanel">
-                    <div class="card-body-1 sx-content">
-                        <?= $model->productDescriptionFull; ?>
-                    </div>
-                </div>
-            <? endif; ?>
-            <? if ($singlPage->is_allow_product_review) : ?>
-                <div class="tab-pane fade show" id="sx-reviews" role="tabpanel">
-                    <div class="card-body-1">
-                        <div class="row">
-                            <div class="col-12">
-                                <a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a>
-                            </div>
-
-                            <?
-                            $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-                                'namespace'         => 'Reviews2Widget',
-                                'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-                                'cmsContentElement' => $model,
-                            ]);
-                            $widgetReviews::end();
-                            ?>
-                        </div>
-                    </div>
-                </div>
-            <? endif; ?>
+<div id="nav-5-1-default-hor-border-bottom-left-padding-0" class="tab-content g-pt-20">
+    <? if ($widget->rpAttributes) : ?>
+        <div class="tab-pane fade show active" id="sx-properties" role="tabpanel">
+            <div class="card-body-1">
+                <? $widget::end(); ?>
+            </div>
         </div>
-    </div>
-</section>
+    <? endif; ?>
+    <? if ($model->productDescriptionFull) : ?>
+        <div class="tab-pane fade show" id="sx-description" role="tabpanel">
+            <div class="card-body-1 sx-content">
+                <?= $model->productDescriptionFull; ?>
+            </div>
+        </div>
+    <? endif; ?>
+    <? if ($singlPage->is_allow_product_review) : ?>
+        <div class="tab-pane fade show" id="sx-reviews" role="tabpanel">
+            <div class="card-body-1">
+                <div class="row">
+                    <div class="col-12">
+                        <a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a>
+                    </div>
+
+                    <?
+                    $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
+                        'namespace'         => 'Reviews2Widget',
+                        'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
+                        'cmsContentElement' => $model,
+                    ]);
+                    $widgetReviews::end();
+                    ?>
+                </div>
+            </div>
+        </div>
+    <? endif; ?>
+</div>
 

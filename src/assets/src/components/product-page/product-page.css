@@ -6,6 +6,11 @@
     padding-top: 20px;
 }
 
+.sx-main-product-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 .sx-product-card-wrapper .sx-stick-slider {
     margin-left: 20px;
     margin-right: 20px;
@@ -86,11 +91,10 @@
 .sx-product-info-wrapper .nav-item {
     font-size: 25px;
 }
+
 .sx-product-info-wrapper .nav-link.active {
     font-weight: bold;
 }
-
-
 
 
 .sx-order-items .sx-order-item {
@@ -106,21 +110,24 @@
     border-color: #333;
     background-color: transparent;
 }
+
 .btn-select-option .sx-no-check {
     opacity: 0.5;
 }
+
 .btn-select-option:hover .sx-no-check {
     opacity: 1;
 }
+
 .btn-select-option:focus, .btn-select-option.active {
-  color: #fff;
-  background-color: #333;
-}
-.btn-select-option:hover {
-  color: #fff;
-  background-color: #333;
+    color: #fff;
+    background-color: #333;
 }
 
+.btn-select-option:hover {
+    color: #fff;
+    background-color: #333;
+}
 
 
 .sx-stick-slider .slick-slide {
@@ -131,9 +138,6 @@
     display: inline;
     margin: auto;
 }
-
-
-
 
 
 /**
@@ -238,3 +242,148 @@
     -webkit-align-items: center;
     align-items: center;
 }
+
+
+.sx-products-slider-section {
+    padding-top: 20px;
+}
+
+/**
+ * Современное оформление свойств
+ */
+.sx-properties-wrapper.sx-columns-1 ul.sx-properties {
+    -moz-column-count: 1;
+    column-count: 1;
+}
+
+.sx-properties-wrapper.sx-columns-2 ul.sx-properties {
+    -moz-column-count: 2;
+    column-count: 2;
+}
+
+.sx-properties-wrapper.sx-columns-3 ul.sx-properties {
+    -moz-column-count: 1;
+    column-count: 1;
+}
+
+ul.sx-properties {
+    -moz-column-count: 2;
+    column-count: 2;
+    grid-column-gap: 40px;
+    -moz-column-gap: 40px;
+    column-gap: 40px;
+    margin: 0px;
+    padding: 0px;
+}
+
+ul.sx-properties li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    page-break-inside: avoid;
+    -moz-column-break-inside: avoid;
+    break-inside: avoid;
+}
+
+ul.sx-properties .sx-properties--value {
+    text-align: right;
+    max-width: 200px;
+}
+
+ul.sx-properties .sx-properties--name {
+    color: #93989d;
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    white-space: nowrap;
+}
+
+ul.sx-properties .sx-properties--name:after {
+    content: "";
+    flex-grow: 1;
+    opacity: .25;
+    margin: 0 6px 0 2px;
+    border-bottom: 1px dotted #4b545b;
+}
+
+
+/**
+ * Настройка аккардиона на товарной странице
+ */
+.sx-product-info-accordion .card {
+    border-radius: 0;
+    margin-bottom: 10px;
+}
+
+.sx-product-info-accordion .card-header {
+    padding: 0;
+}
+
+.sx-product-info-accordion .card-header a {
+    width: 100%;
+    display: block;
+    padding: 5px 10px;
+    margin: 0;
+}
+
+.sx-product-info-accordion .card-header a i {
+    margin-top: 5px;
+}
+
+.sx-product-info-accordion .card-header a:hover {
+    text-decoration: none;
+}
+
+
+/**
+ * Правки в минималистичный шаблон
+ */
+.sx-minimal-page .sx-product-info-accordion .card {
+    border-radius: 0;
+    margin-bottom: 0;
+    border: none;
+}
+
+.sx-minimal-page .card-body .table {
+    margin: 0;
+}
+
+.sx-minimal-page .card-header {
+    background: transparent;
+    border: 0px;
+}
+
+.sx-minimal-page .sx-product-info-accordion .h2, .sx-minimal-page .sx-product-info-accordion h2 {
+    font-size: 1.6rem;
+}
+
+
+.sx-minimal-page .sx-product-info-accordion .card-header a {
+    padding: 5px 0;
+}
+
+.sx-minimal-page .sx-product-info-accordion .card-body {
+    padding: 10px 0;
+}
+
+
+/**
+ * Правки в мобильную версию
+ */
+.sx-mobile-product-page .sx-product-card-wrapper {
+    padding-top: 5px;
+    padding-bottom: 0;
+}
+
+.sx-mobile-product-page .sx-right-product-info {
+    margin-bottom: 10px;
+    background: #fafafa;
+    padding: 10px;
+}
+
+.sx-mobile-product-page .sx-col-product-info {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+

@@ -70,7 +70,12 @@
     cursor: pointer;
 }
 
-
+/**
+ * Оформление продуктовых слайдеров
+ */
+.sx-products-slider-wrapper .sx-products-slider--title {
+    text-align: center;
+}
 
 /**
  * Доработки корзины
@@ -87,5 +92,6 @@
         display: none;
     }
 }
+
 
 
