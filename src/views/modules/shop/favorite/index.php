@@ -21,7 +21,6 @@ $dataProvider->query->with('image');
 $dataProvider->query->joinWith('shopProduct');
 
 \Yii::$app->shop->filterBaseContentElementQuery($dataProvider->query);
-\Yii::$app->shop->filterByPriceContentElementQuery($dataProvider->query);
 
 $dataProvider->query->joinWith("shopProduct.shopFavoriteProducts as fav");
 $dataProvider->query->andWhere(['is not', "fav.id", null]);

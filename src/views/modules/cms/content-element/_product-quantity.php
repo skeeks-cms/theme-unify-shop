@@ -28,50 +28,53 @@ CSS
         if ($sources = \skeeks\cms\shop\models\ShopImportCmsSite::find()->cmsSite()->sort()->all()) : ?>
             <div style="margin-top: 10px;" class="sx-quantities-wrapper">
                 <?php foreach ($sources as $source) : ?>
-                    <?php
-                    $sourceProduct = $shopProduct->shopMainProduct->getShopAttachedProducts()->joinWith("cmsContentElement as cmsContentElement")
-                        ->andWhere(["cmsContentElement.cms_site_id" => $source->sender_cms_site_id])->one();
-                    $address = $source->senderCmsSite->cmsSiteAddress;
-                    if (!$address && $sourceProduct) {
-                        $forOrder = $sourceProduct->quantity + $forOrder;
-                    }
-
-                    ?>
-                    <?php if ($sourceProduct && $address) : ?>
+                    <?php if ($shopProduct->shopMainProduct) : ?>
                         <?php
-                        /**
-                         * @var \skeeks\cms\shop\models\ShopProduct $sourceProduct
-                         */
-                        if ($sourceProduct->shopStoreProducts) :  ?>
-                            <? foreach ($sourceProduct->shopStoreProducts as $shopStoreProduct) : ?>
+                        $sourceProduct = $shopProduct->shopMainProduct->getShopAttachedProducts()->joinWith("cmsContentElement as cmsContentElement")
+                            ->andWhere(["cmsContentElement.cms_site_id" => $source->sender_cms_site_id])->one();
+                        $address = $source->senderCmsSite->cmsSiteAddress;
+                        if (!$address && $sourceProduct) {
+                            $forOrder = $sourceProduct->quantity + $forOrder;
+                        }
+
+                        ?>
+                        <?php if ($sourceProduct && $address) : ?>
+                            <?php
+                            /**
+                             * @var \skeeks\cms\shop\models\ShopProduct $sourceProduct
+                             */
+                            if ($sourceProduct->shopStoreProducts) : ?>
+                                <? foreach ($sourceProduct->shopStoreProducts as $shopStoreProduct) : ?>
+                                    <div class="d-flex flex-row sx-quantities-row">
+                                        <div class="" style="width: 100%; line-height: 1;">
+                                            <?php echo $shopStoreProduct->shopStore->name; ?>
+                                            <br/><small style="color: green;">Можно забрать сейчас!</small>
+                                        </div>
+                                        <div class="">
+                                            <b style="float: right;"><?php echo (float)$shopStoreProduct->quantity; ?>&nbsp;<?php echo $sourceProduct->measure->symbol; ?></b>
+
+                                        </div>
+                                    </div>
+                                <? endforeach; ?>
+                            <? else : ?>
                                 <div class="d-flex flex-row sx-quantities-row">
                                     <div class="" style="width: 100%; line-height: 1;">
-                                        <?php echo $shopStoreProduct->shopStore->name; ?>
-                                        <br/><small style="color: green;">Можно забрать сейчас!</small>
+                                        <?php echo $source->senderCmsSite->name; ?>
+                                        <?php if ($address) : ?>
+                                            <br/><small style="color: gray;"><?php echo $address->value; ?></small>
+                                            <br/><small style="color: green;">Можно забрать сейчас!</small>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="">
-                                        <b style="float: right;"><?php echo (float) $shopStoreProduct->quantity; ?>&nbsp;<?php echo $sourceProduct->measure->symbol; ?></b>
-        
+                                        <b style="float: right;"><?php echo $sourceProduct->quantity; ?>&nbsp;<?php echo $sourceProduct->measure->symbol; ?></b>
+
                                     </div>
                                 </div>
-                            <? endforeach; ?>
-                        <? else : ?>
-                            <div class="d-flex flex-row sx-quantities-row">
-                                <div class="" style="width: 100%; line-height: 1;">
-                                    <?php echo $source->senderCmsSite->name; ?>
-                                    <?php if ($address) : ?>
-                                        <br/><small style="color: gray;"><?php echo $address->value; ?></small>
-                                        <br/><small style="color: green;">Можно забрать сейчас!</small>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="">
-                                    <b style="float: right;"><?php echo $sourceProduct->quantity; ?>&nbsp;<?php echo $sourceProduct->measure->symbol; ?></b>
-    
-                                </div>
-                            </div>
-                        <? endif; ?>
-                        
+                            <? endif; ?>
+
+                        <?php endif; ?>
                     <?php endif; ?>
+
                 <?php endforeach; ?>
                 <?php if ($forOrder) : ?>
                     <div class="d-flex flex-row sx-quantities-row">

@@ -22,7 +22,6 @@ $dataProvider->query->with('image');
 $dataProvider->query->joinWith('shopProduct');
 
 \Yii::$app->shop->filterBaseContentElementQuery($dataProvider->query);
-\Yii::$app->shop->filterByPriceContentElementQuery($dataProvider->query);
 
 
 $filtersWidget = new \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget();
