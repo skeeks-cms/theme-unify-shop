@@ -26,11 +26,19 @@ CSS
          */
         $forOrder = 0;
         if ($sources = \skeeks\cms\shop\models\ShopImportCmsSite::find()->cmsSite()->sort()->all()) : ?>
+
+            <?
+            //mainCmsContentElement
+            $mainShopProduct = null;
+            if ($mainCmsContentElement = $shopProduct->cmsContentElement->mainCmsContentElement) {
+                $mainShopProduct = $mainCmsContentElement->shopProduct;
+            }
+            ?>
             <div style="margin-top: 10px;" class="sx-quantities-wrapper">
                 <?php foreach ($sources as $source) : ?>
-                    <?php if ($shopProduct->shopMainProduct) : ?>
+                    <?php if ($mainShopProduct) : ?>
                         <?php
-                        $sourceProduct = $shopProduct->shopMainProduct->getShopAttachedProducts()->joinWith("cmsContentElement as cmsContentElement")
+                        $sourceProduct = $mainShopProduct->getShopAttachedProducts()->joinWith("cmsContentElement as cmsContentElement")
                             ->andWhere(["cmsContentElement.cms_site_id" => $source->sender_cms_site_id])->one();
                         $address = $source->senderCmsSite->cmsSiteAddress;
                         if (!$address && $sourceProduct) {

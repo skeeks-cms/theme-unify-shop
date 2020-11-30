@@ -13,7 +13,17 @@
 $shopProduct = $model->shopProduct;
 //Если этот товар привязан к главному
 $infoModel = $model;
-if ($shopProduct->main_pid) {
+
+if ($model->main_cce_id) {
+    $shopMainProduct = $model->mainCmsContentElement->shopProduct;
+    if ($shopMainProduct->isOfferProduct) {
+        $infoModel = $shopMainProduct->shopProductWhithOffers->cmsContentElement;
+    } else {
+        $infoModel = $model->mainCmsContentElement;
+    }
+}
+
+/*if ($shopProduct->main_pid) {
     if ($shopProduct->shopMainProduct->isOfferProduct) {
         $element = $shopProduct->shopMainProduct->shopProductWhithOffers->cmsContentElement;
         $infoModel = $element;
@@ -21,7 +31,7 @@ if ($shopProduct->main_pid) {
     } else {
         $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
     }
-}
+}*/
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 ?>
 <div class="sx-product-card h-100 to-cart-fly-wrapper">
