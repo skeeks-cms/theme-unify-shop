@@ -38,11 +38,11 @@ CSS
                 <?php foreach ($sources as $source) : ?>
                     <?php if ($mainShopProduct) : ?>
                         <?php
-                        $sourceProduct = $mainShopProduct->getShopAttachedProducts()->joinWith("cmsContentElement as cmsContentElement")
-                            ->andWhere(["cmsContentElement.cms_site_id" => $source->sender_cms_site_id])->one();
+                        $sourceProduct = $mainCmsContentElement->getSecondaryCmsContentElements()
+                            ->andWhere(["secondaryCCE.cms_site_id" => $source->sender_cms_site_id])->one();
                         $address = $source->senderCmsSite->cmsSiteAddress;
                         if (!$address && $sourceProduct) {
-                            $forOrder = $sourceProduct->quantity + $forOrder;
+                            $forOrder = $sourceProduct->shopProduct->quantity + $forOrder;
                         }
 
                         ?>

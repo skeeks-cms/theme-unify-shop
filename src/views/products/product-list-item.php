@@ -23,15 +23,6 @@ if ($model->main_cce_id) {
     }
 }
 
-/*if ($shopProduct->main_pid) {
-    if ($shopProduct->shopMainProduct->isOfferProduct) {
-        $element = $shopProduct->shopMainProduct->shopProductWhithOffers->cmsContentElement;
-        $infoModel = $element;
-        $infoModel->name = $element->name;
-    } else {
-        $infoModel = $shopProduct->shopMainProduct->cmsContentElement;
-    }
-}*/
 $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
 ?>
 <div class="sx-product-card h-100 to-cart-fly-wrapper">
