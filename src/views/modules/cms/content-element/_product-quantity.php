@@ -51,15 +51,15 @@ CSS
                             /**
                              * @var \skeeks\cms\shop\models\ShopProduct $sourceProduct
                              */
-                            if ($sourceProduct->shopStoreProducts) : ?>
-                                <? foreach ($sourceProduct->shopStoreProducts as $shopStoreProduct) : ?>
+                            if ($sourceProduct->shopProduct->shopStoreProducts) : ?>
+                                <? foreach ($sourceProduct->shopProduct->shopStoreProducts as $shopStoreProduct) : ?>
                                     <div class="d-flex flex-row sx-quantities-row">
                                         <div class="" style="width: 100%; line-height: 1;">
                                             <?php echo $shopStoreProduct->shopStore->name; ?>
                                             <br/><small style="color: green;">Можно забрать сейчас!</small>
                                         </div>
                                         <div class="">
-                                            <b style="float: right;"><?php echo (float)$shopStoreProduct->quantity; ?>&nbsp;<?php echo $sourceProduct->measure->symbol; ?></b>
+                                            <b style="float: right;"><?php echo (float)$shopStoreProduct->quantity; ?>&nbsp;<?php echo $sourceProduct->shopProduct->measure->symbol; ?></b>
 
                                         </div>
                                     </div>
@@ -74,7 +74,7 @@ CSS
                                         <?php endif; ?>
                                     </div>
                                     <div class="">
-                                        <b style="float: right;"><?php echo $sourceProduct->quantity; ?>&nbsp;<?php echo $sourceProduct->measure->symbol; ?></b>
+                                        <b style="float: right;"><?php echo $sourceProduct->shopProduct->quantity; ?>&nbsp;<?php echo $sourceProduct->shopProduct->measure->symbol; ?></b>
 
                                     </div>
                                 </div>
