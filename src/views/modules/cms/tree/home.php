@@ -40,7 +40,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
     $widget->viewFile = '@app/views/widgets/TreeMenuCmsWidget/sub-catalog-small';
     $widget->activeQuery->with('image');
     $widget::end();
-    
+
 } else {
 
     $catalogTree = \skeeks\cms\models\CmsTree::find()->cmsSite()->joinWith('treeType as treeType')->andWhere(['treeType.code' => 'catalog'])->orderBy(['level' => SORT_ASC])->limit(1)->one();
@@ -67,7 +67,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
     <section class="container sx-container" style="margin: 40px auto;">
         <div class="row justify-content-between">
             <div class="col-12">
-                <?php if($model->seo_h1) : ?>
+                <?php if ($model->seo_h1) : ?>
                     <h1><?php echo $model->seo_h1; ?></h1>
                 <?php endif; ?>
 
@@ -90,7 +90,8 @@ if (\Yii::$app->mobileDetect->isMobile) {
             'label'                => "Популярные товары",
             'enabledPaging'        => "N",
             'enabledRunCache'      => "N",
-            'orderBy'           =>  'show_counter',
+            'enabledCurrentTree'   => "N",
+            'orderBy'              => 'show_counter',
             'active'               => "Y",
             'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
             'limit'                => 15,
@@ -106,8 +107,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
 
                 \Yii::$app->shop
                     ->filterBaseContentElementQuery($activeDataProvider->query)
-                    ->filterByQuantityQuery($activeDataProvider->query)
-                ;
+                    ->filterByQuantityQuery($activeDataProvider->query);
             },
         ]);
         $widgetElements::end();
@@ -120,6 +120,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
             'label'                => "Новые поступления",
             'enabledPaging'        => "N",
             'enabledRunCache'      => "N",
+            'enabledCurrentTree'   => "N",
             'active'               => "Y",
             'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
             'limit'                => 15,
@@ -133,8 +134,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
 
                 \Yii::$app->shop
                     ->filterBaseContentElementQuery($activeDataProvider->query)
-                    ->filterByQuantityQuery($activeDataProvider->query)
-                ;
+                    ->filterByQuantityQuery($activeDataProvider->query);
 
                 //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
                 $activeDataProvider->query->orderBy(['published_at' => SORT_DESC]);
@@ -145,7 +145,6 @@ if (\Yii::$app->mobileDetect->isMobile) {
     </div>
 
 <? endif; ?>
-
 
 
 <!-- Blog News -->

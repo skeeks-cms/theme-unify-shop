@@ -30,7 +30,6 @@ class StandartShopFiltersWidget extends FiltersWidget
 
         //Регистрация и настройка стандартных фильтров
         $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
-        $availabilityFiltersHandler->value = (int)\Yii::$app->skeeks->site->shopSite->is_show_product_no_price;
 
         $sortFiltersHandler = new \skeeks\cms\shop\queryFilter\SortFiltersHandler();
         $availabilityFiltersHandler->viewFileVisible = '@app/views/filters/availability-filter';
