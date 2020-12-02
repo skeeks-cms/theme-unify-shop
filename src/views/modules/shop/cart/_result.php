@@ -24,11 +24,16 @@
             <div class="toggle-content" style="display: block;">
 
 
-                <div class="sx-discount-coupons-wrapper">
-                <?= \skeeks\cms\shopDiscountCoupon\ShopDiscountCouponWidget::widget([
-                        'btnSubmitName' => '✓'
-                ]); ?>
-                </div>
+                <?php if (\skeeks\cms\shop\models\ShopDiscountCoupon::find()
+                    ->andWhere(['shop_discount_id' => \skeeks\cms\shop\models\ShopDiscount::find()->cmsSite()->select(['id'])])
+                    ->active()->count()) : ?>
+                    <div class="sx-discount-coupons-wrapper">
+                        <?= \skeeks\cms\shopDiscountCoupon\ShopDiscountCouponWidget::widget([
+                            'btnSubmitName' => '✓',
+                        ]); ?>
+                    </div>
+                <?php endif; ?>
+
 
                 <span class="clearfix">
                 <span class="float-right"><?= \Yii::$app->shop->shopUser->shopOrder->moneyOriginal; ?></span>
