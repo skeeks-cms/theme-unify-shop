@@ -13,6 +13,7 @@
 $dataProvider = new \yii\data\ActiveDataProvider([
     'query' => \skeeks\cms\shop\models\ShopCmsContentElement::find()->active(),
 ]);
+//Если нужно учитывать второстепенную привязку разделов, нужно доработать.
 $dataProvider->query->cmsTree();
 
 $dataProvider->pagination->pageSize = \Yii::$app->unifyShopTheme->productListPerPageSize;
@@ -40,13 +41,24 @@ if (\Yii::$app->unifyShopTheme->is_allow_filters) {
         $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => $show_filter_property_ids]);
     }
 
-    if ($model->activeChildren) {
+    /*if ($model->activeChildren) {
         $rpQuery->andWhere([
             'or',
             ['map.cms_tree_id' => $model->id],
             ['map.cms_tree_id' => null],
         ]);
+    } */
+    
+    $treeIds = [$model->id];
+    if ($model->main_cms_tree_id) {
+        $treeIds[] = $model->main_cms_tree_id;
     }
+    
+    $rpQuery->andWhere([
+        'or',
+        ['map.cms_tree_id' => $treeIds],
+        ['map.cms_tree_id' => null],
+    ]);
 
     $eavFiltersHandler->initRPByQuery($rpQuery);
     $priceFiltersHandler = new \skeeks\cms\shop\queryFilter\PriceFiltersHandler([

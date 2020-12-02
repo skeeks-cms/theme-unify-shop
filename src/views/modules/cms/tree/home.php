@@ -87,6 +87,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
 
                 \Yii::$app->shop
                     ->filterBaseContentElementQuery($activeDataProvider->query)
+                    ->filterByQuantityQuery($activeDataProvider->query)
                 ;
             },
         ]);
@@ -113,6 +114,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
 
                 \Yii::$app->shop
                     ->filterBaseContentElementQuery($activeDataProvider->query)
+                    ->filterByQuantityQuery($activeDataProvider->query)
                 ;
 
                 //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
