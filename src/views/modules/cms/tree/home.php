@@ -50,6 +50,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
     }
     $widget = \skeeks\cms\cmsWidgets\tree\TreeCmsWidget::beginWidget('home-tree-slider', $config);
     $widget->descriptor->name = 'Слайдер разделов';
+    $widget->is_cache = false;
     $widget->viewFile = '@app/views/widgets/TreeCmsWidget/revolution-slider';
     $widget->is_has_image_only = true;
     $widget->activeQuery->with('image');
@@ -61,8 +62,26 @@ if (\Yii::$app->mobileDetect->isMobile) {
 ?>
 
 
+<? if ($model->description_full) : ?>
+    <!-- What People Say -->
+    <section class="container sx-container" style="margin: 40px auto;">
+        <div class="row justify-content-between">
+            <div class="col-12">
+                <?php if($model->seo_h1) : ?>
+                    <h1><?php echo $model->seo_h1; ?></h1>
+                <?php endif; ?>
+
+                <?= $model->description_full; ?>
+
+            </div>
+        </div>
+    </section>
+    <!-- End What People Say -->
+<? endif; ?>
+
+
 <? if (\Yii::$app->shop->shopContents && \Yii::$app->mobileDetect->isDesktop) : ?>
-    <div class="container sx-container g-mt-40 g-mb-40">
+    <div class="container sx-container" style="margin: 40px auto;">
         <?
         \skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
         \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductCardAsset::register($this);
@@ -94,7 +113,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
         $widgetElements::end();
         ?>
     </div>
-    <div class="container sx-container g-mt-40 g-mb-40">
+    <div class="container sx-container" style="margin: 40px auto;">
         <?
         $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-new-products", [
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
@@ -126,23 +145,9 @@ if (\Yii::$app->mobileDetect->isMobile) {
     </div>
 
 <? endif; ?>
-<? if ($model->description_full) : ?>
-    <!-- What People Say -->
-    <section class="container sx-container g-pt-10 g-pb-10">
-        <div class="row justify-content-between">
-            <div class="col-lg-12 flex-lg-unordered g-mt-20--lg g-mb-20">
-                <div class="mb-2">
-                    <div class="d-inline-block g-width-20 g-height-2 g-pos-rel g-top-minus-4 g-bg-primary mr-2"></div>
-                    <span class="g-color-gray-dark-v3 g-font-weight-600 g-font-size-12 text-uppercase">О компании11</span>
-                </div>
 
-                <?= $model->description_full; ?>
 
-            </div>
-        </div>
-    </section>
-    <!-- End What People Say -->
-<? endif; ?>
+
 <!-- Blog News -->
 <section class="container sx-container g-pt-10 g-pb-10">
     <?
