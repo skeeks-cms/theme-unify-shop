@@ -42,3 +42,14 @@
 .sx-discount-coupons-wrapper {
     margin-bottom: 20px;
 }
+
+.sx-delivery-checkout-handler {
+    margin-bottom: 20px;
+}
+
+.sx-dashed {
+    border-bottom: 1px dashed;
+}
+.sx-dashed:hover {
+    text-decoration: none;
+}

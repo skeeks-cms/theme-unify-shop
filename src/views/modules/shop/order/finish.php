@@ -1,12 +1,16 @@
 <?php
 /**
+ * @link https://cms.skeeks.com/
+ * @copyright Copyright (c) 2010 SkeekS
+ * @license https://cms.skeeks.com/license/
  * @author Semenov Alexander <semenov@skeeks.com>
- * @link http://skeeks.com/
- * @copyright 2010 SkeekS (СкикС)
- * @date 06.10.2015
  */
-/* @var $this yii\web\View */
-/* @var $model \skeeks\cms\shop\models\ShopOrder */
+/**
+ * @var $this yii\web\View
+ * @var $model \skeeks\cms\shop\models\ShopOrder
+ */
+
+
 use yii\helpers\Html;
 $this->registerCss(<<<CSS
 .sx-detail-order, .sx-buyer-info {
@@ -30,13 +34,13 @@ CSS
     <div class="col-12">
         <div class="row">
             <div class="col-12">
-                <h1 style="margin-bottom: 0px;">Заказ <span class="g-color-primary">№<?= $model->id; ?></span> 
-                    <?php if((float) $model->moneyOriginal->amount > 0) : ?>
+                <h1 style="margin-bottom: 0px;">Заказ <span class="g-color-primary">№<?= $model->id; ?></span>
+                    <?php if ((float)$model->moneyOriginal->amount > 0) : ?>
                         на сумму <span
-                            class="g-color-primary"><?= \Yii::$app->money->convertAndFormat($model->moneyOriginal); ?></span>
+                                class="g-color-primary"><?= \Yii::$app->money->convertAndFormat($model->moneyOriginal); ?></span>
                     <?php endif; ?>
-                    
-                    
+
+
                 </h1>
                 <p style="color: gray;">от <?= \Yii::$app->formatter->asDatetime($model->created_at); ?></p>
             </div>
@@ -50,7 +54,7 @@ CSS
                     <div class="col-9">
                         <?php echo Html::tag('span', $model->shopOrderStatus->name, ['style' => "padding: 2px 5px; color: {$model->shopOrderStatus->color}; background: {$model->shopOrderStatus->bg_color};"]); ?>
                         <?php if ($model->shopOrderStatus->description) : ?>
-                            <i class="far fa-question-circle" title="<?php echo $model->shopOrderStatus->description; ?>"></i>
+                            <i class="far fa-question-circle" data-toggle="tooltip" title="<?php echo $model->shopOrderStatus->description; ?>"></i>
                         <?php endif; ?>
 
                     </div>
@@ -87,6 +91,7 @@ CSS
                             <? endif; ?>
                         </div>
                     </div>
+
                 <?php endif; ?>
 
                 <?php if ($model->lastStatusLog && $model->lastStatusLog->comment) : ?>
@@ -170,6 +175,37 @@ JS
 
 
 
+
+
+        <?php if ($model->deliveryHandlerCheckoutModel) : ?>
+            <div class="sx-delivery-info" style="
+                    margin-top: 20px;
+                    /*background: #f8f8f8;*/
+                    /*padding: 20px;*/
+                ">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Подробнее о доставке</h4>
+                    </div>
+                </div>
+                <div class="sx-data">
+                    <div class="col-12">
+                        <?php foreach ($model->deliveryHandlerCheckoutModel->getVisibleAttributes() as $attribute) : ?>
+
+                            <div class="row sx-data-row">
+                                <div class="col-3"><?php echo $model->deliveryHandlerCheckoutModel->getAttributeLabel($attribute); ?>
+                                </div>
+                                <div class="col-9">
+                                    <?php echo $model->deliveryHandlerCheckoutModel->{$attribute}; ?>
+                                </div>
+                            </div>
+
+                        <?php endforeach; ?>
+
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
 
 
         <?php if ($model->shopBuyer) : ?>
