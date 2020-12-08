@@ -8,7 +8,10 @@
 /* @var $this yii\web\View */
 ?>
 
-<? $favoriteProducts = \Yii::$app->shop->cart->getShopFavoriteProducts()->count(); ?>
+<?
+$favQuery = \Yii::$app->shop->shopUser->getShopFavoriteProducts();
+\Yii::$app->shop->filterBaseContentElementQuery($favQuery);
+$favoriteProducts = $favQuery->count(); ?>
 <div class="sx-header-menu-item sx-favorite-products"
      data-total="<?= $favoriteProducts; ?>"
 >

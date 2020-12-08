@@ -6,11 +6,15 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /**
- * @var $this yii\web\View
- * @var $model \skeeks\cms\models\CmsTree
- * @var \yii\data\ActiveDataProvider $dataProvider
- * @var \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget $filtersWidget
+ * @var                                                                      $this yii\web\View
+ * @var                                                                      $model \skeeks\cms\models\CmsTree
+ * @var \yii\data\ActiveDataProvider                                         $dataProvider
+ * @var \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget       $filtersWidget
+ * @var \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogNoColPage $catalogSettings
  */
+
+$catalogSettings = \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogNoColPage::beginWidget("catalog-no-col");
+$catalogSettings::end();
 
 if ($filtersWidget->getPriceHandler()) {
     $filtersWidget->getPriceHandler()->viewFile = \Yii::$app->mobileDetect->isMobile ? '@app/views/filters/price-filter' : '@app/views/filters/price-filter-inline';
@@ -78,31 +82,43 @@ CSS
                     </div>
                 </div>
 
-                <div class="sx-filters-wrapper-inline">
-                    <?php
-                    if (!\Yii::$app->mobileDetect->isMobile) {
-                        $filtersWidget->getSortHandler()->viewFile = '@app/views/filters/sort-filter-inline';
-                        $filtersWidget->getAvailabilityHandler()->viewFile = '@app/views/filters/availability-filter-inline';
-                    }
 
-                    echo $filtersWidget->run(); ?>
-                </div>
+                <?php if ($catalogSettings->is_fix_filters_on_scroll) : ?>
+                <!--Зафиксировать фильтры на верху страницы-->
+                    <div class="sx-filters-wrapper-inline js-sticky-block" id="sx-filters-wrapper-inline"
+                         data-has-sticky-header="true"
+                         data-start-point="#sx-filters-wrapper-inline"
+                         data-end-point=".sx-footer"
+                    >
+                    <?php \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this); ?>
+                <?php else: ?>
+                    <div class="sx-filters-wrapper-inline" id="sx-filters-wrapper-inline">
+                <?php endif; ?>
 
-                <div class="row sx-fast-filters">
-                    <div class="col-12">
+                        <?php
+
+                        if (!\Yii::$app->mobileDetect->isMobile) {
+                            $filtersWidget->getSortHandler()->viewFile = '@app/views/filters/sort-filter-inline';
+                            $filtersWidget->getAvailabilityHandler()->viewFile = '@app/views/filters/availability-filter-inline';
+                        }
+                        echo $filtersWidget->run(); ?>
+                    </div>
+
+                    <div class="row sx-fast-filters">
+                        <div class="col-12">
                         <span class="sx-filters-selected-wrapper">
                         </span>
+                        </div>
                     </div>
+
+                    <?php echo $this->render("@app/views/products/product-list", [
+                        'dataProvider' => $dataProvider,
+                    ]); ?>
+
                 </div>
 
-                <?php echo $this->render("@app/views/products/product-list", [
-                    'dataProvider' => $dataProvider
-                ]); ?>
-
             </div>
-
+            <? /* $pjax::end(); */ ?>
         </div>
-        <? /* $pjax::end(); */ ?>
-    </div>
 </section>
 
