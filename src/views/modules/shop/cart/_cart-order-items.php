@@ -54,7 +54,7 @@
                                                 </div>
                                                 <div class="my-auto sx-plus">+</div>
                                             </span>
-                <div class="my-auto g-ml-10">
+                <div class="my-auto sx-measure-symbol">
                     <?= $orderItem->measure_name; ?>
                 </div>
 

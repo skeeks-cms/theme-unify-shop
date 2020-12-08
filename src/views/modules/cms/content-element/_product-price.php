@@ -107,7 +107,7 @@ JS
             </div>
             <div class="my-auto sx-plus">+</div>
         </span>
-            <div class="my-auto g-ml-10">
+            <div class="my-auto sx-measure-symbol">
                 <?= $shopProduct->measure->symbol; ?>
             </div>
         </div>
@@ -304,7 +304,7 @@ JS
                     </div>
                     <div class="my-auto sx-plus">+</div>
                 </span>
-                    <div class="my-auto g-ml-10">
+                    <div class="my-auto sx-measure-symbol">
                         <?= $offerShopProduct->measure->symbol; ?>
                     </div>
                 </div>

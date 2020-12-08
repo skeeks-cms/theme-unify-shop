@@ -53,3 +53,8 @@
 .sx-dashed:hover {
     text-decoration: none;
 }
+
+
+.sx-order-item-properties p {
+    font-size: 0.8em;
+}

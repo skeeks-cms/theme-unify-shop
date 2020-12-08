@@ -138,6 +138,7 @@
                 var totalQuantity = sx.Shop.get('cartData').quantity;
                 var totalItems = sx.Shop.get('cartData').countShopBaskets;
                 var totalMoney = sx.Shop.get('cartData').money.convertAndFormat;
+                var totalMoneyAmount = Number(sx.Shop.get('cartData').money.amount);
 
                 if (totalQuantity) {
                     jCarts.addClass("sx-is-full-cart");
@@ -147,7 +148,11 @@
 
                 $('.sx-total-quantity', jCarts).empty().append(totalQuantity);
                 $('.sx-total-items', jCarts).empty().append(totalItems);
-                $('.sx-total-money', jCarts).empty().append(totalMoney);
+                $('.sx-total-money', jCarts).empty();
+
+                if (totalMoneyAmount > 0) {
+                    $('.sx-total-money', jCarts).append(totalMoney);
+                }
 
             });
         })
