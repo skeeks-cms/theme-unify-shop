@@ -35,7 +35,6 @@ CSS
 ?>
 <section class="">
     <div class="container sx-container">
-        <? /* $pjax = \skeeks\cms\widgets\Pjax::begin(); */ ?>
         <div class="row">
             <div class="col-12 sx-catalog-wrapper" style="padding-bottom: 20px; padding-top: 20px;">
                 <?= $this->render('@app/views/breadcrumbs', [
@@ -85,15 +84,15 @@ CSS
 
                 <?php if ($catalogSettings->is_fix_filters_on_scroll) : ?>
                 <!--Зафиксировать фильтры на верху страницы-->
-                    <div class="sx-filters-wrapper-inline js-sticky-block" id="sx-filters-wrapper-inline"
-                         data-has-sticky-header="true"
-                         data-start-point="#sx-filters-wrapper-inline"
-                         data-end-point=".sx-footer"
-                    >
+                <div class="sx-filters-wrapper-inline js-sticky-block" id="sx-filters-wrapper-inline"
+                     data-has-sticky-header="true"
+                     data-start-point="#sx-filters-wrapper-inline"
+                     data-end-point=".sx-footer"
+                >
                     <?php \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this); ?>
-                <?php else: ?>
+                    <?php else: ?>
                     <div class="sx-filters-wrapper-inline" id="sx-filters-wrapper-inline">
-                <?php endif; ?>
+                        <?php endif; ?>
 
                         <?php
 
@@ -103,22 +102,17 @@ CSS
                         }
                         echo $filtersWidget->run(); ?>
                     </div>
-
                     <div class="row sx-fast-filters">
                         <div class="col-12">
                         <span class="sx-filters-selected-wrapper">
                         </span>
                         </div>
                     </div>
-
                     <?php echo $this->render("@app/views/products/product-list", [
                         'dataProvider' => $dataProvider,
                     ]); ?>
-
                 </div>
-
             </div>
-            <? /* $pjax::end(); */ ?>
         </div>
 </section>
 

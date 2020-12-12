@@ -18,7 +18,6 @@ $catalogSettings::end();
 ?>
 <section class="">
     <div class="container sx-container">
-        <? /* $pjax = \skeeks\cms\widgets\Pjax::begin(); */ ?>
         <div class="row">
             <div class="order-md-2 sx-content-col-main">
                 <?= $this->render('@app/views/breadcrumbs', [
@@ -78,13 +77,11 @@ $catalogSettings::end();
                         </span>
                     </div>
                 </div>
-
                 <?php echo $this->render("@app/views/products/product-list", [
                     'dataProvider' => $dataProvider
                 ]); ?>
 
             </div>
-
             <div class="order-md-1 g-bg-secondary sx-content-col-left" style="">
                 <?= $this->render('@app/views/modules/cms/tree/catalogs/_left-col', [
                     'catalogSettings' => $catalogSettings,
@@ -92,7 +89,6 @@ $catalogSettings::end();
                 ]); ?>
             </div>
         </div>
-        <? /* $pjax::end(); */ ?>
     </div>
 </section>
 

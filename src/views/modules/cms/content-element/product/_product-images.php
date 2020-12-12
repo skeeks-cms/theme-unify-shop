@@ -9,14 +9,6 @@
 /* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
 \skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
 $this->registerJs(<<<JS
-
-/*_.delay(function() {
-    $(".slick-slide").on("click", function() {
-    var jElement = $(this).find(".sx-fancybox-gallary");
-    jElement.trigger("click");
-});
-}, 500);*/
-
 $('[data-fancybox="images"]').fancybox({
     
     thumbs: {
@@ -30,7 +22,6 @@ $('[data-fancybox="images"]').fancybox({
       },
   },
 });
-
 JS
 );
 
