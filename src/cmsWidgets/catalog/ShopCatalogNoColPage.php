@@ -52,7 +52,7 @@ class ShopCatalogNoColPage extends Widget
     public function rules()
     {
         return ArrayHelper::merge(parent::rules(), [
-            [['is_show_subtree_col_left'], 'boolean'],
+            [['is_fix_filters_on_scroll'], 'boolean'],
         ]);
     }
 
