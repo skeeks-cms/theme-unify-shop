@@ -116,11 +116,11 @@ JS
             <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
                 <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
                 <? if ($shopProduct->measure_ratio >= $count) : ?>
-                    <div class="row">
+                    <div class="d-flex flex-row">
                     <!--<div class="my-auto g-ml-10">
                         =
                     </div>-->
-                    <div class="my-auto g-ml-10 d-flex flex-row">
+                    <div class="my-auto d-flex flex-row">
                         <span class="d-flex flex-row sx-quantity-group sx-secondary-quantity-group">
                             <div class="my-auto sx-minus">-</div>
                             <div class="my-auto">
@@ -144,7 +144,7 @@ JS
                             </div>
                             <div class="my-auto sx-plus">+</div>
                         </span>
-                        <div class="my-auto g-ml-10">
+                        <div class="my-auto" style="margin-left: 10px;">
                             <?= $measure->symbol; ?>
                         </div>
                     </div>
