@@ -6,6 +6,7 @@
  * @date 06.03.2015
  *
  * @var \skeeks\cms\shop\models\ShopCmsContentElement $model
+ * @var \skeeks\cms\shop\models\ShopCmsContentElement $infoModel
  * @var                                               $this yii\web\View
  */
 \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductCardAsset::register($this);
@@ -45,16 +46,16 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
     </div>
     <div class="sx-product-card--photo">
         <a href="<?= $model->url; ?>" data-pjax="0">
-            <? if ($infoModel->image) : ?>
-                <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->image ? $infoModel->image->src : null,
+            <? if ($infoModel->mainProductImage) : ?>
+                <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->mainProductImage ? $infoModel->mainProductImage->src : null,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => \Yii::$app->unifyShopTheme->catalog_img_preview_width,
                         'h' => \Yii::$app->unifyShopTheme->catalog_img_preview_height,
                         'm' => \Yii::$app->unifyShopTheme->catalog_img_preview_crop,
                     ]), $model->code
-                ); ?>" title="<?= \yii\helpers\Html::encode($infoModel->name); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->name); ?>"/>
+                ); ?>" title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
             <? else : ?>
-                <img class="img-fluid to-cart-fly-img" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $infoModel->name; ?>">
+                <img class="img-fluid to-cart-fly-img" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $infoModel->productName; ?>">
             <? endif; ?>
         </a>
         <? if ($priceHelper->hasDiscount) : ?>
@@ -90,7 +91,7 @@ $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
             </div>
         <? endif; ?>
         <div class="sx-product-card--title">
-            <a href="<?= $model->url; ?>" title="<?= $model->name; ?>" data-pjax="0" class="sx-product-card--title-a sx-main-text-color g-text-underline--none--hover"><?= $infoModel->name; ?></a>
+            <a href="<?= $model->url; ?>" title="<?= $model->productName; ?>" data-pjax="0" class="sx-product-card--title-a sx-main-text-color g-text-underline--none--hover"><?= $infoModel->productName; ?></a>
         </div>
         <? if (isset($shopProduct)) : ?>
             <div class="sx-product-card--actions">

@@ -20,7 +20,7 @@ $dataProvider->query->with('shopProduct.baseProductPrice');
 $dataProvider->query->with('image');
 $dataProvider->query->joinWith('shopProduct');
 
-\Yii::$app->shop->filterBaseContentElementQuery($dataProvider->query);
+\Yii::$app->shop->filterByMainPidContentElementQuery($dataProvider->query);
 
 \Yii::$app->cmsSearch->buildElementsQuery($dataProvider->query);
 \Yii::$app->cmsSearch->logResult($dataProvider);
