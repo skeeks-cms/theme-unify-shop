@@ -57,7 +57,10 @@ JS
                 if ($canViewTypePrices = \Yii::$app->shop->canViewTypePrices) {
                     foreach ($canViewTypePrices as $canViewTypePrice) {
                         $p = $shopProduct->getShopProductPrices()->andWhere(['type_price_id' => $canViewTypePrice->id])->one();
-                        $info[] = $p->money." — ".$canViewTypePrice->name;
+                        if ($p) {
+                            $info[] = $p->money." — ".$canViewTypePrice->name;
+                        }
+                        
                     }
                 }
                 $infoDisocount = implode("<br />", $info);
@@ -428,7 +431,9 @@ JS
                         if ($canViewTypePrices = \Yii::$app->shop->canViewTypePrices) {
                             foreach ($canViewTypePrices as $canViewTypePrice) {
                                 $p = $shopProduct->getShopProductPrices()->andWhere(['type_price_id' => $canViewTypePrice->id])->one();
-                                $info[] = $p->money." — ".$canViewTypePrice->name;
+                                if ($p) {
+                                    $info[] = $p->money." — ".$canViewTypePrice->name;
+                                }
                             }
                         }
                         $infoDisocount = implode("<br />", $info);
