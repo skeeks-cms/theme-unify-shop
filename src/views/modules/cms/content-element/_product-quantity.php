@@ -14,12 +14,15 @@ $this->registerCss(<<<CSS
 }
 CSS
 );
+/*if (!@$shopStoreProducts) {
+    $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->stores);
+}*/
 ?>
 <? if (\Yii::$app->skeeks->site->shopSite->is_show_quantity_product) : ?>
     <!-- 'available' || 'not-available' || '' -->
     <div style="margin-top: 10px;" class="sx-quantities-wrapper">
-        <?php if($shopProduct->shopStoreProducts) : ?>
-            <?php foreach($shopProduct->shopStoreProducts as $shopStoreProduct) : ?>
+        <?php if($shopStoreProducts) : ?>
+            <?php foreach($shopStoreProducts as $shopStoreProduct) : ?>
                 <div class="d-flex flex-row sx-quantities-row">
                     <div class="" style="width: 100%; line-height: 1;">
                         <?php echo $shopStoreProduct->shopStore->name; ?>

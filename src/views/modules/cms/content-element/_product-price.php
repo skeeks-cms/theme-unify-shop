@@ -163,7 +163,17 @@ JS
         <? endif; ?>
     </div>
 
-    <? if ($shopProduct->quantity > 0) : ?>
+    <?
+    //TODO: подумать сделать оптимальнее
+    $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->stores)->all();
+    $quantityAvailable = 0;
+    if ($shopStoreProducts) {
+        foreach ($shopStoreProducts as $shopStoreProduct)
+        {
+            $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
+        }
+    }
+    if ($shopProduct->quantity > 0 || $quantityAvailable > 0) : ?>
         <div class="g-mt-10">
             <div class="control-group group-submit g-mb-15">
                 <div class="buttons-row ">
@@ -189,6 +199,7 @@ JS
                 <?
                 echo $this->render("@app/views/modules/cms/content-element/_product-quantity", [
                     'shopProduct'           => $shopProduct,
+                    'shopStoreProducts'           => $shopStoreProducts,
                 ]); ?>
             </div>
         </div>
@@ -291,7 +302,18 @@ JS
         <?= $shopOfferChooseHelper->render(); ?>
 
 
-        <? if ($offerShopProduct->quantity > 0) : ?>
+        <?
+
+        //TODO: подумать сделать оптимальнее
+        $shopStoreProducts = $offerShopProduct->getShopStoreProducts(\Yii::$app->shop->stores)->all();
+        $quantityAvailable = 0;
+        if ($shopStoreProducts) {
+            foreach ($shopStoreProducts as $shopStoreProduct)
+            {
+                $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
+            }
+        }
+        if ($offerShopProduct->quantity > 0 || $quantityAvailable > 0) : ?>
 
 
             <div class="sx-quantity-wrapper">
@@ -384,6 +406,7 @@ JS
                     <?
                     echo $this->render("@app/views/modules/cms/content-element/_product-quantity", [
                         'shopProduct'           => $offerShopProduct,
+                        'shopStoreProducts'           => $shopStoreProducts,
                     ]); ?>
                 </div>
             </div>
