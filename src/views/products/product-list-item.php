@@ -24,7 +24,7 @@ if ($model->main_cce_id) {
     }
 }
 
-$priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($model);
+$priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
 ?>
 <div class="sx-product-card h-100 to-cart-fly-wrapper">
     <?
