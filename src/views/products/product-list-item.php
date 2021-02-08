@@ -59,7 +59,7 @@ $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
             <? endif; ?>
         </a>
         <? if ($priceHelper->hasDiscount) : ?>
-            <? $percent = (int)($priceHelper->percent * 100); ?>
+            <? $percent = round($priceHelper->percent * 100, 0); ?>
             <? if ($percent > 0) : ?>
                 <div class="sx-product-card--sale">
                     <div><span class="number">-<?= $percent; ?></span><span class="percent">%</span></div>
