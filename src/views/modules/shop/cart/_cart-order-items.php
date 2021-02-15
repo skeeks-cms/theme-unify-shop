@@ -49,6 +49,7 @@
                                                             value="<?= (float)$orderItem->quantity; ?>"
                                                             class="form-control sx-quantity-input sx-basket-quantity"
                                                             data-measure_ratio="<?= $orderItem->shopProduct ? $orderItem->shopProduct->measure_ratio : ""; ?>"
+                                                            data-measure_ratio_min="<?= $orderItem->shopProduct ? $orderItem->shopProduct->measure_ratio_min : ""; ?>"
                                                             data-basket_id="<?= $orderItem->id; ?>"
                                                     />
                                                 </div>

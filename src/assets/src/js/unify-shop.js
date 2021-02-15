@@ -26,6 +26,7 @@
         var jGroup = $(this).closest(".sx-quantity-group");
         var jInput = $(".sx-quantity-input", jGroup);
         var measure_ratio = Number(jInput.data("measure_ratio")) || 1;
+        var measure_ratio_min = parseFloat(jInput.data("measure_ratio_min")) || 1;
         var newVal = Number(jInput.val()) + measure_ratio;
 
         var count = newVal / measure_ratio;
@@ -33,6 +34,11 @@
 
         newVal = count * measure_ratio;
         newVal = Math.floor(newVal * 100) / 100;
+
+        if (newVal < measure_ratio_min) {
+            newVal = measure_ratio_min
+        }
+
         jInput.val(newVal);
         jInput.focus().change();
 
@@ -47,7 +53,11 @@
         var jGroup = $(this).closest(".sx-quantity-group");
         var jInput = $(".sx-quantity-input", jGroup);
         var measure_ratio = parseFloat(jInput.data("measure_ratio")) || 1;
+        var measure_ratio_min = parseFloat(jInput.data("measure_ratio_min")) || 1;
         var newVal = parseFloat(jInput.val()) - measure_ratio;
+        if (newVal < measure_ratio_min) {
+            newVal = measure_ratio_min
+        }
         jInput.val(newVal);
         jInput.focus();
         jInput.change();

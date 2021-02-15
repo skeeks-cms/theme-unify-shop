@@ -103,9 +103,10 @@ JS
             <div class="my-auto sx-minus">-</div>
             <div class="my-auto">
                 <input
-                        value="<?= $shopProduct->measure_ratio; ?>"
+                        value="<?= $shopProduct->measure_ratio_min; ?>"
                         class="form-control sx-quantity-input"
                         data-measure_ratio="<?= $shopProduct->measure_ratio; ?>"
+                        data-measure_ratio_min="<?= $shopProduct->measure_ratio_min; ?>"
                 />
             </div>
             <div class="my-auto sx-plus">+</div>
@@ -143,6 +144,7 @@ JS
                                             echo round($shopProduct->measure_ratio / $count);
                                         }
                                         ?>"
+                                        data-measure_ratio_min="<? echo $shopProduct->measure_ratio_min ?>"
                                 />
                             </div>
                             <div class="my-auto sx-plus">+</div>
@@ -322,9 +324,10 @@ JS
                     <div class="my-auto sx-minus">-</div>
                     <div class="my-auto">
                         <input
-                                value="<?= $offerShopProduct->measure_ratio; ?>"
+                                value="<?= $offerShopProduct->measure_ratio_min; ?>"
                                 class="form-control sx-quantity-input"
                                 data-measure_ratio="<?= $offerShopProduct->measure_ratio; ?>"
+                                data-measure_ratio_min="<?= $offerShopProduct->measure_ratio_min; ?>"
                         />
                     </div>
                     <div class="my-auto sx-plus">+</div>
@@ -361,6 +364,7 @@ JS
                                             echo round($shopProduct->measure_ratio / $count);
                                         }
                                         ?>"
+                                        data-measure_ratio_min="<? echo $shopProduct->measure_ratio_min ?>"
                                 />
                             </div>
                             <div class="my-auto sx-plus">+</div>
