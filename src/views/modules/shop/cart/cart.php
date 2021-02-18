@@ -40,7 +40,7 @@ JS
                         <!-- /EMPTY CART -->
                     </div>
                 <? else: ?>
-                    <div class="col-md-12 g-my-50 sx-steps">
+                    <div class="col-md-12 sx-steps">
                         <?= \skeeks\cms\shopCartStepsWidget\ShopCartStepsWidget::widget([
                             'viewFile' => '@app/views/modules/shop/cart/_steps',
                         ]); ?>

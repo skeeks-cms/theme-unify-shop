@@ -1,6 +1,15 @@
 /**
  * Оформление шагов в корзине
  */
+.sx-steps {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.sx-step-name {
+    font-size: 16px;
+    margin-bottom: 0;
+}
 .sx-steps li {
     cursor: pointer;
 }
@@ -26,6 +35,11 @@
     transform: translateY(-50%);
     z-index: 2;
     font-size: 18px;
+    font-style: normal;
+    font-weight: bold;
+}
+.sx-steps .active .sx-step-item {
+    color: white;
 }
 
 .sx-order-items .sx-order-item {
