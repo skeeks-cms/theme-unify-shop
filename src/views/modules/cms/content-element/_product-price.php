@@ -167,7 +167,7 @@ JS
 
     <?
     //TODO: подумать сделать оптимальнее
-    $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->stores)->all();
+    $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
     $quantityAvailable = 0;
     if ($shopStoreProducts) {
         foreach ($shopStoreProducts as $shopStoreProduct)
@@ -175,7 +175,7 @@ JS
             $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
         }
     }
-    if ($shopProduct->quantity > 0 || $quantityAvailable > 0) : ?>
+    if ($quantityAvailable > 0) : ?>
         <div class="g-mt-10">
             <div class="control-group group-submit g-mb-15">
                 <div class="buttons-row ">
@@ -307,7 +307,7 @@ JS
         <?
 
         //TODO: подумать сделать оптимальнее
-        $shopStoreProducts = $offerShopProduct->getShopStoreProducts(\Yii::$app->shop->stores)->all();
+        $shopStoreProducts = $offerShopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
         $quantityAvailable = 0;
         if ($shopStoreProducts) {
             foreach ($shopStoreProducts as $shopStoreProduct)
@@ -315,7 +315,7 @@ JS
                 $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
             }
         }
-        if ($offerShopProduct->quantity > 0 || $quantityAvailable > 0) : ?>
+        if ($quantityAvailable > 0) : ?>
 
 
             <div class="sx-quantity-wrapper">
