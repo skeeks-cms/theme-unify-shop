@@ -32,7 +32,7 @@ $widget->viewFile = '@app/views/widgets/RpWidget/'.$singlPage->properties_view_f
 
 
 
-<? if ($widget->visibleRpAttributes) : ?>
+<? if ($widget->rpAttributes) : ?>
     <div class="row">
         <div class="col-md-12">
             <h2>Характеристики</h2>

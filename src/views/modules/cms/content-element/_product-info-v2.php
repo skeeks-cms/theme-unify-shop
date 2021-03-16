@@ -34,7 +34,7 @@ $widget->viewFile = '@app/views/widgets/RpWidget/'.$singlPage->properties_view_f
     <div class="col-md-12">
         <div id="sx-product-info-accordion" class="sx-product-info-accordion">
 
-            <? if ($widget->visibleRpAttributes) : ?>
+            <? if ($widget->rpAttributes) : ?>
                 <div class="card">
                     <div class="card-header " id="sx-properties-header">
                         <a class="h2 sx-main-text-color" href="#" data-toggle="collapse" data-target="#sx-properties" aria-expanded="true" aria-controls="sx-properties">
