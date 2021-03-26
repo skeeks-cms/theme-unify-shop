@@ -32,14 +32,16 @@ CSS
 ?>
 <?
 
-$images = [];
+$images = (array) @$images;
 
-if ($model->mainProductImage) {
-    $images[] = $model->mainProductImage;
-}
+if ($images !== false && !$images) {
+    if ($model->mainProductImage) {
+        $images[] = $model->mainProductImage;
+    }
 
-if ($productImages = $model->productImages) {
-    $images = \yii\helpers\ArrayHelper::merge($images, $productImages);
+    if ($productImages = $model->productImages) {
+        $images = \yii\helpers\ArrayHelper::merge($images, $productImages);
+    }
 }
 
 
