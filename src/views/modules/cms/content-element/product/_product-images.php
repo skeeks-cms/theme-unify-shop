@@ -54,8 +54,8 @@ if ($images !== false && !$images) {
          data-infinite="true"
          data-fade="true"
          data-arrows-classes="g-color-primary--hover sx-arrows sx-images-carousel-arrows sx-color-silver"
-         data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left sx-minus-20"
-         data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right sx-minus-20"
+         data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left sx-minus-0"
+         data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right sx-minus-0"
          data-nav-for="#carouselCus2">
 
         <? foreach ($images as $image) : ?>
