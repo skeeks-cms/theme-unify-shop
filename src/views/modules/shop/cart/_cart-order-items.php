@@ -16,7 +16,7 @@
                     \Yii::$app->imaging->getImagingUrl($orderItem->image ? $orderItem->image->src : null, new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'h' => 150,
                         'w' => 150,
-                        //'m' => \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                        'm' => \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
                     ]))
                 ) ?>" class="sx-lazy" alt="<?= $orderItem->name; ?> title="<?= $orderItem->name; ?> width="150"/>
             </a>
