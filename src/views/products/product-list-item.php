@@ -51,7 +51,7 @@ $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => \Yii::$app->unifyShopTheme->catalog_img_preview_width,
                         'h' => \Yii::$app->unifyShopTheme->catalog_img_preview_height,
-                        'm' => \Yii::$app->unifyShopTheme->catalog_img_preview_crop,
+                        'm' => \Yii::$app->unifyShopTheme->catalog_img_preview_crop ? \Yii::$app->unifyShopTheme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
                     ]), $model->code
                 ); ?>" title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
             <? else : ?>
