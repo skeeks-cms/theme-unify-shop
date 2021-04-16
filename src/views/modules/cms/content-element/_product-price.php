@@ -175,7 +175,7 @@ JS
             $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
         }
     }
-    if ($quantityAvailable > 0) : ?>
+    if (!$shopStoreProducts || $quantityAvailable > 0) : ?>
         <div class="g-mt-10">
             <div class="control-group group-submit g-mb-15">
                 <div class="buttons-row ">
