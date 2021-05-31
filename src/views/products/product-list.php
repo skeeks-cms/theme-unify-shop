@@ -6,7 +6,14 @@
  * @date 25.05.2015
  */
 /* @var $this   yii\web\View */
-/* @var $dataProvider ADa */
+/* @var $dataProvider \yii\data\ActiveDataProvider */
+
+/*print_r($dataProvider->query->createCommand()->rawSql);die;*/
+
+//TODO:Подумать почему то понормальному не работает!
+$q = clone $dataProvider->query;
+$total = $q->limit(-1)->offset(-1)->orderBy([])->count('*');
+$dataProvider->setTotalCount($total);
 ?>
 <? echo \yii\widgets\ListView::widget([
     'dataProvider' => $dataProvider,
