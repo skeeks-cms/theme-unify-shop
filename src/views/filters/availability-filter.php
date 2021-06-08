@@ -12,7 +12,7 @@
 $widget = $this->context;
 $id = \yii\helpers\Html::getInputId($handler, 'value');
 ?>
-<div class="dropdown sx-inline-filter">
+<div class="dropdown sx-inline-filter sx-availability-filter">
     <a href="#" class="btn btn-sm dropdown-toggle btn-primary sx-icon-arrow-down--after sx-fast-filters-btn" data-toggle="dropdown" style="">
         <?php echo $handler->valueAsText; ?>
     </a>

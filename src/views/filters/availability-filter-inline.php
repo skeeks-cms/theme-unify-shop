@@ -17,7 +17,7 @@ $id = \yii\helpers\Html::getInputId($handler, 'value');
         'data-value' => 'sx-availability',
     ]) ?>
 </div>
-<div class="dropdown sx-inline-filter sx-filter-selected">
+<div class="dropdown sx-inline-filter sx-filter-selected sx-availability-filter">
     <a href="#" class="dropdown-toggle btn btn-default" data-toggle="dropdown" style="">
         <?php echo $handler->valueAsText; ?>
     </a>
