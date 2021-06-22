@@ -77,7 +77,10 @@ if (\Yii::$app->unifyShopTheme->is_allow_filters) {
 $filtersWidget->loadFromRequest();
 $filtersWidget->applyToQuery($dataProvider->query);
 
-
+?>
+<div itemprop="offers" itemscope="" itemtype="http://schema.org/AggregateOffer">
+<meta itemprop="priceCurrency" content="<?php echo \Yii::$app->money->currency_code; ?>" />
+<?
 echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->unifyShopTheme->product_list_view_file, [
     'model'         => $model,
     'description'   => $model->description_full,
@@ -85,4 +88,4 @@ echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->unifyShop
     'filtersWidget' => $filtersWidget,
 ]);
 ?>
-
+</div>

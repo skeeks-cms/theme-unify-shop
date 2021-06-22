@@ -15,6 +15,7 @@ $q = clone $dataProvider->query;
 $total = $q->limit(-1)->offset(-1)->orderBy([])->count('*');
 $dataProvider->setTotalCount($total);
 ?>
+<meta itemprop="offerCount" content="<?php echo $total; ?>">
 <? echo \yii\widgets\ListView::widget([
     'dataProvider' => $dataProvider,
     'itemView'     => '@app/views/products/product-list-item',

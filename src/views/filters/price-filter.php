@@ -22,6 +22,8 @@ $val2 = $handler->to ? $handler->to : $max;
 $fromId = \yii\helpers\Html::getInputId($handler, 'from');
 $toId = \yii\helpers\Html::getInputId($handler, 'to');
 ?>
+<meta itemprop="lowPrice" content="<?php echo $val1; ?>">
+<meta itemprop="highPrice" content="<?php echo $val2; ?>">
 <? if ($min != $max
     //&& $max > 0
 ) : ?>
