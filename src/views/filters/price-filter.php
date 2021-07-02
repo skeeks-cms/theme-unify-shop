@@ -27,7 +27,7 @@ $toId = \yii\helpers\Html::getInputId($handler, 'to');
 <? if ($min != $max
     //&& $max > 0
 ) : ?>
-    <section class="filter--group opened <?= ($val1 != $min || $val2 != $max) ? "sx-filter-selected" : "" ?>">
+    <section class="sx-filter filter--group opened <?= ($val1 != $min || $val2 != $max) ? "sx-filter-selected" : "" ?>">
         <header class="filter--group--header">Цена</header>
         <div class="filter--group--body sort-slider sx-project-slider-skin">
             <div class="filter--group--inner">
@@ -62,8 +62,14 @@ $toId = \yii\helpers\Html::getInputId($handler, 'to');
                        data-from="<?= $val1; ?>"
                        data-to="<?= $val2; ?>"
                        data-postfix=" р."/>
+
             </div>
+
         </div>
+        <div class="sx-btn-apply-wrapper">
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                </div>
+
     </section>
 
 

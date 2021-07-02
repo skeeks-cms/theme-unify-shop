@@ -39,14 +39,15 @@ if ($selectedValue) {
 ) : ?>
 <meta itemprop="lowPrice" content="<?php echo $val1; ?>">
 <meta itemprop="highPrice" content="<?php echo $val2; ?>">
-    <div class="dropdown sx-inline-filter <?php echo $selectedValue ? "sx-filter-selected" : ""; ?>">
-        <button class="dropdown-toggle btn btn-default" data-toggle="dropdown">
+
+    <div class="dropdown sx-filter sx-inline-filter <?php echo $selectedValue ? "sx-filter-selected" : ""; ?>">
+        <button class="dropdown-toggle btn btn-default sx-inline-btn" data-toggle="dropdown">
             <?= \Yii::t('app', 'Цена'); ?>
             <? if ($val1 != $min || $val2 != $max) : ?>
                 <small>(<?= $selectedValue; ?>)</small>
             <? endif; ?>
         </button>
-        <div class="dropdown-menu sort-slider sx-project-slider-skin" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-menu sort-slider sx-project-slider-skin keep-open" aria-labelledby="dropdownMenuButton">
             <div class="filter--group">
                 <div class="filter--group--body sort-slider sx-project-slider-skin">
                     <div class="sort-slider__row">
@@ -72,6 +73,7 @@ if ($selectedValue) {
                         <span class="sort-slider__measure my-auto">руб.</span>
                     </div>
 
+
                     <input type="text"
                            id="sx-filter-price"
                            class="slider-range"
@@ -82,6 +84,12 @@ if ($selectedValue) {
                            data-from="<?= $val1; ?>"
                            data-to="<?= $val2; ?>"
                            data-postfix=" р."/>
+
+
+                </div>
+
+                <div class="sx-btn-apply-wrapper">
+                    <button type="submit" class="btn btn-primary">Применить</button>
                 </div>
             </div>
         </div>
