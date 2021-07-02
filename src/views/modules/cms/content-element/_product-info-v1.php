@@ -20,6 +20,9 @@ if ($model->main_cce_id) {
         $infoModel = $model->mainCmsContentElement;
     }
 }
+if ($shopProduct->isOfferProduct) {
+    $infoModel = $shopProduct->shopProductWhithOffers->cmsContentElement;
+}
 ?>
 <?
 $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties', [
