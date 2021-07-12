@@ -25,6 +25,12 @@ if ($model->main_cce_id) {
 }
 
 $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
+
+
+$secondImage = null;
+if ($infoModel->images) {
+    $secondImage = $infoModel->images[0];
+}
 ?>
 <div class="sx-product-card h-100 to-cart-fly-wrapper">
     <?
@@ -47,13 +53,23 @@ $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
     <div class="sx-product-card--photo">
         <a href="<?= $model->url; ?>" data-pjax="0">
             <? if ($infoModel->mainProductImage) : ?>
-                <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->mainProductImage ? $infoModel->mainProductImage->src : null,
+                <img class="sx-product-image to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->mainProductImage ? $infoModel->mainProductImage->src : null,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => \Yii::$app->unifyShopTheme->catalog_img_preview_width,
                         'h' => \Yii::$app->unifyShopTheme->catalog_img_preview_height,
                         'm' => \Yii::$app->unifyShopTheme->catalog_img_preview_crop ? \Yii::$app->unifyShopTheme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
                     ]), $model->code
-                ); ?>" title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
+                ); ?>" 
+                     <? if ($secondImage) : ?>
+                    data-second-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($secondImage->src,
+                        new \skeeks\cms\components\imaging\filters\Thumbnail([
+                            'w' => \Yii::$app->unifyShopTheme->catalog_img_preview_width,
+                            'h' => \Yii::$app->unifyShopTheme->catalog_img_preview_height,
+                            'm' => \Yii::$app->unifyShopTheme->catalog_img_preview_crop,
+                        ]), $model->code
+                    ); ?>"
+                <? endif; ?>
+                     title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
             <? else : ?>
                 <img class="img-fluid to-cart-fly-img" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $infoModel->productName; ?>">
             <? endif; ?>

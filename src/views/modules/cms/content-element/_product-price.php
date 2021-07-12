@@ -315,7 +315,7 @@ JS
                 $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
             }
         }
-        if ($quantityAvailable > 0) : ?>
+        if (!$shopStoreProducts || $quantityAvailable > 0) : ?>
 
 
             <div class="sx-quantity-wrapper">
