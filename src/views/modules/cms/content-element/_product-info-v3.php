@@ -14,14 +14,14 @@
 
 //Если этот товар привязан к главному
 $infoModel = $model;
-if ($model->main_cce_id) {
+/*if ($model->main_cce_id) {
     $shopMainProduct = $model->mainCmsContentElement->shopProduct;
     if ($shopMainProduct->isOfferProduct) {
         $infoModel = $shopMainProduct->shopProductWhithOffers->cmsContentElement;
     } else {
         $infoModel = $model->mainCmsContentElement;
     }
-}
+}*/
 if ($shopProduct->isOfferProduct) {
     $infoModel = $shopProduct->shopProductWhithOffers->cmsContentElement;
 }

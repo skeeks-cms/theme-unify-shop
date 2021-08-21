@@ -52,15 +52,17 @@ if (\Yii::$app->unifyShopTheme->is_allow_filters) {
     } */
     
     $treeIds = [$model->id];
-    if ($model->main_cms_tree_id) {
+    /*if ($model->main_cms_tree_id) {
         $treeIds[] = $model->main_cms_tree_id;
-    }
+    }*/
     
     $rpQuery->andWhere([
         'or',
         ['map.cms_tree_id' => $treeIds],
         ['map.cms_tree_id' => null],
     ]);
+
+    //print_r($rpQuery->createCommand()->rawSql);die;
 
     $eavFiltersHandler->initRPByQuery($rpQuery);
     $priceFiltersHandler = new \skeeks\cms\shop\queryFilter\PriceFiltersHandler([

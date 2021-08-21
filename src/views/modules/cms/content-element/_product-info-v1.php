@@ -12,14 +12,14 @@
 /* @var $singlPage \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage */
 /* @var $this yii\web\View */
 $infoModel = $model;
-if ($model->main_cce_id) {
+/*if ($model->main_cce_id) {
     $shopMainProduct = $model->mainCmsContentElement->shopProduct;
     if ($shopMainProduct->isOfferProduct) {
         $infoModel = $shopMainProduct->shopProductWhithOffers->cmsContentElement;
     } else {
         $infoModel = $model->mainCmsContentElement;
     }
-}
+}*/
 if ($shopProduct->isOfferProduct) {
     $infoModel = $shopProduct->shopProductWhithOffers->cmsContentElement;
 }

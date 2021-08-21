@@ -50,14 +50,14 @@ if ($shopProduct->isOfferProduct) {
 
 
 $infoModel = $model;
-if ($model->main_cce_id) {
+/*if ($model->main_cce_id) {
     $shopMainProduct = $model->mainCmsContentElement->shopProduct;
     if ($shopMainProduct->isOfferProduct) {
         $infoModel = $shopMainProduct->shopProductWhithOffers->cmsContentElement;
     } else {
         $infoModel = $model->mainCmsContentElement;
     }
-}
+}*/
 
 //Работа с ценой
 $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
