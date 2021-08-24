@@ -11,6 +11,7 @@
  * @var $model \skeeks\cms\models\CmsTree
  * @var $savedFilter \skeeks\cms\models\CmsSavedFilter
  */
+//print_r($model->toArray());die;
 $savedFilter = @$savedFilter;
 $dataProvider = new \yii\data\ActiveDataProvider([
     'query' => \skeeks\cms\shop\models\ShopCmsContentElement::find()->active(),
@@ -61,6 +62,7 @@ if (\Yii::$app->unifyShopTheme->is_allow_filters) {
     /*if ($model->main_cms_tree_id) {
         $treeIds[] = $model->main_cms_tree_id;
     }*/
+    //print_r($treeIds);die;
     
     $rpQuery->andWhere([
         'or',
@@ -85,7 +87,7 @@ if (\Yii::$app->unifyShopTheme->is_allow_filters) {
 $filtersWidget->loadFromRequest();
 if ($eavFiltersHandler) {
     if ($savedFilter) {
-        $eavFiltersHandler->loadFromaSavedFilter($savedFilter);
+        $eavFiltersHandler->loadFromSavedFilter($savedFilter);
     }
     $savedFilterFromRequest = $eavFiltersHandler->savedFilter;
     if ($savedFilterFromRequest && !$savedFilter) {
