@@ -9,7 +9,9 @@
 
 /**
  * @var $model \skeeks\cms\models\CmsTree
+ * @var $savedFilter \skeeks\cms\models\CmsSavedFilter
  */
+$savedFilter = @$savedFilter;
 $dataProvider = new \yii\data\ActiveDataProvider([
     'query' => \skeeks\cms\shop\models\ShopCmsContentElement::find()->active(),
 ]);
@@ -27,7 +29,11 @@ $dataProvider->query->joinWith('shopProduct');
 //\Yii::$app->shop->filterByMainPidContentElementQuery($dataProvider->query);
 
 
-$filtersWidget = new \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget();
+$filtersWidget = new \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget([
+    'activeFormConfig' => [
+        'action' => $model->url
+    ]
+]);
 $baseQuery = clone $dataProvider->query;
 
 if (\Yii::$app->unifyShopTheme->is_allow_filters) {
@@ -77,6 +83,16 @@ if (\Yii::$app->unifyShopTheme->is_allow_filters) {
         ->registerHandler($eavFiltersHandler, 'eav');
 }
 $filtersWidget->loadFromRequest();
+if ($eavFiltersHandler) {
+    if ($savedFilter) {
+        $eavFiltersHandler->loadFromaSavedFilter($savedFilter);
+    }
+    $savedFilterFromRequest = $eavFiltersHandler->savedFilter;
+    if ($savedFilterFromRequest && !$savedFilter) {
+        \Yii::$app->response->redirect($savedFilterFromRequest->url);
+        \Yii::$app->end();
+    }
+}
 $filtersWidget->applyToQuery($dataProvider->query);
 
 ?>
