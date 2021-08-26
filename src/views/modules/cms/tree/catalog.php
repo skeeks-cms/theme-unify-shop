@@ -17,7 +17,7 @@ $dataProvider = new \yii\data\ActiveDataProvider([
     'query' => \skeeks\cms\shop\models\ShopCmsContentElement::find()->active(),
 ]);
 //Если нужно учитывать второстепенную привязку разделов, нужно доработать.
-$dataProvider->query->cmsTree();
+$dataProvider->query->cmsTree($model);
 
 $dataProvider->pagination->pageSize = \Yii::$app->unifyShopTheme->productListPerPageSize;
 $dataProvider->query->with('shopProduct');
@@ -25,15 +25,15 @@ $dataProvider->query->with('shopProduct.baseProductPrice');
 $dataProvider->query->with('image');
 $dataProvider->query->joinWith('shopProduct');
 
-
+/*print_r($dataProvider->query);die;*/
 \Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
 //\Yii::$app->shop->filterByMainPidContentElementQuery($dataProvider->query);
 
 
 $filtersWidget = new \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget([
     'activeFormConfig' => [
-        'action' => $model->url
-    ]
+        'action' => $model->url,
+    ],
 ]);
 $baseQuery = clone $dataProvider->query;
 
@@ -57,13 +57,13 @@ if (\Yii::$app->unifyShopTheme->is_allow_filters) {
             ['map.cms_tree_id' => null],
         ]);
     } */
-    
+
     $treeIds = [$model->id];
     /*if ($model->main_cms_tree_id) {
         $treeIds[] = $model->main_cms_tree_id;
     }*/
     //print_r($treeIds);die;
-    
+    /*print_r($treeIds);die;*/
     $rpQuery->andWhere([
         'or',
         ['map.cms_tree_id' => $treeIds],
@@ -99,13 +99,14 @@ $filtersWidget->applyToQuery($dataProvider->query);
 
 ?>
 <div itemprop="offers" itemscope="" itemtype="http://schema.org/AggregateOffer">
-<meta itemprop="priceCurrency" content="<?php echo \Yii::$app->money->currency_code; ?>" />
-<?
-echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->unifyShopTheme->product_list_view_file, [
-    'model'         => $model,
-    'description'   => $model->description_full,
-    'dataProvider'  => $dataProvider,
-    'filtersWidget' => $filtersWidget,
-]);
-?>
+    <meta itemprop="priceCurrency" content="<?php echo \Yii::$app->money->currency_code; ?>"/>
+    <?
+    echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->unifyShopTheme->product_list_view_file, [
+        'model'             => $model,
+        'description_short' => $model->description_short,
+        'description'       => $model->description_full,
+        'dataProvider'      => $dataProvider,
+        'filtersWidget'     => $filtersWidget,
+    ]);
+    ?>
 </div>

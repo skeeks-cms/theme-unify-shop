@@ -43,9 +43,11 @@ CSS
                     'isShowLast' => true,
                 ]) ?>
 
-                <div class="sx-content">
-                    <?= @$description; ?>
-                </div>
+                <?php if(@$description_short) : ?>
+                    <div class="sx-content sx-description-short">
+                        <?= @$description_short; ?>
+                    </div>
+                <?php endif; ?>
 
                 <? if (\Yii::$app->cms->currentTree && \Yii::$app->unifyShopTheme->is_show_catalog_subtree_before_products) : ?>
                     <?php
@@ -111,6 +113,12 @@ CSS
                     <?php echo $this->render("@app/views/products/product-list", [
                         'dataProvider' => $dataProvider,
                     ]); ?>
+
+                    <?php if(@$description) : ?>
+                        <div class="sx-content sx-description-full" style="margin-top: 20px;">
+                            <?= @$description; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
