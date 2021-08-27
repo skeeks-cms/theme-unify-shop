@@ -43,7 +43,7 @@ CSS
                     'isShowLast' => true,
                 ]) ?>
 
-                <?php if(@$description_short) : ?>
+                <?php if (@$description_short) : ?>
                     <div class="sx-content sx-description-short">
                         <?= @$description_short; ?>
                     </div>
@@ -114,9 +114,48 @@ CSS
                         'dataProvider' => $dataProvider,
                     ]); ?>
 
-                    <?php if(@$description) : ?>
+                    <?php if (@$description) : ?>
                         <div class="sx-content sx-description-full" style="margin-top: 20px;">
                             <?= @$description; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?
+                    $savedFilters = [];
+                    if (@$model) {
+                        //todo: вынести в шаблон
+                        $savedFilters = $model->getCmsSavedFilters()
+                            ->joinWith("cmsContentProperty as cmsContentProperty")
+                            ->with("cmsContentProperty")
+                            ->orderBy(['cmsContentProperty.priority' => SORT_ASC])
+                            //->groupBy(['cmsContentProperty.id'])
+                            ->limit(200)
+                            ->all();
+                    }
+
+                    ?>
+                    <?php if ($savedFilters) : ?>
+                        <div class="sx-saved-filters-list" style="margin-top: 20px;">
+                            <?php
+                            $savedFiltersData = [];
+                            foreach ($savedFilters as $sf) {
+                                $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
+                                $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
+                            }
+                            ?>
+                            <div class="h3 sx-title">Быстрый подбор товаров</div>
+                            <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
+                                <div class="h4 sx-sub-title"><?php echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); ?></div>
+                                <ul class="row list-unstyled">
+                                    <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
+                                        <li class="col-md-2 col-sm-4 <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "sx-active" : ""; ?>" style="line-height: 1.1; margin-bottom: 10px;">
+                                            <a class="<?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "" : "sx-main-text-color"; ?> g-color-primary--hover g-text-underline--none--hover"
+                                               href="<?php echo $sf->url; ?>"
+                                               title="<?php echo $sf->seoName; ?>"><?php echo $sf->propertyValueName; ?></a>
+                                        </li>
+                                    <? endforeach; ?>
+                                </ul>
+                            <? endforeach; ?>
                         </div>
                     <?php endif; ?>
                 </div>

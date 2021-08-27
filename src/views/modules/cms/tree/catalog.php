@@ -107,6 +107,7 @@ $filtersWidget->applyToQuery($dataProvider->query);
         'description'       => $model->description_full,
         'dataProvider'      => $dataProvider,
         'filtersWidget'     => $filtersWidget,
+        'savedFilter'     => @$savedFilter,
     ]);
     ?>
 </div>
