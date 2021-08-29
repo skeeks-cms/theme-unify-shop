@@ -79,6 +79,54 @@ $catalogSettings::end();
                         </span>
                     </div>
                 </div>
+
+                <?
+                $savedFilters = [];
+                if (@$model && $savedFilter) {
+                    //todo: вынести в шаблон
+                    $savedFilters = \skeeks\cms\models\CmsSavedFilter::find()
+                        ->cmsSite()
+                        ->joinWith("cmsContentProperty as cmsContentProperty")
+                        ->with("cmsContentProperty")
+                        ->with("cmsTree")
+                        ->orderBy(['cmsContentProperty.priority' => SORT_ASC])
+                        //->groupBy(['cmsContentProperty.id'])
+                        ->limit(200);
+
+                    if ($savedFilter->value_content_element_id) {
+                        $savedFilters->andWhere(['value_content_element_id' => $savedFilter->value_content_element_id]);
+                    } elseif ($savedFilter->value_content_property_enum_id) {
+                        $savedFilters->andWhere(['value_content_property_enum_id' => $savedFilter->value_content_property_enum_id]);
+                    }
+
+                    $savedFilters = $savedFilters->all();
+                }
+
+                ?>
+                <?php if ($savedFilters) : ?>
+                    <div class="sx-saved-filters--before-list">
+                        <?php
+                        $savedFiltersData = [];
+                        foreach ($savedFilters as $sf) {
+                            $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
+                            $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
+                        }
+                        ?>
+                        <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
+                            <!--<div class="h4 sx-sub-title"><?php /*echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); */ ?></div>-->
+                            <ul class="row list-unstyled">
+                                <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
+                                    <li class="col-md-2 col-sm-4 my-auto <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "sx-active" : ""; ?>" style="line-height: 1.1; margin-bottom: 10px;">
+                                        <a class="<?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "" : "sx-main-text-color"; ?> g-color-primary--hover g-text-underline--none--hover"
+                                           href="<?php echo $sf->url; ?>"
+                                           title="<?php echo $sf->seoName; ?>"><?php echo $sf->seoName; ?></a>
+                                    </li>
+                                <? endforeach; ?>
+                            </ul>
+                        <? endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
                 <?php echo $this->render("@app/views/products/product-list", [
                     'dataProvider' => $dataProvider,
                 ]); ?>
