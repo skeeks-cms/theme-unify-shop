@@ -18,12 +18,13 @@ $dataProvider = new \yii\data\ActiveDataProvider([
 ]);
 //Если нужно учитывать второстепенную привязку разделов, нужно доработать.
 $dataProvider->query->cmsTree($model);
-
-$dataProvider->pagination->pageSize = \Yii::$app->unifyShopTheme->productListPerPageSize;
+$dataProvider->pagination->defaultPageSize = \Yii::$app->unifyShopTheme->productListPerPageSize;
+//$dataProvider->pagination->pageSize = \Yii::$app->unifyShopTheme->productListPerPageSize;
 $dataProvider->query->with('shopProduct');
 $dataProvider->query->with('shopProduct.baseProductPrice');
 $dataProvider->query->with('image');
 $dataProvider->query->joinWith('shopProduct');
+$dataProvider->query->groupBy(\skeeks\cms\shop\models\ShopCmsContentElement::tableName() . ".id");
 
 /*print_r($dataProvider->query);die;*/
 \Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
