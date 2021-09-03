@@ -96,7 +96,6 @@ if ($eavFiltersHandler) {
     }
 }
 $filtersWidget->applyToQuery($dataProvider->query);
-
 ?>
 <div itemprop="offers" itemscope="" itemtype="http://schema.org/AggregateOffer">
     <meta itemprop="priceCurrency" content="<?php echo \Yii::$app->money->currency_code; ?>"/>
