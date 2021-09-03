@@ -135,7 +135,7 @@ CSS
                     }
 
                     ?>
-                    <?php if ($savedFilters) : ?>
+                    <?php if (count($savedFilters) > 1) : ?>
                         <div class="sx-saved-filters--before-list">
                             <?php
                             $savedFiltersData = [];
