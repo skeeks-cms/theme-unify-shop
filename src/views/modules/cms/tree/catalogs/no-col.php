@@ -86,7 +86,8 @@ CSS
 
                 <?php if ($catalogSettings->is_fix_filters_on_scroll) : ?>
                 <!--Зафиксировать фильтры на верху страницы-->
-                <div class="sx-filters-wrapper-inline js-sticky-block" id="sx-filters-wrapper-inline"
+                <div class="sx-filters-wrapper-inline js-sticky-block "
+                     id="sx-filters-wrapper-inline"
                      data-has-sticky-header="true"
                      data-start-point="#sx-filters-wrapper-inline"
                      data-end-point=".sx-footer"
