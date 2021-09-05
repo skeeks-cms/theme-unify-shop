@@ -10,7 +10,6 @@
 skeeks\assets\unify\base\UnifyHsRatingAsset::register($this);
 \skeeks\assets\unify\base\UnifyHsPopupAsset::register($this);
 \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductPageAsset::register($this);
-//\skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
 
 $this->registerJs(<<<JS
 $.HSCore.components.HSRating.init($('.js-rating-show'), {
@@ -61,6 +60,32 @@ $infoModel = $model;
 
 //Работа с ценой
 $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
+
+
+
+$suffix = \Yii::$app->name;
+$price = $priceHelper->basePrice->money;
+if ($shopProduct->tradeOffers) {
+    $price = "от " . $priceHelper->basePrice->money;
+}
+if (!$model->meta_title) {
+    $this->title = "{$model->seoName} - цена {$price} купить в интернет-магазине {$suffix}";
+}
+if (!$model->meta_description) {
+    $desc = strip_tags($model->description_short);
+    $this->registerMetaTag([
+        "name" => 'description',
+        "content" => "✔ {$model->seoName}. ✔ {$desc}. Цена {$price}."
+    ], 'description');
+}
+if (!$model->meta_keywords) {
+    $this->registerMetaTag([
+        "name" => 'keywords',
+        "content" => "{$model->seoName}"
+    ], 'keywords');
+}
+
+
 
 $singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage::beginWidget('product-page');
 $singlPage->addCss();
