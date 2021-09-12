@@ -396,3 +396,14 @@ ul.sx-properties .sx-properties--name:after {
     font-size: 1rem !important;
     line-height: 1 !important;
 }
+
+
+.sx-main-product-container .sx-product-images {
+    position: relative;
+}
+.sx-main-product-container .sx-product-images .sx-favorite-product {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 99;
+}

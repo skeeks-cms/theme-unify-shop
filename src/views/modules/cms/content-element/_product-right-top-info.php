@@ -16,7 +16,7 @@
 <div class="topmost-row">
     <div class="row no-gutters">
         <div class="col-5">
-            <div data-product-id="<?= $model->id; ?>" class="item-lot">
+            <div data-product-id="<?= $model->id; ?>" class="item-lot" style="width: 100%;">
                 Код:&nbsp;<?= $model->id; ?></div>
         </div>
 

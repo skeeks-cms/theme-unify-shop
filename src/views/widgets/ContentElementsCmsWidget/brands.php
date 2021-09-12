@@ -33,6 +33,8 @@ $query = $widget->dataProvider->query;
                 'tag'   => 'div',
                 'data'  => [
                     'slidesToShow' => (int)\Yii::$app->unifyShopTheme->product_slider_items,
+                    'autoplay'   => "1",
+                    'infinite'   => "1",
                     'responsive'   => [
                         [
                             'breakpoint' => 2600,

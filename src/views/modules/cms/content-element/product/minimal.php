@@ -30,6 +30,26 @@
         <div class="d-flex flex-row sx-main-product-container">
             <div class="sx-product-page--left-col">
                 <div class="sx-product-images">
+
+                    <?
+                    $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $model->id])->exists();
+                    ?>
+
+                    <div class="sx-favorite-product"
+                         data-added-icon-class="fas fa-heart"
+                         data-not-added-icon-class="far fa-heart"
+                         data-is-added="<?= (int)$isAdded ?>"
+                         data-product_id="<?= (int)$model->id ?>"
+                    >
+                        <a href="#" class="sx-favorite-product-trigger" data-pjax="0" style="font-size: 22px;">
+                            <? if ($isAdded) : ?>
+                                <i class="fas fa-heart"></i>
+                            <? else : ?>
+                                <i class="far fa-heart"></i>
+                            <? endif; ?>
+                        </a>
+                    </div>
+
                     <?= $this->render("@app/views/modules/cms/content-element/product/" . $singlPage->images_view_file, [
                         'model' => $model,
                     ]); ?>
