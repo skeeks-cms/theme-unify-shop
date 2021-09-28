@@ -76,7 +76,7 @@ CSS
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <? foreach ($filtersWidget->getSortHandler()->getSortOptions() as $code => $name) : ?>
-                                    <a class="dropdown-item sx-select-sort sx-filter-action" href="#" data-filter="productfilters-sort" data-filter-value="<?php echo $code; ?>"><?php echo $name; ?></a>
+                                    <a class="dropdown-item sx-select-sort sx-filter-action" href="#" data-filter="#s-value" data-filter-value="<?php echo $code; ?>"><?php echo $name; ?></a>
                                 <? endforeach; ?>
                             </div>
                         </div>
