@@ -7,6 +7,8 @@
  */
 /* @var $this   yii\web\View */
 /* @var $widget \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget */
+\skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
+
 $query = $widget->dataProvider->query;
 ?>
 <? if ($query->count()) : ?>
