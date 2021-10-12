@@ -6,6 +6,7 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
+\skeeks\assets\unify\base\UnifyIconSimpleLineAsset::register($this);
 ?>
 
 <?

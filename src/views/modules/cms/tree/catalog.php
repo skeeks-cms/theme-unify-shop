@@ -38,6 +38,7 @@ $filtersWidget = new \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWid
 ]);
 $baseQuery = clone $dataProvider->query;
 
+$eavFiltersHandler = null;
 if (\Yii::$app->unifyShopTheme->is_allow_filters) {
     $eavFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopEavQueryFilterHandler([
         'baseQuery' => $baseQuery,
