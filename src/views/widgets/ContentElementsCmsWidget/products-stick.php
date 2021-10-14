@@ -16,8 +16,10 @@ $query = $widget->dataProvider->query;
     $query->andWhere(['>', '`pricesFilter`.price', 0]);
 }*/
 
+$widget->dataProvider->setTotalCount(1);
+
 ?>
-<? if ($query->count()) : ?>
+<? if ($query->one()) : ?>
     <div class="sx-products-slider-wrapper">
         <? if ($widget->label) : ?>
             <div class="sx-products-slider--title">
