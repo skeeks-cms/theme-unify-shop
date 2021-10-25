@@ -82,7 +82,7 @@ JS
                             <?php
                             $p = $shopProduct->getShopProductPrices()->andWhere(['type_price_id' => $canViewTypePrice->id])->one();
                             ?>
-                            <?php if ($p && $canViewTypePrice->id != $priceHelper->minPrice->type_price_id) : ?>
+                            <?php if ($p && $canViewTypePrice->id != $priceHelper->minPrice->type_price_id && (float) $p->money->amount > 0) : ?>
                                 <div class="current ss-price h3 sx-new-price sx-second-price"><span title="<b><?php echo $canViewTypePrice->name; ?></b><br><?php echo $canViewTypePrice->description; ?>" data-html="true"
                                                                                                     data-toggle="tooltip"><?= $p->money; ?></span>
                                     <span class="sx-price-info h4" title="<b><?php echo $canViewTypePrice->name; ?></b><br><?php echo $canViewTypePrice->description; ?>" data-html="true" data-toggle="tooltip">
