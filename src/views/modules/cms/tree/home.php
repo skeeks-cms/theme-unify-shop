@@ -80,7 +80,11 @@ if (\Yii::$app->mobileDetect->isMobile) {
 <? endif; ?>
 
 
-<? if (\Yii::$app->shop->shopContents && \Yii::$app->mobileDetect->isDesktop) : ?>
+<? if (
+        \Yii::$app->shop->shopContents
+    //&& \Yii::$app->mobileDetect->isDesktop)
+    ) :
+    ?>
     <div class="container sx-container" style="margin: 40px auto;">
         <?
         \skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
@@ -151,7 +155,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
 <section class="container sx-container g-pt-10 g-pb-10">
     <?
     $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-news", [
-        'viewFile'                   => '@app/views/widgets/ContentElementsCmsWidget/news-masonry',
+        'viewFile'                   => '@app/views/widgets/ContentElementsCmsWidget/news-grid',
         'label'                      => "Новости компании",
         'enabledRunCache'            => "Y",
         'content_ids'                => [1],
