@@ -17,7 +17,7 @@ $dataProvider = new \yii\data\ActiveDataProvider([
     'query' => \skeeks\cms\shop\models\ShopCmsContentElement::find()->active(),
 ]);
 //Если нужно учитывать второстепенную привязку разделов, нужно доработать.
-$dataProvider->query->cmsTree($model);
+$dataProvider->query->cmsTree($model, true, \Yii::$app->unifyShopTheme->is_join_second_trees ? true : false);
 $dataProvider->pagination->defaultPageSize = \Yii::$app->unifyShopTheme->productListPerPageSize;
 //$dataProvider->pagination->pageSize = \Yii::$app->unifyShopTheme->productListPerPageSize;
 $dataProvider->query->with('shopProduct');

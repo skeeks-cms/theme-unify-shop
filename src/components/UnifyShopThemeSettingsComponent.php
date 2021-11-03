@@ -48,6 +48,8 @@ class UnifyShopThemeSettingsComponent extends Component
     public $product_list_count_columns = 3;
     public $product_list_count_columns_mobile = 2;
 
+    public $is_join_second_trees = 0;
+
 
     public $product_page_view_file = "default";
 
@@ -71,6 +73,7 @@ class UnifyShopThemeSettingsComponent extends Component
             'is_show_catalog_subtree_before_products' => 'Показывать подразделы перед списком товаров?',
             'is_allow_filters'                        => 'Показывать фильтры?',
             'product_page_view_file'                  => 'Шаблон страницы одного товара',
+            'is_join_second_trees'                  => 'Учитывать дополнительные разделы в каталоге?',
         ]);
     }
 
@@ -120,6 +123,7 @@ class UnifyShopThemeSettingsComponent extends Component
                     'product_list_count_columns_mobile',
                     'is_allow_filters',
                     'is_show_catalog_subtree_before_products',
+                    'is_join_second_trees',
                 ],
                 'integer',
             ],
@@ -204,6 +208,11 @@ class UnifyShopThemeSettingsComponent extends Component
                     ],
 
                     'is_show_catalog_subtree_before_products' => [
+                        'class'     => BoolField::class,
+                        'allowNull' => false,
+                    ],
+                    
+                    'is_join_second_trees' => [
                         'class'     => BoolField::class,
                         'allowNull' => false,
                     ],
