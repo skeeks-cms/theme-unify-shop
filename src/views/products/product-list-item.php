@@ -130,9 +130,21 @@ if ($infoModel->images) {
                     <? endif; ?>
 
                 <? else : ?>
-                    <? if (
-                            //$shopProduct->quantity > 0 &&
-                        !$shopProduct->isOffersProduct) : ?>
+                    <?
+
+                    $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
+                    $quantityAvailable = 0;
+                    if ($shopStoreProducts) {
+                        foreach ($shopStoreProducts as $shopStoreProduct)
+                        {
+                            $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
+                        }
+                    }
+
+                    if (
+                            !$shopStoreProducts || $quantityAvailable > 0
+                        //&& !$shopProduct->isOffersProduct
+                    ) : ?>
                         <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>".\Yii::t('skeeks/unify-shop', 'To cart'), [
                             'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type'    => 'button',
