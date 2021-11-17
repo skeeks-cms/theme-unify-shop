@@ -26,6 +26,66 @@ $catalogSettings::end();
                     'isShowLast' => true,
                 ]) ?>
 
+                <?
+                $savedFilters = [];
+                if (@$model && $savedFilter) {
+                    //todo: вынести в шаблон
+                    $savedFilters = \skeeks\cms\models\CmsSavedFilter::find()
+                        ->cmsSite()
+                        //->joinWith("cmsContentProperty as cmsContentProperty")
+                        ->joinWith("cmsTree as cmsTree")
+                        ->with("cmsContentProperty")
+                        ->with("cmsTree")
+                        ->orderBy([
+                            'cmsTree.level'    => SORT_ASC,
+                            'cmsTree.priority' => SORT_ASC,
+                        ])
+                        //->groupBy(['cmsContentProperty.id'])
+                        ->limit(200);
+
+                    if ($savedFilter->value_content_element_id) {
+                        $savedFilters->andWhere(['value_content_element_id' => $savedFilter->value_content_element_id]);
+                    } elseif ($savedFilter->value_content_property_enum_id) {
+                        $savedFilters->andWhere(['value_content_property_enum_id' => $savedFilter->value_content_property_enum_id]);
+                    }
+
+                    $savedFilters = $savedFilters->all();
+                }
+
+                ?>
+                <?php if (count($savedFilters) > 1) : ?>
+                    <div class="sx-saved-filters-list sx-saved-filters-list--before">
+                        <div class="h5 sx-sub-title"><?php echo $savedFilter->propertyValueName; ?> встречается в разделах</div>
+
+                        <?php
+                        $savedFiltersData = [];
+                        foreach ($savedFilters as $sf) {
+                            /**
+                             * @var $sf \skeeks\cms\models\CmsSavedFilter
+                             */
+                            $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
+                            $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
+                        }
+                        ?>
+                        <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
+                            <!--<div class="h4 sx-sub-title"><?php /*echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); */ ?></div>-->
+                            <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
+                                <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
+                                    <li class="list-inline-item <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "sx-active" : ""; ?>" style="margin-bottom: 5px;">
+                                        <a class="<?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "" : "sx-main-text-color"; ?> btn 
+                                            <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "btn-primary" : "btn-default"; ?>
+                                            "
+                                           href="<?php echo $sf->url; ?>"
+                                           data-toggle="tooltip"
+                                           title="<?php echo $sf->seoName; ?>"><?php echo $sf->cmsTree->name; ?></a>
+                                    </li>
+                                <? endforeach; ?>
+                            </ul>
+                        <? endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+
                 <?php if (@$description_short) : ?>
                     <div class="sx-content sx-description-short">
                         <?= @$description_short; ?>
@@ -75,61 +135,18 @@ $catalogSettings::end();
                                 <?= $filtersWidget->getAvailabilityHandler()->renderVisible(); ?>
                             <? endif; ?>
                         </span>
-                        <span class="sx-filters-selected-wrapper">
-                        </span>
+                        <div class="sx-filters-selected-wrapper">
+                        </div>
                     </div>
                 </div>
 
-                <?
-                $savedFilters = [];
-                if (@$model && $savedFilter) {
-                    //todo: вынести в шаблон
-                    $savedFilters = \skeeks\cms\models\CmsSavedFilter::find()
-                        ->cmsSite()
-                        ->joinWith("cmsContentProperty as cmsContentProperty")
-                        ->with("cmsContentProperty")
-                        ->with("cmsTree")
-                        ->orderBy(['cmsContentProperty.priority' => SORT_ASC])
-                        //->groupBy(['cmsContentProperty.id'])
-                        ->limit(200);
-
-                    if ($savedFilter->value_content_element_id) {
-                        $savedFilters->andWhere(['value_content_element_id' => $savedFilter->value_content_element_id]);
-                    } elseif ($savedFilter->value_content_property_enum_id) {
-                        $savedFilters->andWhere(['value_content_property_enum_id' => $savedFilter->value_content_property_enum_id]);
-                    }
-
-                    $savedFilters = $savedFilters->all();
-                }
-
-                ?>
-                <?php if (count($savedFilters) > 1) : ?>
-                    <div class="sx-saved-filters--before-list">
-                        <?php
-                        $savedFiltersData = [];
-                        foreach ($savedFilters as $sf) {
-                            $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
-                            $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
-                        }
-                        ?>
-                        <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
-                            <!--<div class="h4 sx-sub-title"><?php /*echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); */ ?></div>-->
-                            <ul class="row list-unstyled">
-                                <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
-                                    <li class="col-md-2 col-sm-4 my-auto <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "sx-active" : ""; ?>" style="line-height: 1.1; margin-bottom: 10px;">
-                                        <a class="<?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "" : "sx-main-text-color"; ?> g-color-primary--hover g-text-underline--none--hover"
-                                           href="<?php echo $sf->url; ?>"
-                                           title="<?php echo $sf->seoName; ?>"><?php echo $sf->seoName; ?></a>
-                                    </li>
-                                <? endforeach; ?>
-                            </ul>
-                        <? endforeach; ?>
-                    </div>
-                <?php endif; ?>
 
                 <?php echo $this->render("@app/views/products/product-list", [
                     'dataProvider' => $dataProvider,
                 ]); ?>
+
+                
+
 
                 <?php if (@$description) : ?>
                     <div class="sx-content sx-description-full" style="margin-top: 20px;">
@@ -138,7 +155,6 @@ $catalogSettings::end();
                 <?php endif; ?>
 
                 <?
-                //todo: вынести в шаблон
                 $savedFilters = [];
                 if (@$model) {
                     //todo: вынести в шаблон
@@ -150,9 +166,10 @@ $catalogSettings::end();
                         ->limit(200)
                         ->all();
                 }
+
                 ?>
                 <?php if ($savedFilters) : ?>
-                    <div class="sx-saved-filters-list" style="margin-top: 20px;">
+                    <div class="sx-saved-filters-list sx-saved-filters-list--after" style="margin-top: 20px;">
                         <?php
                         $savedFiltersData = [];
                         foreach ($savedFilters as $sf) {
@@ -162,12 +179,15 @@ $catalogSettings::end();
                         ?>
                         <div class="h3 sx-title">Быстрый подбор товаров</div>
                         <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
-                            <div class="h4 sx-sub-title"><?php echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); ?></div>
-                            <ul class="row list-unstyled">
+                            <div class="h5 sx-sub-title"><?php echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); ?></div>
+                            <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
                                 <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
-                                    <li class="col-md-2 col-sm-4 <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "sx-active" : ""; ?>" style="line-height: 1.1; margin-bottom: 10px;">
-                                        <a class="<?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "" : "sx-main-text-color"; ?> g-color-primary--hover g-text-underline--none--hover"
+                                    <li class="list-inline-item <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "sx-active" : ""; ?>" style="margin-bottom: 5px;">
+                                        <a class="<?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "" : "sx-main-text-color"; ?> btn 
+                                            <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "btn-primary" : "btn-default"; ?>
+                                            "
                                            href="<?php echo $sf->url; ?>"
+                                           data-toggle="tooltip"
                                            title="<?php echo $sf->seoName; ?>"><?php echo $sf->propertyValueName; ?></a>
                                     </li>
                                 <? endforeach; ?>
