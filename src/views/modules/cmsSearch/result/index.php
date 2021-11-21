@@ -26,7 +26,7 @@ $dataProvider->query->joinWith('shopProduct');
 \Yii::$app->cmsSearch->buildElementsQuery($dataProvider->query);
 \Yii::$app->cmsSearch->logResult($dataProvider);
 
-$dataProvider->query->groupBy([\skeeks\cms\models\CmsContentElement::tableName() . ".id"]);
+$dataProvider->query->groupBy([\skeeks\cms\models\CmsContentElement::tableName().".id"]);
 
 $filtersWidget = new \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget();
 $baseQuery = clone $dataProvider->query;
@@ -36,20 +36,20 @@ if (\Yii::$app->unifyShopTheme->is_allow_filters) {
         'baseQuery' => $baseQuery,
     ]);
 
-    $eavFiltersHandler->openedPropertyIds = \Yii::$app->skeeks->site->shopSite->open_filter_property_ids;
+    /*$eavFiltersHandler->openedPropertyIds = \Yii::$app->skeeks->site->shopSite->open_filter_property_ids;
     $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
-    $rpQuery = $eavFiltersHandler->getRPQuery();
+    $rpQuery = $eavFiltersHandler->getRPQuery();*/
 
-    if ($show_filter_property_ids = \Yii::$app->skeeks->site->shopSite->show_filter_property_ids) {
+    /*if ($show_filter_property_ids = \Yii::$app->skeeks->site->shopSite->show_filter_property_ids) {
         $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => $show_filter_property_ids]);
     }
 
 
     $rpQuery->andWhere(
         ['map.cms_tree_id' => null],
-    );
+    );*/
 
-    $eavFiltersHandler->initRPByQuery($rpQuery);
+    /*$eavFiltersHandler->initRPByQuery($rpQuery);*/
     $priceFiltersHandler = new \skeeks\cms\shop\queryFilter\PriceFiltersHandler([
         'baseQuery' => $baseQuery,
         'viewFile'  => '@app/views/filters/price-filter',
@@ -58,8 +58,8 @@ if (\Yii::$app->unifyShopTheme->is_allow_filters) {
     $filtersWidget
         ->registerHandler($priceFiltersHandler, "price");
 
-    $filtersWidget
-        ->registerHandler($eavFiltersHandler, 'eav');
+    /*$filtersWidget
+        ->registerHandler($eavFiltersHandler, 'eav');*/
 }
 $filtersWidget->loadFromRequest();
 $filtersWidget->applyToQuery($dataProvider->query);
