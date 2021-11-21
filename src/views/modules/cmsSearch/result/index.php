@@ -44,6 +44,11 @@ if (\Yii::$app->unifyShopTheme->is_allow_filters) {
         $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => $show_filter_property_ids]);
     }
 
+
+    $rpQuery->andWhere(
+        ['map.cms_tree_id' => null],
+    );
+
     $eavFiltersHandler->initRPByQuery($rpQuery);
     $priceFiltersHandler = new \skeeks\cms\shop\queryFilter\PriceFiltersHandler([
         'baseQuery' => $baseQuery,
