@@ -8,20 +8,21 @@
 
     $("body").on("click", ".sx-quantity-group .sx-plus", function () {
 
-        var jWrapper = $(this).closest(".sx-quantity-wrapper");
-        $(".sx-plus", jWrapper).trigger("up");
+        /*var jWrapper = $(this).closest(".sx-quantity-wrapper");
+        $(".sx-plus", jWrapper).trigger("up");*/
+        $(this).trigger("up");
         return false;
     });
 
     $("body").on("click", ".sx-quantity-group .sx-minus", function () {
-        var jWrapper = $(this).closest(".sx-quantity-wrapper");
-        $(".sx-minus", jWrapper).trigger("down");
+        /*var jWrapper = $(this).closest(".sx-quantity-wrapper");
+        $(".sx-minus", jWrapper).trigger("down");*/
+
+        $(this).trigger("down");
         return false;
     });
 
     $("body").on("up", ".sx-quantity-group .sx-plus", function () {
-        //$(this).addClass("sx-clicked");
-
 
         var jGroup = $(this).closest(".sx-quantity-group");
         var jInput = $(".sx-quantity-input", jGroup);
@@ -40,12 +41,11 @@
         }
 
         jInput.val(newVal);
-        jInput.focus().change();
+        jInput.focus();
+        jInput.trigger("change", {
+            'result' : 'up'
+        });
 
-        //var jWrapper = $(this).closest(".sx-quantity-wrapper");
-        //$(".sx-plus", jWrapper).not(".sx-clicked").click();
-
-        //$(this).removeClass("sx-clicked");
         return false;
     });
 
@@ -60,7 +60,9 @@
         }
         jInput.val(newVal);
         jInput.focus();
-        jInput.change();
+        jInput.trigger("change", {
+            'result' : 'down'
+        });
         return false;
     });
 
@@ -81,33 +83,49 @@
         $(this).trigger("updatewidth");
     });
 
-    /*$("body").on("change", ".sx-secondary-quantity-group .sx-quantity-input", function () {
+    $("body").on("updateOther", ".sx-quantity-input", function () {
         var measure_ratio = Number($(this).data("measure_ratio")) || 1;
-        var newVal = $(this).val();
+        var coefficient = $(this).val() / measure_ratio;
+        coefficient = Math.round(coefficient);
 
-        if (Number($(this).val()) < measure_ratio) {
+        var jWrapper = $(this).closest(".sx-quantity-wrapper")
 
-        }
+        $(".sx-quantity-input", jWrapper).each(function() {
+            if ($(this).hasClass("sx-current-changed")) {
+                $(this).removeClass("sx-current-changed")
+            } else {
+                var measure_ratio = Number($(this).data("measure_ratio")) || 1;
+                var newVal = coefficient * measure_ratio;
+                console.log(newVal);
+
+                newVal = Math.floor(newVal * 100) / 100;
+
+                $(this).val(newVal);
+                $(this).trigger("updatewidth");
+            }
+        });
+
     });
 
-    $("body").on("updateValue", ".sx-main-quantity-group .sx-quantity-input", function (e, data) {
-         console.log("updateValue");
-         console.log(data);
-    });*/
-
-
-    $("body").on("change", ".sx-main-quantity-group .sx-quantity-input", function () {
-
-        /*$(this).trigger("updatevalue", {
-            'value' : $(this).val()
-        });*/
+    $("body").on("change", ".sx-quantity-input", function (e, data) {
 
         var measure_ratio = Number($(this).data("measure_ratio")) || 1;
         var newVal = $(this).val();
 
-        if (Number($(this).val()) < measure_ratio) {
-            $(this).val(measure_ratio).focus();
+        if (isNaN(newVal) === false) {
+
+        } else {
+            newVal = 0;
+        }
+
+        if (Number(newVal) < measure_ratio) {
+
+            $(this).val(measure_ratio);
             $(this).trigger("updatewidth");
+
+            $(this).focus();
+            $(this).addClass("sx-current-changed").trigger("updateOther");
+
             return false;
         }
 
@@ -117,18 +135,11 @@
         newVal = count * measure_ratio;
         newVal = Math.floor(newVal * 100) / 100;
 
-        $(this).val(newVal).focus();
-
+        $(this).val(newVal);
         $(this).trigger("updatewidth");
 
-        /*var jWrapper = $(this).closest(".sx-quantity-wrapper");
-        $(".sx-secondary-quantity-group .sx-quantity-input", jWrapper).each(function() {
-            $(this).val();
-            var mr = Number($(this).data("measure_ratio")) || 1;
-            
-            newVal = count * measure_ratio;
-            newVal = Math.floor(newVal * 100) / 100 ;
-        });*/
+        $(this).focus();
+        $(this).addClass("sx-current-changed").trigger("updateOther");
 
         return false;
     });
@@ -170,7 +181,6 @@
 
 
     $(document).ready(function () {
-
 
         $('body').on("click", '.to-cart-fly-btn', function () {
 

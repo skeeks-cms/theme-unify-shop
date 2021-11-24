@@ -60,7 +60,7 @@ JS
                         if ($p) {
                             $info[] = $p->money." — ".$canViewTypePrice->name;
                         }
-                        
+
                     }
                 }
                 $infoDisocount = implode("<br />", $info);
@@ -82,7 +82,7 @@ JS
                             <?php
                             $p = $shopProduct->getShopProductPrices()->andWhere(['type_price_id' => $canViewTypePrice->id])->one();
                             ?>
-                            <?php if ($p && $canViewTypePrice->id != $priceHelper->minPrice->type_price_id && (float) $p->money->amount > 0) : ?>
+                            <?php if ($p && $canViewTypePrice->id != $priceHelper->minPrice->type_price_id && (float)$p->money->amount > 0) : ?>
                                 <div class="current ss-price h3 sx-new-price sx-second-price"><span title="<b><?php echo $canViewTypePrice->name; ?></b><br><?php echo $canViewTypePrice->description; ?>" data-html="true"
                                                                                                     data-toggle="tooltip"><?= $p->money; ?></span>
                                     <span class="sx-price-info h4" title="<b><?php echo $canViewTypePrice->name; ?></b><br><?php echo $canViewTypePrice->description; ?>" data-html="true" data-toggle="tooltip">
@@ -118,13 +118,14 @@ JS
 
         <? if ($shopProduct->measure_matches_jsondata) : ?>
             <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
-                <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
-                <? if ($shopProduct->measure_ratio >= $count) : ?>
-                    <div class="d-flex flex-row">
-                    <!--<div class="my-auto g-ml-10">
-                        =
-                    </div>-->
-                    <div class="my-auto d-flex flex-row">
+                <div class="d-flex flex-row">
+                    <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
+                    <? if ($shopProduct->measure_ratio >= $count) : ?>
+
+                        <!--<div class="my-auto g-ml-10">
+                            =
+                        </div>-->
+                        <div class="my-auto d-flex flex-row">
                         <span class="d-flex flex-row sx-quantity-group sx-secondary-quantity-group">
                             <div class="my-auto sx-minus">-</div>
                             <div class="my-auto">
@@ -144,20 +145,26 @@ JS
                                             echo round($shopProduct->measure_ratio / $count);
                                         }
                                         ?>"
-                                        data-measure_ratio_min="<? echo $shopProduct->measure_ratio_min ?>"
+                                        data-measure_ratio_min="<?
+                                        if ($count / $shopProduct->measure_ratio >= 1) {
+                                            echo $count / $shopProduct->measure_ratio;
+                                        } else {
+                                            echo round($shopProduct->measure_ratio / $count);
+                                        }
+                                        ?>"
                                 />
                             </div>
                             <div class="my-auto sx-plus">+</div>
                         </span>
-                        <div class="my-auto" style="margin-left: 10px;">
-                            <?= $measure->symbol; ?>
+                            <div class="my-auto" style="margin-left: 10px;">
+                                <?= $measure->symbol; ?>
+                            </div>
                         </div>
-                    </div>
-                <? else: ?>
-                    <div class="my-auto g-ml-10" style="color: gray; font-size: 14px;">
-                        в 1 <?= $measure->symbol; ?> <?= $count; ?> <?= $shopProduct->measure->symbol; ?>
-                    </div>
-                <? endif; ?>
+                    <? else: ?>
+                        <div class="my-auto g-ml-10" style="color: gray; font-size: 14px;">
+                            в 1 <?= $measure->symbol; ?> <?= $count; ?> <?= $shopProduct->measure->symbol; ?>
+                        </div>
+                    <? endif; ?>
                 </div>
 
 
@@ -170,8 +177,7 @@ JS
     $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
     $quantityAvailable = 0;
     if ($shopStoreProducts) {
-        foreach ($shopStoreProducts as $shopStoreProduct)
-        {
+        foreach ($shopStoreProducts as $shopStoreProduct) {
             $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
         }
     }
@@ -200,8 +206,8 @@ JS
 
                 <?
                 echo $this->render("@app/views/modules/cms/content-element/_product-quantity", [
-                    'shopProduct'           => $shopProduct,
-                    'shopStoreProducts'           => $shopStoreProducts,
+                    'shopProduct'       => $shopProduct,
+                    'shopStoreProducts' => $shopStoreProducts,
                 ]); ?>
             </div>
         </div>
@@ -310,8 +316,7 @@ JS
         $shopStoreProducts = $offerShopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
         $quantityAvailable = 0;
         if ($shopStoreProducts) {
-            foreach ($shopStoreProducts as $shopStoreProduct)
-            {
+            foreach ($shopStoreProducts as $shopStoreProduct) {
                 $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
             }
         }
@@ -364,7 +369,13 @@ JS
                                             echo round($shopProduct->measure_ratio / $count);
                                         }
                                         ?>"
-                                        data-measure_ratio_min="<? echo $shopProduct->measure_ratio_min ?>"
+                                        data-measure_ratio_min="<?
+                                        if ($count / $shopProduct->measure_ratio >= 1) {
+                                            echo $count / $shopProduct->measure_ratio;
+                                        } else {
+                                            echo round($shopProduct->measure_ratio / $count);
+                                        }
+                                        ?>"
                                 />
                             </div>
                             <div class="my-auto sx-plus">+</div>
@@ -409,8 +420,8 @@ JS
 
                     <?
                     echo $this->render("@app/views/modules/cms/content-element/_product-quantity", [
-                        'shopProduct'           => $offerShopProduct,
-                        'shopStoreProducts'           => $shopStoreProducts,
+                        'shopProduct'       => $offerShopProduct,
+                        'shopStoreProducts' => $shopStoreProducts,
                     ]); ?>
                 </div>
             </div>
