@@ -429,7 +429,7 @@ JS
             <div class="g-mt-10">
                 <div class="control-group group-submit g-mb-15">
                     <div class="buttons-row ">
-                        <? /*= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
+                        <?= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
                             'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
                             'product_id'       => $offerShopProduct->id,
                             'size'             => "modal-dialog-350",
@@ -441,7 +441,7 @@ JS
                                 'style' => '',
                                 'class' => 'btn btn-primary btn-block btn-xxl btn-grey-white btn-52 js-out-click-btn g-font-size-18',
                             ],
-                        ]); */ ?>
+                        ]);  ?>
                     </div>
                     <div class="availability-row available" style="">
                         <span class="row-value">Товара нет</span>
