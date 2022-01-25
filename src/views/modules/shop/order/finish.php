@@ -37,7 +37,7 @@ CSS
                 <h1 style="margin-bottom: 0px;">Заказ <span class="g-color-primary">№<?= $model->id; ?></span>
                     <?php if ((float)$model->moneyOriginal->amount > 0) : ?>
                         на сумму <span
-                                class="g-color-primary"><?= \Yii::$app->money->convertAndFormat($model->moneyOriginal); ?></span>
+                                class="g-color-primary"><?= \Yii::$app->money->convertAndFormat($model->money); ?></span>
                     <?php endif; ?>
 
 
