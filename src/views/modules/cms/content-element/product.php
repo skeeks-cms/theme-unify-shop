@@ -23,6 +23,7 @@ $shopOfferChooseHelper = null;
 $shopProduct = $model->shopProduct;
 //Если это страница товара-предложения
 
+
 if ($shopProduct->isOfferProduct) {
     $shopProductOffer = $shopProduct;
     //$shopProduct = $shopProduct->shopProductWhithOffers;
@@ -48,19 +49,8 @@ if ($shopProduct->isOfferProduct) {
 }
 
 
-$infoModel = $model;
-/*if ($model->main_cce_id) {
-    $shopMainProduct = $model->mainCmsContentElement->shopProduct;
-    if ($shopMainProduct->isOfferProduct) {
-        $infoModel = $shopMainProduct->shopProductWhithOffers->cmsContentElement;
-    } else {
-        $infoModel = $model->mainCmsContentElement;
-    }
-}*/
-
 //Работа с ценой
 $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
-
 
 
 $suffix = \Yii::$app->name;
@@ -87,6 +77,7 @@ if (!$model->meta_keywords) {
 
 
 
+
 $singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage::beginWidget('product-page');
 $singlPage->addCss();
 $singlPage::end();
@@ -109,7 +100,6 @@ $singlPage::end();
         'model'                 => $model,
         'singlPage'             => $singlPage,
         'priceHelper'           => $priceHelper,
-        'infoModel'             => $infoModel,
         'shopProduct'           => $shopProduct,
         'shopOfferChooseHelper' => $shopOfferChooseHelper,
     ]); ?>

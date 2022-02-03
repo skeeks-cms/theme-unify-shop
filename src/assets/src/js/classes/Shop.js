@@ -69,9 +69,9 @@
             return ajax;
         }
     });
-    
-    
-    $("body").on("mouseenter", ".sx-product-image", function() {
+
+
+    $("body").on("mouseenter", ".sx-product-image", function () {
 
         var secondImgSrc = $(this).data("second-src");
 
@@ -83,7 +83,7 @@
         }
     });
 
-    $("body").on("mouseleave", ".sx-product-image", function() {
+    $("body").on("mouseleave", ".sx-product-image", function () {
         var fiestImgSrc = $(this).data("first-src");
         if (fiestImgSrc) {
             console.log(fiestImgSrc);
@@ -91,5 +91,56 @@
             $(this).attr("src", fiestImgSrc)
         }
     });
-    
-})(sx, sx.$, sx._);
+
+    /**
+     * Электронная коммерция
+     */
+    if (typeof window.dataLayer !== "undefined") {
+        sx.onReady(function () {
+            //Просмотр страницы товара
+            sx.Shop.on("detail", function (e, data) {
+                dataLayer.push({
+                    "ecommerce": {
+                        "currencyCode": sx.Shop.get("currencyCode"),
+                        "detail": {
+                            "products": [
+                                data
+                            ]
+                        }
+                    }
+                });
+            });
+
+            //Просмотр добавление товара в корзину
+            sx.Shop.on("add", function (e, data) {
+                dataLayer.push({
+                    "ecommerce": {
+                        "currencyCode": sx.Shop.get("currencyCode"),
+                        "add": {
+                            "products": [
+                                data.product
+                            ]
+                        }
+                    }
+                });
+            });
+
+            //Просмотр добавление товара в корзину
+            sx.Shop.on("remove", function (e, data) {
+                dataLayer.push({
+                    "ecommerce": {
+                        "currencyCode": sx.Shop.get("currencyCode"),
+                        "remove": {
+                            "products": [
+                                data.product
+                            ]
+                        }
+                    }
+                });
+            });
+        });
+    }
+
+
+})
+(sx, sx.$, sx._);

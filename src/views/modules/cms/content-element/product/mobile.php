@@ -8,7 +8,6 @@
 /**
  * @var $this yii\web\View
  * @var $model \skeeks\cms\shop\models\ShopCmsContentElement
- * @var $infoModel \skeeks\cms\shop\models\ShopCmsContentElement
  * @var $singlPage \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage
  * @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper
  * @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper
@@ -20,6 +19,22 @@
     <div class="container sx-container to-cart-fly-wrapper">
 
         <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
+
+        <?
+
+if ($model->shopProduct->isOfferProduct || $model->shopProduct->isOfferProduct) {
+
+    $data = \skeeks\cms\shop\components\ShopComponent::productDataForJsEvent($model);
+    $jsData = \yii\helpers\Json::encode($data);
+    $this->registerJs(<<<JS
+sx.onReady(function() {
+    sx.Shop.trigger("detail", {$jsData});
+});
+    
+JS
+    );
+}
+    ?>
 
         <div class="row">
             <div class="col-12">
@@ -72,7 +87,7 @@
                          */
                         if ($shopCmsContentProperty = \skeeks\cms\shop\models\ShopCmsContentProperty::find()->where(['is_vendor' => 1])->one()) : ?>
                             <?php
-                            $brandId = $infoModel->relatedPropertiesModel->getAttribute($shopCmsContentProperty->cmsContentProperty->code);
+                            $brandId = $model->relatedPropertiesModel->getAttribute($shopCmsContentProperty->cmsContentProperty->code);
                             $brand = \skeeks\cms\models\CmsContentElement::findOne((int)$brandId);
                             ?>
                             <?php if ($brand) : ?>
