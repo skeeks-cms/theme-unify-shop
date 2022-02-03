@@ -10,7 +10,6 @@
  * @var $model \skeeks\cms\shop\models\ShopOrder
  */
 
-
 use yii\helpers\Html;
 $this->registerCss(<<<CSS
 .sx-detail-order, .sx-buyer-info {
@@ -25,6 +24,42 @@ $this->registerCss(<<<CSS
 
 CSS
 );
+
+if ($orderId = \Yii::$app->session->getFlash("order")) {
+    //Заказ оформлен тргер события в js
+    if ($orderId == $model->id) {
+
+
+        $data = [
+            'order' => $model->jsonSerialize(),
+        ];
+
+        //Формирование данных для ecomerce dataLayer
+        $products = [];
+        /**
+         * @var $shopOrderItem \skeeks\cms\shop\models\ShopOrderItem
+         */
+        foreach ($model->shopOrderItems as $shopOrderItem)
+        {
+            if ($shopOrderItem->shopProduct) {
+                $products[] = \skeeks\cms\shop\components\ShopComponent::productDataForJsEvent($shopOrderItem->shopProduct->cmsContentElement);
+            }
+        }
+        if ($products) {
+            $data['products'] = $products;
+        }
+
+        $jsData = \yii\helpers\Json::encode($data);
+        $this->registerJs(<<<JS
+sx.onReady(function() {
+    sx.Shop.trigger("purchase", {$jsData});
+});
+    
+JS
+        );
+    }
+
+}
 ?>
 
 

@@ -138,6 +138,22 @@
                     }
                 });
             });
+
+            //Просмотр добавление товара в корзину
+            sx.Shop.on("purchase", function (e, data) {
+                dataLayer.push({
+                    "ecommerce": {
+                        "currencyCode": sx.Shop.get("currencyCode"),
+                        "purchase": {
+                            "actionField": {
+                                'id': data.order.id,
+                                'revenue': data.order.money.amount,
+                            },
+                            "products": data.products
+                        }
+                    }
+                });
+            });
         });
     }
 
