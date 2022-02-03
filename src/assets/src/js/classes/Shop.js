@@ -95,7 +95,9 @@
     /**
      * Электронная коммерция
      */
-    if (typeof window.dataLayer !== "undefined") {
+    /*$(function () {*/
+        window.dataLayer = window.dataLayer || [];
+
         sx.onReady(function () {
             //Просмотр страницы товара
             sx.Shop.on("detail", function (e, data) {
@@ -107,6 +109,7 @@
                                 data
                             ]
                         }
+
                     }
                 });
             });
@@ -155,7 +158,7 @@
                 });
             });
         });
-    }
+    /*});*/
 
 
 })

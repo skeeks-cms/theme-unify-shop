@@ -20,7 +20,7 @@
         <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
         <?
 
-if ($model->shopProduct->isOfferProduct || $model->shopProduct->isOfferProduct) {
+if ($model->shopProduct->isOfferProduct || $model->shopProduct->isSimpleProduct) {
 
     $data = \skeeks\cms\shop\components\ShopComponent::productDataForJsEvent($model);
     $jsData = \yii\helpers\Json::encode($data);
