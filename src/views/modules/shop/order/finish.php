@@ -42,7 +42,9 @@ if ($orderId = \Yii::$app->session->getFlash("order")) {
         foreach ($model->shopOrderItems as $shopOrderItem)
         {
             if ($shopOrderItem->shopProduct) {
-                $products[] = \skeeks\cms\shop\components\ShopComponent::productDataForJsEvent($shopOrderItem->shopProduct->cmsContentElement);
+                $productData = \skeeks\cms\shop\components\ShopComponent::productDataForJsEvent($shopOrderItem->shopProduct->cmsContentElement);
+                $productData['quantity'] = (float) $shopOrderItem->quantity;
+                $products[] = $productData;
             }
         }
         if ($products) {
