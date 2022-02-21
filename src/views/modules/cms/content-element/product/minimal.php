@@ -41,7 +41,7 @@ JS
                 ]); ?>
             </div>
         </div>
-        <div class="d-flex flex-row sx-main-product-container">
+        <div class="sx-main-product-container">
             <div class="sx-product-page--left-col">
                 <div class="sx-product-images">
 

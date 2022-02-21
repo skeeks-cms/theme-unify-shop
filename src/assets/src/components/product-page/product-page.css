@@ -10,6 +10,11 @@
     margin-top: 20px;
     margin-bottom: 20px;
 }
+@media (min-width: 992px) {
+    .sx-main-product-container {
+        display: flex;
+    }
+}
 
 .sx-product-page-wrapper .sx-stick-slider {
     margin: 10px;

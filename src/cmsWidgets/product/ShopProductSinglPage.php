@@ -214,13 +214,17 @@ class ShopProductSinglPage extends Widget
     {
         if (!\Yii::$app->mobileDetect->isMobile) {
             \Yii::$app->view->registerCss(<<<CSS
-            .sx-product-page--left-col {
-                width: calc(100% - {$this->right_col_width}px);
-                margin-right: 15px;
-            }
-            .sx-product-page--right-col {
-                width: {$this->right_col_width}px;
-            }
+
+@media (min-width: 992px) {
+    .sx-product-page--left-col {
+        width: calc(100% - {$this->right_col_width}px);
+        margin-right: 15px;
+    }
+    .sx-product-page--right-col {
+        width: {$this->right_col_width}px;
+    }
+}
+            
 CSS
             );
         }
