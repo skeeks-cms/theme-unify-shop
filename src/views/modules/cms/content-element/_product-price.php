@@ -71,6 +71,9 @@ JS
             <? else: ?>
                 <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
                     <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip">
+                        <?/*= $priceHelper->minMoney->currency->baseCourse; */?><!--
+                        --><?/*= $priceHelper->minMoney->amount; */?>
+                        
                         <?= $priceHelper->minMoney; ?>
                         <? if ($shopProduct->measure_ratio != 1) : ?>
                             / <?= $shopProduct->measure->symbol; ?>
