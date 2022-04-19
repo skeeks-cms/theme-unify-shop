@@ -176,7 +176,6 @@ JS
             <? endforeach; ?>
         <? endif; ?>
     </div>
-<?php endif; ?>
 
     <?
     //TODO: подумать сделать оптимальнее
@@ -187,7 +186,7 @@ JS
             $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
         }
     }
-    if ((\Yii::$app->shop->allStores && $quantityAvailable > 0) || !\Yii::$app->shop->allStores) : ?>
+    if ($quantityAvailable > 0 || !\Yii::$app->shop->allStores) : ?>
         <div class="g-mt-10">
             <div class="control-group group-submit g-mb-15">
                 <div class="buttons-row ">
@@ -249,6 +248,39 @@ JS
             </div>
         </div>
     <? endif; ?>
+<?php else : ?>
+    
+    <a class="btn btn-block btn-xxl btn-primary g-font-size-18" href="#sx-order-1" data-toggle="modal">
+        <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::beginWidget('unify_order_text'); ?>
+        Оставить заявку
+        <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::end(); ?>
+    </a>
+    
+        
+    <?
+    $modal = \yii\bootstrap\Modal::begin([
+        'header'       => 'Оставить заявку',
+        'id'           => 'sx-order-1',
+        'toggleButton' => false,
+        'size'         => \yii\bootstrap\Modal::SIZE_DEFAULT,
+    ]);
+    ?>
+    <?= \skeeks\modules\cms\form2\cmsWidgets\form2\FormWidget::widget([
+        'form_code' => 'callback',
+        'namespace' => 'product-callback',
+        'viewFile'  => 'with-messages'
+        //'viewFile' => '@app/views/widgets/FormWidget/fiz-connect'
+    ]); ?>
+    
+    <?
+    $modal::end();
+    ?>
+
+    
+
+<?php endif; ?>
+
+
 
 <? elseif ($shopProduct->isOffersProduct || $shopProduct->isOfferProduct) : ?>
 
@@ -326,9 +358,8 @@ JS
                 $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
             }
         }
-        if ((\Yii::$app->shop->allStores && $quantityAvailable > 0) || !\Yii::$app->shop->allStores) : ?>
+        if (($quantityAvailable > 0 || !\Yii::$app->shop->allStores)) : ?>
 
-            <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_cart) : ?>
 
             <div class="sx-quantity-wrapper">
                 <div class="d-flex flex-row">
@@ -402,8 +433,7 @@ JS
                 <? endif; ?>
             </div>
 
-            <?php endif; ?>
-
+            
             <div class="g-mt-10">
                 <div class="control-group group-submit g-mb-15">
                     <div class="buttons-row ">
@@ -433,6 +463,9 @@ JS
                     ]); ?>
                 </div>
             </div>
+            
+
+            
         <? else : ?>
             <div class="g-mt-10">
                 <div class="control-group group-submit g-mb-15">
