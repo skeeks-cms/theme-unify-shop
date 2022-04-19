@@ -28,6 +28,7 @@ $favoriteProducts = $favQuery->count(); ?>
     </a>
 </div>
 
+<?php if(\Yii::$app->cms->cmsSite->shopSite->is_show_cart) : ?>
 <div class="sx-header-menu-item sx-top-cart sx-js-cart <?php echo \Yii::$app->shop->cart->quantity ? "sx-is-full-cart" : ""; ?>" id="sx-top-cart">
     <a href="<?= \yii\helpers\Url::to(['/shop/cart']); ?>" class="sx-icon-wrapper g-text-underline--none--hover" style="position: relative;">
         <span class="sx-badge g-color-white g-bg-primary sx-total-quantity">
@@ -38,4 +39,4 @@ $favoriteProducts = $favQuery->count(); ?>
     <a href="<?= \yii\helpers\Url::to(['/shop/cart']); ?>" id="basket-bar-invoker" class="sx-total-money g-text-underline--none--hover" data-pjax="0">
         <? echo ((float) \Yii::$app->shop->cart->money->amount > 0 ) ? \Yii::$app->shop->cart->money : ""; ?>
     </a>
-</div>
+<? endif; ?>

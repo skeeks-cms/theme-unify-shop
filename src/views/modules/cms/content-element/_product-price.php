@@ -29,6 +29,7 @@ $("body").on("click", ".sx-not-select-offer", function() {
 JS
 );
 ?>
+
 <? if ($shopProduct->isSimpleProduct) : ?>
 
     <div class="product-price g-mt-10 g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
@@ -38,7 +39,7 @@ JS
         <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
         <link itemprop="availability" href="http://schema.org/InStock">
 
-        <? if ($priceHelper) : ?>
+        <? if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
             <? if ($priceHelper->hasDiscount) : ?>
 
                 <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip">
@@ -100,6 +101,7 @@ JS
         <? endif; ?>
     </div>
 
+<?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_cart) : ?>
     <div class="sx-quantity-wrapper">
         <div class="d-flex flex-row">
         <span class="d-flex flex-row sx-quantity-group sx-main-quantity-group">
@@ -174,6 +176,7 @@ JS
             <? endforeach; ?>
         <? endif; ?>
     </div>
+<?php endif; ?>
 
     <?
     //TODO: подумать сделать оптимальнее
@@ -184,7 +187,7 @@ JS
             $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
         }
     }
-    if (\Yii::$app->shop->allStores && $quantityAvailable > 0) : ?>
+    if ((\Yii::$app->shop->allStores && $quantityAvailable > 0) || !\Yii::$app->shop->allStores) : ?>
         <div class="g-mt-10">
             <div class="control-group group-submit g-mb-15">
                 <div class="buttons-row ">
@@ -238,9 +241,11 @@ JS
                         ],
                     ]); ?>
                 </div>
-                <div class="availability-row available" style="">
-                    <span class="row-value">Товара нет</span>
-                </div>
+                <?php if(\Yii::$app->cms->cmsSite->shopSite->is_show_quantity_product) : ?>
+                    <div class="availability-row available" style="">
+                        <span class="row-value">Товара нет</span>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     <? endif; ?>
@@ -261,7 +266,7 @@ JS
             <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
             <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
             <link itemprop="availability" href="http://schema.org/InStock">
-            <? if ($priceHelper) : ?>
+            <? if ($priceHelper  && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
                 <? if ($priceHelper->hasDiscount) : ?>
                     <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip"><?= $priceHelper->minMoney; ?></span>
                     <span class="current ss-price sx-old-price h3" title="Базовая цена, доступная для всех" data-toggle="tooltip"><?= $priceHelper->basePrice->money; ?></span>
@@ -311,8 +316,6 @@ JS
         </div>
 
         <?= $shopOfferChooseHelper->render(); ?>
-
-
         <?
 
         //TODO: подумать сделать оптимальнее
@@ -323,8 +326,9 @@ JS
                 $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
             }
         }
-        if (\Yii::$app->shop->allStores && $quantityAvailable > 0) : ?>
+        if ((\Yii::$app->shop->allStores && $quantityAvailable > 0) || !\Yii::$app->shop->allStores) : ?>
 
+            <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_cart) : ?>
 
             <div class="sx-quantity-wrapper">
                 <div class="d-flex flex-row">
@@ -398,6 +402,7 @@ JS
                 <? endif; ?>
             </div>
 
+            <?php endif; ?>
 
             <div class="g-mt-10">
                 <div class="control-group group-submit g-mb-15">
@@ -446,9 +451,14 @@ JS
                             ],
                         ]);  ?>
                     </div>
-                    <div class="availability-row available" style="">
-                        <span class="row-value">Товара нет</span>
-                    </div>
+                    <?php if(\Yii::$app->cms->cmsSite->shopSite->is_show_quantity_product) : ?>
+                        <div class="availability-row available" style="">
+                            <span class="row-value">Товара нет</span>
+                        </div>
+                    <?php endif; ?>
+
+
+
                 </div>
             </div>
         <? endif; ?>
@@ -456,7 +466,7 @@ JS
 
     <? else : ?>
         <div class="product-price g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-            <? if ($priceHelper) : ?>
+            <? if ($priceHelper  && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
                 <div class="">
                     <? if ($priceHelper->hasDiscount) : ?>
                         <span class="current ss-price h1 sx-new-price g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip"><?= \Yii::t('skeeks/unify-shop',

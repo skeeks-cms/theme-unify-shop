@@ -88,7 +88,7 @@ if ($infoModel->images) {
     <div class="sx-product-card--info">
         <? if (isset($shopProduct)) : ?>
             <div class="">
-                <? if ($priceHelper) : ?>
+                <? if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
                     <?
                     $prefix = "";
                     if ($shopProduct->isOffersProduct) {
@@ -111,10 +111,16 @@ if ($infoModel->images) {
         </div>
         <? if (isset($shopProduct)) : ?>
             <div class="sx-product-card--actions">
-                <? if ($priceHelper && (float)$priceHelper->minMoney->getAmount() == 0) : ?>
+                <? if ($priceHelper && (float)$priceHelper->minMoney->getAmount() == 0
+                &&
+                        \Yii::$app->cms->cmsSite->shopSite->is_show_cart
+                ) : ?>
+                
                     <? if (
                             //$shopProduct->quantity > 0 &&
                         \Yii::$app->skeeks->site->shopSite->is_show_button_no_price && !$shopProduct->isOffersProduct) : ?>
+                    
+                    
                         <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>".\Yii::t('skeeks/unify-shop', 'To cart'), [
                             'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type'    => 'button',
@@ -142,9 +148,13 @@ if ($infoModel->images) {
                     }
 
                     if (
-                            !$shopStoreProducts || $quantityAvailable > 0
-                        //&& !$shopProduct->isOffersProduct
+                        (!$shopStoreProducts || $quantityAvailable > 0)
+                        &&
+                        \Yii::$app->cms->cmsSite->shopSite->is_show_cart
+                        && !$shopProduct->isOffersProduct
                     ) : ?>
+                    
+                    
                         <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>".\Yii::t('skeeks/unify-shop', 'To cart'), [
                             'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
                             'type'    => 'button',
