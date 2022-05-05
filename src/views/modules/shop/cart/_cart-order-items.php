@@ -21,7 +21,7 @@
                 ) ?>" class="sx-lazy" alt="<?= $orderItem->name; ?> title="<?= $orderItem->name; ?> width="150"/>
             </a>
         </div>
-        <div class="col" style="padding: 10px;">
+        <div class="col" style="padding: 0 10px;">
             <?
                 \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductCardAsset::register($this);
             ?>
@@ -78,21 +78,9 @@
 
         </div>
         <div class="col my-auto" style="max-width: 19px;">
-            <!--<img onclick="sx.Shop.removeBasket('<? /*= $orderItem->id; */ ?>'); return false;" class="img-remove" src="<? /*= \common\themes\app\assets\AppThemeAsset::getAssetUrl("img/icons/remove-circle-1.svg"); */ ?>" />-->
-            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                 class="svg-inline--fa fa-times-circle fa-w-16"
-                 onclick="sx.Shop.removeBasket('<?= $orderItem->id; ?>'); return false;"
-                 style="cursor: pointer; 
-                                             width: 12px;
-                                             height: 12px;transform-origin: 0.625em 0.5625em;overflow: visible;color: #a9a9a9; margin-top: -13px;">
-                <g transform="translate(256 256)" class="">
-                    <g transform="translate(64, 32)  scale(1, 1)  rotate(0 0 0)" class="">
-                        <path fill="currentColor"
-                              d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
-                              transform="translate(-256 -256)" class=""></path>
-                    </g>
-                </g>
-            </svg>
+            <span class="sx-remove-order-item">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" viewBox="0 0 640 640" width="20" height="20"><defs><path d="M0 320C0 496.84 143.16 640 320 640C496.84 640 640 496.84 640 320C640 143.16 496.84 0 320 0C143.16 0 0 143.16 0 320ZM33.68 320C33.68 161.68 161.68 33.68 320 33.68C478.32 33.68 606.32 161.68 606.32 320C606.32 478.32 478.32 606.32 320 606.32C161.68 606.32 33.68 478.32 33.68 320ZM449.68 213.89C456.42 207.16 456.42 197.05 449.68 190.32C442.95 183.58 432.84 183.58 426.11 190.32C419.03 197.39 383.66 232.76 320 296.42C256.34 232.76 220.97 197.39 213.89 190.32C207.16 183.58 197.05 183.58 190.32 190.32C183.58 197.05 183.58 207.16 190.32 213.89C197.39 220.97 232.76 256.34 296.42 320C232.76 383.66 197.39 419.03 190.32 426.11C183.58 432.84 183.58 442.95 190.32 449.68C197.05 456.42 207.16 456.42 213.89 449.68C220.97 442.61 256.34 407.24 320 343.58C383.66 407.24 419.03 442.61 426.11 449.68C432.84 456.42 442.95 456.42 449.68 449.68C456.42 442.95 456.42 432.84 449.68 426.11C442.61 419.03 407.24 383.66 343.58 320C407.24 256.34 442.61 220.97 449.68 213.89Z" id="a1pP7byjY6"></path><path d="M0 320C0 496.84 143.16 640 320 640C496.84 640 640 496.84 640 320C640 143.16 496.84 0 320 0C143.16 0 0 143.16 0 320ZM33.68 320C33.68 161.68 161.68 33.68 320 33.68C478.32 33.68 606.32 161.68 606.32 320C606.32 478.32 478.32 606.32 320 606.32C161.68 606.32 33.68 478.32 33.68 320ZM449.68 213.89C456.42 207.16 456.42 197.05 449.68 190.32C442.95 183.58 432.84 183.58 426.11 190.32C419.03 197.39 383.66 232.76 320 296.42C256.34 232.76 220.97 197.39 213.89 190.32C207.16 183.58 197.05 183.58 190.32 190.32C183.58 197.05 183.58 207.16 190.32 213.89C197.39 220.97 232.76 256.34 296.42 320C232.76 383.66 197.39 419.03 190.32 426.11C183.58 432.84 183.58 442.95 190.32 449.68C197.05 456.42 207.16 456.42 213.89 449.68C220.97 442.61 256.34 407.24 320 343.58C383.66 407.24 419.03 442.61 426.11 449.68C432.84 456.42 442.95 456.42 449.68 449.68C456.42 442.95 456.42 432.84 449.68 426.11C442.61 419.03 407.24 383.66 343.58 320C407.24 256.34 442.61 220.97 449.68 213.89Z" id="adGPsZa8H"></path></defs><g><g><g><use xlink:href="#a1pP7byjY6" opacity="1" fill="#ffffff" fill-opacity="1"></use><g><use xlink:href="#a1pP7byjY6" opacity="1" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-opacity="0"></use></g></g><g><use xlink:href="#adGPsZa8H" opacity="1" fill="#808080" fill-opacity="1"></use><g><use xlink:href="#adGPsZa8H" opacity="1" fill-opacity="0" stroke="#000000" stroke-width="1" stroke-opacity="0"></use></g></g></g></g></svg>
+            </span>
         </div>
     </div>
 <? endforeach; ?>
