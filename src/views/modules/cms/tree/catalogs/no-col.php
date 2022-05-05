@@ -109,7 +109,7 @@ CSS
                     </div>
                 <?php endif; ?>
 
-                <? if (\Yii::$app->cms->currentTree && \Yii::$app->unifyShopTheme->is_show_catalog_subtree_before_products && !$savedFilter) : ?>
+                <? if (\Yii::$app->cms->currentTree && \Yii::$app->view->theme->is_show_catalog_subtree_before_products && !$savedFilter) : ?>
                     <?php
                     $widget = \skeeks\cms\cmsWidgets\tree\TreeCmsWidget::beginWidget('sub-catalog');
                     $widget->descriptor->name = 'Подразделы каталога';
@@ -127,7 +127,7 @@ CSS
                 <div class="row sx-mobile-filters-block js-sticky-block" id="sx-mobile-filters-block" data-has-sticky-header="true" data-start-point="#sx-mobile-filters-block" data-end-point=".sx-footer">
                     <div class="col-12 sx-mobile-filters-block--inner">
                         <div class="btn-group" style="width: 100%;">
-                            <? if (\Yii::$app->unifyShopTheme->is_allow_filters) : ?>
+                            <? if (\Yii::$app->view->theme->is_allow_filters) : ?>
                                 <a href="#" class="sx-btn-filter btn sx-btn-white sx-icon-arrow-down--after">Фильтры</a>
                             <? endif; ?>
                             <!--<a href="#" class="sx-btn-sort btn sx-btn-white text-left sx-icon-arrow-down--after">Сортировка</a>-->

@@ -17,9 +17,9 @@ $dataProvider = new \yii\data\ActiveDataProvider([
     'query' => \skeeks\cms\shop\models\ShopCmsContentElement::find()->active(),
 ]);
 //Если нужно учитывать второстепенную привязку разделов, нужно доработать.
-$dataProvider->query->cmsTree($model, true, \Yii::$app->unifyShopTheme->is_join_second_trees ? true : false);
-$dataProvider->pagination->defaultPageSize = \Yii::$app->unifyShopTheme->productListPerPageSize;
-//$dataProvider->pagination->pageSize = \Yii::$app->unifyShopTheme->productListPerPageSize;
+$dataProvider->query->cmsTree($model, true, \Yii::$app->view->theme->is_join_second_trees ? true : false);
+$dataProvider->pagination->defaultPageSize = \Yii::$app->view->theme->productListPerPageSize;
+//$dataProvider->pagination->pageSize = \Yii::$app->view->theme->productListPerPageSize;
 $dataProvider->query->with('shopProduct');
 $dataProvider->query->with('shopProduct.baseProductPrice');
 $dataProvider->query->with('image');
@@ -39,7 +39,7 @@ $filtersWidget = new \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWid
 $baseQuery = clone $dataProvider->query;
 
 $eavFiltersHandler = null;
-if (\Yii::$app->unifyShopTheme->is_allow_filters) {
+if (\Yii::$app->view->theme->is_allow_filters) {
     $eavFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopEavQueryFilterHandler([
         'baseQuery' => $baseQuery,
     ]);
@@ -102,7 +102,7 @@ $filtersWidget->applyToQuery($dataProvider->query);
 <div itemprop="offers" itemscope="" itemtype="http://schema.org/AggregateOffer">
     <meta itemprop="priceCurrency" content="<?php echo \Yii::$app->money->currency_code; ?>"/>
     <?
-    echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->unifyShopTheme->product_list_view_file, [
+    echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->view->theme->product_list_view_file, [
         'model'             => $model,
         'description_short' => $model->description_short,
         'description'       => $model->description_full,

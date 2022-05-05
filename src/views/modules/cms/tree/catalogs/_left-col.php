@@ -61,7 +61,7 @@
 
 <? endif; ?>
 
-<? if (!\Yii::$app->unifyShopTheme->is_allow_filters) : ?>
+<? if (!\Yii::$app->view->theme->is_allow_filters) : ?>
 <div class="sx-col-left-block">
     <div style="display: none;">
         <? endif; ?>
@@ -73,7 +73,7 @@
 
         <? echo $filtersWidget->run(); ?>
         <!--</div>-->
-        <? if (!\Yii::$app->unifyShopTheme->is_allow_filters) : ?>
+        <? if (!\Yii::$app->view->theme->is_allow_filters) : ?>
     </div>
 </div>
 <? endif; ?>

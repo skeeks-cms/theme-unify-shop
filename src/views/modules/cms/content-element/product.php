@@ -96,7 +96,7 @@ $singlPage::end();
         <? endif; ?>
     <?php endif; ?>
 
-    <?php echo $this->render("@app/views/modules/cms/content-element/product/". (\Yii::$app->mobileDetect->isMobile ? "mobile" : \Yii::$app->unifyShopTheme->product_page_view_file), [
+    <?php echo $this->render("@app/views/modules/cms/content-element/product/". (\Yii::$app->mobileDetect->isMobile ? "mobile" : \Yii::$app->view->theme->product_page_view_file), [
         'model'                 => $model,
         'singlPage'             => $singlPage,
         'priceHelper'           => $priceHelper,

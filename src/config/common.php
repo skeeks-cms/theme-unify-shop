@@ -19,8 +19,8 @@ return [
             ],
         ],
 
-        'unifyShopTheme'   =>  [
+        /*'unifyShopTheme'   =>  [
             'class' => 'skeeks\cms\themes\unifyshop\components\UnifyShopThemeSettingsComponent',
-        ],
+        ],*/
     ],
 ];

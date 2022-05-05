@@ -55,17 +55,17 @@ if ($infoModel->images) {
             <? if ($infoModel->mainProductImage) : ?>
                 <img class="sx-product-image to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->mainProductImage ? $infoModel->mainProductImage->src : null,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
-                        'w' => \Yii::$app->unifyShopTheme->catalog_img_preview_width,
-                        'h' => \Yii::$app->unifyShopTheme->catalog_img_preview_height,
-                        'm' => \Yii::$app->unifyShopTheme->catalog_img_preview_crop ? \Yii::$app->unifyShopTheme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                        'w' => \Yii::$app->view->theme->catalog_img_preview_width,
+                        'h' => \Yii::$app->view->theme->catalog_img_preview_height,
+                        'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
                     ]), $model->code
                 ); ?>" 
                      <? if ($secondImage) : ?>
                     data-second-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($secondImage->src,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
-                            'w' => \Yii::$app->unifyShopTheme->catalog_img_preview_width,
-                            'h' => \Yii::$app->unifyShopTheme->catalog_img_preview_height,
-                            'm' => \Yii::$app->unifyShopTheme->catalog_img_preview_crop,
+                            'w' => \Yii::$app->view->theme->catalog_img_preview_width,
+                            'h' => \Yii::$app->view->theme->catalog_img_preview_height,
+                            'm' => \Yii::$app->view->theme->catalog_img_preview_crop,
                         ]), $model->code
                     ); ?>"
                 <? endif; ?>

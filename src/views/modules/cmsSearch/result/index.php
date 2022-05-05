@@ -14,7 +14,7 @@ $dataProvider = new \yii\data\ActiveDataProvider([
 ]);
 $dataProvider->query->cmsTree();
 
-$dataProvider->pagination->pageSize = \Yii::$app->unifyShopTheme->productListPerPageSize;
+$dataProvider->pagination->pageSize = \Yii::$app->view->theme->productListPerPageSize;
 $dataProvider->query->with('shopProduct');
 $dataProvider->query->with('shopProduct.baseProductPrice');
 $dataProvider->query->with('image');
@@ -31,7 +31,7 @@ $dataProvider->query->groupBy([\skeeks\cms\models\CmsContentElement::tableName()
 $filtersWidget = new \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget();
 $baseQuery = clone $dataProvider->query;
 
-if (\Yii::$app->unifyShopTheme->is_allow_filters) {
+if (\Yii::$app->view->theme->is_allow_filters) {
     $eavFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopEavQueryFilterHandler([
         'baseQuery' => $baseQuery,
     ]);
@@ -66,7 +66,7 @@ $filtersWidget->applyToQuery($dataProvider->query);
 
 /*\Yii::$app->breadcrumbs->createBase()->append(\Yii::t('skeeks/shop/app', 'Favorite products'));*/
 
-echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->unifyShopTheme->product_list_view_file, [
+echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->view->theme->product_list_view_file, [
     'dataProvider'  => $dataProvider,
     'filtersWidget' => $filtersWidget,
     'title'         => \Yii::t('skeeks/shop/app', 'Результаты поиска'),

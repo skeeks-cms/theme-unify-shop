@@ -40,12 +40,12 @@ $widget->dataProvider->setTotalCount(1);
                 'class' => 'js-carousel sx-stick sx-products-stick',
                 'tag'   => 'div',
                 'data'  => [
-                    'slidesToShow' => (int)\Yii::$app->unifyShopTheme->product_slider_items,
+                    'slidesToShow' => (int)\Yii::$app->view->theme->product_slider_items,
                     'responsive'   => [
                         [
                             'breakpoint' => 2600,
                             'settings'   => [
-                                'slidesToShow' => (int)\Yii::$app->unifyShopTheme->product_slider_items,
+                                'slidesToShow' => (int)\Yii::$app->view->theme->product_slider_items,
                             ],
                         ],
                         [

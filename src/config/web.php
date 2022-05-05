@@ -6,4 +6,13 @@
  * @date 27.08.2015
  */
 return [
+    'components' => [
+        'view' => [
+            'themes' => [
+                "unify_shop" => [
+                    'class' => \skeeks\cms\themes\unifyshop\UnifyShopTheme::class,
+                ],
+            ],
+        ],
+    ],
 ];

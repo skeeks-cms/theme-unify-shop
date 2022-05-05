@@ -26,7 +26,7 @@ $dataProvider->setTotalCount($total);
     ],
     'itemOptions'  => \yii\helpers\ArrayHelper::merge([
         'tag'   => 'div',
-        'class' => \Yii::$app->unifyShopTheme->prooductListItemCssClasses . ' sx-product-card-wrapper',
+        'class' => \Yii::$app->view->theme->prooductListItemCssClasses . ' sx-product-card-wrapper',
     ], (array)@$itemOptions),
     'pager'        => [
         'container' => '.sx-product-list',

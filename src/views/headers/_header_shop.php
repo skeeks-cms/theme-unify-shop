@@ -39,4 +39,5 @@ $favoriteProducts = $favQuery->count(); ?>
     <a href="<?= \yii\helpers\Url::to(['/shop/cart']); ?>" id="basket-bar-invoker" class="sx-total-money g-text-underline--none--hover" data-pjax="0">
         <? echo ((float) \Yii::$app->shop->cart->money->amount > 0 ) ? \Yii::$app->shop->cart->money : ""; ?>
     </a>
+</div>
 <? endif; ?>
