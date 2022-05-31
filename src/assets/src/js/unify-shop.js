@@ -42,6 +42,7 @@
 
         jInput.val(newVal);
         jInput.focus();
+
         jInput.trigger("change", {
             'result' : 'up'
         });

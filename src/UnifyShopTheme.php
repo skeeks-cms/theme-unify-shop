@@ -82,6 +82,8 @@ HTML
 
     public $product_page_view_file = "default";
 
+    public $cart_view = "v1";
+
     public function getConfigFormModelData()
     {
         return ArrayHelper::merge(parent::getConfigFormModelData(), [
@@ -178,6 +180,21 @@ HTML
                         ],
                     ],
                 ],
+                'cart_view'   => [
+                    'class' => FieldSet::class,
+                    'name'  => \Yii::t('skeeks/shop/app', 'Оформление заказа'),
+
+                    'fields' => [
+                        'cart_view'              => [
+                            'class' => SelectField::class,
+                            'items' => [
+                                "v1" => 'Оформление в несколько шагов',
+                                "v2" => 'Оформление в один шаг',
+                            ],
+                        ],
+                    ]
+                ],
+
                 'stick'   => [
                     'class' => FieldSet::class,
                     'name'  => \Yii::t('skeeks/shop/app', 'Слайдеры товаров'),
@@ -216,6 +233,7 @@ HTML
 
             ],
             'attributeLabels' => [
+                'cart_view'  => 'Шаблон оформления заказа',
                 'catalog_img_preview_width'  => 'Ширина превью картинки товара',
                 'catalog_img_preview_height' => 'Высота превью картинки товара',
                 'catalog_img_preview_crop'   => 'Режим обрезки превью картинки товара',

@@ -1,0 +1,92 @@
+.sx-order-item {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.sx-order-col-left {
+    background: white;
+}
+
+.sx-order-result {
+    /*text-transform: uppercase;*/
+    font-size: 14px;
+}
+.sx-order-result-itogo {
+    font-size: 30px;
+}
+.sx-order-item-properties p {
+    margin-bottom: 0;
+}
+.sx-order-item-properties {
+    line-height: 16px;
+    font-size: 12px;
+    margin: 2px 0;
+    color: gray;
+}
+.sx-product-card--title {
+    margin: 0 0 10px;
+}
+.sx-order-item-price {
+    font-size: 14px;
+    color: #000;
+    font-weight: 400;
+    line-height: 16px;
+    margin: 8px 0;
+}
+.sx-inner-col-wrapper {
+    width: 100%;
+    max-width: 600px;
+    margin: 30px 0;
+}
+
+.sx-project-form-wrapper {
+    float: right;
+    padding-right: 15px;
+}
+.btn-submit-order {
+    margin-top: 20px;
+}
+
+.sx-checkout-block {
+    /* background: #f3f3f3; */
+    padding: 15px;
+    margin-bottom: 20px;
+    /* border: 1px solid #f3f3f3; */
+    box-shadow: 0px 1px 6px 1px #eaeaea;
+}
+
+.sx-small-info {
+    font-size: 10px;
+    line-height: 1.1;
+    margin-bottom: 9px;
+    color: gray;
+}
+
+.btn-check {
+    background-color: #f3f3f3;
+    padding: 13px;
+    margin-bottom: 15px;
+}
+
+.sx-checked {
+    background-color: var(--second-bg-color);
+    color: var(--second-text-color);
+}
+.sx-checked:hover {
+    background-color: var(--second-bg-color);
+    color: var(--second-text-color);
+}
+
+
+.sx-checkout-block .sx-paysystem:last-child .btn-select {
+    margin-bottom: 0px;
+}
+.sx-checkout-block .sx-paysystem:last-child .btn-select,
+.sx-checkout-block .sx-delivery:last-child .btn-select
+{
+    margin-bottom: 0px;
+}
+
+.sx-hidden {
+    display: none;
+}
