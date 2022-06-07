@@ -39,11 +39,10 @@ if ($orderId = \Yii::$app->session->getFlash("order")) {
         /**
          * @var $shopOrderItem \skeeks\cms\shop\models\ShopOrderItem
          */
-        foreach ($model->shopOrderItems as $shopOrderItem)
-        {
+        foreach ($model->shopOrderItems as $shopOrderItem) {
             if ($shopOrderItem->shopProduct) {
                 $productData = \skeeks\cms\shop\components\ShopComponent::productDataForJsEvent($shopOrderItem->shopProduct->cmsContentElement);
-                $productData['quantity'] = (float) $shopOrderItem->quantity;
+                $productData['quantity'] = (float)$shopOrderItem->quantity;
                 $products[] = $productData;
             }
         }
@@ -217,7 +216,7 @@ JS
         $contactAttributes = $model->getContactAttributes();
         $receiverAttributes = $model->getReceiverAttributes();
         ?>
-        <?php if($contactAttributes) : ?>
+        <?php if ($contactAttributes) : ?>
             <div class="sx-contact-info" style="
                     margin-top: 20px;
                     /*background: #f8f8f8;*/
@@ -243,7 +242,7 @@ JS
                 </div>
             </div>
         <?php endif; ?>
-        <?php if($receiverAttributes) : ?>
+        <?php if ($receiverAttributes) : ?>
             <div class="sx-receiver-info" style="
                     margin-top: 20px;
                     /*background: #f8f8f8;*/
@@ -300,10 +299,70 @@ JS
                     </div>
                 </div>
             </div>
+        <?php else : ?>
+            <?php if ($model->delivery_address) : ?>
+                <div class="sx-delivery-info" style="
+                    margin-top: 20px;
+                ">
+                    <div class="row">
+                        <div class="col-12">
+                            <h5>Детали доставки</h5>
+                        </div>
+                    </div>
+                    <div class="sx-data">
+                        <div class="col-12">
+                            <div class="row sx-data-row">
+                                <div class="col-3">Адрес
+                                </div>
+                                <div class="col-9">
+                                    <?php echo $model->delivery_address; ?>
+                                </div>
+                            </div>
+                            <?php if($model->delivery_entrance) : ?>
+                                <div class="row sx-data-row">
+                                    <div class="col-3">Подъезд
+                                    </div>
+                                    <div class="col-9">
+                                        <?php echo $model->delivery_entrance; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if($model->delivery_floor) : ?>
+                                <div class="row sx-data-row">
+                                    <div class="col-3">Этаж
+                                    </div>
+                                    <div class="col-9">
+                                        <?php echo $model->delivery_floor; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if($model->delivery_apartment_number) : ?>
+                                <div class="row sx-data-row">
+                                    <div class="col-3">Номер квартиры
+                                    </div>
+                                    <div class="col-9">
+                                        <?php echo $model->delivery_apartment_number; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if($model->delivery_comment) : ?>
+                                <div class="row sx-data-row">
+                                    <div class="col-3">Коментарий
+                                    </div>
+                                    <div class="col-9">
+                                        <?php echo $model->delivery_comment; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
 
 
-        <?php if ($model->shopBuyer) : ?>
+       <!-- <?php /*if ($model->shopBuyer) : */?>
             <div class="sx-buyer-info" style="
                     margin-top: 20px;
                     /*background: #f8f8f8;*/
@@ -316,19 +375,19 @@ JS
                 </div>
                 <div class="sx-data">
                     <div class="col-12">
-                        <?php foreach ($model->shopBuyer->relatedPropertiesModel->toArray() as $k => $v) : ?>
+                        <?php /*foreach ($model->shopBuyer->relatedPropertiesModel->toArray() as $k => $v) : */?>
                             <div class="row sx-data-row">
-                                <div class="col-3"><?php echo \yii\helpers\ArrayHelper::getValue($model->shopBuyer->relatedPropertiesModel->attributeLabels(), $k); ?>
+                                <div class="col-3"><?php /*echo \yii\helpers\ArrayHelper::getValue($model->shopBuyer->relatedPropertiesModel->attributeLabels(), $k); */?>
                                 </div>
                                 <div class="col-9">
-                                    <?php echo $v; ?>
+                                    <?php /*echo $v; */?>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
+                        <?php /*endforeach; */?>
                     </div>
                 </div>
             </div>
-        <?php endif; ?>
+        --><?php /*endif; */?>
 
         <div class="sx-order-items" style="margin-top: 20px;">
             <h5>Содержимое заказа</h5>
