@@ -6,15 +6,20 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
+/* @var $deliveries \skeeks\cms\shop\models\ShopDelivery[] */
 
 \skeeks\cms\shop\widgets\ShopGlobalWidget::widget();
 
 \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyCartV2PageAsset::register($this);
 
+$jsData = \yii\helpers\Json::encode([
+    'checkout_backend' => \yii\helpers\Url::to(['/shop/cart/order-checkout'])
+]);
+
 $this->registerJs(<<<JS
     (function(sx, $, _)
     {
-        new sx.classes.cartv2.Checkout();
+        sx.Checkout = new sx.classes.cartv2.Checkout({$jsData});
     })(sx, sx.$, sx._);
 JS
 );
@@ -26,18 +31,8 @@ if (!$shopOrder->cms_user_id && !\Yii::$app->user->isGuest) {
     $shopOrder->save(true, ['cms_user_id']);
 }
 
-$deliveries = \skeeks\cms\shop\models\ShopDelivery::getAllowForOrder();
-/*if (!$shopOrder->shop_delivery_id && $deliveries) {
-    $firstDelivery = $deliveries[0];
-    $shopOrder->shop_delivery_id = $firstDelivery->id;
-    $shopOrder->save(true, ['shop_delivery_id']);
-}
+$deliveries = \skeeks\cms\shop\models\ShopDelivery::find()->active()->sort()->all();
 
-if (!$shopOrder->shop_pay_system_id && $shopOrder->paySystems) {
-    $firstPaySystem = $shopOrder->paySystems[0];
-    $shopOrder->shop_pay_system_id = $firstPaySystem->id;
-    $shopOrder->save(true, ['shop_pay_system_id']);
-}*/
 $this->registerJs(<<<JS
 $("body").on("click", ".sx-remove-order-item", function() {
     var jItem = $(this).closest(".sx-order-item");
@@ -67,34 +62,34 @@ JS
                     <div class="sx-inner-col-wrapper sx-project-form-wrapper">
 
 
-                        <div class="sx-checkout-block">
-                            <div class="h5 sx-checkout-block-title">1. Данные покупателя</div>
+                        <div id="sx-client-block" class="sx-checkout-block sx-client-block">
+                            <div class="h5 sx-checkout-block-title">1. Покупатель</div>
 
                             <?php if (\Yii::$app->user->isGuest) : ?>
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group field-relatedpropertiesmodel-name js-float-label-wrapper">
+                                        <div class="form-group js-float-label-wrapper">
                                             <label>Имя</label>
-                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_first_name" value="<?php echo $shopOrder->contact_first_name ; ?>" />
+                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_first_name" value="<?php echo $shopOrder->contact_first_name; ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group field-relatedpropertiesmodel-name js-float-label-wrapper">
+                                        <div class="form-group js-float-label-wrapper">
                                             <label>Фамилия</label>
-                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_last_name" value="<?php echo $shopOrder->contact_last_name ; ?>"/>
+                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_last_name" value="<?php echo $shopOrder->contact_last_name; ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group field-relatedpropertiesmodel-name js-float-label-wrapper">
+                                        <div class="form-group js-float-label-wrapper">
                                             <label>Телефон</label>
-                                            <input type="text" id='sx-phone' class="form-control sx-save-after-change" data-field="contact_phone" value="<?php echo $shopOrder->contact_phone ; ?>"/>
+                                            <input type="text" id='sx-phone' class="form-control sx-save-after-change" data-field="contact_phone" value="<?php echo $shopOrder->contact_phone; ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group field-relatedpropertiesmodel-name js-float-label-wrapper">
+                                        <div class="form-group js-float-label-wrapper">
                                             <label>Email</label>
-                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_email" value="<?php echo $shopOrder->contact_email ; ?>"/>
+                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_email" value="<?php echo $shopOrder->contact_email; ?>"/>
                                         </div>
                                     </div>
                                 </div>
@@ -108,26 +103,26 @@ JS
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group field-relatedpropertiesmodel-name js-float-label-wrapper">
+                                        <div class="form-group js-float-label-wrapper">
                                             <label>Имя</label>
                                             <input type="text" <?php echo \Yii::$app->user->identity->first_name ? "disabled" : ""; ?> class="form-control" value="<?php echo \Yii::$app->user->identity->first_name; ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group field-relatedpropertiesmodel-name js-float-label-wrapper">
+                                        <div class="form-group js-float-label-wrapper">
                                             <label>Фамилия</label>
                                             <input type="text" <?php echo \Yii::$app->user->identity->last_name ? "disabled" : ""; ?> class="form-control" value="<?php echo \Yii::$app->user->identity->last_name; ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group field-relatedpropertiesmodel-name js-float-label-wrapper">
+                                        <div class="form-group js-float-label-wrapper">
                                             <label>Телефон</label>
                                             <input type="text" <?php echo \Yii::$app->user->identity->phone ? "disabled" : ""; ?> id='sx-phone' class="form-control"
                                                    value="<?php echo \Yii::$app->user->identity->phone; ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group field-relatedpropertiesmodel-name js-float-label-wrapper">
+                                        <div class="form-group js-float-label-wrapper">
                                             <label>Email</label>
                                             <input type="text" <?php echo \Yii::$app->user->identity->email ? "disabled" : ""; ?> class="form-control" value="<?php echo \Yii::$app->user->identity->email; ?>"/>
                                         </div>
@@ -135,6 +130,44 @@ JS
                                 </div>
 
                             <?php endif; ?>
+
+                            <div class="sx-receiver">
+                                <div class="sx-receiver-triggger-wrapper">
+                                    <span class="sx-receiver-triggger" data-value="<?php echo (int)$shopOrder->hasReceiver; ?>" data-text-me="Я буду получать товар!" data-text-other="Получать будет другой человек?">
+                                        Получать будет другой человек?
+                                    </span>
+                                </div>
+                                <div class="sx-receiver-data sx-hidden">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group js-float-label-wrapper">
+                                                <label>Имя получателя</label>
+                                                <input type="text" class="form-control sx-save-after-change" data-field="receiver_first_name" value="<?php echo $shopOrder->receiver_first_name; ?>"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group js-float-label-wrapper">
+                                                <label>Фамилия получателя</label>
+                                                <input type="text" class="form-control sx-save-after-change" data-field="receiver_last_name" value="<?php echo $shopOrder->receiver_last_name; ?>"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group js-float-label-wrapper">
+                                                <label>Телефон получателя</label>
+                                                <input type="text" id='sx-phone-receiver' class="form-control sx-save-after-change" data-field="receiver_phone" value="<?php echo $shopOrder->receiver_phone; ?>"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group js-float-label-wrapper">
+                                                <label>Email получателя</label>
+                                                <input type="text" class="form-control sx-save-after-change" data-field="receiver_email" value="<?php echo $shopOrder->receiver_email; ?>"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
 
                         <div class="sx-checkout-block sx-delivery-block" id="sx-delivery-block">
@@ -149,8 +182,8 @@ JS
                                                     <?php echo $shopOrder->shopDelivery->id == $delivery->id ? "✓" : ""; ?>
                                                 </span>
                                                 <span class="sx-delivery-name">
-                                            <?php echo $delivery->name; ?>
-                                        </span>
+                                                    <?php echo $delivery->name; ?>
+                                                </span>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
@@ -159,9 +192,26 @@ JS
                                 <?php endif; ?>
 
                             </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <?php if ($deliveries) : ?>
+                                        <?php foreach ($deliveries as $delivery) : ?>
+                                            <div class="sx-delivery-tab <?php echo $shopOrder->shopDelivery->id == $delivery->id ? "" : "sx-hidden"; ?>" data-id="<?php echo $delivery->id; ?>">
+                                                <?php if ($delivery->description) : ?>
+                                                    <div class="sx-delivery-description"><?php echo $delivery->description; ?></div>
+                                                <?php endif; ?>
+
+                                                <?php if ($delivery->handler) : ?>
+                                                    <?php echo $delivery->handler->renderWidget($shopOrder); ?>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="sx-checkout-block sx-paysystem-block" id="sx-paysystem-block">
+                        <div class="sx-checkout-block sx-paysystem-block" id="sx-paysystem-block" data-toggle="tooltip" data-placement="right" title="">
                             <div class="h5 sx-checkout-block-title">3. Способ оплаты</div>
                             <div class="row">
                                 <?php if ($shopOrder->paySystems) : ?>
@@ -171,9 +221,9 @@ JS
                                                 <span class="sx-checked-icon" data-icon="✓">
                                                     <?php echo $shopOrder->shopPaySystem->id == $paySystem->id ? "✓" : ""; ?>
                                                 </span>
-                                                <span class="sx-paysystem-name">
-                                            <?php echo $paySystem->name; ?>
-                                        </span>
+                                                    <span class="sx-paysystem-name">
+                                                    <?php echo $paySystem->name; ?>
+                                                </span>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
@@ -288,7 +338,12 @@ JS
                             </div>
 
                             <div class="col-12">
-                                <a href="#" class="btn btn-xxl btn-block btn-primary btn-submit-order" data-pjax="0">
+                                <div class="sx-order-error">
+
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <a href="#" class="btn btn-xxl btn-block btn-primary btn-submit-order" data-pjax="0" data-value="Оформить заказ" data-process="Подождите...">
                                     Оформить заказ
                                 </a>
                             </div>

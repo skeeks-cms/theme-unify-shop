@@ -97,7 +97,7 @@ JS
                     </div>
                 </div>
                 <div class="row sx-data-row">
-                    <div class="col-3">Оплата</div>
+                    <div class="col-3">Способ оплаты</div>
                     <div class="col-9">
                         <?php if ($model->paid_at) : ?>
                             <?php
@@ -118,7 +118,7 @@ JS
 
                 <?php if ($model->shopDelivery) : ?>
                     <div class="row sx-data-row">
-                        <div class="col-3">Доставка</div>
+                        <div class="col-3">Способ получения</div>
                         <div class="col-9">
                             <?php echo $model->shopDelivery->name; ?>
                             <?php if ((float)$model->moneyDelivery->amount > 0) : ?>
@@ -212,9 +212,67 @@ JS
 
 
 
+        <?
+
+        $contactAttributes = $model->getContactAttributes();
+        $receiverAttributes = $model->getReceiverAttributes();
+        ?>
+        <?php if($contactAttributes) : ?>
+            <div class="sx-contact-info" style="
+                    margin-top: 20px;
+                    /*background: #f8f8f8;*/
+                    /*padding: 20px;*/
+                ">
+                <div class="row">
+                    <div class="col-12">
+                        <h5>Данные покупателя</h5>
+                    </div>
+                </div>
+                <div class="sx-data">
+                    <div class="col-12">
+                        <?php foreach ($contactAttributes as $attribute) : ?>
+                            <div class="row sx-data-row">
+                                <div class="col-3"><?php echo $model->getAttributeLabel($attribute); ?>
+                                </div>
+                                <div class="col-9">
+                                    <?php echo $model->getAttribute($attribute); ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+        <?php if($receiverAttributes) : ?>
+            <div class="sx-receiver-info" style="
+                    margin-top: 20px;
+                    /*background: #f8f8f8;*/
+                    /*padding: 20px;*/
+                ">
+                <div class="row">
+                    <div class="col-12">
+                        <h5>Получатель заказа</h5>
+                    </div>
+                </div>
+                <div class="sx-data">
+                    <div class="col-12">
+                        <?php foreach ($receiverAttributes as $attribute) : ?>
+                            <div class="row sx-data-row">
+                                <div class="col-3"><?php echo $model->getAttributeLabel($attribute); ?>
+                                </div>
+                                <div class="col-9">
+                                    <?php echo $model->getAttribute($attribute); ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
 
 
-        <?php if ($model->deliveryHandlerCheckoutModel) : ?>
+
+        <?php if ($model->deliveryHandlerCheckoutModel && $model->deliveryHandlerCheckoutModel->getVisibleAttributes()) : ?>
             <div class="sx-delivery-info" style="
                     margin-top: 20px;
                     /*background: #f8f8f8;*/
@@ -222,18 +280,18 @@ JS
                 ">
                 <div class="row">
                     <div class="col-12">
-                        <h4>Подробнее о доставке</h4>
+                        <h5>Детали доставки</h5>
                     </div>
                 </div>
                 <div class="sx-data">
                     <div class="col-12">
-                        <?php foreach ($model->deliveryHandlerCheckoutModel->getVisibleAttributes() as $attribute) : ?>
+                        <?php foreach ($model->deliveryHandlerCheckoutModel->getVisibleAttributes() as $attribute => $data) : ?>
 
                             <div class="row sx-data-row">
-                                <div class="col-3"><?php echo $model->deliveryHandlerCheckoutModel->getAttributeLabel($attribute); ?>
+                                <div class="col-3"><?php echo \yii\helpers\ArrayHelper::getValue($data, 'label'); ?>
                                 </div>
                                 <div class="col-9">
-                                    <?php echo $model->deliveryHandlerCheckoutModel->{$attribute}; ?>
+                                    <?php echo \yii\helpers\ArrayHelper::getValue($data, 'value'); ?>
                                 </div>
                             </div>
 
@@ -253,7 +311,7 @@ JS
                 ">
                 <div class="row">
                     <div class="col-12">
-                        <h4>Данные покупателя</h4>
+                        <h5>Данные покупателя</h5>
                     </div>
                 </div>
                 <div class="sx-data">
@@ -273,7 +331,7 @@ JS
         <?php endif; ?>
 
         <div class="sx-order-items" style="margin-top: 20px;">
-            <h4>Содержимое заказа</h4>
+            <h5>Содержимое заказа</h5>
             <div class="">
 
                 <!-- cart content -->
