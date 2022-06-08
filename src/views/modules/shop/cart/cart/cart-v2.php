@@ -31,7 +31,7 @@ if (!$shopOrder->cms_user_id && !\Yii::$app->user->isGuest) {
     $shopOrder->save(true, ['cms_user_id']);
 }
 
-$deliveries = \skeeks\cms\shop\models\ShopDelivery::find()->active()->sort()->all();
+$deliveries = \skeeks\cms\shop\models\ShopDelivery::find()->cmsSite()->active()->sort()->all();
 
 $this->registerJs(<<<JS
 $("body").on("click", ".sx-remove-order-item", function() {
