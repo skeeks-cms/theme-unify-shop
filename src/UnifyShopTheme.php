@@ -82,7 +82,7 @@ HTML
 
     public $product_page_view_file = "default";
 
-    public $cart_view = "v1";
+    public $cart_view = "v2";
 
     public function getConfigFormModelData()
     {
@@ -188,8 +188,8 @@ HTML
                         'cart_view'              => [
                             'class' => SelectField::class,
                             'items' => [
-                                "v1" => 'Оформление в несколько шагов',
-                                "v2" => 'Оформление в один шаг',
+                                //"v1" => 'Оформление в несколько шагов',
+                                "v2" => 'Товары и оформление на одной странице',
                             ],
                         ],
                     ]
