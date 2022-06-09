@@ -139,3 +139,17 @@
 .sx-blink-text {
     animation: blink 0.3s alternate infinite;
 }
+
+.sx-after-order-btn-text {
+    text-align: center;
+    margin-top: 20px;
+    line-height: 1.1;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sx-cart_after_comment_text {
+    line-height: 1.1;
+    padding-left: 15px;
+    padding-right: 15px;
+}

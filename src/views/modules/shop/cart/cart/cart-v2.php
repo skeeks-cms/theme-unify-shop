@@ -13,7 +13,7 @@
 \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyCartV2PageAsset::register($this);
 
 $jsData = \yii\helpers\Json::encode([
-    'checkout_backend' => \yii\helpers\Url::to(['/shop/cart/order-checkout'])
+    'checkout_backend' => \yii\helpers\Url::to(['/shop/cart/order-checkout']),
 ]);
 
 $this->registerJs(<<<JS
@@ -63,7 +63,17 @@ JS
 
 
                         <div id="sx-client-block" class="sx-checkout-block sx-client-block">
-                            <div class="h5 sx-checkout-block-title">1. Покупатель</div>
+                            <div class="h5 sx-checkout-block-title">
+                                1. Покупатель
+
+                                <?php if($this->theme->cart_contact_text) : ?>
+                                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+                                    <div class="material-symbols-outlined" data-toggle="tooltip" data-html="true" title="<?php echo $this->theme->cart_contact_text; ?>">
+                                        help
+                                    </div>
+                                <?php endif; ?>
+
+                            </div>
 
                             <?php if (\Yii::$app->user->isGuest) : ?>
 
@@ -171,15 +181,23 @@ JS
                         </div>
 
                         <div class="sx-checkout-block sx-delivery-block" id="sx-delivery-block">
-                            <div class="h5 sx-checkout-block-title">2. Способ получения</div>
+                            <div class="h5 sx-checkout-block-title">
+                                2. Способ получения
+                                <?php if($this->theme->cart_delivery_text) : ?>
+                                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+                                    <div class="material-symbols-outlined" data-toggle="tooltip" data-html="true" title="<?php echo $this->theme->cart_delivery_text; ?>">
+                                        help
+                                    </div>
+                                <?php endif; ?>
+                            </div>
 
                             <div class="row">
                                 <?php if ($deliveries) : ?>
                                     <?php foreach ($deliveries as $delivery) : ?>
                                         <div class="col-md-6 col-12">
-                                            <div class="btn btn-block btn-check sx-delivery <?php echo $shopOrder->shopDelivery->id == $delivery->id ? "sx-checked" : ""; ?>" data-id="<?php echo $delivery->id; ?>">
+                                            <div class="btn btn-block btn-check sx-delivery <?php echo $shopOrder->shopDelivery && $shopOrder->shopDelivery->id == $delivery->id ? "sx-checked" : ""; ?>" data-id="<?php echo $delivery->id; ?>">
                                                 <span class="sx-checked-icon" data-icon="✓">
-                                                    <?php echo $shopOrder->shopDelivery->id == $delivery->id ? "✓" : ""; ?>
+                                                    <?php echo $shopOrder->shopDelivery && $shopOrder->shopDelivery->id == $delivery->id ? "✓" : ""; ?>
                                                 </span>
                                                 <span class="sx-delivery-name">
                                                     <?php echo $delivery->name; ?>
@@ -196,7 +214,7 @@ JS
                                 <div class="col-12">
                                     <?php if ($deliveries) : ?>
                                         <?php foreach ($deliveries as $delivery) : ?>
-                                            <div class="sx-delivery-tab <?php echo $shopOrder->shopDelivery->id == $delivery->id ? "" : "sx-hidden"; ?>" data-id="<?php echo $delivery->id; ?>">
+                                            <div class="sx-delivery-tab <?php echo $shopOrder->shopDelivery && $shopOrder->shopDelivery->id == $delivery->id ? "" : "sx-hidden"; ?>" data-id="<?php echo $delivery->id; ?>">
                                                 <?php if ($delivery->description) : ?>
                                                     <div class="sx-delivery-description"><?php echo $delivery->description; ?></div>
                                                 <?php endif; ?>
@@ -212,16 +230,26 @@ JS
                         </div>
 
                         <div class="sx-checkout-block sx-paysystem-block" id="sx-paysystem-block" data-toggle="tooltip" data-placement="right" title="">
-                            <div class="h5 sx-checkout-block-title">3. Способ оплаты</div>
+                            <div class="h5 sx-checkout-block-title">
+                                3. Способ оплаты
+
+                                <?php if($this->theme->cart_paysystem_text) : ?>
+                                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+                                    <div class="material-symbols-outlined" data-toggle="tooltip" data-html="true" title="<?php echo $this->theme->cart_paysystem_text; ?>">
+                                        help
+                                    </div>
+                                <?php endif; ?>
+
+                            </div>
                             <div class="row">
                                 <?php if ($shopOrder->paySystems) : ?>
                                     <?php foreach ($shopOrder->paySystems as $paySystem) : ?>
                                         <div class="col-md-6 col-12">
-                                            <div class="btn btn-block btn-check sx-paysystem <?php echo $shopOrder->shopPaySystem->id == $paySystem->id ? "sx-checked" : ""; ?>" data-id="<?php echo $paySystem->id; ?>">
+                                            <div class="btn btn-block btn-check sx-paysystem <?php echo $shopOrder->shopPaySystem && $shopOrder->shopPaySystem->id == $paySystem->id ? "sx-checked" : ""; ?>" data-id="<?php echo $paySystem->id; ?>">
                                                 <span class="sx-checked-icon" data-icon="✓">
-                                                    <?php echo $shopOrder->shopPaySystem->id == $paySystem->id ? "✓" : ""; ?>
+                                                    <?php echo $shopOrder->shopPaySystem && $shopOrder->shopPaySystem->id == $paySystem->id ? "✓" : ""; ?>
                                                 </span>
-                                                    <span class="sx-paysystem-name">
+                                                <span class="sx-paysystem-name">
                                                     <?php echo $paySystem->name; ?>
                                                 </span>
                                             </div>
@@ -250,6 +278,16 @@ JS
                             </div>
 
                         </div>
+
+                        <?php if ($this->theme->cart_after_comment_text) : ?>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="sx-cart_after_comment_text">
+                                        <?php echo $this->theme->cart_after_comment_text; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
 
 
                         <? /* $checkout = \skeeks\cms\shopCheckout\ShopCheckoutWidget::begin([
@@ -347,6 +385,15 @@ JS
                                     Оформить заказ
                                 </a>
                             </div>
+
+                            <?php if ($this->theme->cart_after_btn_text) : ?>
+                                <div class="col-12">
+                                    <div class="sx-after-order-btn-text">
+                                        <?php echo $this->theme->cart_after_btn_text; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+
 
                         <? endif; ?>
 

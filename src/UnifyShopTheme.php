@@ -13,11 +13,14 @@ use skeeks\cms\modules\admin\widgets\BlockTitleWidget;
 use skeeks\cms\themes\unify\assets\UnifyThemeAsset;
 use skeeks\cms\themes\unify\UnifyTheme;
 use skeeks\cms\themes\unifyshop\assets\UnifyThemeShopAsset;
+use skeeks\cms\widgets\formInputs\comboText\ComboTextInputWidget;
 use skeeks\yii2\form\fields\BoolField;
 use skeeks\yii2\form\fields\FieldSet;
 use skeeks\yii2\form\fields\HtmlBlock;
 use skeeks\yii2\form\fields\NumberField;
 use skeeks\yii2\form\fields\SelectField;
+use skeeks\yii2\form\fields\TextareaField;
+use skeeks\yii2\form\fields\WidgetField;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -83,6 +86,11 @@ HTML
     public $product_page_view_file = "default";
 
     public $cart_view = "v2";
+    public $cart_after_btn_text = "Нажимая «Оформить заказ», вы соглашаетесь с условиями использования и оплаты";
+    public $cart_after_comment_text = "";
+    public $cart_delivery_text = "";
+    public $cart_paysystem_text = "";
+    public $cart_contact_text = "";
 
     public function getConfigFormModelData()
     {
@@ -192,6 +200,26 @@ HTML
                                 "v2" => 'Товары и оформление на одной странице',
                             ],
                         ],
+
+                        'cart_after_btn_text' => [
+                            'class' => WidgetField::class,
+                            'widgetClass' => ComboTextInputWidget::class,
+                        ],
+
+                        'cart_after_comment_text' => [
+                            'class' => WidgetField::class,
+                            'widgetClass' => ComboTextInputWidget::class,
+                        ],
+
+                        'cart_contact_text' => [
+                            'class' => TextareaField::class,
+                        ],
+                        'cart_delivery_text' => [
+                            'class' => TextareaField::class,
+                        ],
+                        'cart_paysystem_text' => [
+                            'class' => TextareaField::class,
+                        ]
                     ]
                 ],
 
@@ -234,6 +262,12 @@ HTML
             ],
             'attributeLabels' => [
                 'cart_view'  => 'Шаблон оформления заказа',
+                'cart_after_btn_text'  => 'Текст под кнопкой оформить заказ',
+                'cart_after_comment_text'  => 'Текст под комментарием',
+                'cart_delivery_text'  => 'Текст рядом с выбором способа получания',
+                'cart_paysystem_text'  => 'Текст рядом с выбором способа оплаты',
+                'cart_contact_text'  => 'Текст рядом с вводом данных покупателя',
+
                 'catalog_img_preview_width'  => 'Ширина превью картинки товара',
                 'catalog_img_preview_height' => 'Высота превью картинки товара',
                 'catalog_img_preview_crop'   => 'Режим обрезки превью картинки товара',
@@ -274,6 +308,12 @@ HTML
                         'product_slider_img_preview_crop',
                         'product_list_view_file',
                         'product_page_view_file',
+
+                        'cart_after_comment_text',
+                        'cart_after_btn_text',
+                        'cart_delivery_text',
+                        'cart_paysystem_text',
+                        'cart_contact_text',
                     ],
                     'string',
                 ],
