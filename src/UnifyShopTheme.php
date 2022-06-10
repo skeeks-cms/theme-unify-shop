@@ -91,6 +91,7 @@ HTML
     public $cart_delivery_text = "";
     public $cart_paysystem_text = "";
     public $cart_contact_text = "";
+    public $cart_is_show_delivery_btn_price = true;
 
     public function getConfigFormModelData()
     {
@@ -200,6 +201,9 @@ HTML
                                 "v2" => 'Товары и оформление на одной странице',
                             ],
                         ],
+                        'cart_is_show_delivery_btn_price'              => [
+                            'class' => BoolField::class,
+                        ],
 
                         'cart_after_btn_text' => [
                             'class' => WidgetField::class,
@@ -261,6 +265,7 @@ HTML
 
             ],
             'attributeLabels' => [
+                'cart_is_show_delivery_btn_price'  => 'Выводить цену доставки в кнопки выбора доставки',
                 'cart_view'  => 'Шаблон оформления заказа',
                 'cart_after_btn_text'  => 'Текст под кнопкой оформить заказ',
                 'cart_after_comment_text'  => 'Текст под комментарием',
@@ -299,6 +304,7 @@ HTML
                         'is_allow_filters',
                         'is_show_catalog_subtree_before_products',
                         'is_join_second_trees',
+                        'cart_is_show_delivery_btn_price',
                     ],
                     'integer',
                 ],

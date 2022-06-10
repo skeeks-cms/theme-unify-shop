@@ -196,12 +196,21 @@ JS
                                     <?php foreach ($deliveries as $delivery) : ?>
                                         <div class="col-md-6 col-12">
                                             <div class="btn btn-block btn-check sx-delivery <?php echo $shopOrder->shopDelivery && $shopOrder->shopDelivery->id == $delivery->id ? "sx-checked" : ""; ?>" data-id="<?php echo $delivery->id; ?>">
+                                                <div>
                                                 <span class="sx-checked-icon" data-icon="✓">
                                                     <?php echo $shopOrder->shopDelivery && $shopOrder->shopDelivery->id == $delivery->id ? "✓" : ""; ?>
                                                 </span>
                                                 <span class="sx-delivery-name">
                                                     <?php echo $delivery->name; ?>
                                                 </span>
+                                                </div>
+                                                <?php if($this->theme->cart_is_show_delivery_btn_price) : ?>
+                                                    <div class="sx-delivery-btn-price">
+                                                        <?php echo $delivery->money; ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                                
+                                                
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
