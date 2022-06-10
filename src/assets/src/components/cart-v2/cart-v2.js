@@ -106,6 +106,20 @@
 
                 jPaySystem.addClass("sx-checked");
                 $(".sx-checked-icon", jPaySystem).append($(".sx-checked-icon", jPaySystem).data("icon"));
+
+                //Если обработчик не указан
+                var ajaxQuery = sx.Shop.createAjaxUpdateOrder({
+                    'data': {
+                        'shop_pay_system_id': payId,
+                    }
+                });
+
+                var Handler = new sx.classes.AjaxHandlerStandartRespose(ajaxQuery);
+
+                Handler.on("success", function () {
+                });
+                ajaxQuery.execute();
+
             });
 
             //Если есть данные для обработчика доставки
