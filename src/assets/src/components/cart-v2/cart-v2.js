@@ -19,6 +19,28 @@
             this._updateOrderResultBlock("sx-money", cart.money.amount, cart.money.convertAndFormat);
             this._updateOrderResultBlock("sx-weight", cart.weight.value, cart.weight.convertAndFormat);
 
+            //Включена бесплатная доставка
+            if (cart.freeDelivery.is_active) {
+                if (cart.freeDelivery.sx_need_price.amount > 0) {
+                    $(".sx-free-delivery").show();
+                    $(".sx-free-delivery-success").hide();
+                    $(".sx-need-price").empty().append(cart.freeDelivery.sx_need_price.convertAndFormat);
+
+                    $(".sx-delivery-btn-price").each(function() {
+                        $(this).empty().append($(this).data("money"));
+                    });
+
+                } else {
+                    $(".sx-free-delivery").hide();
+                    $(".sx-free-delivery-success").show();
+
+                    var zeroMoney = $("#sx-money-zero").text();
+                    $(".sx-delivery-btn-price").each(function() {
+                        $(this).empty().append(zeroMoney);
+                    });
+                }
+            }
+
             return this;
         },
 

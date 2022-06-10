@@ -13,7 +13,8 @@
 \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyCartV2PageAsset::register($this);
 
 $jsData = \yii\helpers\Json::encode([
-    'checkout_backend' => \yii\helpers\Url::to(['/shop/cart/order-checkout']),
+    'checkout_backend'               => \yii\helpers\Url::to(['/shop/cart/order-checkout']),
+    'order_free_shipping_from_price' => \Yii::$app->skeeks->site->shopSite->order_free_shipping_from_price,
 ]);
 
 $this->registerJs(<<<JS
@@ -56,6 +57,9 @@ JS
 <div id="sx-cart-v2">
     <!--=== Content Part ===-->
     <section class="sx-cart-layout">
+        <div class="sx-hidden">
+            <div id="sx-money-zero"><?php echo new \skeeks\cms\money\Money("0", $shopOrder->currency_code); ?></div>
+        </div>
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-6 sx-order-col-left">
@@ -66,8 +70,8 @@ JS
                             <div class="h5 sx-checkout-block-title">
                                 1. Покупатель
 
-                                <?php if($this->theme->cart_contact_text) : ?>
-                                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+                                <?php if ($this->theme->cart_contact_text) : ?>
+                                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
                                     <div class="material-symbols-outlined" data-toggle="tooltip" data-html="true" title="<?php echo $this->theme->cart_contact_text; ?>">
                                         help
                                     </div>
@@ -183,8 +187,8 @@ JS
                         <div class="sx-checkout-block sx-delivery-block" id="sx-delivery-block">
                             <div class="h5 sx-checkout-block-title">
                                 2. Способ получения
-                                <?php if($this->theme->cart_delivery_text) : ?>
-                                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+                                <?php if ($this->theme->cart_delivery_text) : ?>
+                                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
                                     <div class="material-symbols-outlined" data-toggle="tooltip" data-html="true" title="<?php echo $this->theme->cart_delivery_text; ?>">
                                         help
                                     </div>
@@ -195,22 +199,23 @@ JS
                                 <?php if ($deliveries) : ?>
                                     <?php foreach ($deliveries as $delivery) : ?>
                                         <div class="col-md-6 col-12">
-                                            <div class="btn btn-block btn-check sx-delivery <?php echo $shopOrder->shopDelivery && $shopOrder->shopDelivery->id == $delivery->id ? "sx-checked" : ""; ?>" data-id="<?php echo $delivery->id; ?>">
+                                            <div class="btn btn-block btn-check sx-delivery <?php echo $shopOrder->shopDelivery && $shopOrder->shopDelivery->id == $delivery->id ? "sx-checked" : ""; ?>"
+                                                 data-id="<?php echo $delivery->id; ?>">
                                                 <div>
                                                 <span class="sx-checked-icon" data-icon="✓">
                                                     <?php echo $shopOrder->shopDelivery && $shopOrder->shopDelivery->id == $delivery->id ? "✓" : ""; ?>
                                                 </span>
-                                                <span class="sx-delivery-name">
+                                                    <span class="sx-delivery-name">
                                                     <?php echo $delivery->name; ?>
                                                 </span>
                                                 </div>
-                                                <?php if($this->theme->cart_is_show_delivery_btn_price) : ?>
-                                                    <div class="sx-delivery-btn-price">
+                                                <?php if ($this->theme->cart_is_show_delivery_btn_price) : ?>
+                                                    <div class="sx-delivery-btn-price" data-money="<?php echo $delivery->money; ?>">
                                                         <?php echo $delivery->money; ?>
                                                     </div>
                                                 <?php endif; ?>
-                                                
-                                                
+
+
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
@@ -242,8 +247,8 @@ JS
                             <div class="h5 sx-checkout-block-title">
                                 3. Способ оплаты
 
-                                <?php if($this->theme->cart_paysystem_text) : ?>
-                                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+                                <?php if ($this->theme->cart_paysystem_text) : ?>
+                                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
                                     <div class="material-symbols-outlined" data-toggle="tooltip" data-html="true" title="<?php echo $this->theme->cart_paysystem_text; ?>">
                                         help
                                     </div>
@@ -254,7 +259,8 @@ JS
                                 <?php if ($shopOrder->paySystems) : ?>
                                     <?php foreach ($shopOrder->paySystems as $paySystem) : ?>
                                         <div class="col-md-6 col-12">
-                                            <div class="btn btn-block btn-check sx-paysystem <?php echo $shopOrder->shopPaySystem && $shopOrder->shopPaySystem->id == $paySystem->id ? "sx-checked" : ""; ?>" data-id="<?php echo $paySystem->id; ?>">
+                                            <div class="btn btn-block btn-check sx-paysystem <?php echo $shopOrder->shopPaySystem && $shopOrder->shopPaySystem->id == $paySystem->id ? "sx-checked" : ""; ?>"
+                                                 data-id="<?php echo $paySystem->id; ?>">
                                                 <span class="sx-checked-icon" data-icon="✓">
                                                     <?php echo $shopOrder->shopPaySystem && $shopOrder->shopPaySystem->id == $paySystem->id ? "✓" : ""; ?>
                                                 </span>
@@ -326,6 +332,22 @@ JS
                         <? else: ?>
                             <!-- LEFT -->
                             <div class="col-12">
+
+                                <? if ($order_free_shipping_from_price = \Yii::$app->skeeks->site->shopSite->order_free_shipping_from_price) : ?>
+
+                                    <div class="sx-free-delivery <?php echo (float)$shopOrder->moneyItems->amount > $order_free_shipping_from_price ? "sx-hidden" : ""; ?>">
+                                        Добавьте товаров на <span class="sx-need-price">
+                                            <?php
+                                            $m = new \skeeks\cms\money\Money((string)\Yii::$app->skeeks->site->shopSite->order_free_shipping_from_price, $shopOrder->currency_code);
+                                            echo $m->sub($shopOrder->moneyItems); ?>
+                                        </span> для бесплатной доставки
+                                    </div>
+                                    <div class="sx-free-delivery-success <?php echo (float)$shopOrder->moneyItems->amount > $order_free_shipping_from_price ? "" : "sx-hidden"; ?>">
+                                        Доставим товар бесплатно!
+                                    </div>
+
+
+                                <? endif; ?>
 
                                 <div class="h5">Товары <small style="color: silver; font-size: 12px;">(Заказ №<?php echo \Yii::$app->shop->shopUser->shopOrder->id; ?>)</small></div>
 

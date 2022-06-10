@@ -153,3 +153,16 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+
+
+.sx-free-delivery, .sx-free-delivery-success {
+    background: #dedede;
+    border-radius: 20px;
+    padding: 5px 20px;
+    margin-bottom: 20px;
+    color: black
+}
+
+.sx-free-delivery .sx-need-price {
+    font-weight: bold;
+}
