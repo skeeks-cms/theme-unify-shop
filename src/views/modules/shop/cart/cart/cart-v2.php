@@ -220,7 +220,9 @@ JS
                                         </div>
                                     <?php endforeach; ?>
                                 <?php else : ?>
-                                    <p>Магазин не настроен!</p>
+                                    <div class="col-12">
+                                        <p>Магазин не настроен!</p>
+                                    </div>
                                 <?php endif; ?>
 
                             </div>
@@ -271,7 +273,9 @@ JS
                                         </div>
                                     <?php endforeach; ?>
                                 <?php else : ?>
-                                    <p>Магазин не настроен!</p>
+                                    <div class="col-12">
+                                        <p>Магазин не настроен!</p>
+                                    </div>
                                 <?php endif; ?>
                             </div>
 
