@@ -214,8 +214,6 @@ JS
                                                         <?php echo $delivery->money; ?>
                                                     </div>
                                                 <?php endif; ?>
-
-
                                             </div>
                                         </div>
                                     <?php endforeach; ?>

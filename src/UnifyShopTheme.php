@@ -91,7 +91,7 @@ HTML
     public $cart_delivery_text = "";
     public $cart_paysystem_text = "";
     public $cart_contact_text = "";
-    public $cart_is_show_delivery_btn_price = true;
+    public $cart_is_show_delivery_btn_price = false;
 
     public function getConfigFormModelData()
     {
