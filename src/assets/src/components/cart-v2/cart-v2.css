@@ -109,8 +109,12 @@
     color: gray;
 }
 
-.sx-delivery-description {
+.sx-delivery-description, .sx-paysystem-description {
     margin-bottom: 10px;
+    line-height: 1.3;
+}
+.sx-delivery-description p, .sx-paysystem-description p {
+    margin-bottom: 5px;
 }
 
 .sx-order-error {
@@ -161,6 +165,10 @@
     padding: 5px 20px;
     margin-bottom: 20px;
     color: black
+}
+
+.btn-check.sx-disabled {
+    opacity: 0.5;
 }
 
 .sx-free-delivery .sx-need-price {

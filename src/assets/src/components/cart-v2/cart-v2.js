@@ -10,6 +10,8 @@
 
         updateOrderResult: function () {
 
+            var self = this;
+            
             var cart = sx.Shop.getCartData();
 
             this._updateOrderResultBlock("sx-money-items", cart.moneyItems.amount, cart.moneyItems.convertAndFormat);
@@ -24,22 +26,87 @@
                 if (cart.freeDelivery.sx_need_price.amount > 0) {
                     $(".sx-free-delivery").show();
                     $(".sx-free-delivery-success").hide();
-                    $(".sx-need-price").empty().append(cart.freeDelivery.sx_need_price.convertAndFormat);
 
-                    $(".sx-delivery-btn-price").each(function() {
+                    var currentValue = $(".sx-need-price").text();
+                    if (currentValue != cart.freeDelivery.sx_need_price.convertAndFormat) {
+                        $(".sx-need-price").empty().append(cart.freeDelivery.sx_need_price.convertAndFormat);
+
+                        setTimeout(function () {
+                            $(".sx-need-price").addClass("sx-blink-text");
+                        }, 400);
+
+                        setTimeout(function () {
+                            $(".sx-need-price").removeClass("sx-blink-text");
+                        }, 900);
+
+                    }
+
+
+                    /*$(".sx-delivery-btn-price").each(function() {
                         $(this).empty().append($(this).data("money"));
-                    });
+                    });*/
 
                 } else {
                     $(".sx-free-delivery").hide();
                     $(".sx-free-delivery-success").show();
 
-                    var zeroMoney = $("#sx-money-zero").text();
+                    /*var zeroMoney = $("#sx-money-zero").text();
                     $(".sx-delivery-btn-price").each(function() {
                         $(this).empty().append(zeroMoney);
-                    });
+                    });*/
                 }
+            } else {
+                $(".sx-free-delivery").hide();
+                $(".sx-free-delivery-success").hide();
             }
+
+            cart.deliveries.forEach(function (item) {
+                var jDelivery = $(".sx-delivery[data-id=" + item.id + "]");
+                var jDeliveryMoney = $(".sx-delivery-btn-price", jDelivery);
+
+                if (jDeliveryMoney.length) {
+
+                    var currentMoneyAmount = jDeliveryMoney.data("money-current-amount");
+
+                    if (currentMoneyAmount != item.sx_need_price.amount) {
+                        jDeliveryMoney.empty().append(item.sx_need_price.convertAndFormat);
+                        jDeliveryMoney.data("money-current-amount", item.sx_need_price.amount);
+
+                        setTimeout(function () {
+                            jDeliveryMoney.addClass("sx-blink-text");
+                        }, 400);
+
+                        setTimeout(function () {
+                            jDeliveryMoney.removeClass("sx-blink-text");
+                        }, 900);
+                    }
+                }
+            });
+
+            cart.paysystems.forEach(function (item) {
+                var jPaysystem = $(".sx-paysystem[data-id=" + item.id + "]");
+                if (item.is_allow) {
+                    jPaysystem.data("is_allow", 1);
+                    jPaysystem.data("is_allow_message", item.is_allow_message);
+                    jPaysystem.removeClass("sx-disabled");
+                } else {
+
+                    //Если выбран этот способ оплаты
+                    if (jPaysystem.hasClass("sx-checked")) {
+                        var selectOther = $(".sx-paysystem:not(.sx-disabled):eq(0)", self.getJPaysystem());
+                        if (selectOther.length) {
+                            selectOther.click();
+                        }
+                    }
+
+                    jPaysystem.data("is_allow", 0);
+                    jPaysystem.data("is_allow_message", item.is_allow_message);
+                    jPaysystem.addClass("sx-disabled");
+
+
+                }
+            });
+
 
             return this;
         },
@@ -50,19 +117,19 @@
 
             jBlocks.each(function () {
                 var currentValue = Number($(this).data("value"));
-                
+
                 if (value != currentValue) {
-                    
+
                     //Если значение меняется
                     var jChangeBlock = $(this);
                     jChangeBlock.empty().append(formatedValue);
                     jChangeBlock.data("value", value);
-                    
-                    setTimeout(function() {
+
+                    setTimeout(function () {
                         jChangeBlock.addClass("sx-blink-text");
                     }, 400);
-                    
-                    setTimeout(function() {
+
+                    setTimeout(function () {
                         jChangeBlock.removeClass("sx-blink-text");
                     }, 900);
                 }
@@ -77,7 +144,7 @@
                         /*setTimeout(function() {
                             jBlock.addClass("sx-hidden");
                         }, 2000);*/
-                        
+
                     }
                 }
             });
@@ -119,12 +186,45 @@
             $('body').on("click", '.sx-paysystem', function () {
 
                 self.hideGlobalError();
-                
+
+
                 var jPaySystem = $(this);
                 var payId = $(this).data("id");
 
+                if (jPaySystem.hasClass("sx-disabled")) {
+
+                    if (!jPaySystem.hasClass("sx-error-showed")) {
+                        jPaySystem.addClass("sx-error-showed");
+
+                        jPaySystem.tooltip({
+                            'title': jPaySystem.data("is_allow_message"),
+                            'placement': 'right',
+                            'template': '<div class="tooltip sx-error-tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>',
+                        });
+                        jPaySystem.tooltip("show");
+                        jPaySystem.on("hide.bs.tooltip", function() {
+                            setTimeout(function () {
+                                jPaySystem.removeClass("sx-error-showed");
+                                jPaySystem.tooltip("dispose");
+                            }, 200);
+                        });
+
+                        /*setTimeout(function () {
+                            jPaySystem.tooltip("hide");
+                        }, 3000);*/
+                    }
+
+
+                    return false;
+                }
+
                 $('.sx-paysystem').removeClass("sx-checked");
                 $('.sx-paysystem .sx-checked-icon').empty();
+
+                $(".sx-paysystem-tab", self.getJPaysystem()).hide();
+                var jPaysystemTab = $(".sx-paysystem-tab[data-id=" + payId + "]", self.getJPaysystem());
+                jPaysystemTab.show();
+
 
                 jPaySystem.addClass("sx-checked");
                 $(".sx-checked-icon", jPaySystem).append($(".sx-checked-icon", jPaySystem).data("icon"));
@@ -174,13 +274,44 @@
                 var jPaySystem = $(this);
                 var payId = $(this).data("id");
 
+                if (jPaySystem.hasClass("sx-disabled")) {
+
+                    if (jPaySystem.hasClass("sx-disabled")) {
+
+                        if (!jPaySystem.hasClass("sx-error-showed")) {
+                            jPaySystem.addClass("sx-error-showed");
+
+                            jPaySystem.tooltip({
+                                'title': jPaySystem.data("is_allow_message"),
+                                'trigger': 'focus',
+                                'placement': 'right',
+                                'template': '<div class="tooltip sx-error-tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>',
+                            });
+                            jPaySystem.tooltip("show");
+
+                            setTimeout(function () {
+                                jPaySystem.tooltip("hide");
+                                setTimeout(function () {
+                                    jPaySystem.removeClass("sx-error-showed");
+                                    jPaySystem.tooltip("dispose");
+                                }, 200);
+                            }, 3000);
+                        }
+
+
+                        return false;
+                    }
+                    
+                    return false;
+                }
+
                 $('.sx-delivery').removeClass("sx-checked");
                 $('.sx-delivery .sx-checked-icon').empty();
 
                 jPaySystem.addClass("sx-checked");
                 $(".sx-checked-icon", jPaySystem).append($(".sx-checked-icon", jPaySystem).data("icon"));
 
-                $(".sx-delivery-tab", self.getJDelivery()).hide()
+                $(".sx-delivery-tab", self.getJDelivery()).hide();
                 var jDeliveryTab = $(".sx-delivery-tab[data-id=" + payId + "]", self.getJDelivery());
                 jDeliveryTab.show();
 
@@ -220,10 +351,10 @@
                 //Проверка данных получателя
                 if ($(".sx-receiver-data").is(":visible")) {
                     var isEmpty = true;
-                    $("input", $(".sx-receiver-data")).each(function() {
-                          if ($(this).val() != '') {
-                              isEmpty = false;
-                          }
+                    $("input", $(".sx-receiver-data")).each(function () {
+                        if ($(this).val() != '') {
+                            isEmpty = false;
+                        }
                     });
 
                     if (isEmpty == true) {
@@ -234,30 +365,30 @@
 
                 var ajaxQuery = sx.ajax.preparePostQuery(self.get("checkout_backend"));
                 var Handler = new sx.classes.AjaxHandlerStandartRespose(ajaxQuery, {
-                    'allowResponseErrorMessage' : false
+                    'allowResponseErrorMessage': false
                 });
-                Handler.on("success", function(e, data) {
+                Handler.on("success", function (e, data) {
                     jBlocker.unblock();
                 });
-                Handler.on("error", function(e, data) {
+                Handler.on("error", function (e, data) {
                     if (data.data.error_element_id) {
                         var jErrorElement = $("#" + data.data.error_element_id);
                         if (jErrorElement.length > 0) {
-                            
+
                             jErrorElement.addClass("is-invalid");
                             var jCheckoutBlock = jErrorElement.closest(".sx-checkout-block");
                             //new sx.classes.Location("#" + jCheckoutBlock.attr("id"));
-                            
+
                             self.showBlockError(jCheckoutBlock, data.message);
                         }
                     } else if (data.data.error_code) {
                         var jErrorElement = $("[data-field='" + data.data.error_code + "']");
                         if (jErrorElement.length > 0) {
-                            
+
                             jErrorElement.addClass("is-invalid");
                             var jCheckoutBlock = jErrorElement.closest(".sx-checkout-block");
                             //new sx.classes.Location("#" + jCheckoutBlock.attr("id"));
-                            
+
                             self.showBlockError(jCheckoutBlock, data.message);
                         }
                     }
@@ -275,7 +406,6 @@
             });
 
 
-
             $('body').on('change', '.sx-save-after-change', function () {
                 var element = $(this);
                 var field = $(this).data('field');
@@ -289,7 +419,7 @@
                 });
 
                 var Handler = new sx.classes.AjaxHandlerStandartRespose(ajaxQuery, {
-                    'allowResponseErrorMessage' : false,
+                    'allowResponseErrorMessage': false,
                 });
                 Handler.on("success", function () {
                     element.removeClass("is-invalid");
@@ -302,7 +432,7 @@
                 ajaxQuery.execute();
             });
 
-            $("input, textarea").on("focus", function() {
+            $("input, textarea").on("focus", function () {
                 if ($(this).hasClass('is-invalid')) {
                     $(this).removeClass('is-invalid');
                     self.hideGlobalError();
@@ -337,12 +467,12 @@
                 $(".sx-receiver-triggger").empty().append($(".sx-receiver-triggger").data("text-me"));
             }
         },
-        
+
         showBlockError(jCheckoutBlock, errormessage, timeout = 3000) {
             jCheckoutBlock.tooltip({
-                'title' : errormessage,
-                'placement' : 'right',
-                'template' : '<div class="tooltip sx-error-tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>',
+                'title': errormessage,
+                'placement': 'right',
+                'template': '<div class="tooltip sx-error-tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>',
             });
             jCheckoutBlock.tooltip("show");
 
@@ -353,11 +483,11 @@
                 }, 200);
             }, timeout);
         },
-        
-        hideGlobalError: function() {
+
+        hideGlobalError: function () {
             var self = this;
-            self.getJError().hide().empty();  
-            
+            self.getJError().hide().empty();
+
             return this;
         },
 
@@ -368,7 +498,11 @@
         getJDelivery: function () {
             return $(".sx-delivery-block");
         },
-        
+
+        getJPaysystem: function () {
+            return $(".sx-paysystem-block");
+        },
+
         getJError: function () {
             return $(".sx-order-error");
         }

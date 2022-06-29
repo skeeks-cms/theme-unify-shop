@@ -210,8 +210,13 @@ JS
                                                 </span>
                                                 </div>
                                                 <?php if ($this->theme->cart_is_show_delivery_btn_price) : ?>
-                                                    <div class="sx-delivery-btn-price" data-money="<?php echo $delivery->money; ?>">
-                                                        <?php echo $delivery->money; ?>
+                                                    <div class="sx-delivery-btn-price" 
+                                                         data-money-current-amount="<?php echo (float) $delivery->getMoneyForOrder($shopOrder)->amount; ?>" 
+                                                         data-money="<?php echo $delivery->money; ?>" 
+                                                         data-money-amount="<?php echo (float) $delivery->money->amount; ?>" 
+                                                         data-free-money-amount="<?php echo $delivery->freeOrderPriceFrom; ?>"
+                                                    >
+                                                        <?php echo $delivery->getMoneyForOrder($shopOrder); ?>
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
@@ -256,11 +261,24 @@ JS
 
                             </div>
                             <div class="row">
-                                <?php if ($shopOrder->paySystems) : ?>
-                                    <?php foreach ($shopOrder->paySystems as $paySystem) : ?>
+                                <?php
+                                /**
+                                 * @var $paySystems \skeeks\cms\shop\models\ShopPaySystem[]
+                                 */
+                                $paySystems = \skeeks\cms\shop\models\ShopPaySystem::find()->cmsSite()->active()->sort()->all();
+
+                                if ($paySystems) : ?>
+                                    <?php foreach ($paySystems as $paySystem) : ?>
                                         <div class="col-md-6 col-12">
-                                            <div class="btn btn-block btn-check sx-paysystem <?php echo $shopOrder->shopPaySystem && $shopOrder->shopPaySystem->id == $paySystem->id ? "sx-checked" : ""; ?>"
-                                                 data-id="<?php echo $paySystem->id; ?>">
+                                            <div class="btn btn-block btn-check sx-paysystem 
+                                            <?php echo $shopOrder->shopPaySystem && $shopOrder->shopPaySystem->id == $paySystem->id ? "sx-checked" : ""; ?>
+                                            <?php echo $paySystem->isAllowForOrder($shopOrder) ? "" : "sx-disabled"; ?>
+"
+                                                 data-id="<?php echo $paySystem->id; ?>"
+                                                 data-is_allow="<?php echo $paySystem->isAllowForOrder($shopOrder); ?>"
+                                                 data-is_allow_message="<?php echo $paySystem->getNotAllowMessage($shopOrder); ?>"
+
+                                            >
                                                 <span class="sx-checked-icon" data-icon="✓">
                                                     <?php echo $shopOrder->shopPaySystem && $shopOrder->shopPaySystem->id == $paySystem->id ? "✓" : ""; ?>
                                                 </span>
@@ -275,6 +293,24 @@ JS
                                         <p>Магазин не настроен!</p>
                                     </div>
                                 <?php endif; ?>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <?php if ($paySystems) : ?>
+                                        <?php foreach ($paySystems as $paySystem) : ?>
+                                            <div class="sx-paysystem-tab <?php echo $shopOrder->shopPaySystem && $shopOrder->shopPaySystem->id == $paySystem->id ? "" : "sx-hidden"; ?>" data-id="<?php echo $paySystem->id; ?>">
+                                                <?php if ($paySystem->description) : ?>
+                                                    <div class="sx-paysystem-description"><?php echo $paySystem->description; ?></div>
+                                                <?php endif; ?>
+
+                                                <?php /*if ($paysystem->handler) : */?><!--
+                                                    <?php /*echo $delivery->handler->renderWidget($shopOrder); */?>
+                                                --><?php /*endif; */?>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </div>
                             </div>
 
                         </div>
@@ -335,21 +371,25 @@ JS
                             <!-- LEFT -->
                             <div class="col-12">
 
-                                <? if ($order_free_shipping_from_price = \Yii::$app->skeeks->site->shopSite->order_free_shipping_from_price) : ?>
+                                <?php
+                                    $order_free_shipping_from_price = $shopOrder->shopDelivery ? $shopOrder->shopDelivery->freeOrderPriceFrom : \Yii::$app->skeeks->site->shopSite->order_free_shipping_from_price;
+                                ?>
+
+                                <?/* if ($order_free_shipping_from_price = \Yii::$app->skeeks->site->shopSite->order_free_shipping_from_price) : */?>
 
                                     <div class="sx-free-delivery <?php echo (float)$shopOrder->moneyItems->amount > $order_free_shipping_from_price ? "sx-hidden" : ""; ?>">
                                         Добавьте товаров на <span class="sx-need-price">
                                             <?php
-                                            $m = new \skeeks\cms\money\Money((string)\Yii::$app->skeeks->site->shopSite->order_free_shipping_from_price, $shopOrder->currency_code);
+                                            $m = new \skeeks\cms\money\Money((string)$order_free_shipping_from_price, $shopOrder->currency_code);
                                             echo $m->sub($shopOrder->moneyItems); ?>
                                         </span> для бесплатной доставки
                                     </div>
-                                    <div class="sx-free-delivery-success <?php echo (float)$shopOrder->moneyItems->amount > $order_free_shipping_from_price ? "" : "sx-hidden"; ?>">
+                                    <div class="sx-free-delivery-success <?php echo (float)$shopOrder->moneyItems->amount > $order_free_shipping_from_price && $order_free_shipping_from_price > 0 ? "" : "sx-hidden"; ?>">
                                         Доставим товар бесплатно!
                                     </div>
 
 
-                                <? endif; ?>
+                                <?/* endif; */?>
 
                                 <div class="h5">Товары <small style="color: silver; font-size: 12px;">(Заказ №<?php echo \Yii::$app->shop->shopUser->shopOrder->id; ?>)</small></div>
 
