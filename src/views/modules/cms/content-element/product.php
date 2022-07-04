@@ -83,7 +83,7 @@ $singlPage->addCss();
 $singlPage::end();
 ?>
 <section class="sx-product-page-wrapper"
-    <?php echo(!$shopProduct->isOffersProduct ? 'itemscope itemtype="http://schema.org/Product"' : ""); ?>
+    <?php echo(!$shopProduct->isOffersProduct ? 'itemscope itemtype="https://schema.org/Product"' : ""); ?>
 >
 
     <?php if (!$shopProduct->isOffersProduct) : ?>
@@ -94,6 +94,15 @@ $singlPage::end();
         <? if ($model->mainProductImage) : ?>
             <link itemprop="image" href="<?= $model->mainProductImage->absoluteSrc; ?>">
         <? endif; ?>
+        
+        <?php if($shopProduct->rating_value) : ?>
+            <span itemscope itemtype="https://schema.org/AggregateRating" itemprop="aggregateRating">
+                <meta itemprop="bestRating" content="<?php echo \Yii::$app->skeeks->site->shopSite->max_product_rating_value; ?>">
+                <meta itemprop="ratingValue" content="<?php echo $shopProduct->rating_value; ?>">
+                <meta itemprop="ratingCount" content="<?php echo $shopProduct->rating_count; ?>">
+            </span>
+        <?php endif; ?>
+    
     <?php endif; ?>
 
     <?php echo $this->render("@app/views/modules/cms/content-element/product/". (\Yii::$app->mobileDetect->isMobile ? "mobile" : \Yii::$app->view->theme->product_page_view_file), [
