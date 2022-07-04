@@ -37,8 +37,8 @@ if ($selectedValue) {
 <? if ($min != $max
     //&& $max > 0
 ) : ?>
-<meta itemprop="lowPrice" content="<?php echo $val1; ?>">
-<meta itemprop="highPrice" content="<?php echo $val2; ?>">
+<!--<meta itemprop="lowPrice" content="<?php /*echo $val1; */?>">
+<meta itemprop="highPrice" content="<?php /*echo $val2; */?>">-->
 
     <div class="dropdown sx-filter sx-inline-filter <?php echo $selectedValue ? "sx-filter-selected" : ""; ?>">
         <button class="dropdown-toggle btn btn-default sx-inline-btn" data-toggle="dropdown">

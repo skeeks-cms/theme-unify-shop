@@ -24,7 +24,7 @@ $dataProvider->query->with('shopProduct');
 $dataProvider->query->with('shopProduct.baseProductPrice');
 $dataProvider->query->with('image');
 $dataProvider->query->joinWith('shopProduct');
-$dataProvider->query->groupBy(\skeeks\cms\shop\models\ShopCmsContentElement::tableName() . ".id");
+$dataProvider->query->groupBy(\skeeks\cms\shop\models\ShopCmsContentElement::tableName().".id");
 
 /*print_r($dataProvider->query);die;*/
 \Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
@@ -98,9 +98,37 @@ if ($eavFiltersHandler) {
     }
 }
 $filtersWidget->applyToQuery($dataProvider->query);
+
 ?>
-<div itemprop="offers" itemscope="" itemtype="http://schema.org/AggregateOffer">
+<!--Тут кэш и построение микроразметки-->
+<?php
+
+$q = clone $dataProvider->query;
+$total = $q->limit(-1)->offset(-1)->orderBy([])->count('*');
+$dataProvider->setTotalCount($total);
+
+$data = \skeeks\cms\shop\components\ShopComponent::getAgregateCategoryData($dataProvider->query, @$savedFilter ? $savedFilter : $model);
+?>
+<span itemprop="product" itemscope itemtype="https://schema.org/Product">
+<meta itemprop="name" content="<?php echo $model->seoName; ?>"/>
+    
+<?php if ($data) : ?>
+    <span itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+        <meta itemprop="reviewCount" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'reviewCount', 0); ?>"/>
+        <meta itemprop="ratingValue" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'ratingValue', 0); ?>"/>
+        <meta itemprop="bestRating" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'bestRating', 0); ?>"/>
+        <meta itemprop="worsRating" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'worsRating', 0); ?>"/>
+    </span>
+<?php endif; ?>
+
+<div itemprop="offers" itemscope itemtype="https://schema.org/AggregateOffer">
     <meta itemprop="priceCurrency" content="<?php echo \Yii::$app->money->currency_code; ?>"/>
+    <?php if ($data) : ?>
+        <meta itemprop="offerCount" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'offerCount', 0); ?>"/>
+        <meta itemprop="highPrice" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'highPrice', 0); ?>"/>
+        <meta itemprop="lowPrice" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0); ?>"/>
+        
+    <?php endif; ?>
     <?
     echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->view->theme->product_list_view_file, [
         'model'             => $model,
@@ -108,7 +136,8 @@ $filtersWidget->applyToQuery($dataProvider->query);
         'description'       => $model->description_full,
         'dataProvider'      => $dataProvider,
         'filtersWidget'     => $filtersWidget,
-        'savedFilter'     => @$savedFilter,
+        'savedFilter'       => @$savedFilter,
     ]);
     ?>
 </div>
+</span>
