@@ -186,7 +186,7 @@ JS
             $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
         }
     }
-    if ($quantityAvailable > 0 || !\Yii::$app->shop->allStores) : ?>
+    if ( ($quantityAvailable > 0 || !\Yii::$app->shop->allStores) || \Yii::$app->skeeks->site->shopSite->is_show_product_no_quantity) : ?>
         <div class="g-mt-10">
             <div class="control-group group-submit g-mb-15">
                 <div class="buttons-row ">
