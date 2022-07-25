@@ -275,9 +275,6 @@ JS
     <?
     $modal::end();
     ?>
-
-    
-
 <?php endif; ?>
 
 
@@ -348,6 +345,9 @@ JS
         </div>
 
         <?= $shopOfferChooseHelper->render(); ?>
+    
+    
+        <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_cart) : ?>
         <?
 
         //TODO: подумать сделать оптимальнее
@@ -496,6 +496,34 @@ JS
             </div>
         <? endif; ?>
 
+        <?php else : ?>
+            
+            <a class="btn btn-block btn-xxl btn-primary g-font-size-18" href="#sx-order-1" data-toggle="modal">
+                <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::beginWidget('unify_order_text'); ?>
+                Оставить заявку
+                <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::end(); ?>
+            </a>
+            
+                
+            <?
+            $modal = \yii\bootstrap\Modal::begin([
+                'header'       => 'Оставить заявку',
+                'id'           => 'sx-order-1',
+                'toggleButton' => false,
+                'size'         => \yii\bootstrap\Modal::SIZE_DEFAULT,
+            ]);
+            ?>
+            <?= \skeeks\modules\cms\form2\cmsWidgets\form2\FormWidget::widget([
+                'form_code' => 'callback',
+                'namespace' => 'product-callback',
+                'viewFile'  => 'with-messages'
+                //'viewFile' => '@app/views/widgets/FormWidget/fiz-connect'
+            ]); ?>
+            
+            <?
+            $modal::end();
+            ?>
+        <?php endif; ?>
 
     <? else : ?>
         <div class="product-price g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
@@ -568,3 +596,5 @@ JS
 
 
 <? endif; ?>
+
+
