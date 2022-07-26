@@ -38,23 +38,19 @@
                 </div>
             <? endif; ?>
             <div class="d-flex flex-row sx-quantity-wrapper">
-                <!--<input type="number" value="<? /*= round($orderItem->quantity); */ ?>" name="qty"
-                                                           class="sx-basket-quantity" maxlength="3" max="999" min="1"
-                                                           data-basket_id="<? /*= $orderItem->id; */ ?>"/>-->
-
                 <span class="d-flex flex-row sx-quantity-group">
-                                                <div class="my-auto sx-minus">-</div>
-                                                <div class="my-auto">
-                                                    <input
-                                                            value="<?= (float)$orderItem->quantity; ?>"
-                                                            class="form-control sx-quantity-input sx-basket-quantity"
-                                                            data-measure_ratio="<?= $orderItem->shopProduct ? $orderItem->shopProduct->measure_ratio : ""; ?>"
-                                                            data-measure_ratio_min="<?= $orderItem->shopProduct ? $orderItem->shopProduct->measure_ratio_min : ""; ?>"
-                                                            data-basket_id="<?= $orderItem->id; ?>"
-                                                    />
-                                                </div>
-                                                <div class="my-auto sx-plus">+</div>
-                                            </span>
+                    <div class="my-auto sx-minus">-</div>
+                    <div class="my-auto">
+                        <input
+                            value="<?= (float)$orderItem->quantity; ?>"
+                            class="form-control sx-quantity-input sx-basket-quantity"
+                            data-measure_ratio="<?= $orderItem->shopProduct ? $orderItem->shopProduct->measure_ratio : ""; ?>"
+                            data-measure_ratio_min="<?= $orderItem->shopProduct ? $orderItem->shopProduct->measure_ratio_min : ""; ?>"
+                            data-basket_id="<?= $orderItem->id; ?>"
+                        />
+                    </div>
+                    <div class="my-auto sx-plus">+</div>
+                </span>
                 <div class="my-auto sx-measure-symbol">
                     <?= $orderItem->measure_name; ?>
                 </div>
@@ -64,9 +60,7 @@
             <? if ((float)$orderItem->moneyOriginal->amount > 0) : ?>
                 <div class="sx-order-item-price">
                     <? if ($orderItem->moneyOriginal->getAmount() == $orderItem->money->getAmount()) : ?>
-
                         <?= $orderItem->moneyOriginal; ?>
-
                     <? else : ?>
                         <?= $orderItem->money; ?>
                         <span class="line-through nopadding-left sx-old-price"><?= $orderItem->moneyOriginal; ?></span>
