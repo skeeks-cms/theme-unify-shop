@@ -104,7 +104,7 @@ $filtersWidget->applyToQuery($dataProvider->query);
 <?php
 
 $q = clone $dataProvider->query;
-$total = $q->limit(-1)->offset(-1)->orderBy([])->count('*');
+$total = $q->select(\skeeks\cms\models\CmsContentElement::tableName() . ".id")->limit(-1)->offset(-1)->orderBy([])->count('*');
 $dataProvider->setTotalCount($total);
 
 $data = \skeeks\cms\shop\components\ShopComponent::getAgregateCategoryData($dataProvider->query, @$savedFilter ? $savedFilter : $model);
