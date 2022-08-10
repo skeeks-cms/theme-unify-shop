@@ -116,14 +116,23 @@
 
             //Просмотр добавление товара в корзину
             sx.Shop.on("add", function (e, data) {
+                var add = {};
+                if (data.product) {
+                    add = {
+                        'products' : [
+                            data.product
+                        ]
+                    }
+                } else {
+                    add = {
+                        'products' : data.products
+                    }
+                }
+                
                 dataLayer.push({
                     "ecommerce": {
                         "currencyCode": sx.Shop.get("currencyCode"),
-                        "add": {
-                            "products": [
-                                data.product
-                            ]
-                        }
+                        "add": add
                     }
                 });
             });
