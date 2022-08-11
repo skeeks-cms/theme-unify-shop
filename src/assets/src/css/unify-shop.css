@@ -97,4 +97,25 @@
 }
 
 
+/**
+ * Это вынести в отдельный файл позже
+ */
+
+.sx-saved-filters-list--before .list-inline-item a {
+    display: inline-flex;
+    min-height: 100%;
+}
+
+.sx-saved-filters-list--before .sx-img-wrapper {
+    margin-right: 5px;
+}
+.sx-saved-filters-list--before .sx-img-wrapper img {
+    width: 50px;
+    height: 50px;
+}
+.sx-saved-filters-list--before .sx-info-wrapper {
+    text-align: left;
+    line-height: 1.2;
+}
+
 

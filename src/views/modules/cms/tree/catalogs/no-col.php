@@ -73,7 +73,7 @@ CSS
                 ?>
                 <?php if (count($savedFilters) > 1) : ?>
                     <div class="sx-saved-filters-list sx-saved-filters-list--before">
-                        <div class="h5 sx-sub-title"><?php echo $savedFilter->propertyValueName; ?> встречается в разделах</div>
+                        <div class="h5 sx-sub-title">Другие товары с опцией «<?php echo $savedFilter->propertyValueName; ?>»:</div>
 
                         <?php
                         $savedFiltersData = [];
@@ -95,14 +95,34 @@ CSS
                                             "
                                            href="<?php echo $sf->url; ?>"
                                            data-toggle="tooltip"
-                                           title="<?php echo $sf->seoName; ?>"><?php echo $sf->cmsTree->name; ?></a>
+                                           title="<?php echo $sf->seoName; ?>">
+
+
+                                            <?php if ($sf->image) : ?>
+                                                <div class="sx-img-wrapper">
+                                                    <img src="<?= \skeeks\cms\helpers\Image::getSrc(\Yii::$app->imaging->thumbnailUrlOnRequest($sf->image ? $sf->image->src : null,
+                                                        new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                                            'w' => 50,
+                                                            'h' => 50,
+                                                            'm' => \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                                                        ]), $model->code
+                                                    )); ?>
+                                                    " alt="<?php echo $sf->seoName; ?>"/>
+                                                </div>
+                                            <?php endif; ?>
+
+                                            <div class="my-auto sx-info-wrapper">
+                                                <div class="sx-title"><?php echo $sf->cmsTree->name; ?></div>
+                                                <div><?php echo $sf->propertyValueName; ?></div>
+                                            </div>
+                                        </a>
                                     </li>
                                 <? endforeach; ?>
                             </ul>
                         <? endforeach; ?>
                     </div>
                 <?php endif; ?>
-                
+
                 <?php if (@$description_short) : ?>
                     <div class="sx-content sx-description-short">
                         <?= @$description_short; ?>
