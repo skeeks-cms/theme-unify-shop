@@ -108,6 +108,79 @@ $total = $q->select(\skeeks\cms\models\CmsContentElement::tableName() . ".id")->
 $dataProvider->setTotalCount($total);
 
 $data = \skeeks\cms\shop\components\ShopComponent::getAgregateCategoryData($dataProvider->query, @$savedFilter ? $savedFilter : $model);
+
+/**
+ * Формирование по шаблону
+ * Это надо вынести куда нибудь в контроллер
+ */
+$cmsTreeType = $model->cmsTreeType;
+if (!$model->meta_title && $cmsTreeType->meta_title_template) {
+    $metaTitle = $cmsTreeType->meta_title_template;
+    if (strpos($metaTitle, "{=section.seoName}") !== false) {
+        $metaTitle = str_replace("{=section.seoName}", $model->seoName, $metaTitle);
+    }
+    if (strpos($metaTitle, "{=siteName}") !== false) {
+        $metaTitle = str_replace("{=siteName}", \Yii::$app->skeeks->site->name, $metaTitle);
+    }
+    if (strpos($metaTitle, "{=minMoney}") !== false) {
+        $lowPrice = \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0);
+        $money = new \skeeks\cms\money\Money((string) $lowPrice, \Yii::$app->money->currencyCode);
+        $metaTitle = str_replace("{=minMoney}", $money, $metaTitle);
+    }
+    
+    $this->title = $metaTitle;
+    $this->registerMetaTag([
+        "name"    => 'og:title',
+        "content" => $this->title
+    ], 'og:title');
+}
+
+if (!$model->meta_description && $cmsTreeType->meta_description_template) {
+    $metaDescription = $cmsTreeType->meta_description_template;
+    if (strpos($metaDescription, "{=section.seoName}") !== false) {
+        $metaDescription = str_replace("{=section.seoName}", $model->seoName, $metaDescription);
+    }
+    if (strpos($metaDescription, "{=siteName}") !== false) {
+        $metaDescription = str_replace("{=siteName}", \Yii::$app->skeeks->site->name, $metaDescription);
+    }
+    if (strpos($metaDescription, "{=minMoney}") !== false) {
+        $lowPrice = \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0);
+        $money = new \skeeks\cms\money\Money((string) $lowPrice, \Yii::$app->money->currencyCode);
+        $metaDescription = str_replace("{=minMoney}", $money, $metaDescription);
+    }
+    
+    
+    $this->registerMetaTag([
+        "name"    => 'og:description',
+        "content" => $metaDescription
+    ], 'og:description');
+    
+    $this->registerMetaTag([
+        "name"    => 'description',
+        "content" => $metaDescription
+    ], 'description');
+}
+
+if (!$model->meta_keywords && $cmsTreeType->meta_keywords_template) {
+    $metaKeywords = $cmsTreeType->meta_keywords_template;
+    if (strpos($metaKeywords, "{=section.seoName}") !== false) {
+        $metaKeywords = str_replace("{=section.seoName}", $model->seoName, $metaKeywords);
+    }
+    if (strpos($metaKeywords, "{=siteName}") !== false) {
+        $metaKeywords = str_replace("{=siteName}", \Yii::$app->skeeks->site->name, $metaKeywords);
+    }
+    if (strpos($metaKeywords, "{=minMoney}") !== false) {
+        $lowPrice = \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0);
+        $money = new \skeeks\cms\money\Money((string) $lowPrice, \Yii::$app->money->currencyCode);
+        $metaKeywords = str_replace("{=minMoney}", $money, $metaKeywords);
+    }
+    
+    $this->registerMetaTag([
+        "name"    => 'keywords',
+        "content" => $metaKeywords
+    ], 'keywords');
+}
+
 ?>
 <span itemprop="product" itemscope itemtype="https://schema.org/Product">
 <meta itemprop="name" content="<?php echo $model->seoName; ?>"/>
