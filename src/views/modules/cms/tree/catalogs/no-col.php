@@ -105,7 +105,7 @@ CSS
                                                             'w' => 50,
                                                             'h' => 50,
                                                             'm' => \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
-                                                        ]), $model->code
+                                                        ]), $sf->cmsTree->code
                                                     )); ?>
                                                     " alt="<?php echo $sf->seoName; ?>"/>
                                                 </div>
