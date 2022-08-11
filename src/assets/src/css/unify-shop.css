@@ -101,9 +101,15 @@
  * Это вынести в отдельный файл позже
  */
 
+.sx-saved-filters-list--before ul {
+    display: flex;
+     flex-wrap: wrap;
+}
 .sx-saved-filters-list--before .list-inline-item a {
     display: inline-flex;
     min-height: 100%;
+    min-width: 170px;
+    overflow: hidden;
 }
 
 .sx-saved-filters-list--before .sx-img-wrapper {
@@ -116,6 +122,18 @@
 .sx-saved-filters-list--before .sx-info-wrapper {
     text-align: left;
     line-height: 1.2;
+}
+.sx-saved-filters-list--before .sx-info-wrapper .sx-title {
+    white-space: nowrap;
+}
+
+.sx-mobile-layout .sx-saved-filters-list--before li {
+    display: inline-block;
+    width: 100%;
+    margin-right: 0;
+}
+.sx-mobile-layout .sx-saved-filters-list--before .list-inline-item a {
+    width: 100%;
 }
 
 
