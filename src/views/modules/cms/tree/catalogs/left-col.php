@@ -198,7 +198,7 @@ $catalogSettings::end();
                             $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
                         }
                         ?>
-                        <div class="h3 sx-title">Быстрый подбор товаров</div>
+                        <div class="h3 sx-title">Быстрый подбор товаров из раздела «<?php echo $savedFilter ? $savedFilter->getCmsTree()->one()->name : $model->name; ?>»</div>
                         <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
                             <div class="h5 sx-sub-title"><?php echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); ?></div>
                             <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
