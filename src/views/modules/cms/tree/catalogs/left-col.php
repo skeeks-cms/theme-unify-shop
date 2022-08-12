@@ -178,7 +178,10 @@ $catalogSettings::end();
                     //todo: вынести в шаблон
                     $savedFilters = $model->getCmsSavedFilters()
                         ->joinWith("cmsContentProperty as cmsContentProperty")
+                        ->with("cmsTree")
                         ->with("cmsContentProperty")
+                        ->with("valueContentElement")
+                        ->with("valueContentPropertyEnum")
                         ->orderBy(['cmsContentProperty.priority' => SORT_ASC])
                         //->groupBy(['cmsContentProperty.id'])
                         ->limit(200)

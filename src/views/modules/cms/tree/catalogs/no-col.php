@@ -209,7 +209,10 @@ CSS
                         //todo: вынести в шаблон
                         $savedFilters = $model->getCmsSavedFilters()
                             ->joinWith("cmsContentProperty as cmsContentProperty")
+                            ->with("cmsTree")
                             ->with("cmsContentProperty")
+                            ->with("valueContentElement")
+                            ->with("valueContentPropertyEnum")
                             ->orderBy(['cmsContentProperty.priority' => SORT_ASC])
                             //->groupBy(['cmsContentProperty.id'])
                             ->limit(200)
@@ -232,7 +235,7 @@ CSS
                                 <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
                                     <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
                                         <li class="list-inline-item <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "sx-active" : ""; ?>" style="margin-bottom: 5px;">
-                                            <a class="<?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "" : "sx-main-text-color"; ?> btn 
+                                            <a class="<?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "" : "sx-main-text-color"; ?> btn
                                             <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "btn-primary" : "btn-default"; ?>
                                             "
                                                href="<?php echo $sf->url; ?>"

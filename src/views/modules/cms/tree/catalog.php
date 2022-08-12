@@ -23,6 +23,7 @@ $dataProvider->pagination->defaultPageSize = \Yii::$app->view->theme->productLis
 $dataProvider->query->with('shopProduct');
 $dataProvider->query->with('shopProduct.baseProductPrice');
 $dataProvider->query->with('image');
+$dataProvider->query->with('images');
 $dataProvider->query->joinWith('shopProduct');
 $dataProvider->query->groupBy(\skeeks\cms\shop\models\ShopCmsContentElement::tableName().".id");
 
