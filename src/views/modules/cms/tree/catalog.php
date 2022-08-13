@@ -28,7 +28,6 @@ $dataProvider->query->joinWith('shopProduct');
 $dataProvider->query->groupBy(\skeeks\cms\shop\models\ShopCmsContentElement::tableName().".id");
 
 /*print_r($dataProvider->query);die;*/
-\Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
 //\Yii::$app->shop->filterByMainPidContentElementQuery($dataProvider->query);
 
 
@@ -104,11 +103,18 @@ $filtersWidget->applyToQuery($dataProvider->query);
 <!--Тут кэш и построение микроразметки-->
 <?php
 
-$q = clone $dataProvider->query;
-$total = $q->select(\skeeks\cms\models\CmsContentElement::tableName() . ".id")->limit(-1)->offset(-1)->orderBy([])->count('*');
-$dataProvider->setTotalCount($total);
+
+//
+
+
 
 $data = \skeeks\cms\shop\components\ShopComponent::getAgregateCategoryData($dataProvider->query, @$savedFilter ? $savedFilter : $model);
+
+\Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
+$q = clone $dataProvider->query;
+$total = $q->select(\skeeks\cms\models\CmsContentElement::tableName() . ".id")->limit(-1)->offset(-1)->orderBy([])->count('*');
+
+$dataProvider->setTotalCount($total);
 
 /**
  * Формирование по шаблону
