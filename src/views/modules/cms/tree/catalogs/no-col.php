@@ -13,7 +13,7 @@
  * @var \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogNoColPage $catalogSettings
  * @var array                                                                $agregateCategoryData
  */
-
+$totalOffers = (int)\yii\helpers\ArrayHelper::getValue($agregateCategoryData, 'offerCount', 0);
 $catalogSettings = \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogNoColPage::beginWidget("catalog-no-col");
 $catalogSettings::end();
 
@@ -23,6 +23,13 @@ if ($filtersWidget->getPriceHandler()) {
 
 if ($filtersWidget->getEavHandler()) {
     $filtersWidget->getEavHandler()->viewFile = \Yii::$app->mobileDetect->isMobile ? '@app/views/filters/eav-filters' : '@app/views/filters/eav-filters-inline';
+}
+
+$priceFilter = $filtersWidget->getPriceHandler();
+$eavFilter = $filtersWidget->getEavHandler();
+$appliedValues = [];
+if ($eavFilter) {
+    $appliedValues = $eavFilter->getApplied();
 }
 
 if (!\Yii::$app->mobileDetect->isMobile) {
