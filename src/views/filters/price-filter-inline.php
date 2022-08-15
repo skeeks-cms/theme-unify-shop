@@ -16,11 +16,11 @@ $widget = $this->context;
 $min = $handler->minValue;
 $max = $handler->maxValue;
 
-$val1 = $handler->from ? $handler->from : $min;
-$val2 = $handler->to ? $handler->to : $max;
+$val1 = $handler->f ? $handler->f : $min;
+$val2 = $handler->t ? $handler->t : $max;
 
-$fromId = \yii\helpers\Html::getInputId($handler, 'from');
-$toId = \yii\helpers\Html::getInputId($handler, 'to');
+$fromId = \yii\helpers\Html::getInputId($handler, 'f');
+$toId = \yii\helpers\Html::getInputId($handler, 't');
 
 $selectedValue = "";
 if ($val1 != $min) {
@@ -52,7 +52,7 @@ if ($selectedValue) {
                 <div class="filter--group--body sort-slider sx-project-slider-skin">
                     <div class="sort-slider__row">
                         <div class="sort-slider__input my-auto">
-                            <?= $form->field($handler, "from")->textInput([
+                            <?= $form->field($handler, "f")->textInput([
                                 'placeholder' => \Yii::$app->money->currencyCode,
                                 'id'          => 'sx-filter-price-from',
                                 'value'       => $val1 == $min ? "" : $val1,
@@ -62,7 +62,7 @@ if ($selectedValue) {
                         </div>
                         <span class="sort-slider__devide my-auto">—</span>
                         <div class="sort-slider__input my-auto">
-                            <?= $form->field($handler, "to")->textInput([
+                            <?= $form->field($handler, "t")->textInput([
                                 'placeholder' => \Yii::$app->money->currencyCode,
                                 'id'          => 'sx-filter-price-to',
                                 'value'       => $val2 == $max ? "" : $val2,

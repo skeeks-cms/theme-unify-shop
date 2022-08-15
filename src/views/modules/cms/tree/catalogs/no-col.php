@@ -11,6 +11,7 @@
  * @var \yii\data\ActiveDataProvider                                         $dataProvider
  * @var \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget       $filtersWidget
  * @var \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogNoColPage $catalogSettings
+ * @var array                                                                $agregateCategoryData
  */
 
 $catalogSettings = \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogNoColPage::beginWidget("catalog-no-col");
@@ -39,9 +40,18 @@ CSS
             <div class="col-12 sx-catalog-wrapper" style="padding-bottom: 20px; padding-top: 20px;">
                 <?= $this->render('@app/views/breadcrumbs', [
                     'model'      => @$model,
-                    'title'      => @$title,
+                    'isShowH1'   => false,
                     'isShowLast' => true,
                 ]) ?>
+                <div class="sx-catalog-h1-wrapper" style="display: flex; margin-bottom: 10px;">
+                    <div><h1 class="sx-breadcrumbs-h1 sx-catalog-h1" style="margin-bottom: 0px;"><?php echo $model->seoName; ?></h1></div>
+                    <div class="sx-catalog-total-offers" style="color: #979797;
+    margin-top: auto;
+    margin-left: 12px;
+    font-size: 15px;">(<?php echo \Yii::t('app', '{n, plural, =0{нет товаров} =1{# товар} one{# товар} few{# товара} many{# товаров} other{# товаров}}', ['n' => $totalOffers],
+                            'ru_RU'); ?>)
+                    </div>
+                </div>
 
 
                 <?

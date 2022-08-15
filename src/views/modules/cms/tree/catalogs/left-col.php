@@ -11,10 +11,18 @@
  * @var                                                                $model \skeeks\cms\models\CmsTree
  * @var \yii\data\ActiveDataProvider                                   $dataProvider
  * @var \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget $filtersWidget
+ * @var array                                                          $agregateCategoryData
  */
-
+$totalOffers = (int)\yii\helpers\ArrayHelper::getValue($agregateCategoryData, 'offerCount', 0);
 $catalogSettings = \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogPage::beginWidget("catalog");
 $catalogSettings::end();
+
+$priceFilter = $filtersWidget->getPriceHandler();
+$eavFilter = $filtersWidget->getEavHandler();
+$appliedValues = [];
+if ($eavFilter) {
+    $appliedValues = $eavFilter->getApplied();
+}
 ?>
 <section class="">
     <div class="container sx-container">
@@ -22,87 +30,26 @@ $catalogSettings::end();
             <div class="order-md-2 sx-content-col-main">
                 <?= $this->render('@app/views/breadcrumbs', [
                     'model'      => @$model,
-                    'title'      => @$title,
+                    'isShowH1'   => false,
                     'isShowLast' => true,
                 ]) ?>
+                <div class="sx-catalog-h1-wrapper" style="display: flex; margin-bottom: 10px;">
+                    <div>
+                        <h1 class="sx-breadcrumbs-h1 sx-catalog-h1" style="margin-bottom: 0px;">
+                            <?php echo $model->seoName; ?>
+                            <?php if (!$savedFilter && $appliedValues) : ?>
+                                + применены фильтры
+                            <?php endif; ?>
 
-                <?
-                $savedFilters = [];
-                if (@$model && $savedFilter) {
-                    //todo: вынести в шаблон
-                    $savedFilters = \skeeks\cms\models\CmsSavedFilter::find()
-                        ->cmsSite()
-                        //->joinWith("cmsContentProperty as cmsContentProperty")
-                        ->joinWith("cmsTree as cmsTree")
-                        ->with("cmsContentProperty")
-                        ->with("cmsTree")
-                        ->orderBy([
-                            'cmsTree.level'    => SORT_ASC,
-                            'cmsTree.priority' => SORT_ASC,
-                        ])
-                        //->groupBy(['cmsContentProperty.id'])
-                        ->limit(200);
-
-                    if ($savedFilter->value_content_element_id) {
-                        $savedFilters->andWhere(['value_content_element_id' => $savedFilter->value_content_element_id]);
-                    } elseif ($savedFilter->value_content_property_enum_id) {
-                        $savedFilters->andWhere(['value_content_property_enum_id' => $savedFilter->value_content_property_enum_id]);
-                    }
-
-                    $savedFilters = $savedFilters->all();
-                }
-
-                ?>
-                <?php if (count($savedFilters) > 1) : ?>
-                    <div class="sx-saved-filters-list sx-saved-filters-list--before">
-                        <div class="h5 sx-sub-title">Другие товары с опцией «<?php echo $savedFilter->propertyValueName; ?>»:</div>
-
-                        <?php
-                        $savedFiltersData = [];
-                        foreach ($savedFilters as $sf) {
-                            /**
-                             * @var $sf \skeeks\cms\models\CmsSavedFilter
-                             */
-                            $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
-                            $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
-                        }
-                        ?>
-                        <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
-                            <!--<div class="h4 sx-sub-title"><?php /*echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); */ ?></div>-->
-                            <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
-                                <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
-                                    <li class="list-inline-item <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "sx-active" : ""; ?>" style="margin-bottom: 5px;">
-                                        <a class="<?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "" : "sx-main-text-color"; ?> btn 
-                                            <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "btn-primary" : "btn-default"; ?>
-                                            "
-                                           href="<?php echo $sf->url; ?>"
-                                           data-toggle="tooltip"
-                                           title="<?php echo $sf->seoName; ?>">
-                                        <?php if ($sf->image) : ?>
-                                                <div class="sx-img-wrapper">
-                                                    <img src="<?= \skeeks\cms\helpers\Image::getSrc(\Yii::$app->imaging->thumbnailUrlOnRequest($sf->image ? $sf->image->src : null,
-                                                        new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                                            'w' => 50,
-                                                            'h' => 50,
-                                                            'm' => \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
-                                                        ]), $model->code
-                                                    )); ?>
-                                                    " alt="<?php echo $sf->seoName; ?>"/>
-                                                </div>
-                                            <?php endif; ?>
-
-                                            <div class="my-auto sx-info-wrapper">
-                                                <div class="sx-title"><?php echo $sf->cmsTree->name; ?></div>
-                                                <div><?php echo $sf->propertyValueName; ?></div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                <? endforeach; ?>
-                            </ul>
-                        <? endforeach; ?>
+                        </h1>
                     </div>
-                <?php endif; ?>
-
+                    <div class="sx-catalog-total-offers" style="color: #979797;
+    margin-top: auto;
+    margin-left: 12px;
+    font-size: 15px;">
+                        (<?php echo \Yii::t('app', '{n, plural, =0{нет товаров} =1{# товар} one{# товар} few{# товара} many{# товаров} other{# товаров}}', ['n' => $totalOffers]); ?>)
+                    </div>
+                </div>
 
                 <?php if (@$description_short) : ?>
                     <div class="sx-content sx-description-short">
@@ -110,16 +57,201 @@ $catalogSettings::end();
                     </div>
                 <?php endif; ?>
 
-                <? if (\Yii::$app->cms->currentTree && \Yii::$app->view->theme->is_show_catalog_subtree_before_products && !$savedFilter) : ?>
-                    <?php
-                    $widget = \skeeks\cms\cmsWidgets\tree\TreeCmsWidget::beginWidget('sub-catalog');
-                    $widget->descriptor->name = 'Подразделы каталога';
-                    $widget->viewFile = '@app/views/widgets/TreeMenuCmsWidget/sub-catalog-small';
-                    $widget->parent_tree_id = $model->id;
-                    $widget->activeQuery->with('image');
-                    $widget::end();
+
+
+
+                <?
+                //Если есть применненые фильтры и это не сохраненный фильтр
+                if (!$savedFilter && $appliedValues): ?>
+                    <div class="sx-saved-filters-list sx-saved-filters-list--after" style="margin-top: 0px;">
+                        <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
+                            <?php if ($priceFilter->f || $priceFilter->t) : ?>
+                                <?php
+                                $priceTitle = "";
+                                if ($priceFilter->f) {
+                                    $f = \Yii::$app->formatter->asDecimal($priceFilter->f);
+                                    $priceTitle .= "от {$f}";
+                                }
+                                if ($priceFilter->t) {
+                                    $t = \Yii::$app->formatter->asDecimal($priceFilter->t);
+                                    $priceTitle .= "до {$t}";
+                                }
+                                $priceTitle .= " " . \Yii::$app->money->currency_symbol;
+                                ?>
+                                <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
+                                    'isActive'    => true,
+                                    'value_id'    => "",
+                                    'property_id' => "price",
+                                    'seoName'     => $model->seoName . " по цене " . $priceTitle,
+                                    'displayName' => $model->name .  " по цене " . $priceTitle,
+                                ]); ?>
+                            <?php endif; ?>
+
+                            <?php foreach ($appliedValues as $data) : ?>
+                                <?php $name = \yii\helpers\ArrayHelper::getValue($data, "name"); ?>
+                                <?php $value = \yii\helpers\ArrayHelper::getValue($data, "value"); ?>
+                                <?php $property = \yii\helpers\ArrayHelper::getValue($data, "property"); ?>
+                                <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
+                                    'isActive'    => true,
+                                    'value_id'    => $value,
+                                    'property_id' => $property->id,
+                                    'seoName'     => $model->seoName." ".\skeeks\cms\helpers\StringHelper::lcfirst($name),
+                                    'displayName' => $model->name." ".\skeeks\cms\helpers\StringHelper::lcfirst($name),
+                                ]); ?>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+
+                <?php else : ?>
+                    <?
+                    /**
+                     * @var $sf \skeeks\cms\models\CmsSavedFilter
+                     */
+                    //todo: вынести в шаблон
+                    $savedFilters = $model->getCmsSavedFilters()
+                        ->joinWith("cmsTree as cmsTree")
+                        ->with("cmsTree")
+                        ->with("cmsContentProperty")
+                        ->with("valueContentElement")
+                        ->with("valueContentPropertyEnum")
+                        ->orderBy([\skeeks\cms\models\CmsSavedFilter::tableName().".priority" => SORT_DESC])
+                        ->andWhere([
+                            'cmsTree.id' => $model->id,
+                        ])
+                        //->groupBy(['cmsContentProperty.id'])
+                        ->limit(10)
+                        ->all();
+
                     ?>
-                <? endif; ?>
+                    <?php if ($savedFilters) : ?>
+
+                        <?
+                        if ($savedFilter) {
+                            //Нужно проверить текущий фильтр добавлени или нет?
+                            $savedFilters = \yii\helpers\ArrayHelper::map($savedFilters, "id", function ($model) {
+                                return $model;
+                            });
+
+                            if (!isset($savedFilters[$savedFilter->id])) {
+                                $savedFilters = \yii\helpers\ArrayHelper::merge([
+                                    $savedFilter->id => $savedFilter,
+                                ], $savedFilters);
+                            }
+                        }
+
+                        ?>
+                        <div class="sx-saved-filters-list sx-saved-filters-list--after" style="margin-top: 0px;">
+                            <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
+                                <? foreach ($savedFilters as $sf) : ?>
+                                    <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
+                                        'isActive'    => (@$savedFilter && $sf->id == $savedFilter->id),
+                                        'value_id'    => $sf->value_content_element_id ? $sf->value_content_element_id : $sf->value_content_property_enum_id,
+                                        'property_id' => $sf->cms_content_property_id,
+                                        'seoName'     => $sf->seoName,
+                                        'displayName' => $sf->shortSeoName,
+                                        'url'         => $sf->url,
+                                    ]); ?>
+                                <? endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+
+
+                    <?
+                    //Показ подкатегорий с применнеными фильтрами
+                    $savedFilters = [];
+                    if (@$model && $savedFilter && $model->activeChildren) {
+                        //todo: вынести в шаблон
+                        $savedFilters = \skeeks\cms\models\CmsSavedFilter::find()
+                            ->cmsSite()
+                            //->joinWith("cmsContentProperty as cmsContentProperty")
+                            ->joinWith("cmsTree as cmsTree")
+                            ->with("cmsContentProperty")
+                            ->with("cmsTree")
+                            ->orderBy([
+                                'cmsTree.level'    => SORT_ASC,
+                                'cmsTree.priority' => SORT_ASC,
+                            ])
+                            ->andWhere([
+                                'cmsTree.id' => $model->getDescendants(null, false)->select(['id']),
+                            ])
+                            //->groupBy(['cmsContentProperty.id'])
+                            ->limit(200);
+
+                        if ($savedFilter->value_content_element_id) {
+                            $savedFilters->andWhere(['value_content_element_id' => $savedFilter->value_content_element_id]);
+                        } elseif ($savedFilter->value_content_property_enum_id) {
+                            $savedFilters->andWhere(['value_content_property_enum_id' => $savedFilter->value_content_property_enum_id]);
+                        }
+
+                        $savedFilters = $savedFilters->all();
+                    }
+
+                    ?>
+                    <?php if (count($savedFilters)) : ?>
+                        <div class="sx-saved-filters-list sx-saved-filters-list--before">
+                            <!--<div class="h5 sx-sub-title">Другие товары с опцией «<?php /*echo $savedFilter->propertyValueName; */ ?>»:</div>-->
+
+                            <?php
+                            $savedFiltersData = [];
+                            foreach ($savedFilters as $sf) {
+                                /**
+                                 * @var $sf \skeeks\cms\models\CmsSavedFilter
+                                 */
+                                $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
+                                $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
+                            }
+                            ?>
+                            <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
+                                <!--<div class="h4 sx-sub-title"><?php /*echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); */ ?></div>-->
+                                <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
+                                    <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
+                                        <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_category", [
+                                            'isActive'    => (@$savedFilter && $sf->id == $savedFilter->id),
+                                            'image'       => $sf->image,
+                                            'seoName'     => $sf->seoName,
+                                            'displayName' => $sf->cmsTree->name,
+                                            'code'        => $sf->cmsTree->code,
+                                            'url'         => $sf->url,
+                                            'description' => $sf->propertyValueName,
+                                        ]); ?>
+                                    <? endforeach; ?>
+                                </ul>
+                            <? endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
+
+                    <? if (\Yii::$app->cms->currentTree && \Yii::$app->view->theme->is_show_catalog_subtree_before_products && !$savedFilter) : ?>
+                        <?php if ($model->activeChildren) : ?>
+                            <div class="sx-saved-filters-list sx-saved-filters-list--before">
+                                <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
+                                    <? foreach ($model->activeChildren as $childdren) : ?>
+                                        <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_category", [
+                                            'isActive'    => false,
+                                            'image'       => $childdren->image,
+                                            'seoName'     => $childdren->seoName,
+                                            'displayName' => $childdren->name,
+                                            'code'        => $childdren->code,
+                                            'url'         => $childdren->url,
+                                            'description' => "",
+                                        ]); ?>
+                                    <? endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+                    <? endif; ?>
+
+                <?php endif; ?>
+
+
+
+
+
+
+
+
+
 
                 <?php if (\Yii::$app->mobileDetect->isMobile) {
                     \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
@@ -153,17 +285,25 @@ $catalogSettings::end();
                                 <?= $filtersWidget->getAvailabilityHandler()->renderVisible(); ?>
                             <? endif; ?>
                         </span>
-                        <div class="sx-filters-selected-wrapper">
+                        <div class="sx-filters-selected-wrapper" style="display: none;">
                         </div>
                     </div>
                 </div>
 
 
-                <?php echo $this->render("@app/views/products/product-list", [
-                    'dataProvider' => $dataProvider,
-                ]); ?>
+                <?php if ($totalOffers > 0): ?>
+                    <?php echo $this->render("@app/views/products/product-list", [
+                        'dataProvider' => $dataProvider,
+                    ]); ?>
+                <?php else : ?>
+                    <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_no-products", [
+                        'savedFilter' => $savedFilter,
+                        'cmsTree'     => $model,
+                    ]); ?>
+                <?php endif; ?>
 
-                
+
+
 
 
                 <?php if (@$description) : ?>
@@ -171,6 +311,70 @@ $catalogSettings::end();
                         <?= @$description; ?>
                     </div>
                 <?php endif; ?>
+
+
+                <?
+                //Показ подкатегорий с применнеными фильтрами
+                $savedFilters = [];
+                if (@$model && $savedFilter) {
+                    //todo: вынести в шаблон
+                    $savedFilters = \skeeks\cms\models\CmsSavedFilter::find()
+                        ->cmsSite()
+                        //->joinWith("cmsContentProperty as cmsContentProperty")
+                        ->joinWith("cmsTree as cmsTree")
+                        ->with("cmsContentProperty")
+                        ->with("cmsTree")
+                        ->orderBy([
+                            'cmsTree.level'    => SORT_ASC,
+                            'cmsTree.priority' => SORT_ASC,
+                        ])
+
+                        //->groupBy(['cmsContentProperty.id'])
+                        ->limit(200);
+
+                    if ($savedFilter->value_content_element_id) {
+                        $savedFilters->andWhere(['value_content_element_id' => $savedFilter->value_content_element_id]);
+                    } elseif ($savedFilter->value_content_property_enum_id) {
+                        $savedFilters->andWhere(['value_content_property_enum_id' => $savedFilter->value_content_property_enum_id]);
+                    }
+
+                    $savedFilters = $savedFilters->all();
+                }
+
+                ?>
+                <?php if (count($savedFilters) > 1) : ?>
+                    <div class="sx-saved-filters-list sx-saved-filters-list--before">
+                        <div class="h3 sx-sub-title">Разделы где встречаются товары с опцией «<?php echo $savedFilter->propertyValueName; ?>»:</div>
+
+                        <?php
+                        $savedFiltersData = [];
+                        foreach ($savedFilters as $sf) {
+                            /**
+                             * @var $sf \skeeks\cms\models\CmsSavedFilter
+                             */
+                            $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
+                            $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
+                        }
+                        ?>
+                        <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
+                            <!--<div class="h4 sx-sub-title"><?php /*echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); */ ?></div>-->
+                            <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
+                                <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
+                                    <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_category", [
+                                        'isActive'    => (@$savedFilter && $sf->id == $savedFilter->id),
+                                        'image'       => $sf->image,
+                                        'seoName'     => $sf->seoName,
+                                        'displayName' => $sf->cmsTree->name,
+                                        'code'        => $sf->cmsTree->code,
+                                        'url'         => $sf->url,
+                                        'description' => $sf->propertyValueName,
+                                    ]); ?>
+                                <? endforeach; ?>
+                            </ul>
+                        <? endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
 
                 <?
                 $savedFilters = [];
@@ -203,14 +407,22 @@ $catalogSettings::end();
                             <div class="h5 sx-sub-title"><?php echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); ?></div>
                             <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
                                 <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
-                                    <li class="list-inline-item <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "sx-active" : ""; ?>" style="margin-bottom: 5px;">
-                                        <a class="<?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "" : "sx-main-text-color"; ?> btn 
-                                            <?php echo (@$savedFilter && $sf->id == $savedFilter->id) ? "btn-primary" : "btn-default"; ?>
-                                            "
-                                           href="<?php echo $sf->url; ?>"
-                                           data-toggle="tooltip"
-                                           title="<?php echo $sf->seoName; ?>"><?php echo $sf->propertyValueName; ?></a>
-                                    </li>
+
+                                    <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
+                                        'isActive'    => (@$savedFilter && $sf->id == $savedFilter->id),
+                                        'value_id'    => $sf->value_content_element_id ? $sf->value_content_element_id : $sf->value_content_property_enum_id,
+                                        'property_id' => $sf->cms_content_property_id,
+                                        'seoName'     => $sf->seoName,
+                                        'displayName' => $sf->propertyValueNameInflected,
+                                        'url'         => $sf->url,
+                                    ]); ?>
+
+                                    <?php /*echo $this->render("@app/views/modules/cms/tree/catalogs/_saved-filter", [
+                                        'sf'          => $sf,
+                                        'savedFilter' => $savedFilter,
+                                        'cmsTree'     => $model,
+                                        'displayName' => "propertyValueNameInflected",
+                                    ]); */ ?>
                                 <? endforeach; ?>
                             </ul>
                         <? endforeach; ?>
@@ -222,6 +434,9 @@ $catalogSettings::end();
                 <?= $this->render('@app/views/modules/cms/tree/catalogs/_left-col', [
                     'catalogSettings' => $catalogSettings,
                     'filtersWidget'   => $filtersWidget,
+                    'model'           => $model,
+                    'savedFilter'     => @$savedFilter,
+                    'appliedValues'   => $appliedValues,
                 ]); ?>
             </div>
         </div>

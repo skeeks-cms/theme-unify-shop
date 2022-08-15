@@ -7,52 +7,186 @@
  */
 /* @var $this yii\web\View */
 /* @var $catalogSettings \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogPage */
+/* @var $model \skeeks\cms\models\CmsTree */
+/* @var $savedFilter \skeeks\cms\models\CmsSavedFilter */
+/* @var $appliedValues array */
 ?>
 
 <? if ($catalogSettings->is_show_subtree_col_left) : ?>
     <?
-    $model = \Yii::$app->cms->currentTree;
-    $menuName = $model ? $model->name : "Меню";
-    $parent = $model;
-    if ($model) {
+    $this->registerCss(<<<CSS
+.sx-col-menu i {
+    font-size: 12px;
+}
 
-        if ($model->activeChildren) {
-            $parent = $model;
-        } elseif ($model->parent) {
-            $parent = $model->parent;
-        } elseif (isset($model->parents[1])) {
-            $parent = $model->parents[1];
-            $menuName = $parent->name;
+.sx-col-menu .sx-children-cat {
+    margin-left: 20px;
+}
+.sx-col-menu .btn {
+    text-align: left;
+    line-height: 1.1;
+}
+CSS
+    );
 
-            if (!$parent->activeChildren) {
-                $parent = $model->parents[0];
-            }
-        } else {
-            $parent = $model->parents[0];
-        }
-    }
     ?>
+
     <div class="sx-col-left-block">
 
+        <?
+        //Если есть дочерние разделы или есть родительские больше чем главная
+        if ($model->activeChildren || count($model->parents) > 1) : ?>
 
-        <? if ($parent && $parent->activeChildren) : ?>
+        <?php
+        $model = clone \Yii::$app->cms->currentTree;
+        $model->refresh();
 
-            <div class="g-mb-10">
+        $data = [];
+
+        foreach ($model->parents as $parent)
+        {
+            if($parent->level > 0) {
+                $data[] = [
+                    'tree' => $parent,
+                    'isParent' => $parent
+                ];
+            }
+        }
+
+        if ($savedFilter) {
+            $data[] = [
+                'tree' => $savedFilter->cmsTree,
+                'isParent' => $parent
+            ];
+            $data[] = [
+                'savedFilter' => $savedFilter,
+                'isCurrent' => true,
+            ];
+
+            /*if ($model->activeChildren) {
+                foreach ($model->activeChildren  as $child)
+                {
+                    $data[] = [
+                        'tree' => $child
+                    ];
+                }
+            }*/
+        } else {
+
+
+            if ($appliedValues) {
+                $data[] = [
+                    'tree' => $model,
+                    'isParent' => true,
+                ];
+                $data[] = [
+                    'name' => "Применены фильтры",
+                    'isCurrent' => true,
+                ];
+            } else {
+                $data[] = [
+                    'tree' => $model,
+                    'isCurrent' => true,
+                ];
+
+                if ($model->activeChildren) {
+                    foreach ($model->activeChildren  as $child)
+                    {
+                        $data[] = [
+                            'tree' => $child,
+                            'isChildren' => true
+                        ];
+                    }
+                }
+            }
+
+
+
+        }
+
+
+
+        ?>
+
+
+
+
+        <?php if($data) : ?>
+            <!--<div class="g-mb-10">
                 <div class="h5 sx-col-left-title">
-                    <?= \Yii::t('skeeks/unify', 'Categories'); ?>
+                    <?/*= \Yii::t('skeeks/unify', 'Categories'); */?>
                 </div>
-            </div>
+            </div>-->
 
             <ul class="list-unstyled mb-0 sx-col-menu">
-                <? foreach ($parent->activeChildren as $child) : ?>
-                    <li class="">
-                        <a class="<?= $child->id == $model->id ? "active g-color-primary" : "sx-main-text-color"; ?> u-link-v5 g-color-primary--hover g-text-underline--none--hover"
-                           href="<?= $child->url; ?>">
-                            <?= $child->name; ?>
-                        </a>
+            <? foreach ($data as $counter => $row) : ?>
+                <?php
+                /**
+                 * @var $savedFilter \skeeks\cms\models\CmsSavedFilter
+                 */
+                    $name = \yii\helpers\ArrayHelper::getValue($row, "name");
+                    $cmsTree = \yii\helpers\ArrayHelper::getValue($row, "tree");
+                    $isCurrent = \yii\helpers\ArrayHelper::getValue($row, "isCurrent");
+                    $isParent = \yii\helpers\ArrayHelper::getValue($row, "isParent");
+                    $isChildren = \yii\helpers\ArrayHelper::getValue($row, "isChildren");
+                    $savedFilter = \yii\helpers\ArrayHelper::getValue($row, "savedFilter");
+                    $title = '';
+                    if ($counter == 0) {
+                        $title = "Смотреть все товары";
+                    } elseif ($isParent) {
+                        $title = "Смотреть все товары из раздела «{$cmsTree->seoName}»";
+                    }
+                ?>
+                <?php if($cmsTree) : ?>
+                    <li class="<?php echo $isChildren ? "sx-children-cat" : ""; ?>">
+                        <? if($isCurrent) : ?>
+                            <div class="sx-main-text-color g-text-underline--none--hover btn btn-primary btn-block"
+                               data-toggle="tooltip" title="<?php echo $title; ?>"
+                            >
+                                <?php if($isParent) : ?>
+                                    <i class="hs-icon hs-icon-arrow-left"></i>
+                                <?php endif; ?>
+                                <?= $cmsTree->name; ?>
+                            </div>
+                        <? else : ?>
+                            <a class="sx-main-text-color g-text-underline--none--hover"
+                               data-toggle="tooltip" title="<?php echo $title; ?>"
+                               href="<?= $cmsTree->url; ?>">
+                                <?php if($isParent) : ?>
+                                    <i class="hs-icon hs-icon-arrow-left"></i>
+                                <?php endif; ?>
+                                <?= $cmsTree->name; ?>
+                            </a>
+                        <? endif; ?>
+
                     </li>
-                <? endforeach; ?>
+                <?php endif; ?>
+                <?php if($savedFilter) : ?>
+                    <li class="<?php echo $isChildren ? "sx-children-cat" : ""; ?>">
+                        <div class="sx-main-text-color g-text-underline--none--hover <?php echo $isCurrent ? "btn btn-primary btn-block" : ""; ?>"
+                           data-toggle="tooltip" title="<?php echo $title; ?>"
+                         >
+                            <?= $savedFilter->shortSeoName; ?>
+                        </div>
+                    </li>
+                <?php endif; ?>
+
+                <?php if($name) : ?>
+                    <li class="<?php echo $isChildren ? "sx-children-cat" : ""; ?>">
+                        <div class="sx-main-text-color g-text-underline--none--hover <?php echo $isCurrent ? "btn btn-primary btn-block" : ""; ?>"
+                           data-toggle="tooltip" title="<?= $name; ?>"
+                         >
+                            <?= $name; ?>
+                        </div>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
             </ul>
+        <?php endif; ?>
+
+
+
+
 
         <? endif; ?>
 
@@ -82,8 +216,8 @@
 
 </div>-->
 
-<? $content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'news'])->one(); ?>
-<?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
+<? /* $content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'news'])->one(); */ ?><!--
+--><? /*= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
     'namespace'          => 'ContentElementsCmsWidget-left-news',
     'viewFile'           => '@app/views/widgets/ContentElementsCmsWidget/left-news',
     'label'              => 'Новости',
@@ -92,4 +226,4 @@
     ],
     'enabledCurrentTree' => \skeeks\cms\components\Cms::BOOL_N,
     'enabledRunCache'    => \skeeks\cms\components\Cms::BOOL_N,
-]); ?>
+]); */ ?>

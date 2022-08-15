@@ -16,11 +16,11 @@ $widget = $this->context;
 $min = $handler->minValue;
 $max = $handler->maxValue;
 
-$val1 = $handler->from ? $handler->from : $min;
-$val2 = $handler->to ? $handler->to : $max;
+$val1 = $handler->f ? $handler->f : $min;
+$val2 = $handler->t ? $handler->t : $max;
 
-$fromId = \yii\helpers\Html::getInputId($handler, 'from');
-$toId = \yii\helpers\Html::getInputId($handler, 'to');
+$fromId = \yii\helpers\Html::getInputId($handler, 'f');
+$toId = \yii\helpers\Html::getInputId($handler, 't');
 ?>
 <!--<meta itemprop="lowPrice" content="<?php /*echo $val1; */?>">
 <meta itemprop="highPrice" content="<?php /*echo $val2; */?>">-->
@@ -33,7 +33,7 @@ $toId = \yii\helpers\Html::getInputId($handler, 'to');
             <div class="filter--group--inner">
                 <div class="sort-slider__row">
                     <div class="sort-slider__input">
-                        <?= $form->field($handler, "from")->textInput([
+                        <?= $form->field($handler, "f")->textInput([
                             'placeholder' => \Yii::$app->money->currencyCode,
                             'id'          => 'sx-filter-price-from',
                             'value'       => $val1 == $min ? "" : $val1,
@@ -43,7 +43,7 @@ $toId = \yii\helpers\Html::getInputId($handler, 'to');
                     </div>
                     <span class="sort-slider__devide">—</span>
                     <div class="sort-slider__input">
-                        <?= $form->field($handler, "to")->textInput([
+                        <?= $form->field($handler, "t")->textInput([
                             'placeholder' => \Yii::$app->money->currencyCode,
                             'id'          => 'sx-filter-price-to',
                             'value'       => $val2 == $max ? "" : $val2,
@@ -51,6 +51,9 @@ $toId = \yii\helpers\Html::getInputId($handler, 'to');
                             'class'       => 'sx-to form-control',
                         ])->label(false); ?>
                     </div>
+                    <span class="sort-slider__devide">
+                        <?php echo \Yii::$app->money->currency_symbol; ?>
+                    </span>
                 </div>
                 <input type="text"
                        id="sx-filter-price"

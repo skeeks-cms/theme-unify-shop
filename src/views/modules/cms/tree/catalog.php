@@ -92,10 +92,12 @@ if ($eavFiltersHandler) {
         $eavFiltersHandler->loadFromSavedFilter($savedFilter);
     }
     $savedFilterFromRequest = $eavFiltersHandler->savedFilter;
-    if ($savedFilterFromRequest && !$savedFilter) {
+    if ($savedFilterFromRequest && !$savedFilter && !($priceFiltersHandler->f || $priceFiltersHandler->t)) {
         \Yii::$app->response->redirect($savedFilterFromRequest->url);
         \Yii::$app->end();
     }
+
+    //print_r($eavFiltersHandler->toArray());die;
 }
 $filtersWidget->applyToQuery($dataProvider->query);
 
@@ -103,17 +105,22 @@ $filtersWidget->applyToQuery($dataProvider->query);
 <!--Тут кэш и построение микроразметки-->
 <?php
 
-
-//
-
-
-
-$data = \skeeks\cms\shop\components\ShopComponent::getAgregateCategoryData($dataProvider->query, @$savedFilter ? $savedFilter : $model);
+$data = \skeeks\cms\shop\components\ShopComponent::getAgregateCategoryData($dataProvider->query, @$savedFilter ? $savedFilter : $model, $eavFiltersHandler->getApplied());
 
 \Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
-$q = clone $dataProvider->query;
-$total = $q->select(\skeeks\cms\models\CmsContentElement::tableName() . ".id")->limit(-1)->offset(-1)->orderBy([])->count('*');
 
+//print_r($dataProvider->query->createCommand()->rawSql);die;
+//Более оптимальный запрос
+$q = clone $dataProvider->query;
+$realPrice = '';
+$select = [
+        \skeeks\cms\models\CmsContentElement::tableName().".id"
+];
+if (isset($q->select['realPrice'])) {
+    $realPrice = $q->select['realPrice'];
+    $select['realPrice'] = $realPrice;
+}
+$total = $q->select($select)->limit(-1)->offset(-1)->orderBy([])->count('*');
 $dataProvider->setTotalCount($total);
 
 /**
@@ -131,14 +138,14 @@ if (!$model->meta_title && $cmsTreeType->meta_title_template) {
     }
     if (strpos($metaTitle, "{=minMoney}") !== false) {
         $lowPrice = \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0);
-        $money = new \skeeks\cms\money\Money((string) $lowPrice, \Yii::$app->money->currencyCode);
+        $money = new \skeeks\cms\money\Money((string)$lowPrice, \Yii::$app->money->currencyCode);
         $metaTitle = str_replace("{=minMoney}", $money, $metaTitle);
     }
-    
+
     $this->title = $metaTitle;
     $this->registerMetaTag([
         "name"    => 'og:title',
-        "content" => $this->title
+        "content" => $this->title,
     ], 'og:title');
 }
 
@@ -152,19 +159,19 @@ if (!$model->meta_description && $cmsTreeType->meta_description_template) {
     }
     if (strpos($metaDescription, "{=minMoney}") !== false) {
         $lowPrice = \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0);
-        $money = new \skeeks\cms\money\Money((string) $lowPrice, \Yii::$app->money->currencyCode);
+        $money = new \skeeks\cms\money\Money((string)$lowPrice, \Yii::$app->money->currencyCode);
         $metaDescription = str_replace("{=minMoney}", $money, $metaDescription);
     }
-    
-    
+
+
     $this->registerMetaTag([
         "name"    => 'og:description',
-        "content" => $metaDescription
+        "content" => $metaDescription,
     ], 'og:description');
-    
+
     $this->registerMetaTag([
         "name"    => 'description',
-        "content" => $metaDescription
+        "content" => $metaDescription,
     ], 'description');
 }
 
@@ -178,13 +185,13 @@ if (!$model->meta_keywords && $cmsTreeType->meta_keywords_template) {
     }
     if (strpos($metaKeywords, "{=minMoney}") !== false) {
         $lowPrice = \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0);
-        $money = new \skeeks\cms\money\Money((string) $lowPrice, \Yii::$app->money->currencyCode);
+        $money = new \skeeks\cms\money\Money((string)$lowPrice, \Yii::$app->money->currencyCode);
         $metaKeywords = str_replace("{=minMoney}", $money, $metaKeywords);
     }
-    
+
     $this->registerMetaTag([
         "name"    => 'keywords',
-        "content" => $metaKeywords
+        "content" => $metaKeywords,
     ], 'keywords');
 }
 
@@ -207,16 +214,17 @@ if (!$model->meta_keywords && $cmsTreeType->meta_keywords_template) {
         <meta itemprop="offerCount" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'offerCount', 0); ?>"/>
         <meta itemprop="highPrice" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'highPrice', 0); ?>"/>
         <meta itemprop="lowPrice" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0); ?>"/>
-        
+
     <?php endif; ?>
     <?
     echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->view->theme->product_list_view_file, [
-        'model'             => $model,
-        'description_short' => $model->description_short,
-        'description'       => $model->description_full,
-        'dataProvider'      => $dataProvider,
-        'filtersWidget'     => $filtersWidget,
-        'savedFilter'       => @$savedFilter,
+        'model'                => $model,
+        'description_short'    => $model->description_short,
+        'description'          => $model->description_full,
+        'dataProvider'         => $dataProvider,
+        'filtersWidget'        => $filtersWidget,
+        'savedFilter'          => @$savedFilter,
+        'agregateCategoryData' => $data,
     ]);
     ?>
 </div>

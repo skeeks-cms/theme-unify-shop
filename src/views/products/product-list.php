@@ -33,7 +33,8 @@ $dataProvider->setTotalCount($total);*/
         'item'      => '.sx-product-card-wrapper',
         'class'     => \skeeks\cms\themes\unify\widgets\ScrollAndSpPager::class,
     ],
-    'summary'      => "Всего товаров: {totalCount}",
+    //'summary'      => "Всего товаров: {totalCount}",
+    'summary'      => false,
     //"\n{items}<div class=\"box-paging\">{pager}</div>{summary}<div class='sx-js-pagination'></div>",
     'layout'       => '<div class="row"><div class="col-md-12 sx-product-list-summary">{summary}</div></div>
     <div class="no-gutters row sx-product-list">{items}</div>
