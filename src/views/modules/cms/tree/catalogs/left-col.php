@@ -76,14 +76,14 @@ if ($eavFilter) {
                                     $t = \Yii::$app->formatter->asDecimal($priceFilter->t);
                                     $priceTitle .= "до {$t}";
                                 }
-                                $priceTitle .= " " . \Yii::$app->money->currency_symbol;
+                                $priceTitle .= " ".\Yii::$app->money->currency_symbol;
                                 ?>
                                 <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
                                     'isActive'    => true,
                                     'value_id'    => "",
                                     'property_id' => "price",
-                                    'seoName'     => $model->seoName . " по цене " . $priceTitle,
-                                    'displayName' => $model->name .  " по цене " . $priceTitle,
+                                    'seoName'     => $model->seoName." по цене ".$priceTitle,
+                                    'displayName' => $model->name." по цене ".$priceTitle,
                                 ]); ?>
                             <?php endif; ?>
 
@@ -297,8 +297,9 @@ if ($eavFilter) {
                     ]); ?>
                 <?php else : ?>
                     <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_no-products", [
-                        'savedFilter' => $savedFilter,
-                        'cmsTree'     => $model,
+                        'savedFilter'   => $savedFilter,
+                        'cmsTree'       => $model,
+                        'filtersWidget' => $filtersWidget,
                     ]); ?>
                 <?php endif; ?>
 
