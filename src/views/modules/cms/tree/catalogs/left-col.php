@@ -33,17 +33,15 @@ if ($eavFilter) {
                     'isShowH1'   => false,
                     'isShowLast' => true,
                 ]) ?>
-                <div class="sx-catalog-h1-wrapper" style="display: flex; margin-bottom: 10px;">
-                    <div>
-                        <h1 class="sx-breadcrumbs-h1 sx-catalog-h1" style="margin-bottom: 0px;">
-                            <?php echo $model->seoName; ?>
-                            <?php if (!$savedFilter && $appliedValues) : ?>
-                                + применены фильтры
-                            <?php endif; ?>
+                <div class="sx-catalog-h1-wrapper" style="margin-bottom: 10px;">
+                    <h1 class="sx-breadcrumbs-h1 sx-catalog-h1" style="margin-bottom: 0px; display: contents;">
+                        <?php echo $model->seoName; ?>
+                        <?php if (!$savedFilter && $appliedValues) : ?>
+                            + применены фильтры
+                        <?php endif; ?>
 
-                        </h1>
-                    </div>
-                    <div class="sx-catalog-total-offers" style="color: #979797;
+                    </h1>
+                    <div class="sx-catalog-total-offers" style="color: #979797; display: contents;
     margin-top: auto;
     margin-left: 12px;
     font-size: 15px;">
