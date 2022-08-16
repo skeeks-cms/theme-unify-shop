@@ -66,15 +66,17 @@ if ($eavFilter) {
                             <?php if ($priceFilter->f || $priceFilter->t) : ?>
                                 <?php
                                 $priceTitle = "";
+                                $priceTitleData = [];
                                 if ($priceFilter->f) {
                                     $f = \Yii::$app->formatter->asDecimal($priceFilter->f);
-                                    $priceTitle .= "от {$f}";
+                                    $priceTitleData[] = "от <b>{$f}</b>";
                                 }
                                 if ($priceFilter->t) {
                                     $t = \Yii::$app->formatter->asDecimal($priceFilter->t);
-                                    $priceTitle .= "до {$t}";
+                                    $priceTitleData[] = "до <b>{$t}</b>";
                                 }
-                                $priceTitle .= " ".\Yii::$app->money->currency_symbol;
+                                $priceTitleData[] = \Yii::$app->money->currency_symbol;
+                                $priceTitle = implode(" ", $priceTitleData);
                                 ?>
                                 <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
                                     'isActive'    => true,
@@ -140,6 +142,31 @@ if ($eavFilter) {
                         ?>
                         <div class="sx-saved-filters-list sx-saved-filters-list--after" style="margin-top: 0px;">
                             <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
+
+                                <?php if ($priceFilter->f || $priceFilter->t) : ?>
+                                    <?php
+                                        $priceTitle = "";
+                                        $priceTitleData = [];
+                                        if ($priceFilter->f) {
+                                            $f = \Yii::$app->formatter->asDecimal($priceFilter->f);
+                                            $priceTitleData[] = "от <b>{$f}</b>";
+                                        }
+                                        if ($priceFilter->t) {
+                                            $t = \Yii::$app->formatter->asDecimal($priceFilter->t);
+                                            $priceTitleData[] = "до <b>{$t}</b>";
+                                        }
+                                        $priceTitleData[] = \Yii::$app->money->currency_symbol;
+                                        $priceTitle = implode(" ", $priceTitleData);
+                                        ?>
+                                    <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
+                                        'isActive'    => true,
+                                        'value_id'    => "",
+                                        'property_id' => "price",
+                                        'seoName'     => $model->seoName." по цене ".$priceTitle,
+                                        'displayName' => $model->name." по цене ".$priceTitle,
+                                    ]); ?>
+                                <?php endif; ?>
+                                
                                 <? foreach ($savedFilters as $sf) : ?>
                                     <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
                                         'isActive'    => (@$savedFilter && $sf->id == $savedFilter->id),

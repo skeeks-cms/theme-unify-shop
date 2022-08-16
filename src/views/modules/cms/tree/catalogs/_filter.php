@@ -13,7 +13,7 @@
     <li class="list-inline-item sx-active" style="margin-bottom: 5px;" data-value_id="<?php echo $value_id; ?>" data-property_id="<?php echo $property_id; ?>">
         <div class="btn btn-primary"
         >
-            <span data-toggle="tooltip" title="У вас применен фильтр «<?php echo $seoName; ?>»">
+            <span data-toggle="tooltip" data-html="true" title="У вас применен фильтр «<?php echo $seoName; ?>»">
                 <?php echo $displayName; ?>
             </span>
             <i class="hs-icon hs-icon-close sx-close-btn" data-toggle="tooltip" title="Отменить выбранный фильтр"></i>
