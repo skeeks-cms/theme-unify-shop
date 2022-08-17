@@ -58,6 +58,19 @@ HTML
         ]);
     }
 
+    /**
+     * @return array
+     */
+    public function _getDefaultTreeViews()
+    {
+        return ArrayHelper::merge(parent::_getDefaultTreeViews(), [
+            'catalog' => [
+                'name' => 'Страница с товарами',
+                'description' => ''
+            ],
+        ]);
+    }
+
     public $themeAssetClass = 'skeeks\cms\themes\unifyshop\assets\UnifyThemeShopAsset';
 
 

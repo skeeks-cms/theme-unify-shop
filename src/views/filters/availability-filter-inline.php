@@ -15,6 +15,7 @@ $id = \yii\helpers\Html::getInputId($handler, 'value');
 <div class="sx-hidden-filters">
     <?= $form->field($handler, 'value')->textInput([
         'data-value' => 'sx-availability',
+        'disabled' => 'disabled',
     ]) ?>
 </div>
 <div class="dropdown sx-filter sx-inline-filter sx-filter-selected sx-availability-filter">
