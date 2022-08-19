@@ -399,6 +399,8 @@ if ($eavFilter) {
                                         'code'        => $sf->cmsTree->code,
                                         'url'         => $sf->url,
                                         'description' => $sf->propertyValueName,
+                                        'adult_css_class' => \Yii::$app->adult->renderCssClass($sf->cmsTree),
+                                        'adult_blocked_html' => \Yii::$app->adult->renderBlocked($sf->cmsTree),
                                     ]); ?>
                                 <? endforeach; ?>
                             </ul>
