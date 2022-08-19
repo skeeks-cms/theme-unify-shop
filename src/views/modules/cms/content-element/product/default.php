@@ -15,7 +15,7 @@
  */
 
 ?>
-<div class="container sx-container to-cart-fly-wrapper">
+<div class="container sx-container to-cart-fly-wrapper <?php echo \Yii::$app->adult->renderCssClass($model); ?>">
     <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
     <?
 
@@ -48,6 +48,8 @@ JS
                 <?
                 $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $model->id])->exists();
                 ?>
+
+                <?php echo \Yii::$app->adult->renderBlocked($model); ?>
 
                 <div class="sx-favorite-product"
                      data-added-icon-class="fas fa-heart"

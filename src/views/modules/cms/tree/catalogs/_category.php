@@ -12,7 +12,8 @@
  */
 
 ?>
-<li class="list-inline-item <?php echo $isActive ? "sx-active" : ""; ?>" style="margin-bottom: 5px;">
+<li class="list-inline-item <?php echo @$adult_css_class; ?> <?php echo $isActive ? "sx-active" : ""; ?>" style="margin-bottom: 5px;">
+
     <a class="<?php echo $isActive ? "" : "sx-main-text-color"; ?> btn
         <?php echo $isActive ? "btn-primary" : "btn-default"; ?>
         "
@@ -20,7 +21,10 @@
        data-toggle="tooltip"
        title="<?php echo $seoName; ?>">
         <?php if ($image) : ?>
-            <div class="sx-img-wrapper">
+
+
+            <div class="sx-img-wrapper" style="position: relative;">
+                <?php echo @$adult_blocked_html; ?>
                 <img src="<?= \skeeks\cms\helpers\Image::getSrc(\Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => 50,

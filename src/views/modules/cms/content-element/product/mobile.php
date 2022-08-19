@@ -15,7 +15,7 @@
  */
 
 ?>
-<section class="sx-mobile-product-page">
+<section class="sx-mobile-product-page <?php echo \Yii::$app->adult->renderCssClass($model); ?>">
     <div class="container sx-container to-cart-fly-wrapper">
 
         <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
@@ -50,6 +50,8 @@ JS
 
             <div class="col-12">
                 <div class="sx-product-images">
+                    <?php echo \Yii::$app->adult->renderBlocked($model); ?>
+
                     <?= $this->render("@app/views/modules/cms/content-element/product/_product-images", [
                         'model' => $model,
                     ]); ?>

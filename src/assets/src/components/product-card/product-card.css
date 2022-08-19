@@ -27,6 +27,7 @@
     padding: 5px 5px 5px 5px;
     margin: 0 0 5px 0;
     text-align: center;
+    position: relative;
 }
 
 .sx-product-card .sx-product-card--info {
@@ -169,4 +170,5 @@
         right: 5px;
         top: 1px;
     }
+
 }

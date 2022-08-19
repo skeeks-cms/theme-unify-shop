@@ -5,6 +5,7 @@
  * @copyright 2010 SkeekS (СкикС)
  * @date 06.03.2015
  *
+ * @var \skeeks\cms\shop\models\ShopProduct $shopProduct
  * @var \skeeks\cms\shop\models\ShopCmsContentElement $model
  * @var \skeeks\cms\shop\models\ShopCmsContentElement $infoModel
  * @var                                               $this yii\web\View
@@ -32,7 +33,13 @@ if ($infoModel->images) {
     $secondImage = $infoModel->images[0];
 }
 ?>
-<div class="sx-product-card h-100 to-cart-fly-wrapper">
+<? echo \yii\helpers\Html::beginTag("div", [
+    'class' => 'sx-product-card h-100 to-cart-fly-wrapper ' . \Yii::$app->adult->renderCssClass($model),
+    'data' => [
+        'id' => $shopProduct->id
+    ]
+]); ?>
+    
     <?
     $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $shopProduct->id])->exists();
     ?>
@@ -51,6 +58,8 @@ if ($infoModel->images) {
         </a>
     </div>
     <div class="sx-product-card--photo">
+        <?php echo \Yii::$app->adult->renderBlocked($model); ?>
+
         <a href="<?= $model->url; ?>" data-pjax="0">
             <? if ($infoModel->mainProductImage) : ?>
                 <img class="sx-product-image to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->mainProductImage ? $infoModel->mainProductImage->src : null,
@@ -171,4 +180,4 @@ if ($infoModel->images) {
             </div>
         <? endif; ?>
     </div>
-</div>
+<? echo \yii\helpers\Html::endTag("div"); ?>

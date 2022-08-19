@@ -15,24 +15,24 @@
  */
 
 ?>
-<section class="sx-minimal-page">
+<section class="sx-minimal-page <?php echo \Yii::$app->adult->renderCssClass($model); ?>">
     <div class="container sx-container to-cart-fly-wrapper">
         <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
         <?
 
-if ($model->shopProduct->isOfferProduct || $model->shopProduct->isSimpleProduct) {
+        if ($model->shopProduct->isOfferProduct || $model->shopProduct->isSimpleProduct) {
 
-    $data = \skeeks\cms\shop\components\ShopComponent::productDataForJsEvent($model);
-    $jsData = \yii\helpers\Json::encode($data);
-    $this->registerJs(<<<JS
+            $data = \skeeks\cms\shop\components\ShopComponent::productDataForJsEvent($model);
+            $jsData = \yii\helpers\Json::encode($data);
+            $this->registerJs(<<<JS
 sx.onReady(function() {
     sx.Shop.trigger("detail", {$jsData});
 });
     
 JS
-    );
-}
-    ?>
+            );
+        }
+        ?>
         <div class="row">
             <div class="col-md-12">
                 <?= $this->render('@app/views/breadcrumbs', [
@@ -49,6 +49,8 @@ JS
                     $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $model->id])->exists();
                     ?>
 
+                    <?php echo \Yii::$app->adult->renderBlocked($model); ?>
+
                     <div class="sx-favorite-product"
                          data-added-icon-class="fas fa-heart"
                          data-not-added-icon-class="far fa-heart"
@@ -64,7 +66,7 @@ JS
                         </a>
                     </div>
 
-                    <?= $this->render("@app/views/modules/cms/content-element/product/" . $singlPage->images_view_file, [
+                    <?= $this->render("@app/views/modules/cms/content-element/product/".$singlPage->images_view_file, [
                         'model' => $model,
                     ]); ?>
                 </div>
@@ -123,13 +125,13 @@ JS
                         <? endif; ?>
 
                         <div class="sx-properties-wrapper sx-columns-1">
-                        <?= $this->render("@app/views/modules/cms/content-element/_product-info-".$singlPage->info_block_view_type, [
-                            'singlPage'             => $singlPage,
-                            'model'                 => $model,
-                            'shopProduct'           => $shopProduct,
-                            'priceHelper'           => $priceHelper,
-                            'shopOfferChooseHelper' => $shopOfferChooseHelper,
-                        ]); ?>
+                            <?= $this->render("@app/views/modules/cms/content-element/_product-info-".$singlPage->info_block_view_type, [
+                                'singlPage'             => $singlPage,
+                                'model'                 => $model,
+                                'shopProduct'           => $shopProduct,
+                                'priceHelper'           => $priceHelper,
+                                'shopOfferChooseHelper' => $shopOfferChooseHelper,
+                            ]); ?>
                         </div>
                     </div>
                 </div>
