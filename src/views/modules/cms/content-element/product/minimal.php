@@ -103,7 +103,7 @@ JS
                             $brandId = $model->relatedPropertiesModel->getAttribute($shopCmsContentProperty->cmsContentProperty->code);
                             $brand = \skeeks\cms\models\CmsContentElement::findOne((int)$brandId);
                             ?>
-                            <?php if ($brand) : ?>
+                            <?php if ($brand && \Yii::$app->mobileDetect->isDesktop) : ?>
                                 <div class="sx-short-brand-info row g-mb-20" style="background: #92929212;
     padding: 5px;">
                                     <div class="col-md-8 my-auto">

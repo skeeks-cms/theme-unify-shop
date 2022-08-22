@@ -8,6 +8,8 @@
 /* @var $this yii\web\View */
 /* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
 \skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
+\skeeks\cms\themes\unify\assets\VanillaLazyLoadAsset::register($this);
+
 $this->registerJs(<<<JS
 $('[data-fancybox="images"]').fancybox({
     
@@ -62,7 +64,10 @@ if ($images !== false && !$images) {
             <div class="js-slide">
                 <!--w-100-->
                 <a class="sx-fancybox-gallary" data-fancybox="images" href="<?= $image->src; ?>">
-                    <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
+                    <img class="img-fluid lazy" 
+                         style="aspect-ratio: 700/500; height: 100%;"
+                         src="<?php echo \Yii::$app->cms->image1px; ?>"
+                         data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
                             'w' => 700,
                             'h' => 500,
@@ -89,7 +94,10 @@ if ($images !== false && !$images) {
         >
             <? foreach ($images as $image) : ?>
                 <div class="js-slide">
-                    <img class="img-fluid" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
+                    <img class="img-fluid lazy" 
+                         style="aspect-ratio: 1; width: 100%;"
+                         src="<?php echo \Yii::$app->cms->image1px; ?>"
+                         data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
                             'w' => 75,
                             'h' => 75,
