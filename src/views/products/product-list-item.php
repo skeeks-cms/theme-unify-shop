@@ -11,6 +11,7 @@
  * @var                                               $this yii\web\View
  */
 \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductCardAsset::register($this);
+\skeeks\cms\themes\unify\assets\FontAwesomeAsset::register($this);
 
 $shopProduct = $model->shopProduct;
 //Если этот товар привязан к главному

@@ -136,4 +136,6 @@
     width: 100%;
 }
 
-
+.sx-catalog-wrapper {
+    min-height: 600px;
+}
