@@ -44,7 +44,7 @@
         jInput.focus();
 
         jInput.trigger("change", {
-            'result' : 'up'
+            'result': 'up'
         });
 
         return false;
@@ -62,7 +62,7 @@
         jInput.val(newVal);
         jInput.focus();
         jInput.trigger("change", {
-            'result' : 'down'
+            'result': 'down'
         });
         return false;
     });
@@ -91,7 +91,7 @@
 
         var jWrapper = $(this).closest(".sx-quantity-wrapper")
 
-        $(".sx-quantity-input", jWrapper).each(function() {
+        $(".sx-quantity-input", jWrapper).each(function () {
             if ($(this).hasClass("sx-current-changed")) {
                 $(this).removeClass("sx-current-changed")
             } else {
@@ -185,56 +185,68 @@
 
         $('body').on("click", '.to-cart-fly-btn', function () {
 
-            var jToCartWrapper = $(this).closest('.to-cart-fly-wrapper');
-            var jToCartFlyImg = $('.to-cart-fly-img', jToCartWrapper);
-            if (!jToCartFlyImg[0]) {
-                jToCartFlyImg = $('.sx-stick-slider .slick-current img', jToCartWrapper);
+            if ($(".sx-mobile-layout").length) {
+                $("#sx-top-cart").animate({
+                    transform: 'scale(1.3)'
+                }, 200, function () {
+                    $(this).animate({
+                        transform: 'scale(1)'
+                    }, 200, function () {
+                        $(this).removeAttr('style');
+                    });
+                });
             } else {
-                if (jToCartFlyImg.length > 1) {
-                    jToCartFlyImg = $(jToCartFlyImg[0]);
-                    console.log(jToCartFlyImg);
+                var jToCartWrapper = $(this).closest('.to-cart-fly-wrapper');
+                var jToCartFlyImg = $('.to-cart-fly-img', jToCartWrapper);
+                if (!jToCartFlyImg[0]) {
+                    jToCartFlyImg = $('.sx-stick-slider .slick-current img', jToCartWrapper);
+                } else {
+                    if (jToCartFlyImg.length > 1) {
+                        jToCartFlyImg = $(jToCartFlyImg[0]);
+                        console.log(jToCartFlyImg);
+                    }
                 }
-            }
 
-            var jToCartFlyImgFly = jToCartFlyImg
-                    .clone()
-                    .css({
-                        'position': 'absolute',
-                        'z-index': '11100',
-                        top: jToCartFlyImg.offset().top,
-                        left: jToCartFlyImg.offset().left,
-                    })
-                    .appendTo("body")
-                //.after(jToCartFlyImg)
-            ;
+                var jToCartFlyImgFly = jToCartFlyImg
+                        .clone()
+                        .css({
+                            'position': 'absolute',
+                            'z-index': '11100',
+                            top: jToCartFlyImg.offset().top,
+                            left: jToCartFlyImg.offset().left,
+                        })
+                        .appendTo("body")
+                    //.after(jToCartFlyImg)
+                ;
 
-            _.delay(function () {
-                jToCartFlyImgFly
-                /*.css({
-                    transform: 'scale(1.2)',
-                    transition: 'all 0.2s'
-                })*/
-                    .animate({
+                _.delay(function () {
+                    jToCartFlyImgFly
+                        /*.css({
+                            transform: 'scale(1.2)',
+                            transition: 'all 0.2s'
+                        })*/
+                        .animate({
 
-                        opacity: 0.05,
-                        left: $("#sx-top-cart").offset()['left'],
-                        top: $("#sx-top-cart").offset()['top'],
-                        width: 20,
-                        transform: 'scale(.10) rotate(360deg)'
-                    }, 1000, function () {
-                        $(this).remove();
+                            opacity: 0.05,
+                            left: $("#sx-top-cart").offset()['left'],
+                            top: $("#sx-top-cart").offset()['top'],
+                            width: 20,
+                            transform: 'scale(.10) rotate(360deg)'
+                        }, 1000, function () {
+                            $(this).remove();
 
-                        $("#sx-top-cart").animate({
-                            transform: 'scale(1.3)'
-                        }, 200, function () {
-                            $(this).animate({
-                                transform: 'scale(1)'
+                            $("#sx-top-cart").animate({
+                                transform: 'scale(1.3)'
                             }, 200, function () {
-                                $(this).removeAttr('style');
+                                $(this).animate({
+                                    transform: 'scale(1)'
+                                }, 200, function () {
+                                    $(this).removeAttr('style');
+                                });
                             });
                         });
-                    });
-            }, 100);
+                }, 100);
+            }
 
 
         });
