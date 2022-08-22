@@ -27,7 +27,13 @@ $dataProvider->query->joinWith('shopProduct');
 \Yii::$app->cmsSearch->logResult($dataProvider);
 
 $dataProvider->query->groupBy([\skeeks\cms\models\CmsContentElement::tableName().".id"]);
-
+//print_r($dataProvider->query->createCommand()->rawSql);die;
+$q = clone $dataProvider->query;
+$select = [
+        \skeeks\cms\models\CmsContentElement::tableName().".id"
+];
+$total = $q->select($select)->limit(-1)->offset(-1)->orderBy([])->count('*');
+$dataProvider->setTotalCount($total);
 
 ?>
 
@@ -37,7 +43,7 @@ $dataProvider->query->groupBy([\skeeks\cms\models\CmsContentElement::tableName()
             <div class="col-12 sx-catalog-wrapper" style="padding-bottom: 20px; padding-top: 20px;">
                 
         <div class="sx-catalog-h1-wrapper" style="display: flex; margin-bottom: 10px;">
-            <div><h1 class="sx-breadcrumbs-h1 sx-catalog-h1" style="margin-bottom: 0px;"><?php echo \Yii::t('app', '{n, plural, =0{нет товаров} =1{# товар} one{# товар} few{# товара} many{# товаров} other{# товаров}}', ['n' => $dataProvider->count],
+            <div><h1 class="sx-breadcrumbs-h1 sx-catalog-h1" style="margin-bottom: 0px;"><?php echo \Yii::t('app', '{n, plural, =0{нет товаров} =1{# товар} one{# товар} few{# товара} many{# товаров} other{# товаров}}', ['n' => $dataProvider->totalCount],
                     'ru_RU'); ?></h1></div>
             
         </div>
