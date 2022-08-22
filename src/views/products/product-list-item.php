@@ -88,7 +88,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                     <? endif; ?>
                      title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
             <?php else : ?>
-                <img class="sx-product-image to-cart-fly-img lazy" 
+                <img class="sx-product-image to-cart-fly-img lazy"
                      style="aspect-ratio: 180/140;"
                      src="<?php echo \Yii::$app->cms->image1px; ?>"
                      data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->mainProductImage ? $infoModel->mainProductImage->src : null,
