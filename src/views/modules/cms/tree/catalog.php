@@ -14,7 +14,7 @@
 //print_r($model->toArray());die;
 $savedFilter = @$savedFilter;
 $dataProvider = new \yii\data\ActiveDataProvider([
-    'query' => \skeeks\cms\shop\models\ShopCmsContentElement::find()->active(),
+    'query' => \skeeks\cms\shop\models\ShopCmsContentElement::find()->cmsSite()->active(),
 ]);
 //Если нужно учитывать второстепенную привязку разделов, нужно доработать.
 $dataProvider->query->cmsTree($model, true, \Yii::$app->view->theme->is_join_second_trees ? true : false);
@@ -51,29 +51,13 @@ if (\Yii::$app->view->theme->is_allow_filters) {
     if ($show_filter_property_ids = \Yii::$app->skeeks->site->shopSite->show_filter_property_ids) {
         $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => $show_filter_property_ids]);
     }
-
-    /*if ($model->activeChildren) {
-        $rpQuery->andWhere([
-            'or',
-            ['map.cms_tree_id' => $model->id],
-            ['map.cms_tree_id' => null],
-        ]);
-    } */
-
     $treeIds = [$model->id];
-    /*if ($model->main_cms_tree_id) {
-        $treeIds[] = $model->main_cms_tree_id;
-    }*/
-    //print_r($treeIds);die;
-    /*print_r($treeIds);die;*/
     $rpQuery->andWhere([
         'or',
         ['map.cms_tree_id' => $treeIds],
         ['map.cms_tree_id' => null],
     ]);
-
     //print_r($rpQuery->createCommand()->rawSql);die;
-
     $eavFiltersHandler->initRPByQuery($rpQuery);
     $priceFiltersHandler = new \skeeks\cms\shop\queryFilter\PriceFiltersHandler([
         'baseQuery' => $baseQuery,
@@ -194,6 +178,8 @@ if (!$model->meta_keywords && $cmsTreeType->meta_keywords_template) {
         "content" => $metaKeywords,
     ], 'keywords');
 }
+
+//print_r($eavFiltersHandler->toArray());die;
 
 ?>
 <span itemprop="product" itemscope itemtype="https://schema.org/Product">
