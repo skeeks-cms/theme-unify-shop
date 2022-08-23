@@ -50,82 +50,96 @@ $q->groupBy(['cmsTree.id']);
 <? if (\Yii::$app->shop->shopContents) : ?>
 
     <?
-    $treeIds = [];
-    if ($model->cmsTree && $model->cmsTree->parent) {
-        $treeIds = \yii\helpers\ArrayHelper::map($model->cmsTree->parent->children, 'id', 'id');
-    }
-    $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-similar-products", [
-        'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
-        'label'                => "Рекомендуем также",
-        'enabledPaging'        => "N",
-        'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
-        'tree_ids'             => $treeIds,
-        'limit'                => 15,
-        'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
-        'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
-            //$activeDataProvider->query->with('shopProduct');
-            //$activeDataProvider->query->with('shopProduct.baseProductPrice');
-            //$activeDataProvider->query->with('shopProduct.minProductPrice');
-            $activeDataProvider->query->with('image');
-            //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
-            //$activeDataProvider->query->orderBy(['show_counter' => SORT_DESC]);
-
-            $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
-
-            /*$activeDataProvider->query->andWhere([
-                '!=',
-                'shopProduct.product_type',
-                \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
-            ]);*/
-
-            \Yii::$app->shop->filterBaseContentElementQuery($activeDataProvider->query);
-
-        },
-    ]);
-
+    $pjax = \skeeks\cms\widgets\PjaxLazyLoad::begin();
+    \skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
+    \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductCardAsset::register($this);
     ?>
 
-    <? if ($widgetElements->dataProvider->query->count()) : ?>
-        <section class="sx-products-slider-section">
-            <div class="container sx-container">
-                <? $widgetElements::end(); ?>
-            </div>
-        </section>
-    <? endif; ?>
-
-
-    <?php if (\Yii::$app->shop->shopUser) : ?>
+    <?php if ($pjax->isPjax) : ?>
 
         <?
-        $widgetElements2 = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-viewed-products", [
-            'viewFile'            => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
-            'label'               => "Просмотренные товары",
-            'enabledPaging'       => "N",
-            'content_ids'         => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
-            //'tree_ids'             => $treeIds,
-            'enabledSearchParams' => "N",
-            'enabledCurrentTree'  => "N",
-            'limit'               => 15,
-            'contentElementClass' => \skeeks\cms\shop\models\ShopCmsContentElement::class,
-            'activeQueryCallback' => function (\yii\db\ActiveQuery $query) use ($model) {
-                $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
-                $query->innerJoin('shop_product', '`shop_product`.`id` = `cms_content_element`.`id`');
-                $query->innerJoin('shop_viewed_product', '`shop_viewed_product`.`shop_product_id` = `shop_product`.`id`');
-                $query->andWhere(['shop_user_id' => \Yii::$app->shop->shopUser->id]);
-                //$query->orderBy(['shop_viewed_product.created_at' => SORT_DESC]);
+        $treeIds = [];
+        if ($model->cmsTree && $model->cmsTree->parent) {
+            $treeIds = \yii\helpers\ArrayHelper::map($model->cmsTree->parent->children, 'id', 'id');
+        }
+        $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-similar-products", [
+            'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
+            'label'                => "Рекомендуем также",
+            'enabledPaging'        => "N",
+            'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+            'tree_ids'             => $treeIds,
+            'limit'                => 15,
+            'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+            'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
+                //$activeDataProvider->query->with('shopProduct');
+                //$activeDataProvider->query->with('shopProduct.baseProductPrice');
+                //$activeDataProvider->query->with('shopProduct.minProductPrice');
+                $activeDataProvider->query->with('image');
+                //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
+                //$activeDataProvider->query->orderBy(['show_counter' => SORT_DESC]);
 
-                \Yii::$app->shop->filterBaseContentElementQuery($query);
+                $activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
+
+                /*$activeDataProvider->query->andWhere([
+                    '!=',
+                    'shopProduct.product_type',
+                    \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
+                ]);*/
+
+                \Yii::$app->shop->filterBaseContentElementQuery($activeDataProvider->query);
+
             },
         ]);
+
         ?>
 
-        <? if ($widgetElements2->dataProvider->query->count()) : ?>
+        <? if ($widgetElements->dataProvider->query->count()) : ?>
             <section class="sx-products-slider-section">
                 <div class="container sx-container">
-                    <? $widgetElements2::end(); ?>
+                    <? $widgetElements::end(); ?>
                 </div>
             </section>
         <? endif; ?>
-    <? endif; ?>
+
+
+        <?php if (\Yii::$app->shop->shopUser) : ?>
+
+            <?
+            $widgetElements2 = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-viewed-products", [
+                'viewFile'            => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
+                'label'               => "Просмотренные товары",
+                'enabledPaging'       => "N",
+                'content_ids'         => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+                //'tree_ids'             => $treeIds,
+                'enabledSearchParams' => "N",
+                'enabledCurrentTree'  => "N",
+                'limit'               => 15,
+                'contentElementClass' => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+                'activeQueryCallback' => function (\yii\db\ActiveQuery $query) use ($model) {
+                    $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
+                    $query->innerJoin('shop_product', '`shop_product`.`id` = `cms_content_element`.`id`');
+                    $query->innerJoin('shop_viewed_product', '`shop_viewed_product`.`shop_product_id` = `shop_product`.`id`');
+                    $query->andWhere(['shop_user_id' => \Yii::$app->shop->shopUser->id]);
+                    //$query->orderBy(['shop_viewed_product.created_at' => SORT_DESC]);
+
+                    \Yii::$app->shop->filterBaseContentElementQuery($query);
+                },
+            ]);
+            ?>
+
+            <? if ($widgetElements2->dataProvider->query->count()) : ?>
+                <section class="sx-products-slider-section">
+                    <div class="container sx-container">
+                        <? $widgetElements2::end(); ?>
+                    </div>
+                </section>
+            <? endif; ?>
+        <? endif; ?>
+
+
+    <?php else : ?>
+        Загрузка товаров...
+    <?php endif; ?>
+    <? $pjax::end(); ?>
 
 <? endif; ?>
