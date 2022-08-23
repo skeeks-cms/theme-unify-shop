@@ -191,16 +191,25 @@ CSS
                 >
                     <?php \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this); ?>
                     <?php else: ?>
-                    <div class="sx-filters-wrapper-inline" id="sx-filters-wrapper-inline">
+                        <div class="sx-filters-wrapper-inline" id="sx-filters-wrapper-inline">
+                    <?php endif; ?>
+
+                        <?
+                        \skeeks\cms\themes\unify\widgets\filters\assets\FiltersWidgetAsset::register($this);
+                        $pjax = \skeeks\cms\widgets\PjaxLazyLoad::begin(); ?>
+                        <?php if ($pjax->isPjax) : ?>
+                            <?php
+                            if (!\Yii::$app->mobileDetect->isMobile) {
+                                $filtersWidget->getSortHandler()->viewFile = '@app/views/filters/sort-filter-inline';
+                                $filtersWidget->getAvailabilityHandler()->viewFile = '@app/views/filters/availability-filter-inline';
+                            }
+    
+                            echo $filtersWidget->run();
+                            ?>
+                        <?php else : ?>
+                            Загрузка фильтров...
                         <?php endif; ?>
-
-                        <?php
-
-                        if (!\Yii::$app->mobileDetect->isMobile) {
-                            $filtersWidget->getSortHandler()->viewFile = '@app/views/filters/sort-filter-inline';
-                            $filtersWidget->getAvailabilityHandler()->viewFile = '@app/views/filters/availability-filter-inline';
-                        }
-                        echo $filtersWidget->run(); ?>
+                        <? $pjax::end(); ?>
                     </div>
                     <div class="row sx-fast-filters">
                         <div class="col-12">

@@ -199,31 +199,17 @@ CSS
 <div class="sx-col-left-block">
     <div style="display: none;">
         <? endif; ?>
-        <?php /*\skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this); */ ?><!--
-        <div id="stickyblock-start"
-             class="js-sticky-block"
-             data-has-sticky-header="true" 
-             data-start-point="#stickyblock-start" data-end-point=".sx-footer">-->
+        <?
+        \skeeks\cms\themes\unify\widgets\filters\assets\FiltersWidgetAsset::register($this);
+        $pjax = \skeeks\cms\widgets\PjaxLazyLoad::begin(); ?>
+        <?php if ($pjax->isPjax) : ?>
+            <? echo $filtersWidget->run(); ?>
+        <?php else : ?>
 
-        <? echo $filtersWidget->run(); ?>
-        <!--</div>-->
+        <?php endif; ?>
+        <? $pjax::end(); ?>
+
         <? if (!\Yii::$app->view->theme->is_allow_filters) : ?>
     </div>
 </div>
 <? endif; ?>
-
-<!--<div id="stickyblock-start" class="g-pa-5 js-sticky-block" data-start-point="#stickyblock-start" data-end-point=".sx-footer">
-
-</div>-->
-
-<? /* $content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'news'])->one(); */ ?><!--
---><? /*= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
-    'namespace'          => 'ContentElementsCmsWidget-left-news',
-    'viewFile'           => '@app/views/widgets/ContentElementsCmsWidget/left-news',
-    'label'              => 'Новости',
-    'content_ids'        => [
-        $content ? $content->id : "",
-    ],
-    'enabledCurrentTree' => \skeeks\cms\components\Cms::BOOL_N,
-    'enabledRunCache'    => \skeeks\cms\components\Cms::BOOL_N,
-]); */ ?>
