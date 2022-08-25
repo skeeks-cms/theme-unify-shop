@@ -14,7 +14,9 @@
 //print_r($model->toArray());die;
 $savedFilter = @$savedFilter;
 $dataProvider = new \yii\data\ActiveDataProvider([
-    'query' => \skeeks\cms\shop\models\ShopCmsContentElement::find()->cmsSite()->active(),
+    'query' => \skeeks\cms\shop\models\ShopCmsContentElement::find()->cmsSite()->active()->select([
+        \skeeks\cms\shop\models\ShopCmsContentElement::tableName() . ".*"
+    ]),
 ]);
 //Если нужно учитывать второстепенную привязку разделов, нужно доработать.
 $dataProvider->query->cmsTree($model, true, \Yii::$app->view->theme->is_join_second_trees ? true : false);
@@ -24,7 +26,7 @@ $dataProvider->query->with('shopProduct');
 $dataProvider->query->with('shopProduct.baseProductPrice');
 $dataProvider->query->with('image');
 $dataProvider->query->with('images');
-$dataProvider->query->joinWith('shopProduct');
+$dataProvider->query->innerJoinWith('shopProduct');
 $dataProvider->query->groupBy(\skeeks\cms\shop\models\ShopCmsContentElement::tableName().".id");
 
 /*print_r($dataProvider->query);die;*/
@@ -89,8 +91,14 @@ $filtersWidget->applyToQuery($dataProvider->query);
 <!--Тут кэш и построение микроразметки-->
 <?php
 
-$data = \skeeks\cms\shop\components\ShopComponent::getAgregateCategoryData($dataProvider->query, @$savedFilter ? $savedFilter : $model, $eavFiltersHandler->getApplied());
-
+$filtersData = $eavFiltersHandler->getApplied();
+if ($priceFiltersHandler->t) {
+    $filtersData['price'] = 1;
+}
+if ($priceFiltersHandler->f) {
+    $filtersData['price'] = 1;
+}
+$data = \skeeks\cms\shop\components\ShopComponent::getAgregateCategoryData($dataProvider->query, @$savedFilter ? $savedFilter : $model, $filtersData);
 \Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
 
 //print_r($dataProvider->query->createCommand()->rawSql);die;
