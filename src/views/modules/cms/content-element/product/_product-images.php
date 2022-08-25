@@ -10,11 +10,12 @@
 \skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
 \skeeks\cms\themes\unify\assets\VanillaLazyLoadAsset::register($this);
 
+$isShowMobileThumbnails = \Yii::$app->mobileDetect->isDesktop ? "true" : "false";
 $this->registerJs(<<<JS
 $('[data-fancybox="images"]').fancybox({
     
     thumbs: {
-    autoStart: true, // Display thumbnails on opening
+    autoStart: {$isShowMobileThumbnails}, // Display thumbnails on opening
     hideOnClose: true, // Hide thumbnail grid when closing animation starts
     parentEl: ".fancybox-container", // Container is injected into this element
     axis: "y", // Vertical (y) or horizontal (x) scrolling
