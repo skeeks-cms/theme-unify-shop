@@ -223,12 +223,12 @@ JS
                     /*padding: 20px;*/
                 ">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-12 col-lg-6">
                         <h5>Данные покупателя</h5>
                     </div>
                 </div>
                 <div class="sx-data">
-                    <div class="col-12">
+                    <div class="col-12 col-lg-6">
                         <?php foreach ($contactAttributes as $attribute) : ?>
                             <div class="row sx-data-row">
                                 <div class="col-3"><?php echo $model->getAttributeLabel($attribute); ?>
@@ -249,12 +249,12 @@ JS
                     /*padding: 20px;*/
                 ">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-12 col-lg-6">
                         <h5>Получатель заказа</h5>
                     </div>
                 </div>
                 <div class="sx-data">
-                    <div class="col-12">
+                    <div class="col-12 col-lg-6">
                         <?php foreach ($receiverAttributes as $attribute) : ?>
                             <div class="row sx-data-row">
                                 <div class="col-3"><?php echo $model->getAttributeLabel($attribute); ?>
@@ -359,6 +359,28 @@ JS
                     </div>
                 </div>
             <?php endif; ?>
+        <?php endif; ?>
+
+
+
+
+        <?php if ($model->comment) : ?>
+            <div class="sx-contact-info" style="
+                    margin-top: 20px;
+                    /*background: #f8f8f8;*/
+                    /*padding: 20px;*/
+                ">
+                <div class="row">
+                    <div class="col-12">
+                        <h5>Комментарий</h5>
+                    </div>
+                </div>
+                <div class="sx-data">
+                        <div class="g-brd-primary" style="background: #fafafa; border-left: 5px solid; padding: 20px; 10px;">
+                        <?php echo $model->comment; ?>
+                        </div>
+                </div>
+            </div>
         <?php endif; ?>
 
 
