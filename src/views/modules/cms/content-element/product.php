@@ -55,11 +55,17 @@ $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
 
 $suffix = \Yii::$app->name;
 $price = $priceHelper->basePrice->money;
+$priceAmount = (float) $price->amount;
 if ($shopProduct->tradeOffers) {
     $price = "от " . $priceHelper->basePrice->money;
 }
 if (!$model->meta_title) {
-    $this->title = "{$model->seoName} - цена {$price} купить в интернет-магазине {$suffix}";
+    if ($priceAmount > 0) {
+        $this->title = "{$model->seoName} - цена {$price} купить в интернет-магазине {$suffix}";
+    } else {
+        $this->title = "{$model->seoName} - купить в интернет-магазине {$suffix}";
+    }
+    
 }
 if (!$model->meta_description) {
     $desc = strip_tags($model->description_short);

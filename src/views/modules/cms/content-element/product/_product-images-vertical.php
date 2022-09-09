@@ -67,7 +67,7 @@ if ($images !== false && !$images) {
                 <? foreach ($images as $image) : ?>
                     <div class="js-slide">
                         <img class="img-fluid lazy" 
-                             style="aspect-ratio: 1; width: 100%;"
+                             style="aspect-ratio: 1; width: 100%; max-width: 75px;"
                              src="<?php echo \Yii::$app->cms->image1px; ?>"
                              data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
                             new \skeeks\cms\components\imaging\filters\Thumbnail([
@@ -95,7 +95,9 @@ if ($images !== false && !$images) {
                     <!--w-100-->
                     <a class="sx-fancybox-gallary" data-fancybox="images" href="<?= $image->src; ?>">
                         <img class="img-fluid lazy" 
-                             style="aspect-ratio: 700/500; width: 100%;"
+                             style="aspect-ratio: 700/500;
+    max-width: 700px;
+    width: 100%;"
                              src="<?php echo \Yii::$app->cms->image1px; ?>"
                              data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
                             new \skeeks\cms\components\imaging\filters\Thumbnail([
