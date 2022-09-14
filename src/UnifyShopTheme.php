@@ -78,6 +78,10 @@ HTML
     public $themeAssetClass = 'skeeks\cms\themes\unifyshop\assets\UnifyThemeShopAsset';
 
 
+    public $product_card_img_preview_height = 500;
+    public $product_card_img_preview_width = 700;
+    public $product_card_img_preview_crop = ManipulatorInterface::THUMBNAIL_INSET;
+
     public $catalog_img_preview_height = 200;
     public $catalog_img_preview_width = 260;
     public $catalog_img_preview_crop = ManipulatorInterface::THUMBNAIL_INSET;
@@ -204,6 +208,25 @@ HTML
                                 'minimal' => 'Минималистичный шаблон (описание и характеристики в правой колонке)',
                             ],
                         ],
+
+
+
+                        'product_card_img_preview_width' => [
+                            'class'  => NumberField::class,
+                            'append' => 'px',
+                        ],
+                        'product_card_img_preview_height'  => [
+                            'class'  => NumberField::class,
+                            'append' => 'px',
+                        ],
+                        'product_card_img_preview_crop'   => [
+                            'class' => SelectField::class,
+                            'items' => [
+                                ManipulatorInterface::THUMBNAIL_INSET    => 'Сохранять формат исходной картинки',
+                                ManipulatorInterface::THUMBNAIL_OUTBOUND => 'Обрезать под размер',
+                            ],
+                        ],
+
                     ],
                 ],
                 'cart_view'   => [
@@ -294,6 +317,10 @@ HTML
                 'catalog_img_preview_height' => 'Высота превью картинки товара',
                 'catalog_img_preview_crop'   => 'Режим обрезки превью картинки товара',
 
+                'product_card_img_preview_height'  => 'Высота превью картинки товара',
+                'product_card_img_preview_width' => 'Ширина превью картинки товара',
+                'product_card_img_preview_crop'   => 'Режим обрезки превью картинки товара',
+
                 'product_slider_items'              => 'Количество товаров в слайдере',
                 'product_slider_img_preview_width'  => 'Ширина превью картинки товара',
                 'product_slider_img_preview_height' => 'Высота превью картинки товара',
@@ -322,6 +349,9 @@ HTML
                         'is_show_catalog_subtree_before_products',
                         'is_join_second_trees',
                         'cart_is_show_delivery_btn_price',
+
+                        'product_card_img_preview_height',
+                        'product_card_img_preview_width',
                     ],
                     'integer',
                 ],
@@ -329,6 +359,7 @@ HTML
                     [
                         'catalog_img_preview_crop',
                         'product_slider_img_preview_crop',
+                        'product_card_img_preview_crop',
                         'product_list_view_file',
                         'product_page_view_file',
 

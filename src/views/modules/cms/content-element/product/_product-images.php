@@ -66,15 +66,17 @@ if ($images !== false && !$images) {
                 <!--w-100-->
                 <a class="sx-fancybox-gallary" data-fancybox="images" href="<?= $image->src; ?>">
                     <img class="img-fluid lazy" 
-                         style="    aspect-ratio: 700/500;
-    max-width: 700px;
-    width: 100%;"
+                         style="    
+                                 aspect-ratio: <?php echo $this->theme->product_card_img_preview_width; ?>/<?php echo $this->theme->product_card_img_preview_height; ?>;
+                                    max-width: <?php echo $this->theme->product_card_img_preview_width; ?>px;
+                                    width: 100%;
+                         "
                          src="<?php echo \Yii::$app->cms->image1px; ?>"
                          data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
-                            'w' => 700,
-                            'h' => 500,
-                            'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                            'w' => $this->theme->product_card_img_preview_width,
+                            'h' => $this->theme->product_card_img_preview_height,
+                            'm' => $this->theme->product_card_img_preview_crop,
                         ]), $model->code
                     ); ?>" alt="<?= $model->name; ?>">
                 </a>
@@ -104,7 +106,7 @@ if ($images !== false && !$images) {
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
                             'w' => 75,
                             'h' => 75,
-                            'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
+                            'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
                         ]), $model->code
                     ); ?>" alt="<?= $model->name; ?>">
                 </div>
