@@ -282,7 +282,7 @@ JS
                 if ($handlerCountry instanceof \skeeks\cms\relatedProperties\propertyTypes\PropertyTypeElement) {
                     $country_content_id = $handlerCountry->content_id;
 
-                    $countries = \yii\helpers\ArrayHelper::map(\skeeks\cms\models\CmsContentElement::find()->andWhere(['content_id' => $country_content_id])->all(), 'id', 'name');
+                    $countries = \yii\helpers\ArrayHelper::map(\skeeks\cms\models\CmsContentElement::find()->cmsSite()->andWhere(['content_id' => $country_content_id])->all(), 'id', 'name');
 
                     if ($filters->country) {
                         $q->innerJoinWith("cmsContentElementProperties as cmsContentElementProperties");
