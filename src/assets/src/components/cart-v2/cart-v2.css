@@ -76,13 +76,13 @@
 }
 
 .sx-checked {
-    background-color: var(--second-bg-color);
-    color: var(--second-text-color);
+    background-color: var(--second-btn-bg-color);
+    color: var(--second-btn-text-color);
 }
 
 .sx-checked:hover {
-    background-color: var(--second-bg-color);
-    color: var(--second-text-color);
+    background-color: var(--second-btn-bg-color);
+    color: var(--second-btn-text-color);
 }
 
 
