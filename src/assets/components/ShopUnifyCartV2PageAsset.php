@@ -11,6 +11,7 @@ namespace skeeks\cms\themes\unifyshop\assets\components;
 use skeeks\cms\admin\assets\JqueryMaskInputAsset;
 use skeeks\cms\base\AssetBundle;
 use skeeks\cms\themes\unify\assets\components\UnifyThemeFloatLabelAsset;
+use skeeks\cms\themes\unifyshop\assets\UnifyThemeShopAsset;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -29,12 +30,13 @@ class ShopUnifyCartV2PageAsset extends AssetBundle
     public $depends = [
         UnifyThemeFloatLabelAsset::class,
         JqueryMaskInputAsset::class,
+        UnifyThemeShopAsset::class,
     ];
 
     public function init()
     {
         if (isset(\Yii::$app->view->theme->themeAssetClass)) {
-            $this->depends = ArrayHelper::merge($this->depends, [\Yii::$app->view->theme->themeAssetClass]);
+            //$this->depends = ArrayHelper::merge($this->depends, [\Yii::$app->view->theme->themeAssetClass]);
         }
     }
 }
