@@ -51,6 +51,7 @@ $this->registerCss(<<<CSS
     background: var(--second-bg-color);
     padding: 20px 20px;
     border-radius: 4px;
+    margin: 20px 0;
 }
 .sx-filter {
     margin-bottom: 20px;
@@ -61,7 +62,7 @@ $this->registerCss(<<<CSS
 
 .sx-alphabet-wrapper, .sx-alphabet-group-wrapper {
     background: white;
-    border: 1px solid silver;
+    border: 1px solid #ced4da;
     border-radius: 4px;
 }
 
@@ -79,11 +80,15 @@ $this->registerCss(<<<CSS
 }
 
 
+.sx-alphabet-wrapper ul li span, .sx-alphabet-group-wrapper ul li span {
+    margin: auto;
+}
 .sx-alphabet-wrapper ul li, .sx-alphabet-group-wrapper ul li {
     padding: 7px 10px;
     margin-right: 0px;
-    display: inline-block;
+    display: inline-flex;
     text-align: center;
+    height: 43px;
 }
 .sx-alphabet-group-wrapper ul li {
     width: 100%;
@@ -132,6 +137,14 @@ $this->registerCss(<<<CSS
     right: 0;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.sx-brand-item .sx-image {
+    margin-bottom: 10px;
+}
+
+.sx-brand-item .sx-country {
+    opacity: 0.8;
 }
 
 
@@ -349,9 +362,9 @@ JS
                         <div class="sx-alphabet-group-wrapper">
                             <div class="sx-alphabet-group">
                                 <ul>
-                                    <li class="sx-active" data-container="sx-en">A-Z</li>
-                                    <li data-container="sx-ru">А-Я</li>
-                                    <li data-container="sx-numbers">0-9</li>
+                                    <li class="sx-active" data-container="sx-en"><span>A-Z</span></li>
+                                    <li data-container="sx-ru"><span>А-Я</span></li>
+                                    <li data-container="sx-numbers"><span>0-9</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -362,30 +375,30 @@ JS
                             <div id="sx-en" class="sx-alphabet">
                                 <ul>
                                 <? foreach($enAlphabet as $letter) : ?>
-                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?> <?php echo in_array($letter, $availableLetters) ? '': 'sx-inactive'; ?>"><?php echo $letter; ?></li>
+                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?> <?php echo in_array($letter, $availableLetters) ? '': 'sx-inactive'; ?>"><span><?php echo $letter; ?></span></li>
                                 <? endforeach; ?>
                                     <?php if($filters->letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?>">Все</li>
+                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?>"><span>Все</span></li>
                                     <?php endif; ?>
                                 </ul>
                             </div>
                             <div id="sx-ru" class="sx-alphabet">
                                 <ul>
                                 <? foreach($ruAlphabet as $letter) : ?>
-                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?> <?php echo in_array($letter, $availableLetters) ? '': 'sx-inactive'; ?>"><?php echo $letter; ?></li>
+                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?> <?php echo in_array($letter, $availableLetters) ? '': 'sx-inactive'; ?>"><span><?php echo $letter; ?></span></li>
                                 <? endforeach; ?>
                                     <?php if($filters->letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?>">Все</li>
+                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?>"><span>Все</span></li>
                                     <?php endif; ?>
                                 </ul>
                             </div>
                             <div id="sx-numbers" class="sx-alphabet">
                                 <ul>
                                 <? foreach($numberAlphabet as $letter) : ?>
-                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?> <?php echo in_array($letter, $availableLetters) ? '': 'sx-inactive'; ?>"><?php echo $letter; ?></li>
+                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?> <?php echo in_array($letter, $availableLetters) ? '': 'sx-inactive'; ?>"><span><?php echo $letter; ?></span></li>
                                 <? endforeach; ?>
                                     <?php if($filters->letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?>">Все</li>
+                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?>"><span>Все</span></li>
                                     <?php endif; ?>
                                 </ul>
                             </div>
