@@ -97,11 +97,11 @@ JS
                     ]); ?>
                     <?php
                     /**
-                     * @var $shopCmsContentProperty \skeeks\cms\shop\models\ShopCmsContentProperty
+                     * @var $cmsContentProperty \skeeks\cms\models\CmsContentProperty
                      */
-                    if ($shopCmsContentProperty = \skeeks\cms\shop\models\ShopCmsContentProperty::find()->where(['is_vendor' => 1])->one()) : ?>
+                    if ($cmsContentProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->andWhere(['is_vendor' => 1])->one()) : ?>
                         <?php
-                        $brandId = $model->relatedPropertiesModel->getAttribute($shopCmsContentProperty->cmsContentProperty->code);
+                        $brandId = $model->relatedPropertiesModel->getAttribute($cmsContentProperty->code);
                         $brand = \skeeks\cms\models\CmsContentElement::findOne((int)$brandId);
                         ?>
                         <?php if ($brand && \Yii::$app->mobileDetect->isDesktop) : ?>

@@ -14,7 +14,7 @@
  */
 
 
-$cmsContentProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->innerJoinWith("shopProperty as shopProperty")->andWhere(['shopProperty.is_vendor' => 1])->one();
+$cmsContentProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->andWhere(['is_vendor' => 1])->one();
 if ($cmsContentProperty) {
     $handler = $cmsContentProperty->handler;
     if ($handler instanceof \skeeks\cms\relatedProperties\propertyTypes\PropertyTypeElement) {
@@ -276,7 +276,7 @@ JS
             /**
              * @var $countryContentProperty \skeeks\cms\models\CmsContentProperty
              */
-            $countryContentProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->andWhere(['code' => 'country'])->one();
+            $countryContentProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->andWhere(['is_country' => 1])->one();
             if ($countryContentProperty) {
                 $handlerCountry = $countryContentProperty->handler;
                 if ($handlerCountry instanceof \skeeks\cms\relatedProperties\propertyTypes\PropertyTypeElement) {
