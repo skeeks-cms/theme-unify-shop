@@ -25,6 +25,9 @@ if ($cmsContentProperty) {
 $q = \skeeks\cms\models\CmsContentElement::find()->cmsSite()->andWhere(['content_id' => $content_id]);
 $dataProvider = new \yii\data\ActiveDataProvider([
     'query' => $q,
+    'pagination' => [
+        'defaultPageSize' => 24 
+    ]
 ]);
 
 $this->registerCss(<<<CSS
@@ -141,6 +144,11 @@ $this->registerCss(<<<CSS
 
 .sx-brand-item .sx-image {
     margin-bottom: 10px;
+    padding: 10px;
+}
+
+.sx-brand-item .sx-image img {
+    max-width: 100%;
 }
 
 .sx-brand-item .sx-country {

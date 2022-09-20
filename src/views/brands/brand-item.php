@@ -10,7 +10,12 @@
  * @var $model \skeeks\cms\models\CmsContentElement
  */
 \skeeks\cms\themes\unify\assets\VanillaLazyLoadAsset::register($this);
-
+$image = null;
+if ($model->image) {
+    $image = $model->image;
+} else if ($model->main_cce_id) {
+    $image = $model->mainCmsContentElement->image;
+}
 ?>
 
 <div class="sx-brand-item-wrapper col-lg-2 col-md-3 col-6">
@@ -20,7 +25,7 @@
                 class="lazy img-responsive"
                 style="aspect-ratio: 1;"
                 src="<?php echo \Yii::$app->cms->image1px; ?>"
-                data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($model->image ? $model->image->src : \skeeks\cms\helpers\Image::getCapSrc(),
+                data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image ? $image->src : \skeeks\cms\helpers\Image::getCapSrc(),
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => 180,
                         'h' => 180,
