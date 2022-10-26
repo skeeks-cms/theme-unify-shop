@@ -22,6 +22,7 @@ if (!$description && $model->main_cce_id) {
 
 $brandTree = \skeeks\cms\models\CmsTree::find()->cmsSite()->andWhere(['view_file' => 'brands'])->one();
 if ($brandTree) {
+    \Yii::$app->breadcrumbs->parts = [];
     \Yii::$app->breadcrumbs->setPartsByTree($brandTree)->append([
         'name' => $model->name,
         'url'  => $model->url,

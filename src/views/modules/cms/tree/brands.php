@@ -22,7 +22,7 @@ if ($cmsContentProperty) {
     }
 }
 
-$q = \skeeks\cms\models\CmsContentElement::find()->cmsSite()->andWhere(['content_id' => $content_id]);
+$q = \skeeks\cms\models\CmsContentElement::find()->active()->cmsSite()->andWhere(['content_id' => $content_id]);
 $dataProvider = new \yii\data\ActiveDataProvider([
     'query' => $q,
     'pagination' => [
