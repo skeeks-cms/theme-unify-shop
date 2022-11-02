@@ -11,7 +11,16 @@
  * @var $model \skeeks\cms\models\CmsTree
  * @var $savedFilter \skeeks\cms\models\CmsSavedFilter
  */
-
+$this->registerCss(<<<CSS
+.sx-main-catalog {
+    display: flex;
+    min-height: calc(100vh - 100px);
+}
+.sx-main-catalog > div{
+    margin: auto;
+}
+CSS
+);
 if (@$savedFilter) {
     echo $this->render("@app/views/modules/cms/tree/catalog", [
         'model' => $model,
