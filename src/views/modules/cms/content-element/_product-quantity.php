@@ -62,8 +62,9 @@ foreach($shopStoreProducts as $shopStoreProduct) {
         <?php if($supplierQuantity) : ?>
             <div class="d-flex flex-row sx-quantities-row">
                 <div class="" style="width: 100%; line-height: 1;">
-                    На складе
-                    <!--<br/><small style="color: gray;">Привезем под заказ</small>-->
+                    Доступен для заказа
+                    <br/><small style="color: gray;">Привезем в течение нескольких дней.</small>
+                    <br/><small style="color: gray;">Точную дату сообщим после оформления заказа.</small>
                 </div>
                 <div class="">
                     <?php if ($supplierQuantity > 10) : ?>
