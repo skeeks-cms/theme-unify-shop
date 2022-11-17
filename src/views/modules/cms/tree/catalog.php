@@ -98,7 +98,7 @@ if ($priceFiltersHandler->t) {
 if ($priceFiltersHandler->f) {
     $filtersData['price'] = 1;
 }
-$data = \skeeks\cms\shop\components\ShopComponent::getAgregateCategoryData($dataProvider->query, @$savedFilter ? $savedFilter : $model, $filtersData);
+$data = \skeeks\cms\shop\components\ShopComponent::getAgregateCategoryData($dataProvider->query, @$savedFilter ? $savedFilter : $model, $filtersData, $filtersWidget->getAvailabilityHandler()->value);
 \Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
 
 //print_r($dataProvider->query->createCommand()->rawSql);die;
