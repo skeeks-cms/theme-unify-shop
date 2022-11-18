@@ -49,7 +49,7 @@ if ($eavFilter) {
                     </div>
                 </div>
 
-                <?php if (@$description_short) : ?>
+                <?php if (@$description_short && !\Yii::$app->mobileDetect->isMobile) : ?>
                     <div class="sx-content sx-description-short">
                         <?= @$description_short; ?>
                     </div>
@@ -104,26 +104,34 @@ if ($eavFilter) {
 
                 <?php else : ?>
                     <?
-                    /**
-                     * @var $sf \skeeks\cms\models\CmsSavedFilter
-                     */
-                    //todo: вынести в шаблон
-                    $savedFilters = $model->getCmsSavedFilters()
-                        ->joinWith("cmsTree as cmsTree")
-                        ->with("cmsTree")
-                        ->with("cmsContentProperty")
-                        ->with("valueContentElement")
-                        ->with("valueContentPropertyEnum")
-                        ->orderBy([\skeeks\cms\models\CmsSavedFilter::tableName().".priority" => SORT_DESC])
-                        ->andWhere([
-                            'cmsTree.id' => $model->id,
-                        ])
+                    $savedFilters = [];
+                    if (!$model->activeChildren && !\Yii::$app->mobileDetect->isMobile) {
+                        /**
+                         * @var $sf \skeeks\cms\models\CmsSavedFilter
+                         */
+                        //todo: вынести в шаблон
+                        $savedFiltersQ = $model->getCmsSavedFilters()
+                            ->joinWith("cmsTree as cmsTree")
+                            ->with("cmsTree")
+                            ->with("cmsContentProperty")
+                            ->with("valueContentElement")
+                            ->with("valueContentPropertyEnum")
+                            ->orderBy([\skeeks\cms\models\CmsSavedFilter::tableName().".priority" => SORT_DESC])
+                            ->andWhere([
+                                'cmsTree.id' => $model->id,
+                            ]);
                         //->groupBy(['cmsContentProperty.id'])
-                        ->limit(10)
-                        ->all();
 
+
+                        $savedFilters = $savedFiltersQ
+                            ->limit(10)
+                            ->all();
+                        
+
+
+                    }
                     ?>
-                    <?php if ($savedFilters) : ?>
+                    <?php if ($savedFilters || $savedFilter) : ?>
 
                         <?
                         if ($savedFilter) {
@@ -145,19 +153,19 @@ if ($eavFilter) {
 
                                 <?php if ($priceFilter->f || $priceFilter->t) : ?>
                                     <?php
-                                        $priceTitle = "";
-                                        $priceTitleData = [];
-                                        if ($priceFilter->f) {
-                                            $f = \Yii::$app->formatter->asDecimal($priceFilter->f);
-                                            $priceTitleData[] = "от <b>{$f}</b>";
-                                        }
-                                        if ($priceFilter->t) {
-                                            $t = \Yii::$app->formatter->asDecimal($priceFilter->t);
-                                            $priceTitleData[] = "до <b>{$t}</b>";
-                                        }
-                                        $priceTitleData[] = \Yii::$app->money->currency_symbol;
-                                        $priceTitle = implode(" ", $priceTitleData);
-                                        ?>
+                                    $priceTitle = "";
+                                    $priceTitleData = [];
+                                    if ($priceFilter->f) {
+                                        $f = \Yii::$app->formatter->asDecimal($priceFilter->f);
+                                        $priceTitleData[] = "от <b>{$f}</b>";
+                                    }
+                                    if ($priceFilter->t) {
+                                        $t = \Yii::$app->formatter->asDecimal($priceFilter->t);
+                                        $priceTitleData[] = "до <b>{$t}</b>";
+                                    }
+                                    $priceTitleData[] = \Yii::$app->money->currency_symbol;
+                                    $priceTitle = implode(" ", $priceTitleData);
+                                    ?>
                                     <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
                                         'isActive'    => true,
                                         'value_id'    => "",
@@ -166,7 +174,7 @@ if ($eavFilter) {
                                         'displayName' => $model->name." по цене ".$priceTitle,
                                     ]); ?>
                                 <?php endif; ?>
-                                
+
                                 <? foreach ($savedFilters as $sf) : ?>
                                     <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
                                         'isActive'    => (@$savedFilter && $sf->id == $savedFilter->id),
@@ -232,14 +240,14 @@ if ($eavFilter) {
                                 <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
                                     <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
                                         <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_category", [
-                                            'isActive'    => (@$savedFilter && $sf->id == $savedFilter->id),
-                                            'image'       => $sf->image,
-                                            'seoName'     => $sf->seoName,
-                                            'displayName' => $sf->cmsTree->name,
-                                            'code'        => $sf->cmsTree->code,
-                                            'url'         => $sf->url,
-                                            'description' => $sf->propertyValueName,
-                                            'adult_css_class' => \Yii::$app->adult->renderCssClass($sf->cmsTree),
+                                            'isActive'           => (@$savedFilter && $sf->id == $savedFilter->id),
+                                            'image'              => $sf->image,
+                                            'seoName'            => $sf->seoName,
+                                            'displayName'        => $sf->cmsTree->name,
+                                            'code'               => $sf->cmsTree->code,
+                                            'url'                => $sf->url,
+                                            'description'        => $sf->propertyValueName,
+                                            'adult_css_class'    => \Yii::$app->adult->renderCssClass($sf->cmsTree),
                                             'adult_blocked_html' => \Yii::$app->adult->renderBlocked($sf->cmsTree),
                                         ]); ?>
                                     <? endforeach; ?>
@@ -255,14 +263,14 @@ if ($eavFilter) {
                                 <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
                                     <? foreach ($model->activeChildren as $childdren) : ?>
                                         <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_category", [
-                                            'isActive'    => false,
-                                            'image'       => $childdren->image,
-                                            'seoName'     => $childdren->seoName,
-                                            'displayName' => $childdren->name,
-                                            'code'        => $childdren->code,
-                                            'url'         => $childdren->url,
-                                            'description' => "",
-                                            'adult_css_class' => \Yii::$app->adult->renderCssClass($childdren),
+                                            'isActive'           => false,
+                                            'image'              => $childdren->image,
+                                            'seoName'            => $childdren->seoName,
+                                            'displayName'        => $childdren->name,
+                                            'code'               => $childdren->code,
+                                            'url'                => $childdren->url,
+                                            'description'        => "",
+                                            'adult_css_class'    => \Yii::$app->adult->renderCssClass($childdren),
                                             'adult_blocked_html' => \Yii::$app->adult->renderBlocked($childdren),
 
                                         ]); ?>
@@ -336,6 +344,12 @@ if ($eavFilter) {
 
 
 
+                <?php if (@$description_short && \Yii::$app->mobileDetect->isMobile) : ?>
+                    <div class="sx-content sx-description-short" style="margin-top: 20px;">
+                        <?= @$description_short; ?>
+                    </div>
+                <?php endif; ?>
+                
 
                 <?php if (@$description) : ?>
                     <div class="sx-content sx-description-full" style="margin-top: 20px;">
@@ -392,14 +406,14 @@ if ($eavFilter) {
                             <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
                                 <? foreach (\yii\helpers\ArrayHelper::getValue($savedFiltersRow, "savedFilters") as $sf) : ?>
                                     <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_category", [
-                                        'isActive'    => (@$savedFilter && $sf->id == $savedFilter->id),
-                                        'image'       => $sf->image,
-                                        'seoName'     => $sf->seoName,
-                                        'displayName' => $sf->cmsTree->name,
-                                        'code'        => $sf->cmsTree->code,
-                                        'url'         => $sf->url,
-                                        'description' => $sf->propertyValueName,
-                                        'adult_css_class' => \Yii::$app->adult->renderCssClass($sf->cmsTree),
+                                        'isActive'           => (@$savedFilter && $sf->id == $savedFilter->id),
+                                        'image'              => $sf->image,
+                                        'seoName'            => $sf->seoName,
+                                        'displayName'        => $sf->cmsTree->name,
+                                        'code'               => $sf->cmsTree->code,
+                                        'url'                => $sf->url,
+                                        'description'        => $sf->propertyValueName,
+                                        'adult_css_class'    => \Yii::$app->adult->renderCssClass($sf->cmsTree),
                                         'adult_blocked_html' => \Yii::$app->adult->renderBlocked($sf->cmsTree),
                                     ]); ?>
                                 <? endforeach; ?>
