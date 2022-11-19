@@ -157,11 +157,11 @@ CSS
                                     $q->groupBy([\skeeks\cms\shop\models\ShopCmsContentElement::tableName() . ".tree_id"]);
 
                                     $cmsTree = \skeeks\cms\models\CmsTree::find()->cmsSite()->andWhere(['id' => $q]);
-
+                                    $cmsTrees = $cmsTree->all();
 
                                     ?>
 
-                                    <?php if($cmsTree->count()) : ?>
+                                    <?php if($cmsTrees) : ?>
                                     <?
                                         $brandProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->andWhere(['is_vendor' => 1])->one();
                                     ?>
@@ -169,7 +169,7 @@ CSS
                                         <div class="sx-saved-filters-list">
                                             <h3>Категории:</h3>
                                             <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
-                                                <? foreach ($cmsTree->each(10) as $cmsTree) : ?>
+                                                <? foreach ($cmsTrees as $cmsTree) : ?>
                                                     <?php
                                                     $sf = \skeeks\cms\models\CmsSavedFilter::find()->cmsSite()->andWhere(['cms_tree_id' => $cmsTree->id])->andWhere(['value_content_element_id' => $model->id])->one();
                                                     if (!$sf) {

@@ -12,6 +12,7 @@
  * @var $cmsContentProperty \skeeks\cms\models\CmsContentProperty
  *
  */
+\skeeks\cms\Skeeks::unlimited();
 
 
 $cmsContentProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->andWhere(['is_vendor' => 1])->one();
@@ -22,13 +23,18 @@ if ($cmsContentProperty) {
     }
 }
 
-$q = \skeeks\cms\models\CmsContentElement::find()->active()->cmsSite()->andWhere(['content_id' => $content_id]);
-$dataProvider = new \yii\data\ActiveDataProvider([
-    'query' => $q,
-    'pagination' => [
-        'defaultPageSize' => 24 
-    ]
-]);
+$q = \skeeks\cms\models\CmsContentElement::find()
+    ->active()
+    ->cmsSite()
+    ->with("image")
+    ->addSelect(\skeeks\cms\models\CmsContentElement::tableName().".*")
+    //->addSelect(['total_products' => new \yii\db\Expression("count(*)")])
+    ->andWhere(['content_id' => $content_id]);
+//$q->joinWith('cmsContentElementPropertyValues as cmsContentElementPropertyValues', true, "INNER JOIN");
+$q->innerJoin(['cmsContentElementPropertyValues' => \skeeks\cms\models\CmsContentElementProperty::tableName()], [\skeeks\cms\models\CmsContentElement::tableName().".id" => new \yii\db\Expression('cmsContentElementPropertyValues.value_element_id')]);
+$q->groupBy(\skeeks\cms\models\CmsContentElement::tableName().".id");
+
+
 
 $this->registerCss(<<<CSS
 .sx-brand-item-wrapper {
@@ -154,21 +160,81 @@ $this->registerCss(<<<CSS
 .sx-brand-item .sx-country {
     opacity: 0.8;
 }
+.sx-brand-item .sx-total-products {
+    opacity: 0.8;
+}
 
 
 CSS
 );
 
 $enAlphabet = [
-    'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
 ];
 
 $ruAlphabet = [
-    'А','Б','В','Г','Д','Е','Ж','З','И','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Ц','Э','Ю','Я'
+    'А',
+    'Б',
+    'В',
+    'Г',
+    'Д',
+    'Е',
+    'Ж',
+    'З',
+    'И',
+    'К',
+    'Л',
+    'М',
+    'Н',
+    'О',
+    'П',
+    'Р',
+    'С',
+    'Т',
+    'У',
+    'Ф',
+    'Ц',
+    'Э',
+    'Ю',
+    'Я',
 ];
 
 $numberAlphabet = [
-    '0','1','2','3','4','5','6','7','8','9',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
 ];
 
 $this->registerJs(<<<JS
@@ -236,95 +302,139 @@ $this->registerJs(<<<JS
 JS
 );
 
+$filtersNames = [];
+
+if ($content_id) {
+    \Yii::$app->seo->canUrl->ADDimportant_pname("f");
+
+    $filters = new \skeeks\cms\base\DynamicModel();
+    $filters->formName = 'f';
+
+    $filters->defineAttribute("country");
+    $filters->defineAttribute("letter");
+    $filters->defineAttribute("q");
+
+    $filters->addRule("country", 'integer');
+    $filters->addRule("q", 'string');
+    $filters->addRule("letter", 'string');
+
+    $filters->load(\Yii::$app->request->get());
+    if ($filters->letter == 'Все') {
+        $filters->letter = '';
+    }
+
+
+    if ($filters->q) {
+        $q->andWhere([
+            'LIKE',
+            "name",
+            $filters->q,
+        ]);
+
+        $filtersNames[] = 'поиск «'.$filters->q.'»';
+    }
+
+
+    $countries = [];
+    /**
+     * @var $countryContentProperty \skeeks\cms\models\CmsContentProperty
+     */
+    $country_content_id = null;
+    $countryContentProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->andWhere(['is_country' => 1])->one();
+    if ($countryContentProperty) {
+        $handlerCountry = $countryContentProperty->handler;
+        if ($handlerCountry instanceof \skeeks\cms\relatedProperties\propertyTypes\PropertyTypeElement) {
+            $country_content_id = $handlerCountry->content_id;
+
+            /*$cmsSiteClass = \Yii::$app->skeeks->siteClass;
+            $countries = \skeeks\cms\models\CmsContentElement::getDb()->cache(function ($db) use ($country_content_id) {
+                return \skeeks\cms\models\CmsContentElement::find()->cmsSite()->andWhere(['content_id' => $country_content_id])->all();
+            }, null, new \yii\caching\TagDependency([
+                'tags' => [
+                    (new $cmsSiteClass())->getTableCacheTag(),
+                ],
+            ]));
+
+            $countries = \yii\helpers\ArrayHelper::map($countries, 'id', 'name');*/
+
+            if ($filters->country) {
+                $q->innerJoinWith("cmsContentElementProperties as cmsContentElementProperties");
+                $q->andWhere(['cmsContentElementProperties.element_id' => $filters->country]);
+
+                $filtersCountry = \skeeks\cms\models\CmsContentElement::find()->cmsSite()->andWhere(['id' => $filters->country])->one();
+                $filtersNames[] = 'страна «'.$filtersCountry->name.'»';
+
+            }
+
+        } elseif ($handlerCountry instanceof \skeeks\cms\relatedProperties\propertyTypes\PropertyTypeList) {
+            
+            if ($filters->country) {
+                
+                $enum = $countryContentProperty->getEnums()->andWhere(['id' => $filters->country])->one(); 
+                
+                $q->innerJoinWith("cmsContentElementProperties as cmsContentElementProperties");
+                $q->andWhere(['cmsContentElementProperties.value_enum' => $filters->country]);
+
+                $filtersNames[] = 'страна «'.$enum->value.'»';
+
+            }
+
+        }
+    }
+
+    $cloneQ = clone $q;
+    $cloneQ->addSelect(['letter' => new \yii\db\Expression("SUBSTRING(name, 1, 1)")]);
+    $cloneQ->groupBy(['letter']);
+
+    $availableLetters = $cloneQ->asArray()->all();
+    $availableLetters = \yii\helpers\ArrayHelper::map($availableLetters, function ($row) {
+        return \skeeks\cms\helpers\StringHelper::ucfirst($row['letter']);
+    }, function ($row) {
+        return \skeeks\cms\helpers\StringHelper::ucfirst($row['letter']);
+    });
+
+    if ($filters->letter) {
+        $filtersNames[] = 'на букву «'.$filters->letter.'»';
+        $q->andWhere(new \yii\db\Expression("name LIKE '{$filters->letter}%'"));
+    }
+}
+
+$totalOffers = $q->count();
+$q->addSelect(['total_products' => new \yii\db\Expression("count(*)")]);
+
+$dataProvider = new \yii\data\ActiveDataProvider([
+    'query'      => $q,
+    'pagination' => [
+        'defaultPageSize' => 24,
+    ],
+]);
+
+//$total = $q->select($select)->limit(-1)->offset(-1)->orderBy([])->count('*');
+$dataProvider->setTotalCount($totalOffers);
 ?>
 <section class="sx-brands-page">
     <div class="container sx-container">
 
 
         <?= $this->render('@app/views/breadcrumbs', [
-            'model' => $model,
+            'model'      => $model,
+            'isShowH1'   => false,
+            'isShowLast' => true,
         ]); ?>
+
+        <div class="sx-catalog-h1-wrapper" style="display: flex; margin-bottom: 10px;">
+            <div><h1 class="sx-breadcrumbs-h1 sx-catalog-h1" style="margin-bottom: 0px;"><?php echo $model->seoName; ?><?php echo $filtersNames ? " + ".implode(" + ", $filtersNames) : ""; ?></h1></div>
+            <div class="sx-catalog-total-offers" style="color: #979797;
+    margin-top: auto;
+    margin-left: 12px;
+    font-size: 15px;">(<?php echo \Yii::t('app', '{n, plural, =0{нет брендов} =1{# бренд} one{# бренд} few{# брендов} many{# брендов} other{# брендов}}', ['n' => $totalOffers],
+                    'ru_RU'); ?>)
+            </div>
+        </div>
 
 
         <?php if ($content_id) : ?>
 
-
-            <?php
-            \Yii::$app->seo->canUrl->ADDimportant_pname("f");
-
-            $filters = new \skeeks\cms\base\DynamicModel();
-            $filters->formName = 'f';
-
-            $filters->defineAttribute("country");
-            $filters->defineAttribute("letter");
-            $filters->defineAttribute("q");
-
-            $filters->addRule("country", 'integer');
-            $filters->addRule("q", 'string');
-            $filters->addRule("letter", 'string');
-
-            $filters->load(\Yii::$app->request->get());
-            if ($filters->letter == 'Все') {
-                $filters->letter = '';
-            }
-
-
-
-
-
-
-            if ($filters->q) {
-                $q->andWhere([
-                    'LIKE', "name", $filters->q
-                ]);
-            }
-
-
-            $countries = [];
-            /**
-             * @var $countryContentProperty \skeeks\cms\models\CmsContentProperty
-             */
-            $countryContentProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->andWhere(['is_country' => 1])->one();
-            if ($countryContentProperty) {
-                $handlerCountry = $countryContentProperty->handler;
-                if ($handlerCountry instanceof \skeeks\cms\relatedProperties\propertyTypes\PropertyTypeElement) {
-                    $country_content_id = $handlerCountry->content_id;
-
-                    $countries = \yii\helpers\ArrayHelper::map(\skeeks\cms\models\CmsContentElement::find()->cmsSite()->andWhere(['content_id' => $country_content_id])->all(), 'id', 'name');
-
-                    if ($filters->country) {
-                        $q->innerJoinWith("cmsContentElementProperties as cmsContentElementProperties");
-                        $q->andWhere(['cmsContentElementProperties.element_id' => $filters->country]);
-                    }
-
-                } elseif ($handlerCountry instanceof \skeeks\cms\relatedProperties\propertyTypes\PropertyTypeList) {
-
-                    $countries = \yii\helpers\ArrayHelper::map($countryContentProperty->enums, 'id', 'value');
-
-                    if ($filters->country) {
-                        $q->innerJoinWith("cmsContentElementProperties as cmsContentElementProperties");
-                        $q->andWhere(['cmsContentElementProperties.value_enum' => $filters->country]);
-                    }
-
-                }
-            }
-
-            $cloneQ = clone $q;
-            $cloneQ->addSelect(['letter' => new \yii\db\Expression("SUBSTRING(name, 1, 1)")]);
-            $cloneQ->groupBy(['letter']);
-
-            $availableLetters = $cloneQ->asArray()->all();
-            $availableLetters = \yii\helpers\ArrayHelper::map($availableLetters, function($row) {
-                return \skeeks\cms\helpers\StringHelper::ucfirst($row['letter']);
-            }, function($row) {
-                return \skeeks\cms\helpers\StringHelper::ucfirst($row['letter']);
-            });
-
-            if ($filters->letter) {
-                $q->andWhere(new \yii\db\Expression("name LIKE '{$filters->letter}%'"));
-            }
-
-            ?>
 
             <div class="sx-filters">
 
@@ -332,30 +442,71 @@ JS
                     'enableClientValidation' => false,
                     'enableAjaxValidation'   => false,
                     'method'                 => "get",
-                    'id'                 => "sx-filters",
+                    'id'                     => "sx-filters",
                 ]); ?>
 
                 <div style="display: none;">
                     <?php
-                        echo $form->field($filters, "letter");
+                    echo $form->field($filters, "letter");
                     ?>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 sx-filter">
                         <div class="sx-search-brand">
-                        <?php echo $form->field($filters, "q")->textInput(
-                            [
-                                'placeholder' => 'Поиск по брендам',
-                            ]
-                        )->label(false); ?>
+                            <?php echo $form->field($filters, "q")->textInput(
+                                [
+                                    'placeholder' => 'Поиск по брендам',
+                                ]
+                            )->label(false); ?>
                             <button type="submit" class="btn">
                                 <i class="icon-magnifier"></i>
                             </button>
                         </div>
                     </div>
                     <div class="col-md-4 sx-filter">
-                        <?php echo $form->field($filters, "country")->widget(
+                        <?php if($country_content_id) : ?>
+                            <?php echo $form->field($filters, "country")->widget(
+                                \skeeks\cms\widgets\AjaxSelectModel::class,
+                                [
+                                    'modelClass' => \skeeks\cms\models\CmsContentElement::class,
+                                    'options'       => ['placeholder' => 'Все страны'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                    ],
+                                    'searchQuery' => function($word = '') use ($country_content_id) {
+                                        $query = \skeeks\cms\models\CmsContentElement::find()->cmsSite()->andWhere(['content_id' => $country_content_id]);
+                                        if ($word) {
+                                            $query->search($word);
+                                        }
+                                        return $query;
+                                    },
+                                ]
+                            )->label(false); ?>
+                        <?php elseif ($countryContentProperty) : ?>
+                            <?php echo $form->field($filters, "country")->widget(
+                                \skeeks\cms\widgets\AjaxSelectModel::class,
+                                [
+                                    'modelClass' => \skeeks\cms\models\CmsContentPropertyEnum::class,
+                                    'modelShowAttribute' => 'value',
+                                    'options'       => ['placeholder' => 'Все страны'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                    ],
+                                    'searchQuery' => function($word = '') use ($countryContentProperty) {
+                                        $query = $countryContentProperty->getEnums();
+                                        if ($word) {
+                                            $query->search($word);
+                                        }
+                                        return $query;
+                                    },
+                                ]
+                            )->label(false); ?>
+                        <?php endif; ?>
+                        
+                        
+                        
+                        <?php /*echo $form->field($filters, "country")->widget(
                             \skeeks\cms\widgets\Select2::class,
                             [
                                 'data'          => $countries,
@@ -364,7 +515,9 @@ JS
                                     'allowClear' => true,
                                 ],
                             ]
-                        )->label(false); ?>
+                        )->label(false); */?>
+                        
+                        
                     </div>
                     <div class="col-md-4 sx-filter">
                         <div class="sx-alphabet-group-wrapper">
@@ -382,31 +535,34 @@ JS
                         <div class="sx-alphabet-wrapper">
                             <div id="sx-en" class="sx-alphabet">
                                 <ul>
-                                <? foreach($enAlphabet as $letter) : ?>
-                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?> <?php echo in_array($letter, $availableLetters) ? '': 'sx-inactive'; ?>"><span><?php echo $letter; ?></span></li>
-                                <? endforeach; ?>
-                                    <?php if($filters->letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?>"><span>Все</span></li>
+                                    <? foreach ($enAlphabet as $letter) : ?>
+                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?> <?php echo in_array($letter, $availableLetters) ? '' : 'sx-inactive'; ?>"><span><?php echo $letter; ?></span>
+                                        </li>
+                                    <? endforeach; ?>
+                                    <?php if ($filters->letter) : ?>
+                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?>"><span>Все</span></li>
                                     <?php endif; ?>
                                 </ul>
                             </div>
                             <div id="sx-ru" class="sx-alphabet">
                                 <ul>
-                                <? foreach($ruAlphabet as $letter) : ?>
-                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?> <?php echo in_array($letter, $availableLetters) ? '': 'sx-inactive'; ?>"><span><?php echo $letter; ?></span></li>
-                                <? endforeach; ?>
-                                    <?php if($filters->letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?>"><span>Все</span></li>
+                                    <? foreach ($ruAlphabet as $letter) : ?>
+                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?> <?php echo in_array($letter, $availableLetters) ? '' : 'sx-inactive'; ?>"><span><?php echo $letter; ?></span>
+                                        </li>
+                                    <? endforeach; ?>
+                                    <?php if ($filters->letter) : ?>
+                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?>"><span>Все</span></li>
                                     <?php endif; ?>
                                 </ul>
                             </div>
                             <div id="sx-numbers" class="sx-alphabet">
                                 <ul>
-                                <? foreach($numberAlphabet as $letter) : ?>
-                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?> <?php echo in_array($letter, $availableLetters) ? '': 'sx-inactive'; ?>"><span><?php echo $letter; ?></span></li>
-                                <? endforeach; ?>
-                                    <?php if($filters->letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active': ''; ?>"><span>Все</span></li>
+                                    <? foreach ($numberAlphabet as $letter) : ?>
+                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?> <?php echo in_array($letter, $availableLetters) ? '' : 'sx-inactive'; ?>"><span><?php echo $letter; ?></span>
+                                        </li>
+                                    <? endforeach; ?>
+                                    <?php if ($filters->letter) : ?>
+                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?>"><span>Все</span></li>
                                     <?php endif; ?>
                                 </ul>
                             </div>

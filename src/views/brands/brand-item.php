@@ -23,12 +23,12 @@ if ($model->image) {
         <div class="sx-image">
             <img
                 class="lazy img-responsive"
-                style="aspect-ratio: 1;"
+                style="spect-ratio: 1; width: 90%;"
                 src="<?php echo \Yii::$app->cms->image1px; ?>"
                 data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image ? $image->src : \skeeks\cms\helpers\Image::getCapSrc(),
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
-                        'w' => 180,
-                        'h' => 180,
+                        'w' => 230,
+                        'h' => 230,
                     ]), $model->image ? $model->code : ''
                 ); ?>"
             />
@@ -44,6 +44,11 @@ if ($model->image) {
                     <?php echo $model->relatedPropertiesModel->getAttributeAsText("country"); ?>
                 </div>
             <?php endif; ?>
+            <div class="sx-total-products">
+                Товаров: <?php echo \Yii::$app->formatter->asInteger($model->raw_row['total_products']); ?>
+            </div>
+
+
 
         </div>
     </a>
