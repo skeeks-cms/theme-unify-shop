@@ -72,9 +72,9 @@ JS
             <? else: ?>
                 <? if ((float)$priceHelper->minPrice->money->amount > 0) : ?>
                     <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip">
-                        <?/*= $priceHelper->minMoney->currency->baseCourse; */?><!--
-                        --><?/*= $priceHelper->minMoney->amount; */?>
-                        
+                        <? /*= $priceHelper->minMoney->currency->baseCourse; */ ?><!--
+                        --><? /*= $priceHelper->minMoney->amount; */ ?>
+
                         <?= $priceHelper->minMoney; ?>
                         <? if ($shopProduct->measure_ratio != 1) : ?>
                             / <?= $shopProduct->measure->symbol; ?>
@@ -101,9 +101,9 @@ JS
         <? endif; ?>
     </div>
 
-<?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_cart) : ?>
-    <div class="sx-quantity-wrapper">
-        <div class="d-flex flex-row">
+    <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_cart) : ?>
+        <div class="sx-quantity-wrapper">
+            <div class="d-flex flex-row">
         <span class="d-flex flex-row sx-quantity-group sx-main-quantity-group">
             <div class="my-auto sx-minus">-</div>
             <div class="my-auto">
@@ -116,21 +116,21 @@ JS
             </div>
             <div class="my-auto sx-plus">+</div>
         </span>
-            <div class="my-auto sx-measure-symbol">
-                <?= $shopProduct->measure->symbol; ?>
+                <div class="my-auto sx-measure-symbol">
+                    <?= $shopProduct->measure->symbol; ?>
+                </div>
             </div>
-        </div>
 
-        <? if ($shopProduct->measure_matches_jsondata) : ?>
-            <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
-                <div class="d-flex flex-row">
-                    <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
-                    <? if ($shopProduct->measure_ratio >= $count) : ?>
+            <? if ($shopProduct->measure_matches_jsondata) : ?>
+                <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
+                    <div class="d-flex flex-row">
+                        <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
+                        <? if ($shopProduct->measure_ratio >= $count) : ?>
 
-                        <!--<div class="my-auto g-ml-10">
-                            =
-                        </div>-->
-                        <div class="my-auto d-flex flex-row">
+                            <!--<div class="my-auto g-ml-10">
+                                =
+                            </div>-->
+                            <div class="my-auto d-flex flex-row">
                         <span class="d-flex flex-row sx-quantity-group sx-secondary-quantity-group">
                             <div class="my-auto sx-minus">-</div>
                             <div class="my-auto">
@@ -161,122 +161,125 @@ JS
                             </div>
                             <div class="my-auto sx-plus">+</div>
                         </span>
-                            <div class="my-auto" style="margin-left: 10px;">
-                                <?= $measure->symbol; ?>
+                                <div class="my-auto" style="margin-left: 10px;">
+                                    <?= $measure->symbol; ?>
+                                </div>
                             </div>
-                        </div>
-                    <? else: ?>
-                        <div class="my-auto g-ml-10" style="color: gray; font-size: 14px;">
-                            в 1 <?= $measure->symbol; ?> <?= $count; ?> <?= $shopProduct->measure->symbol; ?>
-                        </div>
-                    <? endif; ?>
-                </div>
-
-
-            <? endforeach; ?>
-        <? endif; ?>
-    </div>
-
-    <?
-    //TODO: подумать сделать оптимальнее
-    $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
-    $quantityAvailable = 0;
-    if ($shopStoreProducts) {
-        foreach ($shopStoreProducts as $shopStoreProduct) {
-            $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
-        }
-    }
-    if ( ($quantityAvailable > 0 || !\Yii::$app->shop->allStores) || \Yii::$app->skeeks->site->shopSite->is_show_product_no_quantity) : ?>
-        <div class="g-mt-10">
-            <div class="control-group group-submit g-mb-15">
-                <div class="buttons-row ">
-                    <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
-                        <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
-                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
-                                'class'   => 'btn btn-block btn-xxl btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
-                                'type'    => 'button',
-                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, $('.sx-quantity-input').val()); return false;"),
-                            ]); ?>
-                        <? else : ?>
-                            <a class="btn btn-block btn-xxl btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
+                        <? else: ?>
+                            <div class="my-auto g-ml-10" style="color: gray; font-size: 14px;">
+                                в 1 <?= $measure->symbol; ?> <?= $count; ?> <?= $shopProduct->measure->symbol; ?>
+                            </div>
                         <? endif; ?>
-                    <? else : ?>
-                        <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
-                            'class'   => 'btn btn-xxl btn-block btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
-                            'type'    => 'button',
-                            'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, $('.sx-quantity-input').val()); return false;"),
-                        ]); ?>
-                    <? endif; ?>
-                </div>
+                    </div>
 
-                <?
-                echo $this->render("@app/views/modules/cms/content-element/_product-quantity", [
-                    'shopProduct'       => $shopProduct,
-                    'shopStoreProducts' => $shopStoreProducts,
-                ]); ?>
-            </div>
+
+                <? endforeach; ?>
+            <? endif; ?>
         </div>
-    <? else : ?>
-        <div class="g-mt-10">
-            <div class="control-group group-submit g-mb-15">
-                <div class="buttons-row ">
-                    <?= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
-                        'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
-                        'product_id'       => $model->id,
-                        'size'             => "modal-dialog-350",
-                        'success_modal_id' => 'readySubscribeModal',
-                        'id'               => 'modalWait',
-                        'class'            => 'b-modal b-modal-wait',
-                        //'header' => '<div class="b-modal__title h2">Жду товар</div>',
-                        /*'closeButton' => [
-                                'tag'   => 'button',
-                                'class' => 'close',
-                                'label' => '1111111',
-                            ],*/
-                        'toggleButton'     => [
-                            'label' => 'Уведомить о поступлении',
-                            'style' => '',
-                            'class' => 'btn btn-primary btn-block btn-grey-white btn-52 js-out-click-btn btn-xxl g-font-size-18',
-                        ],
+
+        <?
+        //TODO: подумать сделать оптимальнее
+        $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
+        $quantityAvailable = 0;
+        if ($shopStoreProducts) {
+            foreach ($shopStoreProducts as $shopStoreProduct) {
+                $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
+            }
+        }
+        if (($quantityAvailable > 0 || !\Yii::$app->shop->allStores) || \Yii::$app->skeeks->site->shopSite->is_show_product_no_quantity) : ?>
+            <div class="g-mt-10">
+                <div class="control-group group-submit g-mb-15">
+                    <div class="buttons-row ">
+                        <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
+                            <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
+                                <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
+                                    'class'   => 'btn btn-block btn-xxl btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
+                                    'type'    => 'button',
+                                    'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, $('.sx-quantity-input').val()); return false;"),
+                                ]); ?>
+                            <? else : ?>
+                                <a class="btn btn-block btn-xxl btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
+                            <? endif; ?>
+                        <? else : ?>
+                            <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
+                                <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
+                                    'class'   => 'btn btn-xxl btn-block btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
+                                    'type'    => 'button',
+                                    'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, $('.sx-quantity-input').val()); return false;"),
+                                ]); ?>
+                            <? else : ?>
+                                <a class="btn btn-block btn-xxl btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
+                            <? endif; ?>
+                        <? endif; ?>
+                    </div>
+
+                    <?
+                    echo $this->render("@app/views/modules/cms/content-element/_product-quantity", [
+                        'shopProduct'       => $shopProduct,
+                        'shopStoreProducts' => $shopStoreProducts,
                     ]); ?>
                 </div>
-                <?php if(\Yii::$app->cms->cmsSite->shopSite->is_show_quantity_product) : ?>
-                    <div class="availability-row available" style="">
-                        <span class="row-value">Товара нет</span>
-                    </div>
-                <?php endif; ?>
             </div>
-        </div>
-    <? endif; ?>
-<?php else : ?>
-    
-    <a class="btn btn-block btn-xxl btn-primary g-font-size-18" href="#sx-order-1" data-toggle="modal">
-        <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::beginWidget('unify_order_text'); ?>
-        Оставить заявку
-        <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::end(); ?>
-    </a>
-    
-        
-    <?
-    $modal = \yii\bootstrap\Modal::begin([
-        'header'       => 'Оставить заявку',
-        'id'           => 'sx-order-1',
-        'toggleButton' => false,
-        'size'         => \yii\bootstrap\Modal::SIZE_DEFAULT,
-    ]);
-    ?>
-    <?= \skeeks\modules\cms\form2\cmsWidgets\form2\FormWidget::widget([
-        'form_code' => 'callback',
-        'namespace' => 'product-callback',
-        'viewFile'  => 'with-messages'
-        //'viewFile' => '@app/views/widgets/FormWidget/fiz-connect'
-    ]); ?>
-    
-    <?
-    $modal::end();
-    ?>
-<?php endif; ?>
+        <? else : ?>
+            <div class="g-mt-10">
+                <div class="control-group group-submit g-mb-15">
+                    <div class="buttons-row ">
+                        <?= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
+                            'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
+                            'product_id'       => $model->id,
+                            'size'             => "modal-dialog-350",
+                            'success_modal_id' => 'readySubscribeModal',
+                            'id'               => 'modalWait',
+                            'class'            => 'b-modal b-modal-wait',
+                            //'header' => '<div class="b-modal__title h2">Жду товар</div>',
+                            /*'closeButton' => [
+                                    'tag'   => 'button',
+                                    'class' => 'close',
+                                    'label' => '1111111',
+                                ],*/
+                            'toggleButton'     => [
+                                'label' => 'Уведомить о поступлении',
+                                'style' => '',
+                                'class' => 'btn btn-primary btn-block btn-grey-white btn-52 js-out-click-btn btn-xxl g-font-size-18',
+                            ],
+                        ]); ?>
+                    </div>
+                    <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_quantity_product) : ?>
+                        <div class="availability-row available" style="">
+                            <span class="row-value">Товара нет</span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <? endif; ?>
+    <?php else : ?>
 
+        <a class="btn btn-block btn-xxl btn-primary g-font-size-18" href="#sx-order-1" data-toggle="modal">
+            <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::beginWidget('unify_order_text'); ?>
+            Оставить заявку
+            <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::end(); ?>
+        </a>
+
+
+        <?
+        $modal = \yii\bootstrap\Modal::begin([
+            'header'       => 'Оставить заявку',
+            'id'           => 'sx-order-1',
+            'toggleButton' => false,
+            'size'         => \yii\bootstrap\Modal::SIZE_DEFAULT,
+        ]);
+        ?>
+        <?= \skeeks\modules\cms\form2\cmsWidgets\form2\FormWidget::widget([
+            'form_code' => 'callback',
+            'namespace' => 'product-callback',
+            'viewFile'  => 'with-messages'
+            //'viewFile' => '@app/views/widgets/FormWidget/fiz-connect'
+        ]); ?>
+
+        <?
+        $modal::end();
+        ?>
+    <?php endif; ?>
 
 
 <? elseif ($shopProduct->isOffersProduct || $shopProduct->isOfferProduct) : ?>
@@ -295,7 +298,7 @@ JS
             <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
             <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
             <link itemprop="availability" href="http://schema.org/InStock">
-            <? if ($priceHelper  && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
+            <? if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
                 <? if ($priceHelper->hasDiscount) : ?>
                     <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip"><?= $priceHelper->minMoney; ?></span>
                     <span class="current ss-price sx-old-price h3" title="Базовая цена, доступная для всех" data-toggle="tooltip"><?= $priceHelper->basePrice->money; ?></span>
@@ -345,24 +348,24 @@ JS
         </div>
 
         <?= $shopOfferChooseHelper->render(); ?>
-    
-    
+
+
         <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_cart) : ?>
-        <?
+            <?
 
-        //TODO: подумать сделать оптимальнее
-        $shopStoreProducts = $offerShopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
-        $quantityAvailable = 0;
-        if ($shopStoreProducts) {
-            foreach ($shopStoreProducts as $shopStoreProduct) {
-                $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
+            //TODO: подумать сделать оптимальнее
+            $shopStoreProducts = $offerShopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
+            $quantityAvailable = 0;
+            if ($shopStoreProducts) {
+                foreach ($shopStoreProducts as $shopStoreProduct) {
+                    $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
+                }
             }
-        }
-        if (($quantityAvailable > 0 || !\Yii::$app->shop->allStores)) : ?>
+            if (($quantityAvailable > 0 || !\Yii::$app->shop->allStores)) : ?>
 
 
-            <div class="sx-quantity-wrapper">
-                <div class="d-flex flex-row">
+                <div class="sx-quantity-wrapper">
+                    <div class="d-flex flex-row">
                 <span class="d-flex flex-row sx-quantity-group">
                     <div class="my-auto sx-minus">-</div>
                     <div class="my-auto">
@@ -375,19 +378,19 @@ JS
                     </div>
                     <div class="my-auto sx-plus">+</div>
                 </span>
-                    <div class="my-auto sx-measure-symbol">
-                        <?= $offerShopProduct->measure->symbol; ?>
+                        <div class="my-auto sx-measure-symbol">
+                            <?= $offerShopProduct->measure->symbol; ?>
+                        </div>
                     </div>
-                </div>
 
-                <? if ($shopProduct->measure_matches_jsondata) : ?>
-                    <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
-                        <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
-                        <? if ($shopProduct->measure_ratio >= $count) : ?>
-                            <div class="my-auto g-ml-10">
-                                =
-                            </div>
-                            <div class="my-auto g-ml-10 d-flex flex-row">
+                    <? if ($shopProduct->measure_matches_jsondata) : ?>
+                        <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
+                            <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
+                            <? if ($shopProduct->measure_ratio >= $count) : ?>
+                                <div class="my-auto g-ml-10">
+                                    =
+                                </div>
+                                <div class="my-auto g-ml-10 d-flex flex-row">
                         <span class="d-flex flex-row sx-quantity-group sx-secondary-quantity-group">
                             <div class="my-auto sx-minus">-</div>
                             <div class="my-auto">
@@ -418,93 +421,91 @@ JS
                             </div>
                             <div class="my-auto sx-plus">+</div>
                         </span>
-                                <div class="my-auto g-ml-10">
-                                    <?= $measure->symbol; ?>
+                                    <div class="my-auto g-ml-10">
+                                        <?= $measure->symbol; ?>
+                                    </div>
                                 </div>
-                            </div>
-                        <? else: ?>
-                            <div class="my-auto g-ml-10" style="color: gray; font-size: 12px;">
-                                в 1 <?= $measure->symbol; ?> <?= $count; ?> <?= $shopProduct->measure->symbol; ?>
-                            </div>
-                        <? endif; ?>
+                            <? else: ?>
+                                <div class="my-auto g-ml-10" style="color: gray; font-size: 12px;">
+                                    в 1 <?= $measure->symbol; ?> <?= $count; ?> <?= $shopProduct->measure->symbol; ?>
+                                </div>
+                            <? endif; ?>
 
 
-                    <? endforeach; ?>
-                <? endif; ?>
-            </div>
+                        <? endforeach; ?>
+                    <? endif; ?>
+                </div>
 
-            
-            <div class="g-mt-10">
-                <div class="control-group group-submit g-mb-15">
-                    <div class="buttons-row ">
-                        <? if ($offerShopProduct->minProductPrice && $offerShopProduct->minProductPrice->price == 0) : ?>
-                            <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
+
+                <div class="g-mt-10">
+                    <div class="control-group group-submit g-mb-15">
+                        <div class="buttons-row ">
+                            <? if ($offerShopProduct->minProductPrice && $offerShopProduct->minProductPrice->price == 0) : ?>
+                                <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
+                                    <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
+                                        'class'   => 'btn btn-xxl btn-block btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
+                                        'type'    => 'button',
+                                        'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, $('.sx-quantity-input').val()); return false;"),
+                                    ]); ?>
+                                <? else : ?>
+                                    <a class="btn btn-xxl btn-block btn-block btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
+                                <? endif; ?>
+                            <? else : ?>
                                 <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
                                     'class'   => 'btn btn-xxl btn-block btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
                                     'type'    => 'button',
                                     'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                                 ]); ?>
-                            <? else : ?>
-                                <a class="btn btn-xxl btn-block btn-block btn-primary g-font-size-18" href="#sx-order" data-toggle="modal">Оставить заявку</a>
                             <? endif; ?>
-                        <? else : ?>
-                            <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
-                                'class'   => 'btn btn-xxl btn-block btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
-                                'type'    => 'button',
-                                'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, $('.sx-quantity-input').val()); return false;"),
-                            ]); ?>
-                        <? endif; ?>
-                    </div>
-
-                    <?
-                    echo $this->render("@app/views/modules/cms/content-element/_product-quantity", [
-                        'shopProduct'       => $offerShopProduct,
-                        'shopStoreProducts' => $shopStoreProducts,
-                    ]); ?>
-                </div>
-            </div>
-            
-
-            
-        <? else : ?>
-            <div class="g-mt-10">
-                <div class="control-group group-submit g-mb-15">
-                    <div class="buttons-row ">
-                        <?= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
-                            'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
-                            'product_id'       => $offerShopProduct->id,
-                            'size'             => "modal-dialog-350",
-                            'success_modal_id' => 'readySubscribeModal',
-                            'id'               => 'modalWait',
-                            'class'            => 'b-modal b-modal-wait',
-                            'toggleButton'     => [
-                                'label' => 'Уведомить о поступлении',
-                                'style' => '',
-                                'class' => 'btn btn-primary btn-block btn-xxl btn-grey-white btn-52 js-out-click-btn g-font-size-18',
-                            ],
-                        ]);  ?>
-                    </div>
-                    <?php if(\Yii::$app->cms->cmsSite->shopSite->is_show_quantity_product) : ?>
-                        <div class="availability-row available" style="">
-                            <span class="row-value">Товара нет</span>
                         </div>
-                    <?php endif; ?>
 
-
-
+                        <?
+                        echo $this->render("@app/views/modules/cms/content-element/_product-quantity", [
+                            'shopProduct'       => $offerShopProduct,
+                            'shopStoreProducts' => $shopStoreProducts,
+                        ]); ?>
+                    </div>
                 </div>
-            </div>
-        <? endif; ?>
+
+
+            <? else : ?>
+                <div class="g-mt-10">
+                    <div class="control-group group-submit g-mb-15">
+                        <div class="buttons-row ">
+                            <?= \skeeks\cms\shop\widgets\notice\NotifyProductEmailModalWidget::widget([
+                                'view_file'        => '@app/views/widgets/NotifyProductEmailModalWidget/modalForm',
+                                'product_id'       => $offerShopProduct->id,
+                                'size'             => "modal-dialog-350",
+                                'success_modal_id' => 'readySubscribeModal',
+                                'id'               => 'modalWait',
+                                'class'            => 'b-modal b-modal-wait',
+                                'toggleButton'     => [
+                                    'label' => 'Уведомить о поступлении',
+                                    'style' => '',
+                                    'class' => 'btn btn-primary btn-block btn-xxl btn-grey-white btn-52 js-out-click-btn g-font-size-18',
+                                ],
+                            ]); ?>
+                        </div>
+                        <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_quantity_product) : ?>
+                            <div class="availability-row available" style="">
+                                <span class="row-value">Товара нет</span>
+                            </div>
+                        <?php endif; ?>
+
+
+                    </div>
+                </div>
+            <? endif; ?>
 
         <?php else : ?>
-            
+
             <a class="btn btn-block btn-xxl btn-primary g-font-size-18" href="#sx-order-1" data-toggle="modal">
                 <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::beginWidget('unify_order_text'); ?>
                 Оставить заявку
                 <? \skeeks\cms\cmsWidgets\text\TextCmsWidget::end(); ?>
             </a>
-            
-                
+
+
             <?
             $modal = \yii\bootstrap\Modal::begin([
                 'header'       => 'Оставить заявку',
@@ -519,7 +520,7 @@ JS
                 'viewFile'  => 'with-messages'
                 //'viewFile' => '@app/views/widgets/FormWidget/fiz-connect'
             ]); ?>
-            
+
             <?
             $modal::end();
             ?>
@@ -527,7 +528,7 @@ JS
 
     <? else : ?>
         <div class="product-price g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-            <? if ($priceHelper  && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
+            <? if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
                 <div class="">
                     <? if ($priceHelper->hasDiscount) : ?>
                         <span class="current ss-price h1 sx-new-price g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip"><?= \Yii::t('skeeks/unify-shop',
