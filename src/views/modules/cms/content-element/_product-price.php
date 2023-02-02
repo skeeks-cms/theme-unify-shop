@@ -190,7 +190,9 @@ JS
             <div class="g-mt-10">
                 <div class="control-group group-submit g-mb-15">
                     <div class="buttons-row ">
-                        <? if ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) : ?>
+                        <? if (
+                                ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) || (!$shopProduct->minProductPrice)
+                        ) : ?>
                             <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
                                 <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
                                     'class'   => 'btn btn-block btn-xxl btn-primary js-to-cart to-cart-fly-btn g-font-size-18',
