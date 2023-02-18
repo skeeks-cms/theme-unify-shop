@@ -404,6 +404,11 @@ $q->addSelect(['total_products' => new \yii\db\Expression("count(*)")]);
 
 $dataProvider = new \yii\data\ActiveDataProvider([
     'query'      => $q,
+    'sort'      => [
+        'defaultOrder' => [
+            'priority' => SORT_ASC,
+        ]
+    ],
     'pagination' => [
         'defaultPageSize' => 24,
     ],
