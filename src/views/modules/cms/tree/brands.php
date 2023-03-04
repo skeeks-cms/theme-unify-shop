@@ -31,7 +31,11 @@ $q = \skeeks\cms\models\CmsContentElement::find()
     //->addSelect(['total_products' => new \yii\db\Expression("count(*)")])
     ->andWhere(['content_id' => $content_id]);
 //$q->joinWith('cmsContentElementPropertyValues as cmsContentElementPropertyValues', true, "INNER JOIN");
-$q->innerJoin(['cmsContentElementPropertyValues' => \skeeks\cms\models\CmsContentElementProperty::tableName()], [\skeeks\cms\models\CmsContentElement::tableName().".id" => new \yii\db\Expression('cmsContentElementPropertyValues.value_element_id')]);
+$q->innerJoin(['cmsContentElementPropertyValues' => \skeeks\cms\models\CmsContentElementProperty::tableName()],
+    [
+        \skeeks\cms\models\CmsContentElement::tableName().".id" => new \yii\db\Expression('cmsContentElementPropertyValues.value_element_id')
+    ]
+);
 $q->groupBy(\skeeks\cms\models\CmsContentElement::tableName().".id");
 
 
@@ -401,6 +405,9 @@ if ($content_id) {
 
 $totalOffers = $q->count();
 $q->addSelect(['total_products' => new \yii\db\Expression("count(*)")]);
+
+
+//print_r($q->createCommand()->rawSql);die;
 
 $dataProvider = new \yii\data\ActiveDataProvider([
     'query'      => $q,
