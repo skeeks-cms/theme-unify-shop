@@ -272,8 +272,8 @@ $this->registerJs(<<<JS
                 if ($(this).hasClass("sx-inactive")) {
                     return false;
                 }
-                
-                $("#f-letter").val($(this).text());
+                //console.log($(this).text().trim());
+                $("#f-letter").val($(this).text().trim());
                 self.getJForm().submit();
                 return false;
             });
