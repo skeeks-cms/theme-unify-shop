@@ -441,7 +441,55 @@ if ($eavFilter) {
 
                 ?>
                 <?php if ($savedFilters) : ?>
-                    <div class="sx-saved-filters-list sx-saved-filters-list--after" style="margin-top: 20px;">
+                <?php
+/**
+ * @link https://cms.skeeks.com/
+ * @copyright Copyright (c) 2010 SkeekS
+ * @license https://cms.skeeks.com/license/
+ * @author Semenov Alexander <semenov@skeeks.com>
+ */
+/* @var $this yii\web\View */
+$this->registerCss(<<<CSS
+.sx-small::before {
+    content: " ";
+    background: linear-gradient(to bottom, #403d3d00, #ffffffd4);
+    height: 73px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    z-index: 11;
+}
+
+.sx-small {
+    max-height: 145px;
+    position: relative;
+    overflow: hidden;
+}
+.sx-more .btn {
+    /*padding: 20px;
+    font-size: 20px;*/
+    margin-top: 0.5rem;
+}
+
+CSS
+);
+
+$this->registerJs(<<<JS
+if ($(".sx-spoiler").height() > 200) {
+    $(".sx-spoiler").addClass("sx-small");
+    $(".sx-more").show();
+}
+
+$(".sx-more .btn").on("click", function() {
+     $(".sx-spoiler").removeClass("sx-small");
+     $(".sx-more").hide();
+     return false;
+});
+JS
+);
+?>
+                
+                    <div class="sx-saved-filters-list sx-saved-filters-list--after sx-spoiler" style="margin-top: 1.5rem;">
                         <?php
                         $savedFiltersData = [];
                         foreach ($savedFilters as $sf) {
@@ -474,6 +522,12 @@ if ($eavFilter) {
                             </ul>
                         <? endforeach; ?>
                     </div>
+                    <div class="sx-more">
+                        <button class="btn btn-default btn-block">
+                            Показать еще
+                        </button>
+                    </div>
+                
                 <?php endif; ?>
 
             </div>
