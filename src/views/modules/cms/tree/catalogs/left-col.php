@@ -389,7 +389,7 @@ if ($eavFilter) {
                 ?>
                 <?php if (count($savedFilters) > 1) : ?>
                     <div class="sx-saved-filters-list sx-saved-filters-list--before">
-                        <div class="h3 sx-title">Разделы где встречаются товары с опцией «<?php echo $savedFilter->propertyValueName; ?>»</div>
+                        <div class="h3 sx-title">Разделы, где встречаются товары с опцией «<?php echo $savedFilter->propertyValueName; ?>»</div>
 
                         <?php
                         $savedFiltersData = [];
