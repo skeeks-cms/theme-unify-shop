@@ -75,6 +75,7 @@ if (\Yii::$app->view->theme->is_allow_filters) {
 $filtersWidget->loadFromRequest();
 if ($eavFiltersHandler) {
     if ($savedFilter) {
+        //print_r($eavFiltersHandler->toArray());die;
         $eavFiltersHandler->loadFromSavedFilter($savedFilter);
     }
     $savedFilterFromRequest = $eavFiltersHandler->savedFilter;
