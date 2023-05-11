@@ -1,0 +1,59 @@
+/* обязательные стили */
+
+.hvr {
+  position: relative;
+}
+
+.hvr__images {
+  position: relative;
+}
+
+.hvr__sectors {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+}
+
+.hvr__sector {
+  flex-grow: 1;
+}
+
+
+
+.sx-list-images {
+  display: flex;
+  overflow: hidden;
+}
+
+.sx-list-images .sx-list-image {
+  display: none;
+}
+.sx-list-images .sx-list-image:first-child {
+  display: block;
+}
+
+.hvr__dots {
+  display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+
+}
+
+.hvr__dot {
+  width: 5px;
+  height: 5px;
+  margin: 10px 2px 0;
+  border-radius: 50%;
+  background: #d6dbe0;
+}
+
+.hvr__dot--active {
+  background: var(--primary-color);
+    opacity: 0.5;
+}

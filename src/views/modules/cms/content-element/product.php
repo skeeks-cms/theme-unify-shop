@@ -87,6 +87,13 @@ if (!$model->meta_keywords) {
 $singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage::beginWidget('product-page');
 $singlPage->addCss();
 $singlPage::end();
+
+if($this->theme->product_list_images == 2) {
+    \skeeks\cms\themes\unifyshop\assets\ProductListImagesV2Asset::register($this);
+} elseif($this->theme->product_list_images == 1) {
+    \skeeks\cms\themes\unifyshop\assets\ProductListImagesAsset::register($this);
+}
+
 ?>
 <section class="sx-product-page-wrapper"
     <?php echo(!$shopProduct->isOffersProduct ? 'itemscope itemtype="https://schema.org/Product"' : ""); ?>

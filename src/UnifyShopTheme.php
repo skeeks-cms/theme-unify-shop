@@ -10,7 +10,6 @@ namespace skeeks\cms\themes\unifyshop;
 
 use Imagine\Image\ManipulatorInterface;
 use skeeks\cms\modules\admin\widgets\BlockTitleWidget;
-use skeeks\cms\themes\unify\assets\UnifyThemeAsset;
 use skeeks\cms\themes\unify\UnifyTheme;
 use skeeks\cms\themes\unifyshop\assets\UnifyThemeShopAsset;
 use skeeks\cms\widgets\formInputs\comboText\ComboTextInputWidget;
@@ -24,10 +23,10 @@ use skeeks\yii2\form\fields\WidgetField;
 use yii\helpers\ArrayHelper;
 
 /**
- * 
+ *
  * @property string $prooductListItemCssClasses;
  * @property int    $productListPerPageSize;
- * 
+ *
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 class UnifyShopTheme extends UnifyTheme
@@ -48,13 +47,13 @@ class UnifyShopTheme extends UnifyTheme
     static public function descriptorConfig()
     {
         return array_merge(parent::descriptorConfig(), [
-            'name'  => "Unify (Магазин)",
-            'description'  => <<<HTML
+            'name'        => "Unify (Магазин)",
+            'description' => <<<HTML
 <p>Базовая тема магазина!</p>
 <p>Подходит для классического интернет-магазина.</p>
 HTML
             ,
-            'image' => [UnifyThemeShopAsset::class, 'images/shop-preview.png'],
+            'image'       => [UnifyThemeShopAsset::class, 'images/shop-preview.png'],
         ]);
     }
 
@@ -64,17 +63,17 @@ HTML
     public function _getDefaultTreeViews()
     {
         return ArrayHelper::merge(parent::_getDefaultTreeViews(), [
-            'catalog' => [
-                'name' => 'Страница с товарами',
-                'description' => ''
+            'catalog'      => [
+                'name'        => 'Страница с товарами',
+                'description' => '',
             ],
             'main-catalog' => [
-                'name' => 'Страница с категориями',
-                'description' => 'Этот шаблон отображает вложенные разделы в виде категорий и их подкатегорий'
+                'name'        => 'Страница с категориями',
+                'description' => 'Этот шаблон отображает вложенные разделы в виде категорий и их подкатегорий',
             ],
-            'brands' => [
-                'name' => 'Страница с брендами',
-                'description' => 'Этот шаблон отображает бренды + возможность поиска по ним'
+            'brands'       => [
+                'name'        => 'Страница с брендами',
+                'description' => 'Этот шаблон отображает бренды + возможность поиска по ним',
             ],
         ]);
     }
@@ -105,6 +104,7 @@ HTML
     public $product_list_view_file = "left-col";
     public $product_list_count_columns = 3;
     public $product_list_count_columns_mobile = 2;
+    public $product_list_images = "1";
 
     public $is_join_second_trees = 0;
 
@@ -157,7 +157,7 @@ HTML
                             'content' => BlockTitleWidget::widget(['content' => 'Отображение одного товара в списке']),
                         ],
 
-                        'catalog_img_preview_width'  => [
+                        'catalog_img_preview_width' => [
                             'class'  => NumberField::class,
                             'append' => 'px',
                         ],
@@ -174,8 +174,16 @@ HTML
                             ],
                         ],
 
-                        'catalog_is_show_measure'  => [
-                            'class'  => BoolField::class,
+                        'product_list_images' => [
+                            'class' => SelectField::class,
+                            'items' => [
+                                '1' => 'Сменять 1 фото при наведении',
+                                '2' => 'Показывать галерею изображений',
+                            ],
+                        ],
+
+                        'catalog_is_show_measure' => [
+                            'class'     => BoolField::class,
                             'allowNull' => false,
                         ],
 
@@ -206,7 +214,7 @@ HTML
                     ],
                 ],
 
-                'product' => [
+                'product'   => [
                     'class' => FieldSet::class,
                     'name'  => \Yii::t('skeeks/shop/app', 'Товарная страница'),
 
@@ -221,12 +229,11 @@ HTML
                         ],
 
 
-
-                        'product_card_img_preview_width' => [
+                        'product_card_img_preview_width'  => [
                             'class'  => NumberField::class,
                             'append' => 'px',
                         ],
-                        'product_card_img_preview_height'  => [
+                        'product_card_img_preview_height' => [
                             'class'  => NumberField::class,
                             'append' => 'px',
                         ],
@@ -240,45 +247,45 @@ HTML
 
                     ],
                 ],
-                'cart_view'   => [
+                'cart_view' => [
                     'class' => FieldSet::class,
                     'name'  => \Yii::t('skeeks/shop/app', 'Оформление заказа'),
 
                     'fields' => [
-                        'cart_view'              => [
+                        'cart_view'                       => [
                             'class' => SelectField::class,
                             'items' => [
                                 //"v1" => 'Оформление в несколько шагов',
                                 "v2" => 'Товары и оформление на одной странице',
                             ],
                         ],
-                        'cart_is_show_delivery_btn_price'              => [
+                        'cart_is_show_delivery_btn_price' => [
                             'class' => BoolField::class,
                         ],
 
                         'cart_after_btn_text' => [
-                            'class' => WidgetField::class,
+                            'class'       => WidgetField::class,
                             'widgetClass' => ComboTextInputWidget::class,
                         ],
 
                         'cart_after_comment_text' => [
-                            'class' => WidgetField::class,
+                            'class'       => WidgetField::class,
                             'widgetClass' => ComboTextInputWidget::class,
                         ],
 
-                        'cart_contact_text' => [
+                        'cart_contact_text'   => [
                             'class' => TextareaField::class,
                         ],
-                        'cart_delivery_text' => [
+                        'cart_delivery_text'  => [
                             'class' => TextareaField::class,
                         ],
                         'cart_paysystem_text' => [
                             'class' => TextareaField::class,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
 
-                'stick'   => [
+                'stick' => [
                     'class' => FieldSet::class,
                     'name'  => \Yii::t('skeeks/shop/app', 'Слайдеры товаров'),
 
@@ -316,21 +323,21 @@ HTML
 
             ],
             'attributeLabels' => [
-                'cart_is_show_delivery_btn_price'  => 'Выводить цену доставки в кнопки выбора доставки',
-                'cart_view'  => 'Шаблон оформления заказа',
-                'cart_after_btn_text'  => 'Текст под кнопкой оформить заказ',
-                'cart_after_comment_text'  => 'Текст под комментарием',
-                'cart_delivery_text'  => 'Текст рядом с выбором способа получания',
-                'cart_paysystem_text'  => 'Текст рядом с выбором способа оплаты',
-                'cart_contact_text'  => 'Текст рядом с вводом данных покупателя',
+                'cart_is_show_delivery_btn_price' => 'Выводить цену доставки в кнопки выбора доставки',
+                'cart_view'                       => 'Шаблон оформления заказа',
+                'cart_after_btn_text'             => 'Текст под кнопкой оформить заказ',
+                'cart_after_comment_text'         => 'Текст под комментарием',
+                'cart_delivery_text'              => 'Текст рядом с выбором способа получания',
+                'cart_paysystem_text'             => 'Текст рядом с выбором способа оплаты',
+                'cart_contact_text'               => 'Текст рядом с вводом данных покупателя',
 
                 'catalog_img_preview_width'  => 'Ширина превью картинки товара',
                 'catalog_img_preview_height' => 'Высота превью картинки товара',
                 'catalog_img_preview_crop'   => 'Режим обрезки превью картинки товара',
-                'catalog_is_show_measure'   => 'Выводить единицу измерения в карточку',
+                'catalog_is_show_measure'    => 'Выводить единицу измерения в карточку',
 
-                'product_card_img_preview_height'  => 'Высота превью картинки товара',
-                'product_card_img_preview_width' => 'Ширина превью картинки товара',
+                'product_card_img_preview_height' => 'Высота превью картинки товара',
+                'product_card_img_preview_width'  => 'Ширина превью картинки товара',
                 'product_card_img_preview_crop'   => 'Режим обрезки превью картинки товара',
 
                 'product_slider_items'              => 'Количество товаров в слайдере',
@@ -339,6 +346,7 @@ HTML
                 'product_slider_img_preview_crop'   => 'Режим обрезки превью картинки товара',
 
                 'product_list_view_file'            => 'Отображение товаров',
+                'product_list_images'            => 'Отображение картинок товара в списке',
                 'product_list_count_columns'        => 'Количество колонок с товарами',
                 'product_list_count_columns_mobile' => 'Количество колонок с товарами (мобильная версия)',
 
@@ -381,14 +389,16 @@ HTML
                         'cart_delivery_text',
                         'cart_paysystem_text',
                         'cart_contact_text',
+
+                        'product_list_images',
                     ],
                     'string',
                 ],
             ],
         ]);
     }
-    
-    
+
+
     public function getProoductListItemCssClasses()
     {
         $classes = ["col-sm-6"];
