@@ -86,7 +86,7 @@ if ($models) {
         } else {
             $items[] = [
                 'label' => "Мой кабинет",
-                'url'   => \yii\helpers\Url::to(['/cms/upa-personal/update']),
+                'url'   => \yii\helpers\Url::to(['/cms/upa-personal/view']),
             ];
         }
     }
@@ -242,7 +242,7 @@ if ($models) {
                         <div class="sx-label">Вход</div>
                     </a>
                 <? else : ?>
-                    <a class="sx-menu-item " href="<?= \yii\helpers\Url::to(['/cms/upa-personal/update']) ?>">
+                    <a class="sx-menu-item " href="<?= \yii\helpers\Url::to(['/cms/upa-personal/view']) ?>">
                         <div class="sx-icon">
                             <i class="icon-user"></i>
                         </div>
