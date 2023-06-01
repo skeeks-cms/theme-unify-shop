@@ -45,7 +45,7 @@ if ($eavFilter) {
     margin-top: auto;
     margin-left: 12px;
     font-size: 15px;">
-                        (<?php echo \Yii::t('app', '{n, plural, =0{нет товаров} =1{# товар} one{# товар} few{# товара} many{# товаров} other{# товаров}}', ['n' => $totalOffers]); ?>)
+                        (<?php echo \Yii::t('app', '{n, plural, =0{нет&nbsp;товаров} =1{#&nbsp;товар} one{#&nbsp;товар} few{#&nbsp;товара} many{#&nbsp;товаров} other{#&nbsp;товаров}}', ['n' => $totalOffers]); ?>)
                     </div>
                 </div>
 

@@ -55,7 +55,7 @@ CSS
                     <div class="sx-catalog-total-offers" style="color: #979797;
     margin-top: auto;
     margin-left: 12px;
-    font-size: 15px;">(<?php echo \Yii::t('app', '{n, plural, =0{нет товаров} =1{# товар} one{# товар} few{# товара} many{# товаров} other{# товаров}}', ['n' => $totalOffers],
+    font-size: 15px;">(<?php echo \Yii::t('app', '{n, plural, =0{нет&nbsp;товаров} =1{#&nbsp;товар} one{#&nbsp;товар} few{#&nbsp;товара} many{#&nbsp;товаров} other{#&nbsp;товаров}}', ['n' => $totalOffers],
                             'ru_RU'); ?>)
                     </div>
                 </div>
