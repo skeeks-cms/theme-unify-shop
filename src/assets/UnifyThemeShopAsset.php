@@ -30,7 +30,7 @@ class UnifyThemeShopAsset extends AssetBundle
     ];
     public $depends = [
         UnifyThemeAsset::class,
-        UnifyHsScrollbarAsset::class,
+        /*UnifyHsScrollbarAsset::class,*/
         ShopAsset::class
     ];
 

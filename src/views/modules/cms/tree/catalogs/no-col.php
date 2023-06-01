@@ -157,9 +157,10 @@ CSS
                     ?>
                 <? endif; ?>
 
-
                 <?php if (\Yii::$app->mobileDetect->isMobile) {
                     \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
+                } else {
+                    \skeeks\assets\unify\base\UnifyHsScrollbarAsset::register($this);   
                 }; ?>
                 <div class="row sx-mobile-filters-block js-sticky-block" id="sx-mobile-filters-block" data-has-sticky-header="true" data-start-point="#sx-mobile-filters-block" data-end-point=".sx-footer">
                     <div class="col-12 sx-mobile-filters-block--inner">
