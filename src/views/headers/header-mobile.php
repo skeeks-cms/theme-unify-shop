@@ -152,8 +152,8 @@ if ($models) {
 
 <!-- Header -->
 <!--u-header--sticky-top-->
-<header id="js-header" class="u-shadow-v19 u-header u-header--sticky-top u-header--toggle-section u-header--change-appearance" data-header-fix-moment="0">
-    <div class="u-header__section g-py-0 sx-main-menu-wrapper" data-header-fix-moment-exclude="g-py-0" data-header-fix-moment-classes="g-py-0">
+<header id="js-header" class="u-shadow-v19 u-header">
+    <div class="u-header__section sx-main-menu-wrapper">
         <nav class="js-mega-menu navbar navbar-expand-lg hs-menu-initialized hs-menu-horizontal">
             <div class="container">
                 <div class="sx-menu-mobile-top">
@@ -242,17 +242,14 @@ if ($models) {
                         <div class="sx-label">Вход</div>
                     </a>
                 <? else : ?>
-                    <a class="sx-menu-item " href="<?= \Yii::$app->cms->afterAuthUrl; ?>">
+                    <a class="sx-menu-item sx-user-mobile-menu-trigger" href="<?= \Yii::$app->cms->afterAuthUrl; ?>">
                         <div class="sx-icon">
                             <i class="icon-user"></i>
                         </div>
                         <div class="sx-label">Профиль</div>
                     </a>
                 <? endif; ?>
-
-
             <? endif; ?>
-
         </div>
     </div>
 </div>
