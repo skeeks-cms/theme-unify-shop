@@ -278,7 +278,7 @@ ul.sx-properties {
     -moz-column-gap: 40px;
     column-gap: 40px;
     margin: 0px;
-    padding: 0px;
+    /*padding: 0px;*/
 }
 
 ul.sx-properties li {
@@ -415,4 +415,29 @@ ul.sx-properties .sx-properties--name:after {
 
 .slick-track .slick-slide img {
     margin: auto;
+    border-radius: var(--base-radius);
+}
+
+.sx-product-page--left-col {
+    background: var(--second-bg-color);
+    border-radius: var(--base-radius);
+}
+
+.sx-right-product-info, .sx-properties, .sx-product-description {
+    background: var(--second-bg-color);
+    border-radius: var(--base-radius);
+    padding: var(--base-padding)
+}
+
+.product-info .sx-description-short {
+    margin-top: 1rem;
+}
+
+.sx-short-brand-info {
+    margin-top: 1rem;
+}
+
+.product-price {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
 }

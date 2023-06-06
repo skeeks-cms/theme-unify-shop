@@ -32,7 +32,7 @@ JS
 
 <? if ($shopProduct->isSimpleProduct) : ?>
 
-    <div class="product-price g-mt-10 g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+    <div class="product-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
         <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
         <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
         <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
@@ -290,7 +290,7 @@ JS
         ?>
 
 
-        <div class="product-price g-mt-10 g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+        <div class="product-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
             <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
             <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
             <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
