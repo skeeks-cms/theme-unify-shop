@@ -68,7 +68,7 @@ if (!$model->meta_title) {
     
 }
 if (!$model->meta_description) {
-    $desc = strip_tags($model->description_short);
+    $desc = strip_tags((string) $model->description_short);
     $this->registerMetaTag([
         "name" => 'description',
         "content" => "✔ {$model->seoName}. ✔ {$desc}. Цена {$price}."
