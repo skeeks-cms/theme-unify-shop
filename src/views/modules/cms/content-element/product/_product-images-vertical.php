@@ -43,7 +43,7 @@ if ($images !== false && !$images) {
     }
 
     if ($productImages = $model->productImages) {
-        $images = \yii\helpers\ArrayHelper::merge($images, $productImages);
+        $images = \yii\helpers\ArrayHelper::merge((array) $images, (array) $productImages);
     }
 }
 
