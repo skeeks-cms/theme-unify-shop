@@ -109,6 +109,18 @@
     margin-bottom: 0px;
 }
 
+.btn-select-option.sx-image-select {
+    border-radius: 50% !important;
+    padding: 0.5rem !important;
+    line-height: normal;
+}
+.btn-select-option.sx-image-select img {
+    border-radius: 50% !important;
+    width: 2.5rem;
+    height: 2.5rem;
+    line-height: normal;
+}
+
 .btn-select-option {
     color: #333;
     border-color: #333;
