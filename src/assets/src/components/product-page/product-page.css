@@ -111,13 +111,13 @@
 
 .btn-select-option.sx-image-select {
     border-radius: 50% !important;
-    padding: 0.5rem !important;
+    padding: 0.2rem !important;
     line-height: normal;
 }
 .btn-select-option.sx-image-select img {
     border-radius: 50% !important;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 1.8rem;
+    height: 1.8rem;
     line-height: normal;
 }
 
