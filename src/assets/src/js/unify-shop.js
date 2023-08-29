@@ -206,6 +206,10 @@
                         console.log(jToCartFlyImg);
                     }
                 }
+                
+                if (jToCartFlyImg.length == 0) {
+                    return false;
+                }
 
                 var jToCartFlyImgFly = jToCartFlyImg
                         .clone()
