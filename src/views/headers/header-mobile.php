@@ -91,14 +91,16 @@ if ($models) {
         }
     }
 
-    $items[] = [
-        'label' => "Избранное",
-        'url'   => \yii\helpers\Url::to(['/shop/favorite']),
-    ];
-    $items[] = [
-        'label' => "Корзина",
-        'url'   => \yii\helpers\Url::to(['/shop/cart']),
-    ];
+    if (\Yii::$app->cms->cmsSite->shopSite->is_show_cart) {
+        $items[] = [
+            'label' => "Избранное",
+            'url'   => \yii\helpers\Url::to(['/shop/favorite']),
+        ];
+        $items[] = [
+            'label' => "Корзина",
+            'url'   => \yii\helpers\Url::to(['/shop/cart']),
+        ];
+    }
 
 }
 
