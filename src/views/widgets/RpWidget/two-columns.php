@@ -15,10 +15,12 @@
     <ul class="sx-properties">
         <? $counter = 0; ?>
         <? foreach ($attributes as $code => $value ) :
-            if ($value) : ?>
-                <li>
+            if ($value ) : ?>
+                <? $property = $widget->model->relatedPropertiesModel->getRelatedProperty($code);
+                ?>
+                <?php if(!$property->is_vendor_code) : ?>
+                    <li class="sx-prop-<?php echo $code; ?>">
                     <span class="sx-properties--name">
-                        <? $property = $widget->model->relatedPropertiesModel->getRelatedProperty($code); ?>
                         <?= $property->name; ?>
                         
                         <? if ($property->hint) : ?>
@@ -43,6 +45,10 @@
 
                     </span>
                 </li>
+                <?php endif; ?>
+                
+
+                
             <? endif; ?>
         <? endforeach; ?>
     </ul>
