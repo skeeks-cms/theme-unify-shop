@@ -73,7 +73,7 @@ if ($images !== false && !$images) {
                             new \skeeks\cms\components\imaging\filters\Thumbnail([
                                 'w' => 75,
                                 'h' => 75,
-                                'm' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
+                                'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
                             ]), $model->code
                         ); ?>" alt="<?= $model->name; ?>">
                     </div>
@@ -86,19 +86,35 @@ if ($images !== false && !$images) {
              data-infinite="true"
              data-fade="true"
              data-arrows-classes="g-color-primary--hover sx-arrows sx-images-carousel-arrows sx-color-silver"
-             data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left"
-             data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right"
+             data-arrow-left-classes="hs-icon hs-icon-arrow-left sx-left sx-plus-20"
+             data-arrow-right-classes="hs-icon hs-icon-arrow-right sx-right sx-plus-20"
              data-nav-for="#carouselCus2">
 
-            <? foreach ($images as $image) : ?>
+            <?
+            /**
+             * @var $image \skeeks\cms\models\CmsStorageFile
+             */
+            foreach ($images as $image) : ?>
+
+
+
                 <div class="js-slide">
                     <!--w-100-->
                     <a class="sx-fancybox-gallary" data-fancybox="images" href="<?= $image->src; ?>">
                         <img class="img-fluid lazy" 
                              style="
-aspect-ratio: <?php echo $this->theme->product_card_img_preview_width; ?>/<?php echo $this->theme->product_card_img_preview_height; ?>;
-                                    max-width: <?php echo $this->theme->product_card_img_preview_width; ?>px;
-                                    width: 100%;
+                             <? if ($this->theme->product_card_img_preview_width && $this->theme->product_card_img_preview_height) : ?>
+                                    aspect-ratio: <?php echo $this->theme->product_card_img_preview_width; ?>/<?php echo $this->theme->product_card_img_preview_height; ?>;
+                                    width: <?php echo $this->theme->product_card_img_preview_width; ?>px;
+                             <? elseif((int) $this->theme->product_card_img_preview_height && ! (int) $this->theme->product_card_img_preview_width) : ?>
+                                <?
+                                     $newWidth = round ($image->image_width * $this->theme->product_card_img_preview_height / $image->image_height);
+                                 ?>
+                                aspect-ratio: <?php echo $newWidth; ?>/<?php echo $this->theme->product_card_img_preview_height; ?>;
+                                width: <?php echo $newWidth; ?>px;
+                             <? endif; ?>
+                                    height: 100%;
+                                     max-width: 100%;
 "
                              src="<?php echo \Yii::$app->cms->image1px; ?>"
                              data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,

@@ -66,19 +66,28 @@ if ($images !== false && !$images) {
                 <!--w-100-->
                 <a class="sx-fancybox-gallary" data-fancybox="images" href="<?= $image->src; ?>">
                     <img class="img-fluid lazy" 
-                         style="    
-                                 aspect-ratio: <?php echo $this->theme->product_card_img_preview_width; ?>/<?php echo $this->theme->product_card_img_preview_height; ?>;
-                                    max-width: <?php echo $this->theme->product_card_img_preview_width; ?>px;
-                                    width: 100%;
-                         "
-                         src="<?php echo \Yii::$app->cms->image1px; ?>"
-                         data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
-                        new \skeeks\cms\components\imaging\filters\Thumbnail([
-                            'w' => $this->theme->product_card_img_preview_width,
-                            'h' => $this->theme->product_card_img_preview_height,
-                            'm' => $this->theme->product_card_img_preview_crop,
-                        ]), $model->code
-                    ); ?>" alt="<?= $model->name; ?>">
+                             style="
+                             <? if ($this->theme->product_card_img_preview_width && $this->theme->product_card_img_preview_height) : ?>
+                                    aspect-ratio: <?php echo $this->theme->product_card_img_preview_width; ?>/<?php echo $this->theme->product_card_img_preview_height; ?>;
+                                    width: <?php echo $this->theme->product_card_img_preview_width; ?>px;
+                             <? elseif((int) $this->theme->product_card_img_preview_height && ! (int) $this->theme->product_card_img_preview_width) : ?>
+                                <?
+                                     $newWidth = round ($image->image_width * $this->theme->product_card_img_preview_height / $image->image_height);
+                                 ?>
+                                aspect-ratio: <?php echo $newWidth; ?>/<?php echo $this->theme->product_card_img_preview_height; ?>;
+                                width: <?php echo $newWidth; ?>px;
+                             <? endif; ?>
+                                    height: 100%;
+                                     max-width: 100%;
+"
+                             src="<?php echo \Yii::$app->cms->image1px; ?>"
+                             data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
+                            new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                'w' => $this->theme->product_card_img_preview_width,
+                                'h' => $this->theme->product_card_img_preview_height,
+                                'm' => $this->theme->product_card_img_preview_crop,
+                            ]), $model->code
+                        ); ?>" alt="<?= $model->name; ?>">
                 </a>
             </div>
         <? endforeach; ?>
