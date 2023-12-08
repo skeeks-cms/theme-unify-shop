@@ -15,7 +15,7 @@ $favoriteProducts = $favQuery->count(); ?>
 <div class="sx-header-menu-item sx-favorite-products"
      data-total="<?= $favoriteProducts; ?>"
 >
-    <a href="<?= \yii\helpers\Url::to(['/shop/favorite']) ?>" data-pjax="0" class="sx-icon-wrapper g-text-underline--none--hover" style="position: relative;">
+    <a href="<?= \yii\helpers\Url::to(['/shop/favorite']) ?>" data-pjax="0" class="sx-icon-wrapper g-text-underline--none--hover" aria-label="Избранное" title="Избранное" style="position: relative;">
         <!--<i class="far fa-heart" style="width: 30px;"></i>-->
         <span class="sx-favorite-total-wrapper g-color-white g-bg-primary sx-badge" style="<?= $favoriteProducts > 0 ? "" : "display: none;"; ?>">
             <span class="sx-favorite-total"><?= $favoriteProducts; ?></span>

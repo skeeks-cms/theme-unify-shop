@@ -60,7 +60,7 @@ class HvrSlider {
                     if (target.matches('.hvr__sector')) {
                         setActiveEl(target);
                     }
-                });
+                }, {passive: true});
             }
         });
     }

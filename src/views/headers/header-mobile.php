@@ -21,6 +21,19 @@
 //\skeeks\assets\unify\base\UnifyHsMegamenuAsset::register($this);
 \skeeks\cms\themes\unify\assets\components\UnifyThemeHeaderMobileAsset::register($this);
 
+
+$this->registerJs(<<<JS
+   
+    $(function() {
+        setTimeout(function() {
+            $(".mm-title").attr("href", "#"); 
+        }, 500);
+        $(".mm-title").attr("href", "#"); 
+    });
+    
+JS
+);
+
 ?>
 <? $items = [];
 
@@ -160,7 +173,7 @@ if ($models) {
             <div class="container">
                 <div class="sx-menu-mobile-top">
                     <!-- Logo -->
-                    <a href="<?= \yii\helpers\Url::home(); ?>" title="<?= $this->theme->title; ?>" class="navbar-brand d-block">
+                    <a href="<?= \yii\helpers\Url::home(); ?>" aria-label="<?= \Yii::$app->skeeks->site->name; ?>" title="<?= \Yii::$app->skeeks->site->name; ?>" class="navbar-brand d-block">
                         <img src="<?= $this->theme->mobile_logo ? $this->theme->mobile_logo : $this->theme->logo; ?>" alt="<?= $this->theme->title; ?>">
                     </a>
                     <?php if(\Yii::$app->cms->cmsSite->cmsSitePhone) : ?>
@@ -174,7 +187,7 @@ if ($models) {
                             <?php echo $this->render("@app/views/headers/_header-search"); ?>
                         <? endif; ?>
                     </div>
-                    <a href="#sx-menu" class="navbar-toggler btn g-px-0 g-valign-middle">
+                    <a href="#sx-menu" class="navbar-toggler btn g-px-0 g-valign-middle" aria-label="Меню" title="Меню">
                         <span class="hamburger">
                             <span class="hamburger-box">
                                 <span class="hamburger-inner"></span>
