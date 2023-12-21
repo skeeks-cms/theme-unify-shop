@@ -292,7 +292,7 @@ if ($eavFilter) {
 
 
                 <?php if (\Yii::$app->mobileDetect->isMobile) {
-                    \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
+                    //\skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
                 } else {
                     \skeeks\assets\unify\base\UnifyHsScrollbarAsset::register($this);   
                 }; ?>
