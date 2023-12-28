@@ -39,7 +39,35 @@ JS
         <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
         <link itemprop="availability" href="http://schema.org/InStock">
 
-        <? if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
+        <?
+        
+        //TODO: подумать сделать оптимальнее
+        $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
+        $quantityAvailable = 0;
+        if ($shopStoreProducts) {
+            foreach ($shopStoreProducts as $shopStoreProduct) {
+                $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
+            }
+        }
+        
+        $isShowPrice = false;
+        if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
+            $isShowPrice = true;
+            
+            //нужно проверить наличие
+            if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity) {
+                
+                if ($shopStoreProducts && $quantityAvailable > 0) {
+                    $isShowPrice = true;
+                } else {
+                    $isShowPrice = false;
+                }
+                
+            }
+        }
+        
+        ?>
+        <? if ($isShowPrice) : ?>
             <? if ($priceHelper->hasDiscount) : ?>
 
                 <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip">
@@ -178,14 +206,7 @@ JS
         </div>
 
         <?
-        //TODO: подумать сделать оптимальнее
-        $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
-        $quantityAvailable = 0;
-        if ($shopStoreProducts) {
-            foreach ($shopStoreProducts as $shopStoreProduct) {
-                $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
-            }
-        }
+        
         if (($quantityAvailable > 0 || !\Yii::$app->shop->allStores) || \Yii::$app->skeeks->site->shopSite->is_show_product_no_quantity) : ?>
             <div class="g-mt-10">
                 <div class="control-group group-submit g-mb-15">
@@ -287,6 +308,33 @@ JS
         <?
         $offerShopProduct = $shopOfferChooseHelper->offerCmsContentElement->shopProduct;
         $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($shopOfferChooseHelper->offerCmsContentElement);
+        
+                
+        //TODO: подумать сделать оптимальнее
+        $shopStoreProducts = $offerShopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
+        $quantityAvailable = 0;
+        if ($shopStoreProducts) {
+            foreach ($shopStoreProducts as $shopStoreProduct) {
+                $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
+            }
+        }
+        
+        $isShowPrice = false;
+        if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
+            $isShowPrice = true;
+            
+            //нужно проверить наличие
+            if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity) {
+                
+                if ($shopStoreProducts && $quantityAvailable > 0) {
+                    $isShowPrice = true;
+                } else {
+                    $isShowPrice = false;
+                }
+                
+            }
+        }
+
         ?>
 
 
@@ -296,7 +344,7 @@ JS
             <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
             <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
             <link itemprop="availability" href="http://schema.org/InStock">
-            <? if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
+            <? if ($isShowPrice) : ?>
                 <? if ($priceHelper->hasDiscount) : ?>
                     <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip"><?= $priceHelper->minMoney; ?></span>
                     <span class="current ss-price sx-old-price h3" title="Базовая цена, доступная для всех" data-toggle="tooltip"><?= $priceHelper->basePrice->money; ?></span>
@@ -351,14 +399,7 @@ JS
         <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_cart) : ?>
             <?
 
-            //TODO: подумать сделать оптимальнее
-            $shopStoreProducts = $offerShopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
-            $quantityAvailable = 0;
-            if ($shopStoreProducts) {
-                foreach ($shopStoreProducts as $shopStoreProduct) {
-                    $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
-                }
-            }
+            
             if (($quantityAvailable > 0 || !\Yii::$app->shop->allStores)) : ?>
 
 

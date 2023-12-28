@@ -30,6 +30,31 @@ if ($model->main_cce_id) {
 $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
 
 
+
+$shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
+$quantityAvailable = 0;
+if ($shopStoreProducts) {
+    foreach ($shopStoreProducts as $shopStoreProduct) {
+        $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
+    }
+}
+
+$isShowPrice = false;
+if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
+    $isShowPrice = true;
+    
+    //нужно проверить наличие
+    if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity) {
+        
+        if ($shopStoreProducts && $quantityAvailable > 0) {
+            $isShowPrice = true;
+        } else {
+            $isShowPrice = false;
+        }
+        
+    }
+}
+
 ?>
 <? echo \yii\helpers\Html::beginTag("div", [
     'class' => 'sx-product-card h-100 to-cart-fly-wrapper '.\Yii::$app->adult->renderCssClass($model),
@@ -166,7 +191,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
 <div class="sx-product-card--info">
     <? if (isset($shopProduct)) : ?>
         <div class="">
-            <? if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
+            <? if ($isShowPrice) : ?>
                 <?
                 $prefix = "";
                 if ($shopProduct->isOffersProduct) {
@@ -185,6 +210,8 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                             </div>
                     <? endif; ?>
                 <? endif; ?>
+            <? else : ?>
+                <div class="new sx-new-price sx-list-new-price g-color-primary">&nbsp;</div>
             <? endif; ?>
         </div>
     <? endif; ?>
@@ -220,13 +247,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
             <? else : ?>
                 <?
 
-                $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
-                $quantityAvailable = 0;
-                if ($shopStoreProducts) {
-                    foreach ($shopStoreProducts as $shopStoreProduct) {
-                        $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
-                    }
-                }
+                
 
                 if (
                     (!$shopStoreProducts || $quantityAvailable > 0)
