@@ -22,6 +22,15 @@ $this->registerCss(<<<CSS
     background-color: #f7f7f7;
 }
 
+.sx-pay-wrapper {
+    margin-top: 20px; 
+    background: #fafafa;
+ padding: 15px;
+}
+
+.sx-finish-calc {
+    background: #fcfcfc; padding: 20px; border:rgba(0,0,0,0.05) 1px solid; border-top-width: 0;
+}
 CSS
 );
 
@@ -149,7 +158,7 @@ JS
         </div>
 
         <? if ($model->shopOrderStatus->is_payment_allowed && $model->paySystem && $model->paySystem->paySystemHandler && !$model->paid_at) : ?>
-            <div style="margin-top: 20px; background: #fafafa; padding: 15px;">
+            <div class="sx-pay-wrapper">
                 <?= Html::a("Оплатить", $model->payUrl, [
                     'class' => 'btn btn-xl btn-primary',
                     'style' => 'margin-right: 20px;',
@@ -434,7 +443,7 @@ JS
                 <div class="col-md-6"></div>
                 <div class="col-md-6 float-right">
                     <!-- /cart content -->
-                    <div class="toggle-transparent toggle-bordered-full clearfix" style="background: #fcfcfc; padding: 20px; border:rgba(0,0,0,0.05) 1px solid; border-top-width: 0;">
+                    <div class="toggle-transparent toggle-bordered-full clearfix sx-finish-calc">
                         <div class="toggle active" style="display: block;">
                             <div class="toggle-content" style="display: block;">
 
