@@ -46,7 +46,7 @@ JS
         </div>
 
 
-        <div class="row" style="margin-top: 20px;">
+        <div class="row">
 
             <div class="col-12">
                 <div class="sx-product-images">
