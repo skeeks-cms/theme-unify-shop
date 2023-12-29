@@ -30,7 +30,6 @@ if ($model->main_cce_id) {
 $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
 
 
-
 $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
 $quantityAvailable = 0;
 if ($shopStoreProducts) {
@@ -42,16 +41,20 @@ if ($shopStoreProducts) {
 $isShowPrice = false;
 if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
     $isShowPrice = true;
-    
+
     //нужно проверить наличие
     if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity) {
-        
-        if ($shopStoreProducts && $quantityAvailable > 0) {
-            $isShowPrice = true;
+
+        if ($shopStoreProducts) {
+            if ($quantityAvailable > 0) {
+                $isShowPrice = true;
+            } else {
+                $isShowPrice = false;
+            }
         } else {
-            $isShowPrice = false;
+            $isShowPrice = true;
         }
-        
+
     }
 }
 
@@ -88,50 +91,75 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
         <? if ($infoModel->mainProductImage) : ?>
             <?php if (\Yii::$app->mobileDetect->isDesktop) : ?>
 
-            <?php if($this->theme->product_list_images == 1) : ?>
-                <?
-                \skeeks\cms\themes\unifyshop\assets\ProductListImagesAsset::register($this);
-
-                $images = [];
-                $images[] = $infoModel->mainProductImage;
-                if ($infoModel->images) {
-                    $images = \yii\helpers\ArrayHelper::merge($images, $infoModel->images);
-                }
-                ?>
-                <div class="sx-list-images">
+                <?php if ($this->theme->product_list_images == 1) : ?>
                     <?
-                    $counter = 0;
-                    foreach ($images as $image) : ?>
-                        <? $counter ++; ?>
-                        <? if ($counter < 6) : ?>
-                        <img class="sx-list-image lazy"
-                             style="aspect-ratio: <?php echo \Yii::$app->view->theme->catalog_img_preview_width; ?>/<?php echo \Yii::$app->view->theme->catalog_img_preview_height; ?>;"
-                             src="<?php echo \Yii::$app->cms->image1px; ?>"
-                             data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
-                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                     'w' => \Yii::$app->view->theme->catalog_img_preview_width,
-                                     'h' => \Yii::$app->view->theme->catalog_img_preview_height,
-                                     'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
-                                 ]), $model->code
-                             ); ?>"
+                    \skeeks\cms\themes\unifyshop\assets\ProductListImagesAsset::register($this);
 
-                             title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"
-                             alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
+                    $images = [];
+                    $images[] = $infoModel->mainProductImage;
+                    if ($infoModel->images) {
+                        $images = \yii\helpers\ArrayHelper::merge($images, $infoModel->images);
+                    }
+                    ?>
+                    <div class="sx-list-images">
+                        <?
+                        $counter = 0;
+                        foreach ($images as $image) : ?>
+                            <? $counter++; ?>
+                            <? if ($counter < 6) : ?>
+                                <img class="sx-list-image lazy"
+                                     style="aspect-ratio: <?php echo \Yii::$app->view->theme->catalog_img_preview_width; ?>/<?php echo \Yii::$app->view->theme->catalog_img_preview_height; ?>;"
+                                     src="<?php echo \Yii::$app->cms->image1px; ?>"
+                                     data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
+                                         new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                             'w' => \Yii::$app->view->theme->catalog_img_preview_width,
+                                             'h' => \Yii::$app->view->theme->catalog_img_preview_height,
+                                             'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                                         ]), $model->code
+                                     ); ?>"
+
+                                     title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"
+                                     alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
+                            <? endif; ?>
+                        <? endforeach; ?>
+                    </div>
+
+
+                <?php elseif ($this->theme->product_list_images == 2) : ?>
+
+                    <?
+                    \skeeks\cms\themes\unifyshop\assets\ProductListImagesV2Asset::register($this);
+
+                    $secondImage = null;
+                    if ($infoModel->images) {
+                        $secondImage = $infoModel->images[0];
+                    }
+                    ?>
+                    <img class="sx-product-image to-cart-fly-img lazy"
+                         style="aspect-ratio: <?php echo \Yii::$app->view->theme->catalog_img_preview_width; ?>/<?php echo \Yii::$app->view->theme->catalog_img_preview_height; ?>;"
+                         src="<?php echo \Yii::$app->cms->image1px; ?>"
+                         data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->mainProductImage ? $infoModel->mainProductImage->src : null,
+                             new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                 'w' => \Yii::$app->view->theme->catalog_img_preview_width,
+                                 'h' => \Yii::$app->view->theme->catalog_img_preview_height,
+                                 'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                             ]), $model->code
+                         ); ?>"
+                        <? if ($secondImage) : ?>
+                            data-second-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($secondImage->src,
+                                new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                    'w' => \Yii::$app->view->theme->catalog_img_preview_width,
+                                    'h' => \Yii::$app->view->theme->catalog_img_preview_height,
+                                    'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                                ]), $model->code
+                            ); ?>"
                         <? endif; ?>
-                    <? endforeach; ?>
-                </div>
+                         title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
+
+                <?php endif; ?>
 
 
-            <?php elseif($this->theme->product_list_images == 2) : ?>
-
-                <?
-                \skeeks\cms\themes\unifyshop\assets\ProductListImagesV2Asset::register($this);
-
-                $secondImage = null;
-                if ($infoModel->images) {
-                    $secondImage = $infoModel->images[0];
-                }
-                ?>
+            <?php else : ?>
                 <img class="sx-product-image to-cart-fly-img lazy"
                      style="aspect-ratio: <?php echo \Yii::$app->view->theme->catalog_img_preview_width; ?>/<?php echo \Yii::$app->view->theme->catalog_img_preview_height; ?>;"
                      src="<?php echo \Yii::$app->cms->image1px; ?>"
@@ -142,33 +170,6 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                              'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
                          ]), $model->code
                      ); ?>"
-                    <? if ($secondImage) : ?>
-                        data-second-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($secondImage->src,
-                            new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                'w' => \Yii::$app->view->theme->catalog_img_preview_width,
-                                'h' => \Yii::$app->view->theme->catalog_img_preview_height,
-                                'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
-                            ]), $model->code
-                        ); ?>"
-                    <? endif; ?>
-                     title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
-
-            <?php endif; ?>
-
-
-
-
-            <?php else : ?>
-                <img class="sx-product-image to-cart-fly-img lazy"
-                     style="aspect-ratio: 180/140;"
-                     src="<?php echo \Yii::$app->cms->image1px; ?>"
-                     data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->mainProductImage ? $infoModel->mainProductImage->src : null,
-                    new \skeeks\cms\components\imaging\filters\Thumbnail([
-                        'w' => \Yii::$app->view->theme->catalog_img_preview_width,
-                        'h' => \Yii::$app->view->theme->catalog_img_preview_height,
-                        'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
-                    ]), $model->code
-                ); ?>"
                      title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
             <?php endif; ?>
 
@@ -205,9 +206,9 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                     <? if ((float)$priceHelper->minMoney->getAmount() > 0) : ?>
                         <div class="new sx-new-price sx-list-new-price g-color-primary" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?>
                             <? if ($this->theme->catalog_is_show_measure == 1) : ?>
-                            <span class="sx-measure">/ <?= $shopProduct->measure->symbol; ?></span>
+                                <span class="sx-measure">/ <?= $shopProduct->measure->symbol; ?></span>
                             <? endif; ?>
-                            </div>
+                        </div>
                     <? endif; ?>
                 <? endif; ?>
             <? else : ?>
@@ -247,7 +248,6 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
             <? else : ?>
                 <?
 
-                
 
                 if (
                     (!$shopStoreProducts || $quantityAvailable > 0)

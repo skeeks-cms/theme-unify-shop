@@ -57,10 +57,14 @@ JS
             //нужно проверить наличие
             if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity) {
                 
-                if ($shopStoreProducts && $quantityAvailable > 0) {
-                    $isShowPrice = true;
+                if ($shopStoreProducts) {
+                    if ($quantityAvailable > 0) {
+                        $isShowPrice = true;
+                    } else {
+                        $isShowPrice = false;
+                    }
                 } else {
-                    $isShowPrice = false;
+                    $isShowPrice = true;
                 }
                 
             }
@@ -326,10 +330,14 @@ JS
             //нужно проверить наличие
             if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity) {
                 
-                if ($shopStoreProducts && $quantityAvailable > 0) {
-                    $isShowPrice = true;
+                if ($shopStoreProducts) {
+                    if ($quantityAvailable > 0) {
+                        $isShowPrice = true;
+                    } else {
+                        $isShowPrice = false;
+                    }
                 } else {
-                    $isShowPrice = false;
+                    $isShowPrice = true;
                 }
                 
             }
