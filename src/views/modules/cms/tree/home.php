@@ -81,7 +81,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
 
 
 <? if (
-        \Yii::$app->shop->shopContents
+       \Yii::$app->shop->contentProducts
     //&& \Yii::$app->mobileDetect->isDesktop)
     ) :
     ?>
@@ -97,7 +97,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
             'enabledCurrentTree'   => "N",
             'orderBy'              => 'show_counter',
             'active'               => "Y",
-            'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+            'content_ids'          => [\Yii::$app->shop->contentProducts->id],
             'limit'                => 15,
             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
             'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) //use ($filterWidget)
@@ -126,7 +126,7 @@ if (\Yii::$app->mobileDetect->isMobile) {
             'enabledRunCache'      => "N",
             'enabledCurrentTree'   => "N",
             'active'               => "Y",
-            'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+            'content_ids'          => [\Yii::$app->shop->contentProducts->id],
             'limit'                => 15,
             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
             'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) //use ($filterWidget)

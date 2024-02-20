@@ -10,6 +10,7 @@ namespace skeeks\cms\themes\unifyshop\filters;
 
 
 use skeeks\cms\eavqueryfilter\CmsEavQueryFilterHandler;
+use skeeks\cms\shop\delivery\simple\SimpleDeliveryHandler;
 use skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler;
 use skeeks\cms\shop\queryFilter\PriceFiltersHandler;
 use skeeks\cms\themes\unify\queryFilter\SortFiltersHandler;
@@ -30,8 +31,8 @@ class StandartShopFiltersWidget extends FiltersWidget
 
         //Регистрация и настройка стандартных фильтров
         $availabilityFiltersHandler = new \skeeks\cms\shop\queryFilter\AvailabilityFiltersHandler();
-
         $sortFiltersHandler = new \skeeks\cms\shop\queryFilter\SortFiltersHandler();
+
         $availabilityFiltersHandler->viewFileVisible = '@app/views/filters/availability-filter';
         $sortFiltersHandler->viewFileVisible = '@app/views/filters/sort-filter';
 
@@ -69,5 +70,12 @@ class StandartShopFiltersWidget extends FiltersWidget
     public function getEavHandler()
     {
         return ArrayHelper::getValue($this->handlers, 'eav');
+    }
+    /**
+     * @return SimpleDeliveryHandler
+     */
+    public function getShopDataHandler()
+    {
+        return ArrayHelper::getValue($this->handlers, 'data');
     }
 }

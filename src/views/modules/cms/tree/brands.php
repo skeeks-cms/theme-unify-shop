@@ -12,24 +12,14 @@
  * @var $cmsContentProperty \skeeks\cms\models\CmsContentProperty
  *
  */
-\skeeks\cms\Skeeks::unlimited();
-
-
-$cmsContentProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->andWhere(['is_vendor' => 1])->one();
-if ($cmsContentProperty) {
-    $handler = $cmsContentProperty->handler;
-    if ($handler instanceof \skeeks\cms\relatedProperties\propertyTypes\PropertyTypeElement) {
-        $content_id = $handler->content_id;
-    }
-}
-
 $q = \skeeks\cms\models\CmsContentElement::find()
+    ->contentId(\Yii::$app->shop->contentBrands->id)
     ->active()
     ->cmsSite()
     ->with("image")
     ->addSelect(\skeeks\cms\models\CmsContentElement::tableName().".*")
+    ;
     //->addSelect(['total_products' => new \yii\db\Expression("count(*)")])
-    ->andWhere(['content_id' => $content_id]);
 //$q->joinWith('cmsContentElementPropertyValues as cmsContentElementPropertyValues', true, "INNER JOIN");
 $q->innerJoin(['cmsContentElementPropertyValues' => \skeeks\cms\models\CmsContentElementProperty::tableName()],
     [
@@ -308,7 +298,7 @@ JS
 
 $filtersNames = [];
 
-if ($content_id) {
+if (\Yii::$app->shop->contentBrands) {
     \Yii::$app->seo->canUrl->ADDimportant_pname("f");
 
     $filters = new \skeeks\cms\base\DynamicModel();
@@ -445,7 +435,7 @@ $dataProvider->setTotalCount($totalOffers);
         </div>
 
 
-        <?php if ($content_id) : ?>
+        <?php if (\Yii::$app->shop->contentBrands) : ?>
 
 
             <div class="sx-filters">

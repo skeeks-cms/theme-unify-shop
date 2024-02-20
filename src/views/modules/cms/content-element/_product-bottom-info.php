@@ -47,7 +47,7 @@ $q->groupBy(['cmsTree.id']);
 ?>
 
 
-<? if (\Yii::$app->shop->shopContents) : ?>
+<? if (\Yii::$app->shop->contentProducts) : ?>
 
     <?
     $pjax = \skeeks\cms\widgets\PjaxLazyLoad::begin();
@@ -66,7 +66,7 @@ $q->groupBy(['cmsTree.id']);
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
             'label'                => "Рекомендуем также",
             'enabledPaging'        => "N",
-            'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+            'content_ids'          => [\Yii::$app->shop->contentProducts->id],
             'tree_ids'             => $treeIds,
             'limit'                => 15,
             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
@@ -109,7 +109,7 @@ $q->groupBy(['cmsTree.id']);
                 'viewFile'            => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
                 'label'               => "Просмотренные товары",
                 'enabledPaging'       => "N",
-                'content_ids'         => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+                'content_ids'         => [\Yii::$app->shop->contentProducts->id],
                 //'tree_ids'             => $treeIds,
                 'enabledSearchParams' => "N",
                 'enabledCurrentTree'  => "N",
