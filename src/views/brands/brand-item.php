@@ -7,14 +7,12 @@
  */
 /**
  * @var $this yii\web\View
- * @var $model \skeeks\cms\models\CmsContentElement
+ * @var $model \skeeks\cms\shop\models\ShopBrand
  */
 \skeeks\cms\themes\unify\assets\VanillaLazyLoadAsset::register($this);
 $image = null;
-if ($model->image) {
-    $image = $model->image;
-} else if ($model->main_cce_id) {
-    $image = $model->mainCmsContentElement->image;
+if ($model->logo) {
+    $image = $model->logo;
 }
 ?>
 
@@ -29,7 +27,7 @@ if ($model->image) {
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => 230,
                         'h' => 230,
-                    ]), $model->image ? $model->code : ''
+                    ]), $model->logo ? $model->code : ''
                 ); ?>"
             />
         </div>
@@ -38,10 +36,9 @@ if ($model->image) {
                 <?php echo $model->name; ?>
             </div>
             <?php
-            $model->relatedPropertiesModel->initAllProperties();
-            if($model->relatedPropertiesModel->getAttribute("country")) : ?>
+            if($model->country) : ?>
                 <div class="sx-country">
-                    <?php echo $model->relatedPropertiesModel->getAttributeAsText("country"); ?>
+                    <?php echo $model->country->name; ?>
                 </div>
             <?php endif; ?>
             <div class="sx-total-products">

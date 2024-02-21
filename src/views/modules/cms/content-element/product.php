@@ -55,9 +55,9 @@ $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
 
 $suffix = \Yii::$app->name;
 $price = $priceHelper->basePrice->money;
-$priceAmount = (float) $price->amount;
+$priceAmount = (float)$price->amount;
 if ($shopProduct->tradeOffers) {
-    $price = "от " . $priceHelper->basePrice->money;
+    $price = "от ".$priceHelper->basePrice->money;
 }
 if (!$model->meta_title) {
     if ($priceAmount > 0) {
@@ -65,32 +65,62 @@ if (!$model->meta_title) {
     } else {
         $this->title = "{$model->seoName} - купить в интернет-магазине {$suffix}";
     }
-    
+
 }
 if (!$model->meta_description) {
-    $desc = strip_tags((string) $model->description_short);
+    $desc = strip_tags((string)$model->description_short);
     $this->registerMetaTag([
-        "name" => 'description',
-        "content" => "✔ {$model->seoName}. ✔ {$desc}. Цена {$price}."
+        "name"    => 'description',
+        "content" => "✔ {$model->seoName}. ✔ {$desc}. Цена {$price}.",
     ], 'description');
 }
 if (!$model->meta_keywords) {
     $this->registerMetaTag([
-        "name" => 'keywords',
-        "content" => "{$model->seoName}"
+        "name"    => 'keywords',
+        "content" => "{$model->seoName}",
     ], 'keywords');
 }
 
+$brandSavedFilter = null;
+if ($brand = $model->shopProduct->brand) {
 
+    \Yii::$app->breadcrumbs->parts = [];
+
+    if ($model->cmsTree) {
+        $q = \skeeks\cms\models\CmsSavedFilter::find()->tree($model->tree_id)->brand($brand);
+        $brandSavedFilter = $q->one();
+
+        if (!$brandSavedFilter) {
+            $brandSavedFilter = new \skeeks\cms\models\CmsSavedFilter();
+            $brandSavedFilter->shop_brand_id = $brand->id;
+            $brandSavedFilter->cms_tree_id = $model->tree_id;
+            $brandSavedFilter->save();
+        }
+        \Yii::$app->breadcrumbs->setPartsByTree($model->cmsTree);
+    } else {
+        \Yii::$app->breadcrumbs->createBase();
+    }
+
+    \Yii::$app->breadcrumbs->append([
+        'url'  => $brandSavedFilter ? $brandSavedFilter->url : $brand->url,
+        'name' => $brand->name,
+    ]);
+
+    \Yii::$app->breadcrumbs->append([
+        'url'  => $model->url,
+        'name' => $model->name,
+    ]);
+
+}
 
 
 $singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage::beginWidget('product-page');
 $singlPage->addCss();
 $singlPage::end();
 
-if($this->theme->product_list_images == 2) {
+if ($this->theme->product_list_images == 2) {
     \skeeks\cms\themes\unifyshop\assets\ProductListImagesV2Asset::register($this);
-} elseif($this->theme->product_list_images == 1) {
+} elseif ($this->theme->product_list_images == 1) {
     \skeeks\cms\themes\unifyshop\assets\ProductListImagesAsset::register($this);
 }
 
@@ -107,19 +137,20 @@ if($this->theme->product_list_images == 2) {
         <? if ($model->mainProductImage) : ?>
             <link itemprop="image" href="<?= $model->mainProductImage->absoluteSrc; ?>">
         <? endif; ?>
-        
-        <?php if($shopProduct->rating_value) : ?>
+
+        <?php if ($shopProduct->rating_value) : ?>
             <span itemscope itemtype="https://schema.org/AggregateRating" itemprop="aggregateRating">
                 <meta itemprop="bestRating" content="<?php echo \Yii::$app->skeeks->site->shopSite->max_product_rating_value; ?>">
                 <meta itemprop="ratingValue" content="<?php echo $shopProduct->rating_value; ?>">
                 <meta itemprop="ratingCount" content="<?php echo $shopProduct->rating_count; ?>">
             </span>
         <?php endif; ?>
-    
+
     <?php endif; ?>
 
-    <?php echo $this->render("@app/views/modules/cms/content-element/product/". (\Yii::$app->mobileDetect->isMobile ? "mobile" : \Yii::$app->view->theme->product_page_view_file), [
+    <?php echo $this->render("@app/views/modules/cms/content-element/product/".(\Yii::$app->mobileDetect->isMobile ? "mobile" : \Yii::$app->view->theme->product_page_view_file), [
         'model'                 => $model,
+        'brandSavedFilter'      => $brandSavedFilter,
         'singlPage'             => $singlPage,
         'priceHelper'           => $priceHelper,
         'shopProduct'           => $shopProduct,

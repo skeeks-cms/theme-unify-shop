@@ -12,23 +12,12 @@
  * @var $cmsContentProperty \skeeks\cms\models\CmsContentProperty
  *
  */
-$q = \skeeks\cms\models\CmsContentElement::find()
-    ->contentId(\Yii::$app->shop->contentBrands->id)
-    ->active()
-    ->cmsSite()
-    ->with("image")
-    ->addSelect(\skeeks\cms\models\CmsContentElement::tableName().".*")
-    ;
-    //->addSelect(['total_products' => new \yii\db\Expression("count(*)")])
-//$q->joinWith('cmsContentElementPropertyValues as cmsContentElementPropertyValues', true, "INNER JOIN");
-$q->innerJoin(['cmsContentElementPropertyValues' => \skeeks\cms\models\CmsContentElementProperty::tableName()],
-    [
-        \skeeks\cms\models\CmsContentElement::tableName().".id" => new \yii\db\Expression('cmsContentElementPropertyValues.value_element_id')
-    ]
-);
-$q->groupBy(\skeeks\cms\models\CmsContentElement::tableName().".id");
 
-
+$q = \skeeks\cms\shop\models\ShopBrand::find()
+    ->with("logo")
+    ->innerJoinWith('products as products', false)
+    ->addSelect(\skeeks\cms\shop\models\ShopBrand::tableName().".*")
+    ->groupBy(\skeeks\cms\shop\models\ShopBrand::tableName().".id");
 
 $this->registerCss(<<<CSS
 .sx-brand-item-wrapper {
@@ -298,99 +287,63 @@ JS
 
 $filtersNames = [];
 
-if (\Yii::$app->shop->contentBrands) {
-    \Yii::$app->seo->canUrl->ADDimportant_pname("f");
+\Yii::$app->seo->canUrl->ADDimportant_pname("f");
 
-    $filters = new \skeeks\cms\base\DynamicModel();
-    $filters->formName = 'f';
+$filters = new \skeeks\cms\base\DynamicModel();
+$filters->formName = 'f';
 
-    $filters->defineAttribute("country");
-    $filters->defineAttribute("letter");
-    $filters->defineAttribute("q");
+$filters->defineAttribute("country");
+$filters->defineAttribute("letter");
+$filters->defineAttribute("q");
 
-    $filters->addRule("country", 'integer');
-    $filters->addRule("q", 'string');
-    $filters->addRule("letter", 'string');
+$filters->addRule("country", 'integer');
+$filters->addRule("q", 'string');
+$filters->addRule("letter", 'string');
 
-    $filters->load(\Yii::$app->request->get());
-    if ($filters->letter == 'Все') {
-        $filters->letter = '';
-    }
-
-
-    if ($filters->q) {
-        $q->andWhere([
-            'LIKE',
-            "name",
-            $filters->q,
-        ]);
-
-        $filtersNames[] = 'поиск «'.$filters->q.'»';
-    }
+$filters->load(\Yii::$app->request->get());
+if ($filters->letter == 'Все') {
+    $filters->letter = '';
+}
 
 
-    $countries = [];
-    /**
-     * @var $countryContentProperty \skeeks\cms\models\CmsContentProperty
-     */
-    $country_content_id = null;
-    $countryContentProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->andWhere(['is_country' => 1])->one();
-    if ($countryContentProperty) {
-        $handlerCountry = $countryContentProperty->handler;
-        if ($handlerCountry instanceof \skeeks\cms\relatedProperties\propertyTypes\PropertyTypeElement) {
-            $country_content_id = $handlerCountry->content_id;
+if ($filters->q) {
+    $q->andWhere([
+        'LIKE',
+        "name",
+        $filters->q,
+    ]);
 
-            /*$cmsSiteClass = \Yii::$app->skeeks->siteClass;
-            $countries = \skeeks\cms\models\CmsContentElement::getDb()->cache(function ($db) use ($country_content_id) {
-                return \skeeks\cms\models\CmsContentElement::find()->cmsSite()->andWhere(['content_id' => $country_content_id])->all();
-            }, null, new \yii\caching\TagDependency([
-                'tags' => [
-                    (new $cmsSiteClass())->getTableCacheTag(),
-                ],
-            ]));
+    $filtersNames[] = 'поиск «'.$filters->q.'»';
+}
 
-            $countries = \yii\helpers\ArrayHelper::map($countries, 'id', 'name');*/
 
-            if ($filters->country) {
-                $q->innerJoinWith("cmsContentElementProperties as cmsContentElementProperties");
-                $q->andWhere(['cmsContentElementProperties.element_id' => $filters->country]);
+$countries = [];
+/**
+ * @var $countryContentProperty \skeeks\cms\models\CmsContentProperty
+ */
+$country_content_id = null;
+if ($filters->country) {
+    $q->andWhere(['products.country_alpha2' => $filters->country]);
 
-                $filtersCountry = \skeeks\cms\models\CmsContentElement::find()->cmsSite()->andWhere(['id' => $filters->country])->one();
-                $filtersNames[] = 'страна «'.$filtersCountry->name.'»';
+    $filtersCountry = \skeeks\cms\models\CmsCountry::find()->alpha2($filters->country)->one();
+    $filtersNames[] = 'страна «'.$filtersCountry->name.'»';
 
-            }
+}
 
-        } elseif ($handlerCountry instanceof \skeeks\cms\relatedProperties\propertyTypes\PropertyTypeList) {
-            
-            if ($filters->country) {
-                
-                $enum = $countryContentProperty->getEnums()->andWhere(['id' => $filters->country])->one(); 
-                
-                $q->innerJoinWith("cmsContentElementProperties as cmsContentElementProperties");
-                $q->andWhere(['cmsContentElementProperties.value_enum' => $filters->country]);
+$cloneQ = clone $q;
+$cloneQ->addSelect(['letter' => new \yii\db\Expression("SUBSTRING(name, 1, 1)")]);
+$cloneQ->groupBy(['letter']);
 
-                $filtersNames[] = 'страна «'.$enum->value.'»';
+$availableLetters = $cloneQ->asArray()->all();
+$availableLetters = \yii\helpers\ArrayHelper::map($availableLetters, function ($row) {
+    return \skeeks\cms\helpers\StringHelper::ucfirst($row['letter']);
+}, function ($row) {
+    return \skeeks\cms\helpers\StringHelper::ucfirst($row['letter']);
+});
 
-            }
-
-        }
-    }
-
-    $cloneQ = clone $q;
-    $cloneQ->addSelect(['letter' => new \yii\db\Expression("SUBSTRING(name, 1, 1)")]);
-    $cloneQ->groupBy(['letter']);
-
-    $availableLetters = $cloneQ->asArray()->all();
-    $availableLetters = \yii\helpers\ArrayHelper::map($availableLetters, function ($row) {
-        return \skeeks\cms\helpers\StringHelper::ucfirst($row['letter']);
-    }, function ($row) {
-        return \skeeks\cms\helpers\StringHelper::ucfirst($row['letter']);
-    });
-
-    if ($filters->letter) {
-        $filtersNames[] = 'на букву «'.$filters->letter.'»';
-        $q->andWhere(new \yii\db\Expression("name LIKE '{$filters->letter}%'"));
-    }
+if ($filters->letter) {
+    $filtersNames[] = 'на букву «'.$filters->letter.'»';
+    $q->andWhere(new \yii\db\Expression("name LIKE '{$filters->letter}%'"));
 }
 
 $totalOffers = $q->count();
@@ -401,10 +354,10 @@ $q->addSelect(['total_products' => new \yii\db\Expression("count(*)")]);
 
 $dataProvider = new \yii\data\ActiveDataProvider([
     'query'      => $q,
-    'sort'      => [
+    'sort'       => [
         'defaultOrder' => [
             'priority' => SORT_ASC,
-        ]
+        ],
     ],
     'pagination' => [
         'defaultPageSize' => 24,
@@ -435,176 +388,133 @@ $dataProvider->setTotalCount($totalOffers);
         </div>
 
 
-        <?php if (\Yii::$app->shop->contentBrands) : ?>
+        <div class="sx-filters">
 
+            <? $form = \yii\bootstrap\ActiveForm::begin([
+                'enableClientValidation' => false,
+                'enableAjaxValidation'   => false,
+                'method'                 => "get",
+                'id'                     => "sx-filters",
+            ]); ?>
 
-            <div class="sx-filters">
-
-                <? $form = \yii\bootstrap\ActiveForm::begin([
-                    'enableClientValidation' => false,
-                    'enableAjaxValidation'   => false,
-                    'method'                 => "get",
-                    'id'                     => "sx-filters",
-                ]); ?>
-
-                <div style="display: none;">
-                    <?php
-                    echo $form->field($filters, "letter");
-                    ?>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4 sx-filter">
-                        <div class="sx-search-brand">
-                            <?php echo $form->field($filters, "q")->textInput(
-                                [
-                                    'placeholder' => 'Поиск по брендам',
-                                ]
-                            )->label(false); ?>
-                            <button type="submit" class="btn">
-                                <i class="icon-magnifier"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-4 sx-filter">
-                        <?php if($country_content_id) : ?>
-                            <?php echo $form->field($filters, "country")->widget(
-                                \skeeks\cms\widgets\AjaxSelectModel::class,
-                                [
-                                    'modelClass' => \skeeks\cms\models\CmsContentElement::class,
-                                    'options'       => ['placeholder' => 'Все страны'],
-                                    'pluginOptions' => [
-                                        'allowClear' => true,
-                                    ],
-                                    'searchQuery' => function($word = '') use ($country_content_id) {
-                                        $query = \skeeks\cms\models\CmsContentElement::find()->cmsSite()->andWhere(['content_id' => $country_content_id]);
-                                        if ($word) {
-                                            $query->search($word);
-                                        }
-                                        return $query;
-                                    },
-                                ]
-                            )->label(false); ?>
-                        <?php elseif ($countryContentProperty) : ?>
-                            <?php echo $form->field($filters, "country")->widget(
-                                \skeeks\cms\widgets\AjaxSelectModel::class,
-                                [
-                                    'modelClass' => \skeeks\cms\models\CmsContentPropertyEnum::class,
-                                    'modelShowAttribute' => 'value',
-                                    'options'       => ['placeholder' => 'Все страны'],
-                                    'pluginOptions' => [
-                                        'allowClear' => true,
-                                    ],
-                                    'searchQuery' => function($word = '') use ($countryContentProperty) {
-                                        $query = $countryContentProperty->getEnums();
-                                        if ($word) {
-                                            $query->search($word);
-                                        }
-                                        return $query;
-                                    },
-                                ]
-                            )->label(false); ?>
-                        <?php endif; ?>
-                        
-                        
-                        
-                        <?php /*echo $form->field($filters, "country")->widget(
-                            \skeeks\cms\widgets\Select2::class,
-                            [
-                                'data'          => $countries,
-                                'options'       => ['placeholder' => 'Все страны'],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                ],
-                            ]
-                        )->label(false); */?>
-                        
-                        
-                    </div>
-                    <div class="col-md-4 sx-filter">
-                        <div class="sx-alphabet-group-wrapper">
-                            <div class="sx-alphabet-group">
-                                <ul>
-                                    <li class="sx-active" data-container="sx-en"><span>A-Z</span></li>
-                                    <li data-container="sx-ru"><span>А-Я</span></li>
-                                    <li data-container="sx-numbers"><span>0-9</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 sx-filter">
-                        <div class="sx-alphabet-wrapper">
-                            <div id="sx-en" class="sx-alphabet">
-                                <ul>
-                                    <? foreach ($enAlphabet as $letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?> <?php echo in_array($letter, $availableLetters) ? '' : 'sx-inactive'; ?>"><span><?php echo $letter; ?></span>
-                                        </li>
-                                    <? endforeach; ?>
-                                    <?php if ($filters->letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?>"><span>Все</span></li>
-                                    <?php endif; ?>
-                                </ul>
-                            </div>
-                            <div id="sx-ru" class="sx-alphabet">
-                                <ul>
-                                    <? foreach ($ruAlphabet as $letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?> <?php echo in_array($letter, $availableLetters) ? '' : 'sx-inactive'; ?>"><span><?php echo $letter; ?></span>
-                                        </li>
-                                    <? endforeach; ?>
-                                    <?php if ($filters->letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?>"><span>Все</span></li>
-                                    <?php endif; ?>
-                                </ul>
-                            </div>
-                            <div id="sx-numbers" class="sx-alphabet">
-                                <ul>
-                                    <? foreach ($numberAlphabet as $letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?> <?php echo in_array($letter, $availableLetters) ? '' : 'sx-inactive'; ?>"><span><?php echo $letter; ?></span>
-                                        </li>
-                                    <? endforeach; ?>
-                                    <?php if ($filters->letter) : ?>
-                                        <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?>"><span>Все</span></li>
-                                    <?php endif; ?>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <? $form::end(); ?>
+            <div style="display: none;">
+                <?php
+                echo $form->field($filters, "letter");
+                ?>
             </div>
 
-            <? echo \yii\widgets\ListView::widget([
-                'dataProvider' => $dataProvider,
-                'itemView'     => '@app/views/brands/brand-item',
-                'emptyText'    => '<div class="sx-empty-list"><div class="h1">Брендов нет</div></div>',
-                'options'      => [
-                    'class' => '',
-                    'tag'   => 'div',
-                ],
-                'itemOptions'  => [
-                    'tag' => false,
-                ],
-                'pager'        => [
-                    'container' => '.sx-brand-list',
-                    'item'      => '.sx-brand-item-wrapper',
-                    'class'     => \skeeks\cms\themes\unify\widgets\ScrollAndSpPager::class,
-                ],
-                //'summary'      => "Всего товаров: {totalCount}",
-                'summary'      => false,
-                //"\n{items}<div class=\"box-paging\">{pager}</div>{summary}<div class='sx-js-pagination'></div>",
-                'layout'       => '<div class="row"><div class="col-md-12 sx-product-list-summary">{summary}</div></div>
+            <div class="row">
+                <div class="col-md-4 sx-filter">
+                    <div class="sx-search-brand">
+                        <?php echo $form->field($filters, "q")->textInput(
+                            [
+                                'placeholder' => 'Поиск по брендам',
+                            ]
+                        )->label(false); ?>
+                        <button type="submit" class="btn">
+                            <i class="icon-magnifier"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4 sx-filter">
+
+                    <?php echo $form->field($filters, "country")->widget(
+                        \skeeks\cms\widgets\AjaxSelectModel::class,
+                        [
+                            'modelClass'       => \skeeks\cms\models\CmsCountry::class,
+                            'modelPkAttribute' => 'alpha2',
+                            'options'          => ['placeholder' => 'Все страны'],
+                            'pluginOptions'    => [
+                                'allowClear' => true,
+                            ],
+                            'searchQuery'      => function ($word = '') {
+                                $query = \skeeks\cms\models\CmsCountry::find();
+                                if ($word) {
+                                    $query->search($word);
+                                }
+                                return $query;
+                            },
+                        ]
+                    )->label(false); ?>
+                </div>
+                <div class="col-md-4 sx-filter">
+                    <div class="sx-alphabet-group-wrapper">
+                        <div class="sx-alphabet-group">
+                            <ul>
+                                <li class="sx-active" data-container="sx-en"><span>A-Z</span></li>
+                                <li data-container="sx-ru"><span>А-Я</span></li>
+                                <li data-container="sx-numbers"><span>0-9</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 sx-filter">
+                    <div class="sx-alphabet-wrapper">
+                        <div id="sx-en" class="sx-alphabet">
+                            <ul>
+                                <? foreach ($enAlphabet as $letter) : ?>
+                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?> <?php echo in_array($letter, $availableLetters) ? '' : 'sx-inactive'; ?>"><span><?php echo $letter; ?></span>
+                                    </li>
+                                <? endforeach; ?>
+                                <?php if ($filters->letter) : ?>
+                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?>"><span>Все</span></li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                        <div id="sx-ru" class="sx-alphabet">
+                            <ul>
+                                <? foreach ($ruAlphabet as $letter) : ?>
+                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?> <?php echo in_array($letter, $availableLetters) ? '' : 'sx-inactive'; ?>"><span><?php echo $letter; ?></span>
+                                    </li>
+                                <? endforeach; ?>
+                                <?php if ($filters->letter) : ?>
+                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?>"><span>Все</span></li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                        <div id="sx-numbers" class="sx-alphabet">
+                            <ul>
+                                <? foreach ($numberAlphabet as $letter) : ?>
+                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?> <?php echo in_array($letter, $availableLetters) ? '' : 'sx-inactive'; ?>"><span><?php echo $letter; ?></span>
+                                    </li>
+                                <? endforeach; ?>
+                                <?php if ($filters->letter) : ?>
+                                    <li class="<?php echo $letter == $filters->letter ? 'sx-active' : ''; ?>"><span>Все</span></li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <? $form::end(); ?>
+        </div>
+
+        <? echo \yii\widgets\ListView::widget([
+            'dataProvider' => $dataProvider,
+            'itemView'     => '@app/views/brands/brand-item',
+            'emptyText'    => '<div class="sx-empty-list"><div class="h1">Брендов нет</div></div>',
+            'options'      => [
+                'class' => '',
+                'tag'   => 'div',
+            ],
+            'itemOptions'  => [
+                'tag' => false,
+            ],
+            'pager'        => [
+                'container' => '.sx-brand-list',
+                'item'      => '.sx-brand-item-wrapper',
+                'class'     => \skeeks\cms\themes\unify\widgets\ScrollAndSpPager::class,
+            ],
+            //'summary'      => "Всего товаров: {totalCount}",
+            'summary'      => false,
+            //"\n{items}<div class=\"box-paging\">{pager}</div>{summary}<div class='sx-js-pagination'></div>",
+            'layout'       => '<div class="row"><div class="col-md-12 sx-product-list-summary">{summary}</div></div>
                     <div class="no-gutters row sx-brand-list">{items}</div>
                     <div class="row"><div class="col-md-12">{pager}</div></div>',
-            ])
-            ?>
-        <?php else : ?>
-
-            Магазин не настроен
-
-        <?php endif; ?>
-
+        ])
+        ?>
 
     </div>
 </section>

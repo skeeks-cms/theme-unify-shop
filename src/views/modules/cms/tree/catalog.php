@@ -41,7 +41,12 @@ $filtersWidget = new \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWid
 $baseQuery = clone $dataProvider->query;
 
 $eavFiltersHandler = null;
+$shopDataFiltersHandler = null;
 if (\Yii::$app->view->theme->is_allow_filters) {
+    $shopDataFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopDataFiltersHandler([
+        'baseQuery' => $baseQuery,
+    ]);
+
     $eavFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopEavQueryFilterHandler([
         'baseQuery' => $baseQuery,
     ]);
@@ -70,22 +75,38 @@ if (\Yii::$app->view->theme->is_allow_filters) {
         ->registerHandler($priceFiltersHandler, "price");
 
     $filtersWidget
+        ->registerHandler($shopDataFiltersHandler, 'data');
+
+    $filtersWidget
         ->registerHandler($eavFiltersHandler, 'eav');
 }
 $filtersWidget->loadFromRequest();
-if ($eavFiltersHandler) {
+
+if ($eavFiltersHandler || $shopDataFiltersHandler) {
     if ($savedFilter) {
         //print_r($eavFiltersHandler->toArray());die;
         $eavFiltersHandler->loadFromSavedFilter($savedFilter);
-    }
-    $savedFilterFromRequest = $eavFiltersHandler->savedFilter;
-    if ($savedFilterFromRequest && !$savedFilter && !($priceFiltersHandler->f || $priceFiltersHandler->t)) {
-        \Yii::$app->response->redirect($savedFilterFromRequest->url);
-        \Yii::$app->end();
-    }
+        $shopDataFiltersHandler->loadFromSavedFilter($savedFilter);
+    } else {
+        //Создать фильтр если не заполнена цена и данные для магазина
+        if (!$priceFiltersHandler->getApplied() && !$shopDataFiltersHandler->getApplied()) {
+            $savedFilterFromRequest = $eavFiltersHandler->savedFilter;
+            if ($savedFilterFromRequest) {
+                \Yii::$app->response->redirect($savedFilterFromRequest->url);
+                \Yii::$app->end();
+            }
+        }
 
-    //print_r($eavFiltersHandler->toArray());die;
+        if (!$priceFiltersHandler->getApplied() && !$eavFiltersHandler->getApplied()) {
+            $savedFilterFromRequest = $shopDataFiltersHandler->savedFilter;
+            if ($savedFilterFromRequest) {
+                \Yii::$app->response->redirect($savedFilterFromRequest->url);
+                \Yii::$app->end();
+            }
+        }
+    }
 }
+
 $filtersWidget->applyToQuery($dataProvider->query);
 
 ?>
@@ -93,12 +114,10 @@ $filtersWidget->applyToQuery($dataProvider->query);
 <?php
 
 $filtersData = $eavFiltersHandler->getApplied();
-if ($priceFiltersHandler->t) {
-    $filtersData['price'] = 1;
-}
-if ($priceFiltersHandler->f) {
-    $filtersData['price'] = 1;
-}
+$filtersData = \yii\helpers\ArrayHelper::merge($filtersData, $shopDataFiltersHandler->getApplied());
+$filtersData = \yii\helpers\ArrayHelper::merge($filtersData, $priceFiltersHandler->getApplied());
+
+
 $data = \skeeks\cms\shop\components\ShopComponent::getAgregateCategoryData($dataProvider->query, @$savedFilter ? $savedFilter : $model, $filtersData, $filtersWidget->getAvailabilityHandler()->value);
 \Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
 

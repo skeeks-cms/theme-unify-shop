@@ -64,15 +64,13 @@ JS
                     <h1 class="h4"><? /*= $model->seoName; */ ?></h1>
                 --><? /* endif; */ ?>
                     <div class="product-info-header">
-                        <?
-                        /*var_dump($shopOfferChooseHelper);die;*/
-
+                        <?/*
                         echo $this->render("@app/views/modules/cms/content-element/_product-right-top-info", [
                             'singlPage'   => $singlPage,
                             'model'       => $model,
                             //'shopProduct'           => $shopProduct,
                             'priceHelper' => $priceHelper,
-                        ]); ?>
+                        ]); */?>
 
                         <?
                         echo $this->render("@app/views/modules/cms/content-element/_product-price", [
@@ -83,31 +81,117 @@ JS
                         ]); ?>
 
 
-                        <?php
-                    /**
-                     * @var $cmsContentProperty \skeeks\cms\models\CmsContentProperty
-                     */
-                    if ($cmsContentProperty = \skeeks\cms\models\CmsContentProperty::find()->cmsSite()->andWhere(['is_vendor' => 1])->one()) : ?>
-                            <?php
-                            $brandId = $model->relatedPropertiesModel->getAttribute($cmsContentProperty->code);
-                            $brand = \skeeks\cms\models\CmsContentElement::findOne((int)$brandId);
-                            ?>
-                            <?php if ($brand  && \Yii::$app->mobileDetect->isDesktop) : ?>
-                                <div class="sx-short-brand-info row g-mb-20" style="background: #92929212;
-    padding: 5px;">
-                                    <div class="col-md-8 my-auto">
-                                        <?php echo $brand->name; ?>
-                                    </div>
-                                    <?php if ($brand->image) : ?>
-                                        <div class="col-md-4 my-auto" style=" text-align: right;">
-                                            <img class="img-fluid" src="<?php echo $brand->image->src; ?>" style="max-height: 40px;"/>
-                                        </div>
-                                    <?php endif; ?>
 
-                                </div>
-                            <?php endif; ?>
+                        <div class="sx-properties-wrapper sx-columns-1">
+                        <ul class="sx-properties" style="padding-left: 0; padding-right: 0; padding-bottom: 0;">
+                            <li>
+                                <span class="sx-properties--name">
+                                    Код
+                                </span>
+                                <span class="sx-properties--value">
+                                    <?= $model->id; ?>
+                                </span>
+                            </li>
+                            <? if ($model->shopProduct->brand) : ?>
+                                <li>
+                                    <span class="sx-properties--name">
+                                        Бренд
+                                    </span>
+                                    <span class="sx-properties--value">
+                                        <?php if($model->shopProduct->brand->logo_image_id) : ?>
+                                            <? $logo = $model->shopProduct->brand->logo; ?>
+
+                                            <img class="img-fluid"
+                                                 src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($logo->src,
+                                                new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                                    'w' => 0,
+                                                    'h' => 20,
+                                                    'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
+                                                ]), $model->shopProduct->brand->code
+                                            ); ?>" alt="<?= $model->shopProduct->brand->name; ?>">
+                                        <?php endif; ?>
+
+                                        <a href="<?php echo $model->shopProduct->brand->url; ?>" data-pjax="0">
+                                            <?= $model->shopProduct->brand->name; ?>
+                                        </a>
+                                    </span>
+                                </li>
+                            <? endif; ?>
+                            <? if ($model->shopProduct->country) : ?>
+                                <li>
+                                    <span class="sx-properties--name">
+                                        Страна
+                                    </span>
+                                    <span class="sx-properties--value">
+                                        <?php if($model->shopProduct->country->flag_image_id) : ?>
+                                            <? $flag = $model->shopProduct->country->flag; ?>
+
+                                            <img class="img-fluid"
+                                                 src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($flag->src,
+                                                new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                                    'w' => 0,
+                                                    'h' => 20,
+                                                    'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
+                                                ]), $model->shopProduct->country->alpha2
+                                            ); ?>" alt="<?= $model->shopProduct->country->name; ?>">
+                                        <?php endif; ?>
+
+                                        <?= $model->shopProduct->country->name; ?>
+                                    </span>
+                                </li>
+                            <? endif; ?>
+                            <? if ($model->shopProduct->weight) : ?>
+                                <li>
+                                    <span class="sx-properties--name">
+                                        Вес с упаковкой
+                                    </span>
+                                    <span class="sx-properties--value">
+                                        <?= $model->shopProduct->weightFormatted; ?>
+                                    </span>
+                                </li>
+                            <? endif; ?>
+                            <? if ($model->shopProduct->dimensionsFormated) : ?>
+                                <li>
+                                    <span class="sx-properties--name">
+                                        Габариты с упаковкой
+                                    </span>
+                                    <span class="sx-properties--value">
+                                        <?= $model->shopProduct->dimensionsFormated; ?>
+                                    </span>
+                                </li>
+                            <? endif; ?>
+                        </ul>
+                    </div>
+
+                    <?
+                    $this->registerCss(<<<CSS
+.sx-fast-links a {
+    color: var(--main-text);
+}
+.sx-fast-links a i {
+    font-size: 1rem;
+}
+CSS
+);
+                    ?>
+                    <div class="sx-fast-links">
+                        <?php if($model->tree_id) : ?>
+                            <p>
+                                <a href="<?php echo $model->cmsTree->url; ?>" data-pjax="0">Все <?php echo \skeeks\cms\helpers\StringHelper::strtolower($model->cmsTree->name); ?> <i class="hs-icon hs-icon-arrow-right"></i></a>
+                            </p>
                         <?php endif; ?>
-
+                        <?php if($brandSavedFilter) : ?>
+                            <p>
+                                <a href="<?php echo $brandSavedFilter->url; ?>" data-pjax="0">Все <?php echo \skeeks\cms\helpers\StringHelper::strtolower($model->cmsTree->name); ?> <?php echo $model->shopProduct->brand->name; ?> <i class="hs-icon hs-icon-arrow-right"></i></a>
+                            </p>
+                        <?php endif; ?>
+                        <?php if($model->shopProduct->brand) : ?>
+                            <p>
+                                <a href="<?php echo $model->shopProduct->brand->url; ?>" data-pjax="0">Страница бренда <?php echo $model->shopProduct->brand->name; ?> <i class="hs-icon hs-icon-arrow-right"></i></a>
+                            </p>
+                        <?php endif; ?>
+                    </div>
+                        
                         <? if ($model->productDescriptionShort) : ?>
                             <div class="sx-description-short">
                                 <?= $model->productDescriptionShort; ?>

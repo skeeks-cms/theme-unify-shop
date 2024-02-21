@@ -17,11 +17,19 @@ $totalOffers = (int)\yii\helpers\ArrayHelper::getValue($agregateCategoryData, 'o
 $catalogSettings = \skeeks\cms\themes\unifyshop\cmsWidgets\catalog\ShopCatalogPage::beginWidget("catalog");
 $catalogSettings::end();
 
+$totalOffers = (int)\yii\helpers\ArrayHelper::getValue($agregateCategoryData, 'offerCount', 0);
 $priceFilter = $filtersWidget->getPriceHandler();
 $eavFilter = $filtersWidget->getEavHandler();
+$shopFilter = $filtersWidget->getShopDataHandler();
 $appliedValues = [];
+if ($priceFilter) {
+    $appliedValues = $priceFilter->getApplied();
+}
+if ($shopFilter) {
+    $appliedValues = \yii\helpers\ArrayHelper::merge($appliedValues, $shopFilter->getApplied());
+}
 if ($eavFilter) {
-    $appliedValues = $eavFilter->getApplied();
+    $appliedValues =  \yii\helpers\ArrayHelper::merge($appliedValues, $eavFilter->getApplied());
 }
 ?>
 <section class="">
@@ -63,9 +71,9 @@ if ($eavFilter) {
                 if (!$savedFilter && $appliedValues): ?>
                     <div class="sx-saved-filters-list sx-saved-filters-list--after" style="margin-top: 0px;">
                         <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
-                            <?php if ($priceFilter->f || $priceFilter->t) : ?>
+                            <?php /*if ($priceFilter->f || $priceFilter->t) : */?><!--
                                 <?php
-                                $priceTitle = "";
+/*                                $priceTitle = "";
                                 $priceTitleData = [];
                                 if ($priceFilter->f) {
                                     $f = \Yii::$app->formatter->asDecimal($priceFilter->f);
@@ -77,24 +85,31 @@ if ($eavFilter) {
                                 }
                                 $priceTitleData[] = \Yii::$app->money->currency_symbol;
                                 $priceTitle = implode(" ", $priceTitleData);
-                                ?>
-                                <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
+                                */?>
+                                <?php /*echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
                                     'isActive'    => true,
                                     'value_id'    => "",
                                     'property_id' => "price",
                                     'seoName'     => $model->seoName." по цене ".$priceTitle,
                                     'displayName' => $model->name." по цене ".$priceTitle,
-                                ]); ?>
-                            <?php endif; ?>
+                                ]); */?>
+                            --><?php /*endif; */?>
 
                             <?php foreach ($appliedValues as $data) : ?>
                                 <?php $name = \yii\helpers\ArrayHelper::getValue($data, "name"); ?>
                                 <?php $value = \yii\helpers\ArrayHelper::getValue($data, "value"); ?>
-                                <?php $property = \yii\helpers\ArrayHelper::getValue($data, "property"); ?>
+                                <?php
+                                $property_id = '';
+                                if ($property_id = \yii\helpers\ArrayHelper::getValue($data, "property_id")) {
+
+                                } elseif ($property = \yii\helpers\ArrayHelper::getValue($data, "property")) {
+                                    $property_id = $property->id;
+                                }
+                                ?>
                                 <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
                                     'isActive'    => true,
                                     'value_id'    => $value,
-                                    'property_id' => $property->id,
+                                    'property_id' => $property_id,
                                     'seoName'     => $model->seoName." ".\skeeks\cms\helpers\StringHelper::lcfirst($name),
                                     'displayName' => $model->name." ".\skeeks\cms\helpers\StringHelper::lcfirst($name),
                                 ]); ?>
@@ -215,6 +230,10 @@ if ($eavFilter) {
                             $savedFilters->andWhere(['value_content_element_id' => $savedFilter->value_content_element_id]);
                         } elseif ($savedFilter->value_content_property_enum_id) {
                             $savedFilters->andWhere(['value_content_property_enum_id' => $savedFilter->value_content_property_enum_id]);
+                        } elseif ($savedFilter->shop_brand_id) {
+                            $savedFilters->andWhere(['shop_brand_id' => $savedFilter->shop_brand_id]);
+                        } elseif ($savedFilter->country_alpha2) {
+                            $savedFilters->andWhere(['country_alpha2' => $savedFilter->country_alpha2]);
                         }
 
                         $savedFilters = $savedFilters->all();
@@ -226,14 +245,7 @@ if ($eavFilter) {
                             <!--<div class="h5 sx-sub-title">Другие товары с опцией «<?php /*echo $savedFilter->propertyValueName; */ ?>»:</div>-->
 
                             <?php
-                            $savedFiltersData = [];
-                            foreach ($savedFilters as $sf) {
-                                /**
-                                 * @var $sf \skeeks\cms\models\CmsSavedFilter
-                                 */
-                                $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
-                                $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
-                            }
+                            $savedFiltersData = \skeeks\cms\models\CmsSavedFilter::formatFilters($savedFilters);
                             ?>
                             <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
                                 <!--<div class="h4 sx-sub-title"><?php /*echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); */ ?></div>-->
@@ -383,6 +395,10 @@ if ($eavFilter) {
                         $savedFilters->andWhere(['value_content_element_id' => $savedFilter->value_content_element_id]);
                     } elseif ($savedFilter->value_content_property_enum_id) {
                         $savedFilters->andWhere(['value_content_property_enum_id' => $savedFilter->value_content_property_enum_id]);
+                    } elseif ($savedFilter->shop_brand_id) {
+                        $savedFilters->andWhere(['shop_brand_id' => $savedFilter->shop_brand_id]);
+                    } elseif ($savedFilter->country_alpha2) {
+                        $savedFilters->andWhere(['country_alpha2' => $savedFilter->country_alpha2]);
                     }
 
                     $savedFilters = $savedFilters->all();
@@ -394,14 +410,7 @@ if ($eavFilter) {
                         <div class="h3 sx-title">Разделы, где встречаются товары с опцией «<?php echo $savedFilter->propertyValueName; ?>»</div>
 
                         <?php
-                        $savedFiltersData = [];
-                        foreach ($savedFilters as $sf) {
-                            /**
-                             * @var $sf \skeeks\cms\models\CmsSavedFilter
-                             */
-                            $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
-                            $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
-                        }
+                        $savedFiltersData = \skeeks\cms\models\CmsSavedFilter::formatFilters($savedFilters);
                         ?>
                         <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
                             <!--<div class="h4 sx-sub-title"><?php /*echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); */ ?></div>-->
@@ -493,11 +502,7 @@ JS
                 
                     <div class="sx-saved-filters-list sx-saved-filters-list--after sx-spoiler" style="margin-top: 1.5rem;">
                         <?php
-                        $savedFiltersData = [];
-                        foreach ($savedFilters as $sf) {
-                            $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
-                            $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
-                        }
+                        $savedFiltersData = \skeeks\cms\models\CmsSavedFilter::formatFilters($savedFilters);
                         ?>
                         <div class="h3 sx-title">Быстрый подбор товаров из раздела «<?php echo $savedFilter ? $savedFilter->getCmsTree()->one()->name : $model->name; ?>»</div>
                         <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
