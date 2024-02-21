@@ -169,7 +169,7 @@ JS
     color: var(--main-text);
 }
 .sx-fast-links a i {
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 CSS
 );
