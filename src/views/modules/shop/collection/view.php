@@ -43,7 +43,7 @@ CSS
 
 $infoModel = $model;
 
-$this->title = "Коллекция ".$infoModel->seoName." ".$infoModel->brand ? $infoModel->brand->name : "" ."";
+$this->title = "Коллекция ".$infoModel->seoName." " . ($infoModel->brand ? $infoModel->brand->name : "") ."";
 $properties = [];
 ?>
 
@@ -151,6 +151,9 @@ JS
                     if ($model->images) {
                         $images = \yii\helpers\ArrayHelper::merge($images, $model->images);
                     }
+                    if (!$images) {
+                        $images = false;
+                    }
                     echo $this->render("@app/views/modules/cms/content-element/product/_product-images", [
                         'images' => $images,
                         'model' => $model,
@@ -163,24 +166,30 @@ JS
 
                     <div class="sx-properties-wrapper sx-columns-1">
                         <ul class="sx-properties">
-                            <li>
-                                <span class="sx-properties--name">
-                                Бренд
-                                </span>
-                                <span class="sx-properties--value">
-                                <?= $infoModel->brand->name; ?>
-                                </span>
-                            </li>
-                            <? if ($infoModel->brand->country) : ?>
+                            <?php if($infoModel->brand) : ?>
                                 <li>
                                     <span class="sx-properties--name">
-                                    Страна
+                                    Бренд
                                     </span>
                                     <span class="sx-properties--value">
-                                    <?= $infoModel->brand->country->name; ?>
+                                    <?= $infoModel->brand->name; ?>
                                     </span>
                                 </li>
-                            <? endif; ?>
+                                <? if ($infoModel->brand->country) : ?>
+                                    <li>
+                                        <span class="sx-properties--name">
+                                        Страна
+                                        </span>
+                                        <span class="sx-properties--value">
+                                        <?= $infoModel->brand->country->name; ?>
+                                        </span>
+                                    </li>
+                                <? endif; ?>
+
+                            <?php endif; ?>
+
+
+
 
                         </ul>
                     </div>
@@ -406,7 +415,7 @@ $description = $model->description_full;
                             <? endif; ?>
                             <div class="sx-product-card--photo">
                                 <a href="<?= $product->url; ?>" data-pjax="0">
-                                    <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($product->mainProductImage ? $product->mainProductImage->src : \skeeks\cms\helpers\Image::getCapSrc(),
+                                    <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($product->image ? $product->image->src : \skeeks\cms\helpers\Image::getCapSrc(),
                                         new \skeeks\cms\components\imaging\filters\ThumbnailFix([
                                             'w' => 300,
                                             //'m' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
