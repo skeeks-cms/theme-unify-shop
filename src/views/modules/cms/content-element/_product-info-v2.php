@@ -74,35 +74,6 @@ $widget->viewFile = '@app/views/widgets/RpWidget/'.$singlPage->properties_view_f
                 </div>
 
             <? endif; ?>
-
-            <? if ($singlPage->is_allow_product_review) : ?>
-
-                <div class="card">
-                    <div class="card-header" id="sx-reviews-header">
-                        <a class="h2 sx-main-text-color" href="#" data-toggle="collapse" data-target="#sx-reviews" aria-expanded="true" aria-controls="sx-reviews">
-                            Отзывы
-                            <i class="hs-icon hs-icon-arrow-bottom float-right"></i>
-                        </a>
-                    </div>
-                    <div id="sx-reviews" class="collapse" aria-labelledby="sx-reviews-header">
-                        <div class="card-body">
-
-                            <div class="col-12">
-                                <a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a>
-                            </div>
-
-                            <?
-                            $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-                                'namespace'         => 'Reviews2Widget',
-                                'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-                                'cmsContentElement' => $model,
-                            ]);
-                            $widgetReviews::end();
-                            ?>
-                        </div>
-                    </div>
-                </div>
-            <? endif; ?>
         </div>
     </div>
 </div>

@@ -54,11 +54,6 @@ JS
         </li>
     <? endif; ?>
 
-    <? if ($singlPage->is_allow_product_review) : ?>
-        <li class="nav-item">
-            <a class="nav-link sx-main-text-color g-px-0--md g-mr-30--md" data-toggle="tab" href="#sx-reviews" role="tab">Отзывы</a>
-        </li>
-    <? endif; ?>
 </ul>
 
 <div id="nav-5-1-default-hor-border-bottom-left-padding-0" class="tab-content g-pt-20">
@@ -74,26 +69,6 @@ JS
             <div class="card-body-1 sx-content">
                 <div class="sx-product-description">
                     <?= $model->productDescriptionFull; ?>
-                </div>
-            </div>
-        </div>
-    <? endif; ?>
-    <? if ($singlPage->is_allow_product_review) : ?>
-        <div class="tab-pane fade show" id="sx-reviews" role="tabpanel">
-            <div class="card-body-1">
-                <div class="row">
-                    <div class="col-12">
-                        <a href="#showReviewFormBlock" data-toggle="modal" class="btn btn-primary showReviewFormBtn">Оставить отзыв</a>
-                    </div>
-
-                    <?
-                    $widgetReviews = \skeeks\cms\reviews2\widgets\reviews2\Reviews2Widget::begin([
-                        'namespace'         => 'Reviews2Widget',
-                        'viewFile'          => '@app/views/widgets/Reviews2Widget/reviews',
-                        'cmsContentElement' => $model,
-                    ]);
-                    $widgetReviews::end();
-                    ?>
                 </div>
             </div>
         </div>

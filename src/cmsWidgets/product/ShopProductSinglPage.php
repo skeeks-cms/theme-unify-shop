@@ -33,10 +33,6 @@ class ShopProductSinglPage extends Widget
     public $is_show_title_in_short_description = false;
 
     /**
-     * @var bool
-     */
-    public $is_allow_product_review = true;
-    /**
      * @var int
      */
     public $right_col_width = 475;
@@ -66,7 +62,6 @@ class ShopProductSinglPage extends Widget
             'right_bg_color'                     => \Yii::t('skeeks/shop/app', 'Цвет фона'),
             'right_padding'                      => \Yii::t('skeeks/shop/app', 'Отступы внутри блока'),
             'info_block_view_type'               => \Yii::t('skeeks/shop/app', 'Вариант отображения детальной информации'),
-            'is_allow_product_review'            => \Yii::t('skeeks/shop/app', 'Включить отзывы?'),
             'sliders_align'                      => \Yii::t('skeeks/shop/app', 'Выравнивать слайдеры (похожие товары и ранее просмотренные)'),
             'properties_view_file'               => \Yii::t('skeeks/shop/app', 'Шаблон отображения характеристик'),
             'images_view_file'                   => \Yii::t('skeeks/shop/app', 'Шаблон галереи картинок'),
@@ -84,7 +79,6 @@ class ShopProductSinglPage extends Widget
         return ArrayHelper::merge(parent::rules(), [
             [['is_show_title_in_short_description'], 'boolean'],
             [['is_show_title_in_breadcrumbs'], 'boolean'],
-            [['is_allow_product_review'], 'boolean'],
             [['info_block_view_type'], 'string'],
             [['right_col_width'], 'integer'],
             [['right_bg_color'], 'string'],
@@ -193,11 +187,6 @@ class ShopProductSinglPage extends Widget
                 'class'  => FieldSet::class,
                 'name'   => 'Прочее',
                 'fields' => [
-
-                    'is_allow_product_review' => [
-                        'class'     => BoolField::class,
-                        'allowNull' => false,
-                    ],
                     'sliders_align'           => [
                         'class' => SelectField::class,
                         'items' => [
