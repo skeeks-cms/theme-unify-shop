@@ -24,7 +24,7 @@ $dataProvider->query->joinWith('shopProduct');
 \Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
 
 \Yii::$app->cmsSearch->buildElementsQuery($dataProvider->query);
-\Yii::$app->cmsSearch->logResult($dataProvider);
+/*\Yii::$app->cmsSearch->logResult($dataProvider);*/
 
 $dataProvider->query->groupBy([\skeeks\cms\models\CmsContentElement::tableName().".id"]);
 //print_r($dataProvider->query->createCommand()->rawSql);die;
