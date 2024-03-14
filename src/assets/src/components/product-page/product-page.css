@@ -276,6 +276,13 @@
     padding-top: 20px;
 }
 
+.product-info-header .sx-properties-wrapper.sx-columns-1 ul.sx-properties {
+    padding: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    background: none;
+    border-radius: 0;
+}
 /**
  * Современное оформление свойств
  */

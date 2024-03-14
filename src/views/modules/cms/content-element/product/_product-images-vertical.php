@@ -30,6 +30,10 @@ $this->registerCss(<<<CSS
 .slick-current {
     cursor: zoom-in;
 }
+.sx-main-product-container .sx-product-images
+{
+    padding-left: 10px;
+}
 CSS
 );
 ?>
@@ -82,7 +86,7 @@ if ($images !== false && !$images) {
 
         <? endif; ?>
 
-        <div id="carouselCus1" class="js-carousel sx-stick sx-stick-slider" style="width: calc(100% - 80px);"
+        <div id="carouselCus1" class="js-carousel sx-stick sx-stick-slider" style="width: calc(100% - 90px);"
              data-infinite="true"
              data-fade="true"
              data-arrows-classes="g-color-primary--hover sx-arrows sx-images-carousel-arrows sx-color-silver"

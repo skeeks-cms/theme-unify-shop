@@ -151,6 +151,7 @@ class ShopProductSinglPage extends Widget
                     'right_padding' => [
                         'class' => SelectField::class,
                         'items' => [
+                            '0'  => '0px',
                             '5'  => '5px',
                             '10' => '10px',
                             '15' => '15px',
@@ -207,7 +208,7 @@ class ShopProductSinglPage extends Widget
 @media (min-width: 992px) {
     .sx-product-page--left-col {
         width: calc(100% - {$this->right_col_width}px);
-        margin-right: 15px;
+        margin-right: 2rem;
     }
     .sx-product-page--right-col {
         width: {$this->right_col_width}px;

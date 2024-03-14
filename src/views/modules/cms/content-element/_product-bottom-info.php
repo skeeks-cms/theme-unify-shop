@@ -15,7 +15,7 @@
 ?>
 
 <?
-$q = \skeeks\cms\shop\models\ShopCmsContentElement::find();
+/*$q = \skeeks\cms\shop\models\ShopCmsContentElement::find();
 $q->joinWith('shopProduct as sp');
 $q->joinWith('cmsTree as cmsTree');
 $q->andWhere([
@@ -41,7 +41,7 @@ $q
         ["shopProductRelations2.shop_product1_id" => $model->id],
         ["shopProductRelations2.shop_product2_id" => $model->id],
     ]);
-$q->groupBy(['cmsTree.id']);
+$q->groupBy(['cmsTree.id']);*/
 
 
 ?>
@@ -57,6 +57,120 @@ $q->groupBy(['cmsTree.id']);
 
     <?php if ($pjax->isPjax) : ?>
 
+        <?php if ($collections = $model->shopProduct->collections) : ?>
+            <section class="g-bg-secondary g-py-30 g-bg-graylight-radialgradient-ellipse sx-collections" style="margin-top: 20px;">
+                <div class="container sx-container">
+
+
+                    <? foreach ($collections as $collection) :
+                        /**
+                         * @var $collection \skeeks\cms\shop\models\ShopCollection
+                         */
+                        $this->registerCss(<<<CSS
+.sx-rounded {
+    border-radius: var(--base-radius);
+    overflow: hidden;
+}
+.sx-rounded img {
+    border-radius: var(--base-radius);
+}
+CSS
+                        );
+                        ?>
+
+
+                        <div class="row" style="padding: 2rem 0;">
+                            <div class="col-lg-4">
+
+                                <!-- Article -->
+                                <article class="u-block-hover">
+                                    <!-- Article Image -->
+                                    <div class="sx-rounded">
+                                        <a href="<?php echo $collection->url; ?>" class="img-wrapper" data-pjax="0">
+                                            <? if ($collection->image) : ?>
+                                                <img class="w-100 u-block-hover__main--zoom-v1" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($collection->image ? $collection->image->src : null,
+                                                    new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                                        'w' => 500,
+                                                        'h' => 383,
+                                                        'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
+                                                    ]), $collection->code
+                                                ); ?>" title="<?= \yii\helpers\Html::encode($collection->name); ?>" alt="<?= \yii\helpers\Html::encode($collection->name); ?>"/>
+                                            <? else : ?>
+                                                <img class="w-100 u-block-hover__main--zoom-v1" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $collection->name; ?>">
+                                            <? endif; ?>
+                                        </a>
+                                    </div>
+                                    <!-- End Article Image -->
+                                    <!--<a href="<? /*= $collection->url; */
+                                    ?>">Все товары коллекции</a>-->
+                                </article>
+                                <!-- End Article -->
+                            </div>
+
+                            <div class="col-lg-8">
+
+                                <?
+                                $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("collection-products", [
+                                    'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
+                                    'label'                => "<a href='{$collection->url}' class='sx-collection-title' data-pjax='0'>Коллекция &laquo;{$collection->name}&raquo;</a>",
+                                    'isJoinTreeMap'        => false,
+                                    'enabledPaging'        => "N",
+                                    'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+                                    'limit'                => 15,
+                                    'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+                                    'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model, $collection) {
+                                        //$activeDataProvider->query->with('shopProduct');
+                                        //$activeDataProvider->query->with('shopProduct.baseProductPrice');
+                                        //$activeDataProvider->query->with('shopProduct.minProductPrice');
+                                        $activeDataProvider->query->with('image');
+                                        //$activeDataProvider->query->joinWith('shopProduct.baseProductPrice as basePrice');
+                                        //$activeDataProvider->query->orderBy(['show_counter' => SORT_DESC]);
+
+                                        $activeDataProvider->query->joinWith("shopProduct.collections as collections");
+                                        $activeDataProvider->query->andWhere(['collections.id' => $collection->id]);
+                                        
+                                       
+                                        //$activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
+
+                                        /*$activeDataProvider->query->andWhere([
+                                            '!=',
+                                            'shopProduct.product_type',
+                                            \skeeks\cms\shop\models\ShopProduct::TYPE_OFFER,
+                                        ]);*/
+
+                                        \Yii::$app->shop->filterBaseContentElementQuery($activeDataProvider->query);
+
+                                    },
+                                ]);
+
+                                ?>
+
+                                <section>
+                                    <?php
+                                    $description = $collection->description_short;
+                                    ?>
+
+
+                                    <div class="">
+                                        <? $widgetElements::end(); ?>
+                                    </div>
+                                    <?php if ($description) : ?>
+                                        <div class="sx-collection-desription" style="margin-top: 20px;">
+                                            <?php echo $description; ?>
+                                        </div>
+                                    <?php endif; ?>
+
+                                </section>
+                            </div>
+                        </div>
+                        <!-- End Product Blocks -->
+
+
+                        <!-- End Product Blocks v4 -->
+                    <? endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
         <?
         $treeIds = [];
         if ($model->cmsTree && $model->cmsTree->parent) {
@@ -71,7 +185,7 @@ $q->groupBy(['cmsTree.id']);
             'limit'                => 15,
             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
             'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
-                //$activeDataProvider->query->with('shopProduct');
+                $activeDataProvider->query->with('shopProduct');
                 //$activeDataProvider->query->with('shopProduct.baseProductPrice');
                 //$activeDataProvider->query->with('shopProduct.minProductPrice');
                 $activeDataProvider->query->with('image');

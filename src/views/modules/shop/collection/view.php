@@ -13,6 +13,10 @@
 \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductPageAsset::register($this);
 \skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductCardAsset::register($this);
 
+$singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage::beginWidget('product-page');
+$singlPage->addCss();
+$singlPage::end();
+
 $product = null;
 $this->registerCss(<<<CSS
 .js-carousel.slick-initialized .js-slide, .js-carousel.slick-initialized .js-thumb {
@@ -134,9 +138,9 @@ JS
             </div>
         </div>
         <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
-        <div class="row g-mt-20">
-            <div class="col-md-7">
-                <div class="sx-product-images g-ml-40 g-mr-40">
+        <div class="sx-main-product-container">
+            <div class="sx-product-page--left-col">
+                <div class="sx-product-images">
                     <? /*= $this->render("_product-images", [
                         'model'                 => $model,
                         'shopOfferChooseHelper' => null,
@@ -154,16 +158,17 @@ JS
                     if (!$images) {
                         $images = false;
                     }
-                    echo $this->render("@app/views/modules/cms/content-element/product/_product-images", [
+                    echo $this->render("@app/views/modules/cms/content-element/product/_product-images-vertical", [
                         'images' => $images,
                         'model' => $model,
                     ]); ?>
                 </div>
             </div>
-            <div class="col-md-5 sx-col-product-info" style="background: #fafafa; padding: 20px;">
+            <div class="sx-product-page--right-col sx-col-product-info">
                 <div class="sx-right-product-info product-info ss-product-info" style="min-height: 100%;">
                     <h1 class="h2" style="margin-bottom: 1rem;">Коллекция <?= $model->seoName; ?> <?= $infoModel->brand ? $infoModel->brand->name : ""; ?></h1>
 
+                    <div class="product-info-header">
                     <div class="sx-properties-wrapper sx-columns-1">
                         <ul class="sx-properties">
                             <?php if($infoModel->brand) : ?>
@@ -260,6 +265,7 @@ JS
 
 
                     <button style="margin-top: 20px;" onclick="new sx.classes.Location().href('#portfolio-section')" class="btn btn-xxl btn-block btn-primary g-font-size-18">Смотреть товары коллекции</button>
+                    </div>
                 </div>
             </div>
         </div>

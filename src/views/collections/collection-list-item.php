@@ -1,0 +1,70 @@
+<?php
+/**
+ * @author Semenov Alexander <semenov@skeeks.com>
+ * @link http://skeeks.com/
+ * @copyright 2010 SkeekS (СкикС)
+ * @date 06.03.2015
+ *
+ */
+/* @var $this yii\web\View */
+/**
+ * @var \skeeks\cms\shop\models\ShopCollection $model
+ */
+
+?>
+<div class="g-brd-gray-light-v4 g-color-gray-dark-v2 g-brd-around g-bg-white sx-collection-list-item">
+    <a class="d-block text-center" href="<?= $model->url; ?>">
+        <? if ($model->image) : ?>
+
+
+            <?
+                \skeeks\cms\themes\unifyshop\assets\ProductListImagesAsset::register($this);
+
+                $images = [];
+                $images[] = $model->image;
+                if ($model->images) {
+                    $images = \yii\helpers\ArrayHelper::merge($images, $model->images);
+                }
+                ?>
+                <div class="sx-list-images">
+                    <?
+                    $counter = 0;
+                    foreach ($images as $image) : ?>
+                        <? $counter ++; ?>
+                        <? if ($counter < 6) : ?>
+                        <img class="sx-list-image lazy"
+                             style="aspect-ratio: 480/280; width: 100%;"
+                             src="<?php echo \Yii::$app->cms->image1px; ?>"
+                             data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
+                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                     'w' => 420,
+                                     'h' => 280,
+                                     'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
+                                 ]), $model->code
+                             ); ?>"
+
+                             title="<?= \yii\helpers\Html::encode($model->code); ?>"
+                             alt="<?= \yii\helpers\Html::encode($model->code); ?>"/>
+                        <? endif; ?>
+                    <? endforeach; ?>
+                </div>
+        <? else : ?>
+            <img class="img-fluid g-transform-scale-1_1--parent-hover g-transition-0_5 g-transition--ease-in-out" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
+        <? endif; ?>
+    </a>
+    <div class="g-pt-15 g-px-15">
+        <a class="h5 g-font-weight-600" href="<?= $model->url; ?>"><?= $model->name; ?></a>
+
+        <div class="g-nowrap" style="overflow: hidden; margin-bottom: 20px;">
+            <? if ($model->brand && $model->brand->country_alpha2) : ?>
+                <div class="pull-left" href="#"><?= $model->brand->country->name; ?></div>
+            <? endif; ?>
+
+            <? if ($model->brand) : ?>
+                <div class="pull-left" href="#"><?= $model->brand->name; ?></div>
+            <? endif; ?>
+        </div>
+        <!--<hr class="g-brd-gray-light-v4 g-my-10">
+        <div class="text-center h6 g-mb-10">Товаров: <?/*= $model->getProducts()->count(); */?> шт.</div>-->
+    </div>
+</div>

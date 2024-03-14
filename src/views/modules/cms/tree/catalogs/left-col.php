@@ -31,6 +31,13 @@ if ($shopFilter) {
 if ($eavFilter) {
     $appliedValues =  \yii\helpers\ArrayHelper::merge($appliedValues, $eavFilter->getApplied());
 }
+
+$hasCollections = false;
+if ($model->shop_has_collections) {
+    \Yii::$app->seo->canUrl->ADDimportant_pnames(['sx-catalog-view']);
+    $viewMode = \Yii::$app->request->get("sx-catalog-view", "collection");
+    $hasCollections = true;
+}
 ?>
 <section class="">
     <div class="container sx-container">
@@ -343,16 +350,69 @@ if ($eavFilter) {
                 </div>
 
 
-                <?php if ($totalOffers > 0): ?>
-                    <?php echo $this->render("@app/views/products/product-list", [
-                        'dataProvider' => $dataProvider,
+                <?php if ($hasCollections) : ?>
+                    <div class="btn-group btn-block" style="margin-bottom: 20px;" role="group" aria-label="Basic example">
+                        <a href="<?php echo \yii\helpers\Url::current(['sx-catalog-view' => 'collection']); ?>" type="button" class="btn btn-xl <?php echo $viewMode == "collection" ? "btn-primary" : "btn-secondary"; ?>">Коллекции</a>
+                        <a href="<?php echo \yii\helpers\Url::current(['sx-catalog-view' => 'product']); ?>" type="button"
+                           class="btn btn-xl <?php echo $viewMode == "product" ? "btn-primary" : "btn-secondary"; ?>">Товары</a>
+                    </div>
+
+                <?php endif; ?>
+                
+                
+                <?php if ($hasCollections && $viewMode == "collection") : ?>
+
+                    <?php
+                $this->registerCss(<<<CSS
+.sorting, .sx-btn-sort-select {
+    display: none;
+}
+CSS
+);
+                    /**
+                     * @var $query \yii\db\ActiveQuery
+                     */
+                    $query = $dataProvider->query;
+                    $realPrice = '';
+                    $select = [
+                        \skeeks\cms\models\CmsContentElement::tableName().".id"
+                    ];
+                    if (isset($query->select['realPrice'])) {
+                        $realPrice = $query->select['realPrice'];
+                        $select['realPrice'] = $realPrice;
+                    }
+                    $query->select($select);
+                    $query->addSelect(['collection_id' => "collections.id"]);
+                    $query->innerJoinWith("shopProduct.collections as collections", false);
+                    //$query->with("shopProduct.collections as collections");
+                    $query->groupBy(['collections.id']);
+
+                    $q = \skeeks\cms\shop\models\ShopCollection::find()->innerJoin(['main' => $query], [
+                            'main.collection_id' => new \yii\db\Expression(\skeeks\cms\shop\models\ShopCollection::tableName() . ".id")]);
+                    ?>
+
+                    <?php echo $this->render("@app/views/collections/collection-list", [
+                        'dataProvider' => new \yii\data\ActiveDataProvider([
+                            'query'      => $q,
+                            'pagination' => [
+                                'pageSize' => 21,
+                            ],
+                        ]),
                     ]); ?>
-                <?php else : ?>
-                    <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_no-products", [
-                        'savedFilter'   => $savedFilter,
-                        'cmsTree'       => $model,
-                        'filtersWidget' => $filtersWidget,
-                    ]); ?>
+
+                <?php else: ?>
+                
+                    <?php if ($totalOffers > 0): ?>
+                        <?php echo $this->render("@app/views/products/product-list", [
+                            'dataProvider' => $dataProvider,
+                        ]); ?>
+                    <?php else : ?>
+                        <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_no-products", [
+                            'savedFilter'   => $savedFilter,
+                            'cmsTree'       => $model,
+                            'filtersWidget' => $filtersWidget,
+                        ]); ?>
+                    <?php endif; ?>
                 <?php endif; ?>
 
 
