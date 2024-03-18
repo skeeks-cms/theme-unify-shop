@@ -34,12 +34,15 @@ $this->registerCss(<<<CSS
 {
     padding-left: 10px;
 }
+.js-carousel.slick-initialized .js-slide {
+    margin-bottom: 10px;
+}
 CSS
 );
 ?>
 <?
 
-$images = (array) @$images;
+$images = @$images;
 
 if ($images !== false && !$images) {
     if ($model->mainProductImage) {
@@ -50,7 +53,6 @@ if ($images !== false && !$images) {
         $images = \yii\helpers\ArrayHelper::merge((array) $images, (array) $productImages);
     }
 }
-
 
 ?>
 <? if ($images) : ?>
@@ -86,7 +88,7 @@ if ($images !== false && !$images) {
 
         <? endif; ?>
 
-        <div id="carouselCus1" class="js-carousel sx-stick sx-stick-slider" style="width: calc(100% - 90px);"
+        <div id="carouselCus1" class="js-carousel sx-stick sx-stick-slider" style="<? echo (count($images) > 1) ? "width: calc(100% - 90px);" : "width: 100%;"; ?>"
              data-infinite="true"
              data-fade="true"
              data-arrows-classes="g-color-primary--hover sx-arrows sx-images-carousel-arrows sx-color-silver"
