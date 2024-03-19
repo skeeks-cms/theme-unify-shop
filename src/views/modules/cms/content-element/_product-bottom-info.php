@@ -88,13 +88,17 @@ CSS
                                     <div class="sx-rounded">
                                         <a href="<?php echo $collection->url; ?>" class="img-wrapper" data-pjax="0">
                                             <? if ($collection->image) : ?>
-                                                <img class="w-100 u-block-hover__main--zoom-v1" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($collection->image ? $collection->image->src : null,
+                                                <?
+                                                $preview = \Yii::$app->imaging->getPreview($collection->image,
                                                     new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                                        'w' => 500,
-                                                        'h' => 383,
-                                                        'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
-                                                    ]), $collection->code
-                                                ); ?>" title="<?= \yii\helpers\Html::encode($collection->name); ?>" alt="<?= \yii\helpers\Html::encode($collection->name); ?>"/>
+                                                        'w' => $this->theme->product_card_img_preview_width,
+                                                        'h' => $this->theme->product_card_img_preview_height,
+                                                        'm' => $this->theme->product_card_img_preview_crop,
+                                                        'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_BIG,
+                                                    ]), $model->code
+                                                );
+                                                ?>
+                                                <img class="w-100 u-block-hover__main--zoom-v1" src="<?php echo $preview->src; ?>" title="<?= \yii\helpers\Html::encode($collection->name); ?>" alt="<?= \yii\helpers\Html::encode($collection->name); ?>"/>
                                             <? else : ?>
                                                 <img class="w-100 u-block-hover__main--zoom-v1" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $collection->name; ?>">
                                             <? endif; ?>

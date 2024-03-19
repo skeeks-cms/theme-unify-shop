@@ -421,12 +421,17 @@ $description = $model->description_full;
                             <? endif; ?>
                             <div class="sx-product-card--photo">
                                 <a href="<?= $product->url; ?>" data-pjax="0">
-                                    <img class="to-cart-fly-img" src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($product->image ? $product->image->src : \skeeks\cms\helpers\Image::getCapSrc(),
-                                        new \skeeks\cms\components\imaging\filters\ThumbnailFix([
-                                            'w' => 300,
-                                            //'m' => \Imagine\Image\ImageInterface::THUMBNAIL_INSET,
-                                        ]), $product->code
-                                    ); ?>" title="<?= \yii\helpers\Html::encode($product->name); ?>" alt="<?= \yii\helpers\Html::encode($product->name); ?>"/>
+                                    <?
+                                    $preview = \Yii::$app->imaging->getPreview($product->image,
+                                        new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                            'w'          => $this->theme->catalog_img_preview_width,
+                                            'h'          => $this->theme->catalog_img_preview_width,
+                                            'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                                            'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_MEDIUM,
+                                        ]), $model->code
+                                    );
+                                    ?>
+                                    <img class="to-cart-fly-img" src="<?= $preview->src; ?>" title="<?= \yii\helpers\Html::encode($product->name); ?>" alt="<?= \yii\helpers\Html::encode($product->name); ?>"/>
                                 </a>
                             </div>
                             <div class="sx-product-card--info">

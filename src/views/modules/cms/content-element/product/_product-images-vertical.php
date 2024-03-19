@@ -71,17 +71,23 @@ if ($images !== false && !$images) {
                  data-arrow-right-classes="hs-icon hs-icon-arrow-bottom sx-right"
             >
                 <? foreach ($images as $image) : ?>
+                    
+                    <?
+                    $preview = \Yii::$app->imaging->getPreview($image,
+                        new \skeeks\cms\components\imaging\filters\Thumbnail([
+                            'w' => 75,
+                            'h' => 75,
+                            'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
+                            'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_SMALL,
+                        ]), $model->code
+                    );
+                    ?>
+                    
                     <div class="js-slide">
                         <img class="img-fluid lazy" 
-                             style="aspect-ratio: 1; width: 100%; max-width: 75px;"
+                             style="aspect-ratio: <?php echo $preview->cssAspectRatio; ?>; width: 100%;"
                              src="<?php echo \Yii::$app->cms->image1px; ?>"
-                             data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
-                            new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                'w' => 75,
-                                'h' => 75,
-                                'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
-                            ]), $model->code
-                        ); ?>" alt="<?= $model->name; ?>">
+                             data-src="<?= $preview->src; ?>" alt="<?= $model->name; ?>">
                     </div>
                 <? endforeach; ?>
             </div>
@@ -101,35 +107,24 @@ if ($images !== false && !$images) {
              * @var $image \skeeks\cms\models\CmsStorageFile
              */
             foreach ($images as $image) : ?>
-
-
+                <?
+                $preview = \Yii::$app->imaging->getPreview($image,
+                    new \skeeks\cms\components\imaging\filters\Thumbnail([
+                        'w' => $this->theme->product_card_img_preview_width,
+                        'h' => $this->theme->product_card_img_preview_height,
+                        'm' => $this->theme->product_card_img_preview_crop,
+                        'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_BIG,
+                    ]), $model->code
+                );
+                ?>
 
                 <div class="js-slide">
                     <!--w-100-->
                     <a class="sx-fancybox-gallary" data-fancybox="images" href="<?= $image->src; ?>">
                         <img class="img-fluid lazy" 
-                             style="
-                             <? if ($this->theme->product_card_img_preview_width && $this->theme->product_card_img_preview_height) : ?>
-                                    aspect-ratio: <?php echo $this->theme->product_card_img_preview_width; ?>/<?php echo $this->theme->product_card_img_preview_height; ?>;
-                                    width: <?php echo $this->theme->product_card_img_preview_width; ?>px;
-                             <? elseif((int) $this->theme->product_card_img_preview_height && ! (int) $this->theme->product_card_img_preview_width) : ?>
-                                <?
-                                     $newWidth = round ($image->image_width * $this->theme->product_card_img_preview_height / $image->image_height);
-                                 ?>
-                                aspect-ratio: <?php echo $newWidth; ?>/<?php echo $this->theme->product_card_img_preview_height; ?>;
-                                width: <?php echo $newWidth; ?>px;
-                             <? endif; ?>
-                                    height: 100%;
-                                     max-width: 100%;
-"
+                             style="aspect-ratio: <?php echo $preview->cssAspectRatio; ?>; height: 100%; max-width: 100%;
                              src="<?php echo \Yii::$app->cms->image1px; ?>"
-                             data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
-                            new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                'w' => $this->theme->product_card_img_preview_width,
-                                'h' => $this->theme->product_card_img_preview_height,
-                                'm' => $this->theme->product_card_img_preview_crop,
-                            ]), $model->code
-                        ); ?>" alt="<?= $model->name; ?>">
+                             data-src="<?= $preview->src; ?>" alt="<?= $model->name; ?>">
                     </a>
                 </div>
             <? endforeach; ?>

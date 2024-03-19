@@ -30,19 +30,23 @@
                     <?
                     $counter = 0;
                     foreach ($images as $image) : ?>
-                        <? $counter ++; ?>
+                        <? $counter ++; 
+                        $preview = \Yii::$app->imaging->getPreview($image,
+                            new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                'w'          => $this->theme->catalog_img_preview_width,
+                                'h'          => $this->theme->catalog_img_preview_width,
+                                'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                                'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_BIG,
+                            ]), $model->code
+                        );
+                        ?>
+                    
+                            
                         <? if ($counter < 6) : ?>
                         <img class="sx-list-image lazy"
-                             style="aspect-ratio: 480/280; width: 100%;"
+                             style="aspect-ratio: <?= $preview->cssAspectRatio?>; width: 100%;"
                              src="<?php echo \Yii::$app->cms->image1px; ?>"
-                             data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
-                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                     'w' => 420,
-                                     'h' => 280,
-                                     'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
-                                 ]), $model->code
-                             ); ?>"
-
+                             data-src="<?= $preview->src; ?>"
                              title="<?= \yii\helpers\Html::encode($model->code); ?>"
                              alt="<?= \yii\helpers\Html::encode($model->code); ?>"/>
                         <? endif; ?>

@@ -105,18 +105,22 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                         <?
                         $counter = 0;
                         foreach ($images as $image) : ?>
-                            <? $counter++; ?>
+                            <? $counter++;
+
+                            $preview = \Yii::$app->imaging->getPreview($image,
+                                new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                    'w'          => $this->theme->catalog_img_preview_width,
+                                    'h'          => $this->theme->catalog_img_preview_width,
+                                    'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                                    'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_MEDIUM,
+                                ]), $model->code
+                            );
+                            ?>
                             <? if ($counter < 6) : ?>
                                 <img class="sx-list-image lazy"
-                                     style="aspect-ratio: <?php echo \Yii::$app->view->theme->catalog_img_preview_width; ?>/<?php echo \Yii::$app->view->theme->catalog_img_preview_height; ?>;"
+                                     style="aspect-ratio: <?= $preview->cssAspectRatio; ?>;"
                                      src="<?php echo \Yii::$app->cms->image1px; ?>"
-                                     data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($image->src,
-                                         new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                             'w' => \Yii::$app->view->theme->catalog_img_preview_width,
-                                             'h' => \Yii::$app->view->theme->catalog_img_preview_height,
-                                             'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
-                                         ]), $model->code
-                                     ); ?>"
+                                     data-src="<?= $preview->src; ?>"
 
                                      title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"
                                      alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
@@ -131,28 +135,40 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                     \skeeks\cms\themes\unifyshop\assets\ProductListImagesV2Asset::register($this);
 
                     $secondImage = null;
+                    
+                    $preview = \Yii::$app->imaging->getPreview($image,
+                        new \skeeks\cms\components\imaging\filters\Thumbnail([
+                            'w'          => $this->theme->catalog_img_preview_width,
+                            'h'          => $this->theme->catalog_img_preview_width,
+                            'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                            'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_MEDIUM,
+                        ]), $model->code
+                    );
+                    
                     if ($infoModel->images) {
                         $secondImage = $infoModel->images[0];
                     }
+                    
+                    
+            
                     ?>
                     <img class="sx-product-image to-cart-fly-img lazy"
-                         style="aspect-ratio: <?php echo \Yii::$app->view->theme->catalog_img_preview_width; ?>/<?php echo \Yii::$app->view->theme->catalog_img_preview_height; ?>;"
+                         style="aspect-ratio: <?php echo $preview->cssAspectRatio; ?>;"
                          src="<?php echo \Yii::$app->cms->image1px; ?>"
-                         data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->mainProductImage ? $infoModel->mainProductImage->src : null,
-                             new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                 'w' => \Yii::$app->view->theme->catalog_img_preview_width,
-                                 'h' => \Yii::$app->view->theme->catalog_img_preview_height,
-                                 'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
-                             ]), $model->code
-                         ); ?>"
+                         data-src="<?= $preview->src; ?>"
                         <? if ($secondImage) : ?>
-                            data-second-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($secondImage->src,
+                        
+                            <?
+                            $preview = \Yii::$app->imaging->getPreview($secondImage,
                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                    'w' => \Yii::$app->view->theme->catalog_img_preview_width,
-                                    'h' => \Yii::$app->view->theme->catalog_img_preview_height,
-                                    'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                                    'w'          => $this->theme->catalog_img_preview_width,
+                                    'h'          => $this->theme->catalog_img_preview_width,
+                                    'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                                    'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_MEDIUM,
                                 ]), $model->code
-                            ); ?>"
+                            );
+                            ?>
+                            data-second-src="<?php echo $preview->src; ?>"
                         <? endif; ?>
                          title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
 
