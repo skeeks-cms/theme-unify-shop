@@ -27,6 +27,7 @@
                 }
                 ?>
                 <div class="sx-list-images">
+                    
                     <?
                     $counter = 0;
                     foreach ($images as $image) : ?>
@@ -36,7 +37,7 @@
                                 'w'          => $this->theme->catalog_img_preview_width,
                                 'h'          => $this->theme->catalog_img_preview_width,
                                 'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
-                                'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_BIG,
+                                'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_MEDIUM,
                             ]), $model->code
                         );
                         ?>

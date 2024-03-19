@@ -75,10 +75,10 @@ if ($images !== false && !$images) {
                     <?
                     $preview = \Yii::$app->imaging->getPreview($image,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
-                            'w' => 75,
-                            'h' => 75,
+                            'w' => 100,
+                            'h' => 100,
                             'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
-                            'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_SMALL,
+                            'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_MICRO,
                         ]), $model->code
                     );
                     ?>
@@ -122,7 +122,7 @@ if ($images !== false && !$images) {
                     <!--w-100-->
                     <a class="sx-fancybox-gallary" data-fancybox="images" href="<?= $image->src; ?>">
                         <img class="img-fluid lazy" 
-                             style="aspect-ratio: <?php echo $preview->cssAspectRatio; ?>; height: 100%; max-width: 100%;
+                             style="aspect-ratio: <?php echo $preview->cssAspectRatio; ?>; height: 100%; width: 100%;
                              src="<?php echo \Yii::$app->cms->image1px; ?>"
                              data-src="<?= $preview->src; ?>" alt="<?= $model->name; ?>">
                     </a>
