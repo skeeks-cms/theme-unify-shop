@@ -176,16 +176,21 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
 
 
             <?php else : ?>
+            
+                <?
+                $preview = \Yii::$app->imaging->getPreview($infoModel->mainProductImage,
+                    new \skeeks\cms\components\imaging\filters\Thumbnail([
+                        'w'          => $this->theme->catalog_img_preview_width,
+                        'h'          => $this->theme->catalog_img_preview_width,
+                        'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
+                        'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_SMALL,
+                    ]), $model->code
+                );
+                ?>
                 <img class="sx-product-image to-cart-fly-img lazy"
-                     style="aspect-ratio: <?php echo \Yii::$app->view->theme->catalog_img_preview_width; ?>/<?php echo \Yii::$app->view->theme->catalog_img_preview_height; ?>;"
+                     style="aspect-ratio: <?php echo $preview->cssAspectRatio; ?>;"
                      src="<?php echo \Yii::$app->cms->image1px; ?>"
-                     data-src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($infoModel->mainProductImage ? $infoModel->mainProductImage->src : null,
-                         new \skeeks\cms\components\imaging\filters\Thumbnail([
-                             'w' => \Yii::$app->view->theme->catalog_img_preview_width,
-                             'h' => \Yii::$app->view->theme->catalog_img_preview_height,
-                             'm' => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
-                         ]), $model->code
-                     ); ?>"
+                     data-src="<?= $preview->src; ?>"
                      title="<?= \yii\helpers\Html::encode($infoModel->productName); ?>" alt="<?= \yii\helpers\Html::encode($infoModel->productName); ?>"/>
             <?php endif; ?>
 

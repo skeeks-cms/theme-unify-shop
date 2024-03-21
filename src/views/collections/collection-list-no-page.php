@@ -46,10 +46,14 @@ CSS
         'class' => '',
         'tag'   => false,
     ],
-    'itemOptions'  => [
+    /*'itemOptions'  => [
         'tag'   => 'div',
         'class' => $itemClasses . ' item sx-collection-list-item-wrapper',
-    ],
+    ],*/
+    'itemOptions'  => \yii\helpers\ArrayHelper::merge([
+        'tag'   => 'div',
+        'class' => \Yii::$app->view->theme->prooductListItemCssClasses . ' item sx-collection-list-item-wrapper',
+    ], (array)@$itemOptions),
     'pager'        => [
         'container' => '.sx-product-list',
         'item'      => '.sx-product-card-wrapper',
