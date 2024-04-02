@@ -87,7 +87,9 @@ if ($eavFiltersHandler || $shopDataFiltersHandler) {
         //print_r($eavFiltersHandler->toArray());die;
         $eavFiltersHandler->loadFromSavedFilter($savedFilter);
         $shopDataFiltersHandler->loadFromSavedFilter($savedFilter);
+        $filtersWidget->applyToQuery($dataProvider->query);
     } else {
+        $filtersWidget->applyToQuery($dataProvider->query);
         //Создать фильтр если не заполнена цена и данные для магазина
         if (!$priceFiltersHandler->getApplied() && !$shopDataFiltersHandler->getApplied()) {
             $savedFilterFromRequest = $eavFiltersHandler->savedFilter;
@@ -105,9 +107,11 @@ if ($eavFiltersHandler || $shopDataFiltersHandler) {
             }
         }
     }
+} else {
+    $filtersWidget->applyToQuery($dataProvider->query);
 }
 
-$filtersWidget->applyToQuery($dataProvider->query);
+
 
 ?>
 <!--Тут кэш и построение микроразметки-->

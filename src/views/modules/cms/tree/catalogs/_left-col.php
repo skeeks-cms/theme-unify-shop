@@ -31,7 +31,6 @@ CSS
 
     ?>
 
-    <div class="sx-col-left-block">
 
         <?
         //Если есть дочерние разделы или есть родительские больше чем главная
@@ -112,6 +111,8 @@ CSS
 
 
         <?php if($data) : ?>
+                <div class="sx-col-left-block">
+
             <!--<div class="g-mb-10">
                 <div class="h5 sx-col-left-title">
                     <?/*= \Yii::t('skeeks/unify', 'Categories'); */?>
@@ -187,10 +188,10 @@ CSS
 
 
 
-
+</div>
         <? endif; ?>
 
-    </div>
+    
 
 
 <? endif; ?>

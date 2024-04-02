@@ -132,12 +132,14 @@ $this->registerCss(<<<CSS
 }
 
 .sx-brand-item .sx-image {
-    margin-bottom: 10px;
-    padding: 10px;
+    margin-bottom: 0.8rem;
 }
+
 
 .sx-brand-item .sx-image img {
     max-width: 100%;
+    border-radius: var(--base-radius); 
+
 }
 
 .sx-brand-item .sx-country {
