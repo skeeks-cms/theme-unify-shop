@@ -425,7 +425,7 @@ ul.sx-properties .sx-properties--name:after {
  * На детальной странице переопределение стилей вставленных заголовков
  */
 .sx-product-description h1, .sx-product-description .h1, .sx-product-description h2, .sx-product-description .h2, .sx-product-description h3, .sx-product-description .h3, .sx-product-description h4, .sx-product-description .h4, .sx-product-description h5, .sx-product-description .h5, .sx-product-description h6, .sx-product-description .h6 {
-    font-size: 1rem !important;
+    /*font-size: 1rem !important;*/
     line-height: 1 !important;
 }
 
