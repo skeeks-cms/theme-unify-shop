@@ -46,13 +46,13 @@ foreach($shopStoreProducts as $shopStoreProduct) {
                             <?php endif; ?>
                         </div>
                         <div class="">
-                            <?php if ($shopStoreProduct->quantity > 10) : ?>
-                                <b style="float: right;"><?php echo $shopStoreProduct->quantity > 10 ? "много" : (float) $shopStoreProduct->quantity . " " . $shopProduct->measure->symbol; ?>
+                            <?php /*if ($shopStoreProduct->quantity > 10) : */?><!--
+                                <b style="float: right;"><?php /*echo $shopStoreProduct->quantity > 10 ? "много" : (float) $shopStoreProduct->quantity . " " . $shopProduct->measure->symbol; */?>
                                 </b>
-                            <?php else: ?>
+                            --><?php /*else: */?>
                                 <b style="float: right;"><?php echo (float) $shopStoreProduct->quantity; ?>&nbsp;<?php echo $shopProduct->measure->symbol; ?>
                                 </b>
-                            <?php endif; ?>
+                            <?php /*endif; */?>
                         </div>
                     </div>
                 <?php endif; ?>

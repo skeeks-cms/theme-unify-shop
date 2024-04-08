@@ -49,7 +49,8 @@ JS
                 $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
             }
         }
-        
+
+
         $isShowPrice = false;
         if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
             $isShowPrice = true;
@@ -59,6 +60,7 @@ JS
                 
                 if ($shopStoreProducts) {
                     if ($quantityAvailable > 0) {
+
                         $isShowPrice = true;
                     } else {
                         $isShowPrice = false;
@@ -69,7 +71,8 @@ JS
                 
             }
         }
-        
+
+
         ?>
         <? if ($isShowPrice) : ?>
             <? if ($priceHelper->hasDiscount) : ?>
