@@ -10,7 +10,7 @@
 
 <? foreach (\Yii::$app->shop->shopUser->shopOrder->shopOrderItems as $orderItem) : ?>
     <div class="row no-gutters sx-order-item" data-id="<?php echo $orderItem->id; ?>">
-        <div class="col" style="max-width: 160px;">
+        <div class="col sx-image-col" style="max-width: 160px;">
             <a href="<?= $orderItem->url; ?>" data-pjax="0">
                 <img src="<?= \skeeks\cms\helpers\Image::getSrc(
                     \Yii::$app->imaging->getImagingUrl($orderItem->image ? $orderItem->image->src : null, new \skeeks\cms\components\imaging\filters\Thumbnail([

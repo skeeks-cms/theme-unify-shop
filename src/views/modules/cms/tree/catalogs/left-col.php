@@ -52,7 +52,7 @@ if ($model->shop_has_collections) {
                     <h1 class="sx-breadcrumbs-h1 sx-catalog-h1" style="margin-bottom: 0px; display: contents;">
                         <?php echo $model->seoName; ?>
                         <?php if (!$savedFilter && $appliedValues) : ?>
-                            + применены фильтры
+                            <span class="sx-applied-filters-text">+ применены фильтры</span>
                         <?php endif; ?>
 
                     </h1>
