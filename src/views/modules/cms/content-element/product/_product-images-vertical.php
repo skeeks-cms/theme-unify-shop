@@ -122,7 +122,7 @@ if ($images !== false && !$images) {
                     <!--w-100-->
                     <a class="sx-fancybox-gallary" data-fancybox="images" href="<?= $image->src; ?>">
                         <img class="img-fluid lazy" 
-                             style="aspect-ratio: <?php echo $preview->cssAspectRatio; ?>; height: 100%; width: 100%; max-width: <?php echo $preview->width; ?>px; max-height: <?php echo $preview->height; ?>px;"
+                             style="aspect-ratio: <?php echo $preview->cssAspectRatio; ?>; height: 100%; width: 100%; max-width: 500px; max-height: <?php echo $preview->height; ?>px;"
                              src="<?php echo \Yii::$app->cms->image1px; ?>"
                              data-src="<?= $preview->src; ?>" alt="<?= $model->name; ?>">
                     </a>
