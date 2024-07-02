@@ -12,13 +12,17 @@
     <div class="row no-gutters sx-order-item" data-id="<?php echo $orderItem->id; ?>">
         <div class="col sx-image-col" style="max-width: 160px;">
             <a href="<?= $orderItem->url; ?>" data-pjax="0">
-                <img src="<?= \skeeks\cms\helpers\Image::getSrc(
-                    \Yii::$app->imaging->getImagingUrl($orderItem->image ? $orderItem->image->src : null, new \skeeks\cms\components\imaging\filters\Thumbnail([
-                        'h' => 150,
+                <?
+                $preview = \Yii::$app->imaging->getPreview($orderItem->image,
+                    new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w' => 150,
-                        'm' => \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
-                    ]))
-                ) ?>" class="sx-lazy" alt="<?= $orderItem->name; ?> title="<?= $orderItem->name; ?> width="150"/>
+                        'h' => 150,
+                        'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
+                        'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_SMALL,
+                    ])
+                );
+                ?>
+                <img src="<?= $preview->src; ?>" class="sx-lazy" alt="<?= $orderItem->name; ?> title="<?= $orderItem->name; ?> width="150"/>
             </a>
         </div>
         <div class="col" style="padding: 0 10px;">

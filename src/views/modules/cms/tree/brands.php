@@ -17,6 +17,7 @@ $q = \skeeks\cms\shop\models\ShopBrand::find()
     ->with("logo")
     ->innerJoinWith('products as products', false)
     ->addSelect(\skeeks\cms\shop\models\ShopBrand::tableName().".*")
+    ->andWhere([\skeeks\cms\shop\models\ShopBrand::tableName().".is_active" => 1])
     ->groupBy(\skeeks\cms\shop\models\ShopBrand::tableName().".id");
 
 $this->registerCss(<<<CSS
