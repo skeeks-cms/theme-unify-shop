@@ -29,7 +29,7 @@ if ($shopFilter) {
     $appliedValues = \yii\helpers\ArrayHelper::merge($appliedValues, $shopFilter->getApplied());
 }
 if ($eavFilter) {
-    $appliedValues =  \yii\helpers\ArrayHelper::merge($appliedValues, $eavFilter->getApplied());
+    $appliedValues = \yii\helpers\ArrayHelper::merge($appliedValues, $eavFilter->getApplied());
 }
 
 $hasCollections = false;
@@ -78,29 +78,29 @@ if ($model->shop_has_collections) {
                 if (!$savedFilter && $appliedValues): ?>
                     <div class="sx-saved-filters-list sx-saved-filters-list--after" style="margin-top: 0px;">
                         <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
-                            <?php /*if ($priceFilter->f || $priceFilter->t) : */?><!--
+                            <?php /*if ($priceFilter->f || $priceFilter->t) : */ ?><!--
                                 <?php
-/*                                $priceTitle = "";
-                                $priceTitleData = [];
-                                if ($priceFilter->f) {
-                                    $f = \Yii::$app->formatter->asDecimal($priceFilter->f);
-                                    $priceTitleData[] = "от <b>{$f}</b>";
-                                }
-                                if ($priceFilter->t) {
-                                    $t = \Yii::$app->formatter->asDecimal($priceFilter->t);
-                                    $priceTitleData[] = "до <b>{$t}</b>";
-                                }
-                                $priceTitleData[] = \Yii::$app->money->currency_symbol;
-                                $priceTitle = implode(" ", $priceTitleData);
-                                */?>
+                            /*                                $priceTitle = "";
+                                                            $priceTitleData = [];
+                                                            if ($priceFilter->f) {
+                                                                $f = \Yii::$app->formatter->asDecimal($priceFilter->f);
+                                                                $priceTitleData[] = "от <b>{$f}</b>";
+                                                            }
+                                                            if ($priceFilter->t) {
+                                                                $t = \Yii::$app->formatter->asDecimal($priceFilter->t);
+                                                                $priceTitleData[] = "до <b>{$t}</b>";
+                                                            }
+                                                            $priceTitleData[] = \Yii::$app->money->currency_symbol;
+                                                            $priceTitle = implode(" ", $priceTitleData);
+                                                            */ ?>
                                 <?php /*echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
                                     'isActive'    => true,
                                     'value_id'    => "",
                                     'property_id' => "price",
                                     'seoName'     => $model->seoName." по цене ".$priceTitle,
                                     'displayName' => $model->name." по цене ".$priceTitle,
-                                ]); */?>
-                            --><?php /*endif; */?>
+                                ]); */ ?>
+                            --><?php /*endif; */ ?>
 
                             <?php foreach ($appliedValues as $data) : ?>
                                 <?php $name = \yii\helpers\ArrayHelper::getValue($data, "name"); ?>
@@ -121,6 +121,15 @@ if ($model->shop_has_collections) {
                                     'displayName' => $model->name." ".\skeeks\cms\helpers\StringHelper::lcfirst($name),
                                 ]); ?>
                             <?php endforeach; ?>
+
+                            <li class="list-inline-item sx-active" style="margin-bottom: 5px;" data-value_id="38" data-property_id="field-e-f34">
+                                <a href="<?php echo $model->url; ?>" class="btn btn-default">
+                            <span data-toggle="tooltip" data-html="true" title="" data-original-title="Сбросить примененные фильтры">
+                            Очистить все </span>
+                                    <i class="hs-icon hs-icon-close sx-close-btn" data-toggle="tooltip" title="" data-original-title=""></i>
+                                </a>
+                            </li>
+
                         </ul>
                     </div>
 
@@ -148,7 +157,6 @@ if ($model->shop_has_collections) {
                         $savedFilters = $savedFiltersQ
                             ->limit(10)
                             ->all();
-                        
 
 
                     }
@@ -313,7 +321,7 @@ if ($model->shop_has_collections) {
                 <?php if (\Yii::$app->mobileDetect->isMobile) {
                     //\skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
                 } else {
-                    \skeeks\assets\unify\base\UnifyHsScrollbarAsset::register($this);   
+                    \skeeks\assets\unify\base\UnifyHsScrollbarAsset::register($this);
                 }; ?>
                 <div class="row sx-mobile-filters-block js-sticky-block" id="sx-mobile-filters-block" data-has-sticky-header="true" data-start-point="#sx-mobile-filters-block" data-end-point=".sx-footer">
                     <div class="col-12 sx-mobile-filters-block--inner">
@@ -358,24 +366,24 @@ if ($model->shop_has_collections) {
                     </div>
 
                 <?php endif; ?>
-                
-                
+
+
                 <?php if ($hasCollections && $viewMode == "collection") : ?>
 
                     <?php
-                $this->registerCss(<<<CSS
+                    $this->registerCss(<<<CSS
 .sorting, .sx-btn-sort-select {
     display: none;
 }
 CSS
-);
+                    );
                     /**
                      * @var $query \yii\db\ActiveQuery
                      */
                     $query = $dataProvider->query;
                     $realPrice = '';
                     $select = [
-                        \skeeks\cms\models\CmsContentElement::tableName().".id"
+                        \skeeks\cms\models\CmsContentElement::tableName().".id",
                     ];
                     if (isset($query->select['realPrice'])) {
                         $realPrice = $query->select['realPrice'];
@@ -388,7 +396,8 @@ CSS
                     $query->groupBy(['collections.id']);
 
                     $q = \skeeks\cms\shop\models\ShopCollection::find()->innerJoin(['main' => $query], [
-                            'main.collection_id' => new \yii\db\Expression(\skeeks\cms\shop\models\ShopCollection::tableName() . ".id")]);
+                        'main.collection_id' => new \yii\db\Expression(\skeeks\cms\shop\models\ShopCollection::tableName().".id"),
+                    ]);
                     ?>
 
                     <?php echo $this->render("@app/views/collections/collection-list", [
@@ -401,7 +410,7 @@ CSS
                     ]); ?>
 
                 <?php else: ?>
-                
+
                     <?php if ($totalOffers > 0): ?>
                         <?php echo $this->render("@app/views/products/product-list", [
                             'dataProvider' => $dataProvider,
@@ -423,7 +432,7 @@ CSS
                         <?= @$description_short; ?>
                     </div>
                 <?php endif; ?>
-                
+
 
                 <?php if (@$description) : ?>
                     <div class="sx-content sx-description-full" style="margin-top: 20px;">
@@ -512,15 +521,15 @@ CSS
 
                 ?>
                 <?php if ($savedFilters) : ?>
-                <?php
-/**
- * @link https://cms.skeeks.com/
- * @copyright Copyright (c) 2010 SkeekS
- * @license https://cms.skeeks.com/license/
- * @author Semenov Alexander <semenov@skeeks.com>
- */
-/* @var $this yii\web\View */
-$this->registerCss(<<<CSS
+                    <?php
+                    /**
+                     * @link https://cms.skeeks.com/
+                     * @copyright Copyright (c) 2010 SkeekS
+                     * @license https://cms.skeeks.com/license/
+                     * @author Semenov Alexander <semenov@skeeks.com>
+                     */
+                    /* @var $this yii\web\View */
+                    $this->registerCss(<<<CSS
 .sx-small::before {
     content: " ";
     background: linear-gradient(to bottom, #403d3d00, #ffffffd4);
@@ -543,9 +552,9 @@ $this->registerCss(<<<CSS
 }
 
 CSS
-);
+                    );
 
-$this->registerJs(<<<JS
+                    $this->registerJs(<<<JS
 if ($(".sx-spoiler").height() > 200) {
     $(".sx-spoiler").addClass("sx-small");
     $(".sx-more").show();
@@ -557,9 +566,9 @@ $(".sx-more .btn").on("click", function() {
      return false;
 });
 JS
-);
-?>
-                
+                    );
+                    ?>
+
                     <div class="sx-saved-filters-list sx-saved-filters-list--after sx-spoiler" style="margin-top: 1.5rem;">
                         <?php
                         $savedFiltersData = \skeeks\cms\models\CmsSavedFilter::formatFilters($savedFilters);
@@ -594,7 +603,7 @@ JS
                             Показать еще
                         </button>
                     </div>
-                
+
                 <?php endif; ?>
 
             </div>

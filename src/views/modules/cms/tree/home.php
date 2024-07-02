@@ -20,7 +20,7 @@
         'content_ids'        => [
             $content ? $content->id : "",
         ],
-        'viewFile'           => '@app/views/widgets/ContentElementsCmsWidget/slider-revo-no-full',
+        'viewFile'           => '@app/views/widgets/ContentElementsCmsWidget/stock-carousel',
     ]); ?>
 
 <? endif; ?>
