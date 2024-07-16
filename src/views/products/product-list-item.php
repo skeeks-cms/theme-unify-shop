@@ -136,7 +136,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
 
                     $secondImage = null;
                     
-                    $preview = \Yii::$app->imaging->getPreview($image,
+                    $preview = \Yii::$app->imaging->getPreview($infoModel->mainProductImage,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
                             'w'          => $this->theme->catalog_img_preview_width,
                             'h'          => $this->theme->catalog_img_preview_width,
