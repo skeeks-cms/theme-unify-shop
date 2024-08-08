@@ -102,7 +102,7 @@ if ($collectionsQuery->count()) :
 <?php endif; ?>
 
 
-<? if (\Yii::$app->shop->shopContents && \Yii::$app->mobileDetect->isDesktop) : ?>
+<? if (\Yii::$app->shop->shopContents) : ?>
     <div class="container sx-container sx-popular-product" style="margin: 40px auto;">
         <?
         \skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
