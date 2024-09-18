@@ -101,8 +101,8 @@ if ($images !== false && !$images) {
                     <?
                     $preview = \Yii::$app->imaging->getPreview($image,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
-                            'w' => 75,
-                            'h' => 75,
+                            'w' => 100,
+                            'h' => 100,
                             'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
                             'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_SMALL,
                         ]), $model->code
@@ -111,7 +111,7 @@ if ($images !== false && !$images) {
             
                 <div class="js-slide">
                         <img class="img-fluid lazy" 
-                             style="aspect-ratio: <?php echo $preview->cssAspectRatio; ?>; width: 100%;"
+                             style="max-width: 100px; aspect-ratio: <?php echo $preview->cssAspectRatio; ?>; width: 100%;"
                              src="<?php echo \Yii::$app->cms->image1px; ?>"
                              data-src="<?= $preview->src; ?>" alt="<?= $model->name; ?>">
                     </div>
