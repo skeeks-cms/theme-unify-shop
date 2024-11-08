@@ -110,7 +110,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                             $preview = \Yii::$app->imaging->getPreview($image,
                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
                                     'w'          => $this->theme->catalog_img_preview_width,
-                                    'h'          => $this->theme->catalog_img_preview_width,
+                                    'h'          => $this->theme->catalog_img_preview_height,
                                     'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
                                     'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_MEDIUM,
                                 ]), $model->code
@@ -139,7 +139,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                     $preview = \Yii::$app->imaging->getPreview($infoModel->mainProductImage,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
                             'w'          => $this->theme->catalog_img_preview_width,
-                            'h'          => $this->theme->catalog_img_preview_width,
+                            'h'          => $this->theme->catalog_img_preview_height,
                             'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
                             'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_MEDIUM,
                         ]), $model->code
@@ -162,7 +162,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                             $preview = \Yii::$app->imaging->getPreview($secondImage,
                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
                                     'w'          => $this->theme->catalog_img_preview_width,
-                                    'h'          => $this->theme->catalog_img_preview_width,
+                                    'h'          => $this->theme->catalog_img_preview_height,
                                     'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
                                     'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_MEDIUM,
                                 ]), $model->code
@@ -181,7 +181,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                 $preview = \Yii::$app->imaging->getPreview($infoModel->mainProductImage,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
                         'w'          => $this->theme->catalog_img_preview_width,
-                        'h'          => $this->theme->catalog_img_preview_width,
+                        'h'          => $this->theme->catalog_img_preview_height,
                         'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
                         'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_SMALL,
                     ]), $model->code
