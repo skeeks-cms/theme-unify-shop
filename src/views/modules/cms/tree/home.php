@@ -7,21 +7,41 @@
  */
 /* @var $this yii\web\View */
 ?>
-<? if ($this->theme->is_show_home_slider && !\Yii::$app->mobileDetect->isMobile) : ?>
-    <?
-    $content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'slide'])->one();
-    ?>
-    <?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
-        'namespace'          => 'home-slider',
-        'enabledCurrentTree' => 'N',
-        'orderBy'            => 'priority',
-        'order'              => SORT_ASC,
-        'enabledRunCache'    => \skeeks\cms\components\Cms::BOOL_N,
-        'content_ids'        => [
-            $content ? $content->id : "",
-        ],
-        'viewFile'           => '@app/views/widgets/ContentElementsCmsWidget/stock-carousel',
-    ]); ?>
+<? if ($this->theme->is_show_home_slider) : ?>
+    <?php if (\Yii::$app->mobileDetect->isMobile) : ?>
+        <?
+        $content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'slide-mobile'])->one();
+        ?>
+        <?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
+            'namespace'          => 'home-slider-mobile',
+            'enabledCurrentTree' => 'N',
+            'orderBy'            => 'priority',
+            'order'              => SORT_ASC,
+            'enabledRunCache'    => \skeeks\cms\components\Cms::BOOL_N,
+            'content_ids'        => [
+                $content ? $content->id : "",
+            ],
+            'viewFile'           => '@app/views/widgets/ContentElementsCmsWidget/stock-carousel',
+        ]); ?>
+    <?php else : ?>
+
+        <?
+        $content = \skeeks\cms\models\CmsContent::find()->where(['code' => 'slide'])->one();
+        ?>
+        <?= \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::widget([
+            'namespace'          => 'home-slider',
+            'enabledCurrentTree' => 'N',
+            'orderBy'            => 'priority',
+            'order'              => SORT_ASC,
+            'enabledRunCache'    => \skeeks\cms\components\Cms::BOOL_N,
+            'content_ids'        => [
+                $content ? $content->id : "",
+            ],
+            'viewFile'           => '@app/views/widgets/ContentElementsCmsWidget/stock-carousel',
+        ]); ?>
+
+    <?php endif; ?>
+
 
 <? endif; ?>
 
