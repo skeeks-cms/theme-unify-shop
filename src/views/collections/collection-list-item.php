@@ -10,7 +10,7 @@
 /**
  * @var \skeeks\cms\shop\models\ShopCollection $model
  */
-
+\skeeks\cms\themes\unify\assets\VanillaLazyLoadAsset::register($this);
 ?>
 <div class="g-brd-gray-light-v4 g-color-gray-dark-v2 g-brd-around g-bg-white sx-collection-list-item">
     <a class="d-block text-center" href="<?= $model->url; ?>">
