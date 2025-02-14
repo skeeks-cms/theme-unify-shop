@@ -170,5 +170,31 @@
         right: 5px;
         top: 1px;
     }
+    .sx-product-card--sale {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        width: 35px;
+        height: 35px;
+        text-align: center;
+        background: #ffde09d4;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+        z-index: 5;
+        font-weight: 700;
+        line-height: 1;
+        padding: 6px 0 0;
+    }
+
+    .sx-product-card--sale .number {
+        font-size: 1em;
+    }
+    .sx-product-card--sale .percent {
+        font-size: 1em;
+    }
+    .sx-product-card--sale .caption {
+        text-transform: uppercase;
+        font-size: .466667em;
+    }
 
 }
