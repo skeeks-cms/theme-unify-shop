@@ -27,13 +27,6 @@ $('[data-fancybox="images"]').fancybox({
 });
 JS
 );
-
-$this->registerCss(<<<CSS
-.slick-current {
-    cursor: zoom-in;
-}
-CSS
-);
 ?>
 <?
 

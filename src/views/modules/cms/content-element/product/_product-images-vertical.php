@@ -27,9 +27,6 @@ JS
 );
 
 $this->registerCss(<<<CSS
-.slick-current {
-    cursor: zoom-in;
-}
 .sx-main-product-container .sx-product-images
 {
     padding-left: 10px;

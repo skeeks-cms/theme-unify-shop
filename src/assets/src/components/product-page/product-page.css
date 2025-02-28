@@ -46,7 +46,6 @@
     right: 0;
     bottom: 0;
     left: 0;
-    /*border: 1px solid rgba(21,146,165,0);*/
     -moz-transition: all .3s ease;
     -o-transition: all .3s ease;
     -webkit-transition: all .3s ease;
@@ -56,6 +55,7 @@
 
 .sx-product-page-wrapper .sx-stick-navigation .slick-slide {
     opacity: .6;
+    position: relative;
 }
 
 .sx-product-page-wrapper .sx-stick-navigation .slick-current,
