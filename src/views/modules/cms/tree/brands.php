@@ -18,7 +18,8 @@ $q = \skeeks\cms\shop\models\ShopBrand::find()
     ->innerJoinWith('products as products', false)
     ->addSelect(\skeeks\cms\shop\models\ShopBrand::tableName().".*")
     ->andWhere([\skeeks\cms\shop\models\ShopBrand::tableName().".is_active" => 1])
-    ->groupBy(\skeeks\cms\shop\models\ShopBrand::tableName().".id");
+    ->groupBy(\skeeks\cms\shop\models\ShopBrand::tableName().".id")
+    ->orderBy([\skeeks\cms\shop\models\ShopBrand::tableName().".name" => SORT_ASC]);
 
 $this->registerCss(<<<CSS
 .sx-brand-item-wrapper {
