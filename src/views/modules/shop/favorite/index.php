@@ -43,8 +43,8 @@ $baseQuery = clone $dataProvider->query;
         <div class="row">
             <div class="col-12 sx-catalog-wrapper" style="padding-bottom: 20px; padding-top: 20px;">
                 
-        <div class="sx-catalog-h1-wrapper" style="display: flex; margin-bottom: 10px;">
-            <div><h1 class="sx-breadcrumbs-h1 sx-catalog-h1" style="margin-bottom: 0px;"><?php echo \Yii::t('skeeks/shop/app', 'Favorite products'); ?></h1></div>
+        <div class="sx-catalog-h1-wrapper">
+            <div><h1 class="sx-breadcrumbs-h1 sx-catalog-h1"><?php echo \Yii::t('skeeks/shop/app', 'Favorite products'); ?></h1></div>
             <div class="sx-catalog-total-offers" style="color: #979797;
     margin-top: auto;
     margin-left: 12px;

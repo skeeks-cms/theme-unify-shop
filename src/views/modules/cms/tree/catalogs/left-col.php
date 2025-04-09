@@ -53,8 +53,8 @@ if ($model->shop_has_collections) {
                     'isShowH1'   => false,
                     'isShowLast' => true,
                 ]) ?>
-                <div class="sx-catalog-h1-wrapper" style="margin-bottom: 10px;">
-                    <h1 class="sx-breadcrumbs-h1 sx-catalog-h1" style="margin-bottom: 0px; display: contents;">
+                <div class="sx-catalog-h1-wrapper">
+                    <h1 class="sx-breadcrumbs-h1 sx-catalog-h1">
                         <?php echo $model->seoName; ?>
                         <?php if (!$savedFilter && $appliedValues) : ?>
                             <span class="sx-applied-filters-text">+ применены фильтры</span>

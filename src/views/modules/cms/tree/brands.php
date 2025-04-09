@@ -381,8 +381,8 @@ $dataProvider->setTotalCount($totalOffers);
             'isShowLast' => true,
         ]); ?>
 
-        <div class="sx-catalog-h1-wrapper" style="display: flex; margin-bottom: 10px;">
-            <div><h1 class="sx-breadcrumbs-h1 sx-catalog-h1" style="margin-bottom: 0px;"><?php echo $model->seoName; ?><?php echo $filtersNames ? " + ".implode(" + ", $filtersNames) : ""; ?></h1></div>
+        <div class="sx-catalog-h1-wrapper">
+            <div><h1 class="sx-breadcrumbs-h1 sx-catalog-h1"><?php echo $model->seoName; ?><?php echo $filtersNames ? " + ".implode(" + ", $filtersNames) : ""; ?></h1></div>
             <div class="sx-catalog-total-offers" style="color: #979797;
     margin-top: auto;
     margin-left: 12px;

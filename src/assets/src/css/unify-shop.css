@@ -80,6 +80,16 @@
     text-align: center;
 }
 
+.sx-catalog-h1-wrapper .sx-breadcrumbs-h1 {
+    margin-bottom: 0;
+    margin-right: 0.25rem;
+}
+.sx-catalog-h1-wrapper {
+    margin-bottom: 0.8rem;
+    display: flex;
+    justify-content: left;
+    align-items: baseline;
+}
 /**
  * Доработки корзины
  */

@@ -82,7 +82,7 @@ if (!$model->meta_keywords) {
 }
 
 $brandSavedFilter = null;
-if ($brand = $model->shopProduct->brand) {
+/*if ($brand = $model->shopProduct->brand) {
 
     \Yii::$app->breadcrumbs->parts = [];
 
@@ -111,7 +111,7 @@ if ($brand = $model->shopProduct->brand) {
         'name' => $model->name,
     ]);
 
-}
+}*/
 
 
 $singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage::beginWidget('product-page');
