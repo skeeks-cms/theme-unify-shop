@@ -40,7 +40,6 @@ $widget->dataProvider->setTotalCount(1);
                 'class' => 'js-carousel sx-stick sx-products-stick',
                 'tag'   => 'div',
                 'data'  => [
-                    'lazy-load' => "progressive",
                     'slidesToShow' => (int)\Yii::$app->view->theme->product_slider_items,
                     'responsive'   => [
                         [
