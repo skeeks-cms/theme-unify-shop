@@ -184,11 +184,15 @@ CSS
         $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-relation-products", [
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
             'label'                => "С этим товаром приобретают",
+            'enabledCurrentTree'        => "N",
             'enabledPaging'        => "N",
             'content_ids'          => [\Yii::$app->shop->contentProducts->id],
             'limit'                => 25,
             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
             'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
+                /**
+                 * @var $q \yii\db\ActiveQuery
+                 */
                 $q = $activeDataProvider->query;
 
                 $activeDataProvider->query->with('shopProduct');
@@ -221,7 +225,6 @@ CSS
         ]);
 
         ?>
-
         <? if ($widgetElements->dataProvider->query->count()) : ?>
             <section class="sx-products-slider-section sx-product-relations">
                 <div class="container sx-container">
@@ -246,6 +249,7 @@ CSS
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
             'label'                => "Товары из этой же категории",
             'enabledPaging'        => "N",
+            'enabledCurrentTree'        => "N",
             'content_ids'          => [\Yii::$app->shop->contentProducts->id],
             'tree_ids'             => $treeIds,
             'limit'                => 15,
