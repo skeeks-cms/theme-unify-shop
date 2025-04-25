@@ -83,7 +83,17 @@ if (\Yii::$app->mobileDetect->isMobile) {
 
 
 <?php
-$collectionsQuery = \skeeks\cms\shop\models\ShopCollection::find()->andWhere(['is not', 'cms_image_id', null])->orderBy(['created_at' => SORT_DESC])->limit(4);
+$collectionsQuery = \skeeks\cms\shop\models\ShopCollection::find()
+    ->select([
+        \skeeks\cms\shop\models\ShopCollection::tableName() . ".*",
+        'totalProducts' => new \yii\db\Expression("count(shopProducts.id)")
+    ])
+    ->joinWith("shopProducts as shopProducts")
+    ->andWhere(['is not', 'cms_image_id', null])
+    ->andHaving(['>', 'totalProducts', 0])
+    ->orderBy(['created_at' => SORT_DESC])
+    ->groupBy([\skeeks\cms\shop\models\ShopCollection::tableName() . '.id'])
+    ->limit(4);
 if ($collectionsQuery->count()) :
 ?>
 
@@ -103,7 +113,17 @@ if ($collectionsQuery->count()) :
     </div>
     <div id="sx-home-collection-2">
         <?
-        $collectionsQuery = \skeeks\cms\shop\models\ShopCollection::find()->andWhere(['is not', 'cms_image_id', null])->orderBy(['priority' => SORT_DESC])->limit(4);
+        $collectionsQuery = \skeeks\cms\shop\models\ShopCollection::find()
+            ->select([
+                \skeeks\cms\shop\models\ShopCollection::tableName() . ".*",
+                'totalProducts' => new \yii\db\Expression("count(shopProducts.id)")
+            ])
+            ->joinWith("shopProducts as shopProducts")
+            ->andWhere(['is not', 'cms_image_id', null])
+            ->andHaving(['>', 'totalProducts', 0])
+            ->orderBy(['priority' => SORT_DESC])
+            ->groupBy([\skeeks\cms\shop\models\ShopCollection::tableName() . '.id'])
+            ->limit(4);
         ?>
         <div class="container sx-container sx-popular-product" style="margin: 40px auto;">
             <?php echo $this->render("@app/views/collections/collection-list-no-page", [

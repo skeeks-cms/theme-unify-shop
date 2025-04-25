@@ -146,5 +146,6 @@ JS
         'shopProduct'           => $shopProduct,
         'priceHelper'           => $priceHelper,
         'shopOfferChooseHelper' => $shopOfferChooseHelper,
+        'singlPage'             => $singlPage,
     ]); ?>
 </section>

@@ -9,7 +9,9 @@
 /* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
 /* @var $shopProduct \skeeks\cms\shop\models\ShopProduct */
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
+/* @var $singlPage \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage
 /* @var $this yii\web\View */
+
 
 
 ?>
@@ -175,14 +177,74 @@ CSS
                 </div>
             </section>
         <?php endif; ?>
+
+
+        <?
+
+        $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-relation-products", [
+            'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
+            'label'                => "С этим товаром приобретают",
+            'enabledPaging'        => "N",
+            'content_ids'          => [\Yii::$app->shop->contentProducts->id],
+            'limit'                => 25,
+            'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+            'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) use ($model) {
+                $q = $activeDataProvider->query;
+
+                $activeDataProvider->query->with('shopProduct');
+                $activeDataProvider->query->with('image');
+
+                $id = $model->id;
+                if ($model->shopProduct->isOfferProduct) {
+                    if ($model->shopProduct->shopProductWhithOffers) {
+                        $id = $model->shopProduct->shopProductWhithOffers->id;
+                    }
+                }
+
+                $q
+                    ->joinWith("shopProduct.shopProductRelations1 as shopProductRelations1")
+                    ->joinWith("shopProduct.shopProductRelations2 as shopProductRelations2")
+                    ->andWhere([
+                        '!=',
+                        'shopProduct.id',
+                        $id,
+                    ])
+                    ->andWhere([
+                        'or',
+                        ["shopProductRelations1.shop_product1_id" => $id],
+                        ["shopProductRelations1.shop_product2_id" => $id],
+                        ["shopProductRelations2.shop_product1_id" => $id],
+                        ["shopProductRelations2.shop_product2_id" => $id],
+                    ]);
+
+            },
+        ]);
+
+        ?>
+
+        <? if ($widgetElements->dataProvider->query->count()) : ?>
+            <section class="sx-products-slider-section sx-product-relations">
+                <div class="container sx-container">
+                    <? $widgetElements::end(); ?>
+                </div>
+            </section>
+        <? endif; ?>
+
+
+
         <?
         $treeIds = [];
         if ($model->cmsTree && $model->cmsTree->parent) {
             $treeIds = \yii\helpers\ArrayHelper::map($model->cmsTree->parent->children, 'id', 'id');
         }
+        $treeIds = [];
+        if ($model->cmsTree) {
+            $treeIds[] = $model->cmsTree->id;
+        }
+
         $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-similar-products", [
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
-            'label'                => "Рекомендуем также",
+            'label'                => "Товары из этой же категории",
             'enabledPaging'        => "N",
             'content_ids'          => [\Yii::$app->shop->contentProducts->id],
             'tree_ids'             => $treeIds,
@@ -212,7 +274,7 @@ CSS
         ?>
 
         <? if ($widgetElements->dataProvider->query->count()) : ?>
-            <section class="sx-products-slider-section">
+            <section class="sx-products-slider-section sx-product-tree">
                 <div class="container sx-container">
                     <? $widgetElements::end(); ?>
                 </div>
@@ -246,7 +308,7 @@ CSS
             ?>
 
             <? if ($widgetElements2->dataProvider->query->count()) : ?>
-                <section class="sx-products-slider-section">
+                <section class="sx-products-slider-section sx-product-viewed">
                     <div class="container sx-container">
                         <? $widgetElements2::end(); ?>
                     </div>
