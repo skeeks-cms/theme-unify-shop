@@ -32,6 +32,7 @@ $dataProvider->setTotalCount($total);*/
         'container' => '.sx-product-list',
         'item'      => '.sx-product-card-wrapper',
         'class'     => \skeeks\cms\themes\unify\widgets\ScrollAndSpPager::class,
+        'triggerOffset'     => (int) $this->theme->pagination_trigger_offset,
     ],
     //'summary'      => "Всего товаров: {totalCount}",
     'summary'      => false,
