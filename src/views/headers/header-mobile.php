@@ -94,7 +94,7 @@ if ($models) {
         if (\Yii::$app->user->isGuest) {
             $items[] = [
                 'label' => "Вход",
-                'url'   => \skeeks\cms\helpers\UrlHelper::construct('cms/auth/login'),
+                'url'   => \skeeks\cms\helpers\UrlHelper::construct('/cms/auth/login'),
             ];
         } else {
             $items[] = [
@@ -250,7 +250,7 @@ if ($models) {
 
             <? if ($this->theme->is_header_auth) : ?>
                 <? if (\Yii::$app->user->isGuest) : ?>
-                    <a class="sx-menu-item " href="<?= \skeeks\cms\helpers\UrlHelper::construct('cms/auth/login'); ?>">
+                    <a class="sx-menu-item " href="<?= \skeeks\cms\helpers\UrlHelper::construct('/cms/auth/login'); ?>">
                         <div class="sx-icon">
                             <i class="icon-user"></i>
                         </div>
