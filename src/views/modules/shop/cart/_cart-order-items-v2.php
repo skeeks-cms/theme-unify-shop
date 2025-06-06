@@ -66,8 +66,8 @@
                     <? if ($orderItem->moneyOriginal->getAmount() == $orderItem->money->getAmount()) : ?>
                         <?= $orderItem->moneyOriginal; ?>
                     <? else : ?>
-                        <?= $orderItem->money; ?>
-                        <span class="line-through nopadding-left sx-old-price"><?= $orderItem->moneyOriginal; ?></span>
+                        <?= $orderItem->moneyWithDiscount; ?>
+                        <span class="line-through nopadding-left sx-old-price"><?= $orderItem->money; ?></span>
                     <? endif; ?>
 
                     <? /*= $orderItem->moneyOriginal; */ ?> / <?= $orderItem->measure_name; ?>
