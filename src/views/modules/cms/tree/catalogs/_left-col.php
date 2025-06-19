@@ -189,15 +189,25 @@ CSS
 <? endif; ?>
 
 <? if (!\Yii::$app->view->theme->is_allow_filters) : ?>
+
 <div class="sx-col-left-block">
     <div style="display: none;">
         <? endif; ?>
-        <div class="js-sticky-block" data-has-sticky-header="true" data-start-point=".sx-fast-filters" data-end-point=".sx-footer-wrapper">
+
+        <?php
+$isHeaderSticky = $this->theme->is_header_sticky ? "true" : "false";
+?>
+        <div class="js-sticky-block" data-has-sticky-header="<?php echo $isHeaderSticky; ?>" data-start-point=".sx-fast-filters" data-end-point=".sx-footer-wrapper">
             <div class="sx-filters-left-wrapper js-scrollbar">
                 <?
                 \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
                 $this->registerJs(<<<JS
-$(".sx-filters-left-wrapper").css("height", "calc(100vh - " + $(".u-header--sticky-top").height() +  "px)");
+if ($(".u-header--sticky-top").length) {
+    $(".sx-filters-left-wrapper").css("height", "calc(100vh - " + $(".u-header--sticky-top").height() +  "px)");
+} else {
+    $(".sx-filters-left-wrapper").css("height", "100vh");
+}
+
 JS
                 );
                 $this->registerCss(<<<CSS
