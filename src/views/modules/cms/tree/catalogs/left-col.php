@@ -35,10 +35,15 @@ if ($eavFilter) {
 $hasCollections = false;
 if ($model->shop_has_collections) {
     \Yii::$app->seo->canUrl->ADDimportant_pnames(['sx-catalog-view']);
+
     if ($model->shop_show_collections) {
         $viewMode = \Yii::$app->request->get("sx-catalog-view", "collection");
     } else {
         $viewMode = \Yii::$app->request->get("sx-catalog-view", "product");
+    }
+
+    if (\Yii::$app->request->post("sx-catalog-view")) {
+        $viewMode = \Yii::$app->request->post("sx-catalog-view");
     }
 
     $hasCollections = true;
