@@ -94,7 +94,11 @@ if ($eavFiltersHandler || $shopDataFiltersHandler) {
         if (!$priceFiltersHandler->getApplied() && !$shopDataFiltersHandler->getApplied()) {
             $savedFilterFromRequest = $eavFiltersHandler->savedFilter;
             if ($savedFilterFromRequest) {
-                \Yii::$app->response->redirect($savedFilterFromRequest->url);
+                $newUrl = $savedFilterFromRequest->url;
+                if ($viewMode = \Yii::$app->request->post("sx-catalog-view")) {
+                    $newUrl = $newUrl . "?sx-catalog-view={$viewMode}";
+                }
+                \Yii::$app->response->redirect($newUrl);
                 \Yii::$app->end();
             }
         }
@@ -102,7 +106,13 @@ if ($eavFiltersHandler || $shopDataFiltersHandler) {
         if (!$priceFiltersHandler->getApplied() && !$eavFiltersHandler->getApplied()) {
             $savedFilterFromRequest = $shopDataFiltersHandler->savedFilter;
             if ($savedFilterFromRequest) {
-                \Yii::$app->response->redirect($savedFilterFromRequest->url);
+
+                $newUrl = $savedFilterFromRequest->url;
+                if ($viewMode = \Yii::$app->request->post("sx-catalog-view")) {
+                    $newUrl = $newUrl . "?sx-catalog-view={$viewMode}";
+                }
+
+                \Yii::$app->response->redirect($newUrl);
                 \Yii::$app->end();
             }
         }
