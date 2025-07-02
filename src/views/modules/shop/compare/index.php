@@ -125,6 +125,17 @@ $elements = $qElements->all();
 
             <div class="sx-props">
                 <? foreach ($element->relatedPropertiesModel->properties as $property) : ?>
+
+                <?
+                    if ($property->handler instanceof \skeeks\cms\relatedProperties\propertyTypes\PropertyTypeText) {
+                        if ($property->handler->fieldElement == "textarea") {
+                            continue;
+                        }
+                    }
+                    if ($property->handler instanceof \skeeks\cms\relatedProperties\userPropertyTypes\UserPropertyTypeComboText) {
+                        continue;
+                    }
+                    ?>
                     <div class="sx-prop">
                         <div class="sx-prop-name"> <?php echo $property->name; ?></div>
                         <div class="sx-prop-values">
