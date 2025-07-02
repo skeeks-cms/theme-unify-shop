@@ -69,21 +69,10 @@ if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
 <?
 
 $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $shopProduct->id])->exists();
+$isCompireAdded = \Yii::$app->shop->shopUser->getCmsCompareElements()->andWhere(['cms_content_element_id' => $shopProduct->id])->exists();
 ?>
-<div class="sx-favorite-product"
-     data-added-icon-class="fas fa-heart"
-     data-not-added-icon-class="far fa-heart"
-     data-is-added="<?= (int)$isAdded ?>"
-     data-product_id="<?= (int)$shopProduct->id ?>"
->
-    <a href="#" class="sx-favorite-product-trigger" data-pjax="0" style="font-size: 22px;">
-        <? if ($isAdded) : ?>
-            <i class="fas fa-heart"></i>
-        <? else : ?>
-            <i class="far fa-heart"></i>
-        <? endif; ?>
-    </a>
-</div>
+
+
 <div class="sx-product-card--photo">
     <?php echo \Yii::$app->adult->renderBlocked($model); ?>
 
@@ -135,7 +124,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                     \skeeks\cms\themes\unifyshop\assets\ProductListImagesV2Asset::register($this);
 
                     $secondImage = null;
-                    
+
                     $preview = \Yii::$app->imaging->getPreview($infoModel->mainProductImage,
                         new \skeeks\cms\components\imaging\filters\Thumbnail([
                             'w'          => $this->theme->catalog_img_preview_width,
@@ -144,20 +133,19 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                             'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_MEDIUM,
                         ]), $model->code
                     );
-                    
+
                     if ($infoModel->images) {
                         $secondImage = $infoModel->images[0];
                     }
-                    
-                    
-            
+
+
                     ?>
                     <img class="sx-product-image to-cart-fly-img lazy"
                          style="aspect-ratio: <?php echo $preview->cssAspectRatio; ?>;"
                          src="<?php echo \Yii::$app->cms->image1px; ?>"
                          data-src="<?= $preview->src; ?>"
                         <? if ($secondImage) : ?>
-                        
+
                             <?
                             $preview = \Yii::$app->imaging->getPreview($secondImage,
                                 new \skeeks\cms\components\imaging\filters\Thumbnail([
@@ -176,7 +164,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
 
 
             <?php else : ?>
-            
+
                 <?
                 $preview = \Yii::$app->imaging->getPreview($infoModel->mainProductImage,
                     new \skeeks\cms\components\imaging\filters\Thumbnail([
@@ -211,6 +199,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
     <? endif; ?>
 </div>
 <div class="sx-product-card--info">
+    <div>
     <? if (isset($shopProduct)) : ?>
         <div class="">
             <? if ($isShowPrice) : ?>
@@ -239,6 +228,7 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
     <? endif; ?>
     <div class="sx-product-card--title">
         <a href="<?= $model->url; ?>" title="<?= $model->productName; ?>" data-pjax="0" class="sx-product-card--title-a sx-main-text-color g-text-underline--none--hover"><?= $infoModel->productName; ?></a>
+    </div>
     </div>
     <? if (isset($shopProduct)) : ?>
         <div class="sx-product-card--actions">
@@ -291,6 +281,43 @@ $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_pr
                     ]); ?>
                 <? endif; ?>
             <? endif; ?>
+
+
+            <div class="sx-product-additional-btns">
+
+                <div class="sx-compire-product"
+                     data-added-icon-class="icon-equalizer sx-added"
+                     data-not-added-icon-class="icon-equalizer"
+                     data-is-added="<?= (int)$isCompireAdded ?>"
+                     data-product_id="<?= (int)$shopProduct->id ?>"
+                >
+                    <a href="#" target="Добавить товар к сравнению"  class="sx-compire-product-trigger" data-pjax="0">
+                        <? if ($isCompireAdded) : ?>
+                            <i class="icon-equalizer sx-added"></i>
+                        <? else : ?>
+                            <i class="icon-equalizer"></i>
+                        <? endif; ?>
+                    </a>
+                </div>
+
+                <div class="sx-favorite-product"
+                     data-added-icon-class="fas fa-heart sx-added"
+                     data-not-added-icon-class="far fa-heart"
+                     data-is-added="<?= (int)$isAdded ?>"
+                     data-product_id="<?= (int)$shopProduct->id ?>"
+                >
+                    <a href="#" target="Добавить товар в избранное" class="sx-favorite-product-trigger" data-pjax="0">
+                        <? if ($isAdded) : ?>
+                            <i class="fas fa-heart sx-added"></i>
+                        <? else : ?>
+                            <i class="far fa-heart"></i>
+                        <? endif; ?>
+                    </a>
+                </div>
+
+
+            </div>
+
         </div>
     <? endif; ?>
 </div>

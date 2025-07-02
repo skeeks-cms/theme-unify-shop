@@ -10,6 +10,20 @@
 ?>
 
 <?
+$compareQuery = \Yii::$app->shop->shopUser->getCmsCompareElements();
+$compareProducts = $compareQuery->count(); ?>
+<div class="sx-header-menu-item sx-compare-products"
+     data-total="<?= $compareProducts; ?>"
+>
+    <a href="<?= \yii\helpers\Url::to(['/shop/compare']) ?>" data-pjax="0" class="sx-icon-wrapper g-text-underline--none--hover" aria-label="Сравнение товаров" title="Сравнение товаров" style="position: relative;">
+        <!--<i class="far fa-heart" style="width: 30px;"></i>-->
+        <span class="sx-compare-total-wrapper g-color-white g-bg-primary sx-badge" style="<?= $compareProducts > 0 ? "" : "display: none;"; ?>">
+            <span class="sx-compare-total"><?= $compareProducts; ?></span>
+        </span>
+        <i class="icon-equalizer"></i>
+    </a>
+</div>
+<?
 $favQuery = \Yii::$app->shop->shopUser->getShopFavoriteProducts();
 $favoriteProducts = $favQuery->count(); ?>
 <div class="sx-header-menu-item sx-favorite-products"
