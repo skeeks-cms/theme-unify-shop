@@ -104,6 +104,9 @@
     .sx-js-cart.sx-is-full-cart .sx-total-money {
         display: none;
     }
+    .sx-catalog-h1-wrapper {
+        flex-direction: column;
+    }
 }
 
 

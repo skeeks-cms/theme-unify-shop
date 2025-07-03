@@ -351,6 +351,10 @@ $this->registerCss(<<<CSS
     width: 30%;
     min-width: 4rem;
 }
+.sx-fixed .btn {
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
 .sx-fixed .sx-product-card {
     display: flex;
     flex-direction: row;
@@ -438,6 +442,19 @@ $this->registerCss(<<<CSS
 .sx-trees i {
     font-size: 0.5rem;
     margin-left: 0.25rem;
+}
+@media (max-width: 768px) {
+    .sx-elements .sx-product-card-wrapper {
+        width: 50%;
+        min-width: 50%;
+    }
+    
+    .sx-prop-values .sx-product-property-value {
+        width: 50%;
+        min-width: 50%;
+        padding-left: 7px;
+        padding-right: 7px;
+    }
 }
     
 CSS

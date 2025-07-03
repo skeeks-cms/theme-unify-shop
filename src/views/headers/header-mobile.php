@@ -110,6 +110,10 @@ if ($models) {
             'url'   => \yii\helpers\Url::to(['/shop/favorite']),
         ];
         $items[] = [
+            'label' => "Сравнение",
+            'url'   => \yii\helpers\Url::to(['/shop/compare']),
+        ];
+        $items[] = [
             'label' => "Корзина",
             'url'   => \yii\helpers\Url::to(['/shop/cart']),
         ];
@@ -204,12 +208,12 @@ if ($models) {
     <?php \skeeks\assets\unify\base\UnifyIconSimpleLineAsset::register($this); ?>
     <div class="container">
         <div class="shop-menu-footer-inner-wrapper">
-            <a class="sx-menu-item <?php echo \Yii::$app->cms->currentTree && \Yii::$app->cms->currentTree->level == 0 ? "sx-active" : ""; ?>" href="<?php echo \yii\helpers\Url::home(); ?>">
+            <!--<a class="sx-menu-item <?php /*echo \Yii::$app->cms->currentTree && \Yii::$app->cms->currentTree->level == 0 ? "sx-active" : ""; */?>" href="<?php /*echo \yii\helpers\Url::home(); */?>">
                 <div class="sx-icon">
                     <i class="icon-home"></i>
                 </div>
                 <div class="sx-label">Главная</div>
-            </a>
+            </a>-->
 
             <?php if ($catalogMainCmsTree = \Yii::$app->cms->cmsSite->shopSite->catalogMainCmsTree) : ?>
 
@@ -235,6 +239,20 @@ if ($models) {
                         <i class="icon-heart"></i>
                     </div>
                     <div class="sx-label">Избранное</div>
+                </a>
+
+                <?php
+                $compareQuery = \Yii::$app->shop->shopUser->getCmsCompareElements();
+                $compareProducts = $compareQuery->count();
+                ?>
+                <a class="sx-menu-item sx-compare-products" href="<?= \yii\helpers\Url::to(['/shop/compare']); ?>" data-total="<?= $compareProducts; ?>">
+                    <div class="sx-icon">
+                        <span class="sx-compare-total-wrapper g-color-white g-bg-primary sx-badge" style="<?= $compareProducts > 0 ? "" : "display: none;"; ?>">
+                            <span class="sx-compare-total"><?= $compareProducts; ?></span>
+                        </span>
+                        <i class="icon-equalizer"></i>
+                    </div>
+                    <div class="sx-label">Сравнение</div>
                 </a>
 
                 <a class="sx-menu-item sx-top-cart sx-js-cart <?php echo \Yii::$app->shop->cart->quantity ? "sx-is-full-cart" : ""; ?>" id="sx-top-cart" href="<?= \yii\helpers\Url::to(['/shop/cart']); ?>">
