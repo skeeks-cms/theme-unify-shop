@@ -43,6 +43,49 @@ JS
                     'isShowH1' => true,
                 ]); ?>
             </div>
+            
+            <?
+                $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $model->id])->exists();
+                $isCompireAdded = \Yii::$app->shop->shopUser->getCmsCompareElements()->andWhere(['cms_content_element_id' => $shopProduct->id])->exists();
+                ?>
+
+            <div class="col-12">
+                <div class="sx-product-additional-btns">
+                    
+
+                    <div class="sx-compire-product"
+                         data-added-icon-class="icon-equalizer sx-added"
+                         data-not-added-icon-class="icon-equalizer"
+                         data-is-added="<?= (int)$isCompireAdded ?>"
+                         data-product_id="<?= (int)$shopProduct->id ?>"
+                    >
+                        <a href="#" target="Добавить товар к сравнению" class="sx-compire-product-trigger" data-pjax="0">
+                            <? if ($isCompireAdded) : ?>
+                                <i class="icon-equalizer sx-added"></i>
+                            <? else : ?>
+                                <i class="icon-equalizer"></i>
+                            <? endif; ?>
+                        </a>
+                    </div>
+                    
+                    <div class="sx-favorite-product"
+                         data-added-icon-class="fas fa-heart sx-added"
+                         data-not-added-icon-class="far fa-heart"
+                         data-is-added="<?= (int)$isAdded ?>"
+                         data-product_id="<?= (int)$model->id ?>"
+                    >
+                        <a href="#" class="sx-favorite-product-trigger" data-pjax="0" style="font-size: 1.5rem;">
+                            <? if ($isAdded) : ?>
+                                <i class="fas fa-heart sx-added"></i>
+                            <? else : ?>
+                                <i class="far fa-heart"></i>
+                            <? endif; ?>
+                        </a>
+                    </div>
+                    
+                </div>
+                </div>
+            
         </div>
 
 

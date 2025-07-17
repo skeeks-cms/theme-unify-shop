@@ -433,11 +433,17 @@ ul.sx-properties .sx-properties--name:after {
 .sx-main-product-container .sx-product-images {
     position: relative;
 }
-.sx-main-product-container .sx-product-images .sx-favorite-product {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    z-index: 99;
+
+.sx-product-additional-btns {
+    align-items: center;
+}
+.sx-product-additional-btns div:first-child a {
+    margin-left: 0;
+}
+
+.sx-product-additional-btns a .sx-added {
+    opacity: 1;
+    color: var(--primary-color);
 }
 
 .slick-track .slick-slide img {

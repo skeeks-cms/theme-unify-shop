@@ -46,26 +46,10 @@ JS
         <div class="sx-product-page--left-col">
             <div class="sx-product-images">
 
-                <?
-                $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $model->id])->exists();
-                ?>
 
                 <?php echo \Yii::$app->adult->renderBlocked($model); ?>
 
-                <div class="sx-favorite-product"
-                     data-added-icon-class="fas fa-heart"
-                     data-not-added-icon-class="far fa-heart"
-                     data-is-added="<?= (int)$isAdded ?>"
-                     data-product_id="<?= (int)$model->id ?>"
-                >
-                    <a href="#" class="sx-favorite-product-trigger" data-pjax="0" style="font-size: 22px;">
-                        <? if ($isAdded) : ?>
-                            <i class="fas fa-heart"></i>
-                        <? else : ?>
-                            <i class="far fa-heart"></i>
-                        <? endif; ?>
-                    </a>
-                </div>
+
 
 
                 <?= $this->render("@app/views/modules/cms/content-element/product/".$singlPage->images_view_file, [
@@ -78,14 +62,53 @@ JS
                 <? if ($singlPage->is_show_title_in_short_description) : ?>
                     <h1 class="h4"><?= $model->seoName; ?></h1>
                 <? endif; ?>
+                <?
+                $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $model->id])->exists();
+                $isCompireAdded = \Yii::$app->shop->shopUser->getCmsCompareElements()->andWhere(['cms_content_element_id' => $shopProduct->id])->exists();
+                ?>
+
+                <div class="sx-product-additional-btns">
+                    
+
+                    <div class="sx-compire-product"
+                         data-added-icon-class="icon-equalizer sx-added"
+                         data-not-added-icon-class="icon-equalizer"
+                         data-is-added="<?= (int)$isCompireAdded ?>"
+                         data-product_id="<?= (int)$shopProduct->id ?>"
+                    >
+                        <a href="#" target="Добавить товар к сравнению" class="sx-compire-product-trigger" data-pjax="0">
+                            <? if ($isCompireAdded) : ?>
+                                <i class="icon-equalizer sx-added"></i>
+                            <? else : ?>
+                                <i class="icon-equalizer"></i>
+                            <? endif; ?>
+                        </a>
+                    </div>
+                    
+                    <div class="sx-favorite-product"
+                         data-added-icon-class="fas fa-heart sx-added"
+                         data-not-added-icon-class="far fa-heart"
+                         data-is-added="<?= (int)$isAdded ?>"
+                         data-product_id="<?= (int)$model->id ?>"
+                    >
+                        <a href="#" class="sx-favorite-product-trigger" data-pjax="0" style="font-size: 1.5rem;">
+                            <? if ($isAdded) : ?>
+                                <i class="fas fa-heart sx-added"></i>
+                            <? else : ?>
+                                <i class="far fa-heart"></i>
+                            <? endif; ?>
+                        </a>
+                    </div>
+                    
+                </div>
                 <div class="product-info-header">
-                    <?/*
+                    <? /*
                     echo $this->render("@app/views/modules/cms/content-element/_product-right-top-info", [
                         'singlPage'   => $singlPage,
                         'model'       => $model,
                         //'shopProduct'           => $shopProduct,
                         'priceHelper' => $priceHelper,
-                    ]); */?>
+                    ]); */ ?>
 
                     <?
                     echo $this->render("@app/views/modules/cms/content-element/_product-price", [
@@ -135,17 +158,17 @@ JS
                                         Бренд
                                     </span>
                                     <span class="sx-properties--value">
-                                        <?php if($model->shopProduct->brand->logo_image_id) : ?>
+                                        <?php if ($model->shopProduct->brand->logo_image_id) : ?>
                                             <? $logo = $model->shopProduct->brand->logo; ?>
 
                                             <img class="img-fluid"
                                                  src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($logo->src,
-                                                new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                                    'w' => 0,
-                                                    'h' => 20,
-                                                    'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
-                                                ]), $model->shopProduct->brand->code
-                                            ); ?>" alt="<?= $model->shopProduct->brand->name; ?>">
+                                                     new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                                         'w' => 0,
+                                                         'h' => 20,
+                                                         'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
+                                                     ]), $model->shopProduct->brand->code
+                                                 ); ?>" alt="<?= $model->shopProduct->brand->name; ?>">
                                         <?php endif; ?>
 
                                         <a href="<?php echo $model->shopProduct->brand->url; ?>" data-pjax="0">
@@ -160,17 +183,17 @@ JS
                                         Страна
                                     </span>
                                     <span class="sx-properties--value">
-                                        <?php if($model->shopProduct->country->flag_image_id) : ?>
+                                        <?php if ($model->shopProduct->country->flag_image_id) : ?>
                                             <? $flag = $model->shopProduct->country->flag; ?>
 
                                             <img class="img-fluid"
                                                  src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($flag->src,
-                                                new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                                    'w' => 0,
-                                                    'h' => 20,
-                                                    'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
-                                                ]), $model->shopProduct->country->alpha2
-                                            ); ?>" alt="<?= $model->shopProduct->country->name; ?>">
+                                                     new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                                         'w' => 0,
+                                                         'h' => 20,
+                                                         'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
+                                                     ]), $model->shopProduct->country->alpha2
+                                                 ); ?>" alt="<?= $model->shopProduct->country->name; ?>">
                                         <?php endif; ?>
 
                                         <?= $model->shopProduct->country->name; ?>
@@ -209,20 +232,22 @@ JS
     font-size: 0.8rem;
 }
 CSS
-);
+                    );
                     ?>
                     <div class="sx-fast-links">
-                        <?php if($model->tree_id) : ?>
+                        <?php if ($model->tree_id) : ?>
                             <p>
                                 <a href="<?php echo $model->cmsTree->url; ?>" data-pjax="0">Все <?php echo \skeeks\cms\helpers\StringHelper::strtolower($model->cmsTree->name); ?> <i class="hs-icon hs-icon-arrow-right"></i></a>
                             </p>
                         <?php endif; ?>
-                        <?php if($brandSavedFilter) : ?>
+                        <?php if ($brandSavedFilter) : ?>
                             <p>
-                                <a href="<?php echo $brandSavedFilter->url; ?>" data-pjax="0">Все <?php echo \skeeks\cms\helpers\StringHelper::strtolower($model->cmsTree->name); ?> <?php echo $model->shopProduct->brand->name; ?> <i class="hs-icon hs-icon-arrow-right"></i></a>
+                                <a href="<?php echo $brandSavedFilter->url; ?>"
+                                   data-pjax="0">Все <?php echo \skeeks\cms\helpers\StringHelper::strtolower($model->cmsTree->name); ?> <?php echo $model->shopProduct->brand->name; ?> <i
+                                            class="hs-icon hs-icon-arrow-right"></i></a>
                             </p>
                         <?php endif; ?>
-                        <?php if($model->shopProduct->brand) : ?>
+                        <?php if ($model->shopProduct->brand) : ?>
                             <p>
                                 <a href="<?php echo $model->shopProduct->brand->url; ?>" data-pjax="0">Страница бренда <?php echo $model->shopProduct->brand->name; ?> <i class="hs-icon hs-icon-arrow-right"></i></a>
                             </p>

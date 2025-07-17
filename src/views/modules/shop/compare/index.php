@@ -37,21 +37,32 @@ $dataProvider->query->orderBy(["total" => SORT_DESC]);
 
 $treesData = $dataProvider->query->asArray()->all();
 
-$selectedTree = $treesData[0];
-$selectedTreeId = \yii\helpers\ArrayHelper::getValue($treesData, "0.tree_id");
+if ($treesData) {
+    $selectedTree = $treesData[0];
+    $selectedTreeId = \yii\helpers\ArrayHelper::getValue($treesData, "0.tree_id");
 
-if (\Yii::$app->request->get("tree_id")) {
-    $selectedTreeId = \Yii::$app->request->get("tree_id");
+    if ($tmpTreeQueryId = (int) \Yii::$app->request->get("tree_id")) {
+        
+        //Проверить а есть ли в списке пользователя
+        $chekData = \yii\helpers\ArrayHelper::map($treesData, "tree_id", "tree_id");
+        if (in_array($tmpTreeQueryId, $chekData)) {
+            $selectedTreeId = $tmpTreeQueryId;
+        }
+        
+    }
+    $selectedTreeModel = \skeeks\cms\models\CmsTree::findOne($selectedTreeId);
+
+    $qElements->andWhere(['tree_id' => $selectedTreeId]);
+
+    /**
+     * @var \skeeks\cms\shop\models\ShopCmsContentElement[] $elements
+     */
+    $elements = $qElements->all();
 }
-$selectedTreeModel = \skeeks\cms\models\CmsTree::findOne($selectedTreeId);
 
-$qElements->andWhere(['tree_id' => $selectedTreeId]);
-
-/**
- * @var \skeeks\cms\shop\models\ShopCmsContentElement[] $elements
- */
-$elements = $qElements->all();
 ?>
+
+<?php if ($treesData) : ?>
 
     <div class="sx-compare-wrapper" style="padding-bottom: 20px; padding-top: 20px;">
 
@@ -72,19 +83,21 @@ $elements = $qElements->all();
         <div class="sx-trees">
             <ul class="list-unstyled list-inline" style="margin-bottom: 10px;">
 
-                <? foreach ($treesData as $treeData) : ?>
+                <?
+                $totalTrees = count($treesData);
+                foreach ($treesData as $treeData) : ?>
 
                     <? if ($selectedTreeId == \yii\helpers\ArrayHelper::getValue($treeData, "tree_id")) : ?>
-                        <li class="list-inline-item sx-active" style="margin-bottom: 5px;" data-value_id="" data-property_id="">
+                        <li class="list-inline-item sx-active" style="margin-bottom: 5px;" data-id="<?php echo \yii\helpers\ArrayHelper::getValue($treeData, "tree_id"); ?>">
                             <div class="btn btn-primary">
         <span data-toggle="tooltip" data-html="true" title="" data-original-title="Применена категорию">
         <?php echo \yii\helpers\ArrayHelper::getValue($treeData, "tree_name"); ?>
         <?php echo \yii\helpers\ArrayHelper::getValue($treeData, "total"); ?> </span>
-                                <!--<i class="hs-icon hs-icon-close sx-close-btn" data-toggle="tooltip" title="" data-original-title="Удалить категорию"></i>-->
+                                <i class="hs-icon hs-icon-close sx-close-btn" data-toggle="tooltip" title="" data-original-title="Удалить категорию"></i>
                             </div>
                         </li>
                     <? else : ?>
-                        <li class="list-inline-item" style="margin-bottom: 5px;" data-value_id="" data-property_id="">
+                        <li class="list-inline-item" style="margin-bottom: 5px;" data-id="<?php echo \yii\helpers\ArrayHelper::getValue($treeData, "tree_id"); ?>">
                             <a href="<?php echo \yii\helpers\Url::to(['/shop/compare', 'tree_id' => \yii\helpers\ArrayHelper::getValue($treeData, "tree_id")]); ?>" class="btn btn-default">
                                             <span data-toggle="tooltip" data-html="true" title="" data-original-title="Выбрать категорию">
                                             <?php echo \yii\helpers\ArrayHelper::getValue($treeData, "tree_name"); ?>
@@ -95,6 +108,15 @@ $elements = $qElements->all();
 
 
                 <? endforeach; ?>
+
+                <?php if($totalTrees) : ?>
+                    <li class="list-inline-item" style="margin-bottom: 5px;" data-id="<?php echo \yii\helpers\ArrayHelper::getValue($treeData, "tree_id"); ?>">
+                        <a href="#" class="btn btn-default sx-clear-all">
+                            <span data-toggle="tooltip" data-html="true" title="" data-original-title="Убрать все товары из сравнения">Очистить все <i class="hs-icon hs-icon-close" data-toggle="tooltip" title=""></i></span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+
 
 
             </ul>
@@ -159,7 +181,11 @@ $elements = $qElements->all();
                 ]); */ ?>
     </div>
 
+
 <?php
+$js = \yii\helpers\Json::encode([
+    'backend_clear' => \yii\helpers\Url::to(['/shop/compare/clear'])
+]);
 
 $this->registerJs(<<<JS
 sx.classes.CompareManager = sx.classes.Component.extend({
@@ -192,6 +218,51 @@ sx.classes.CompareManager = sx.classes.Component.extend({
         var jLeftBtn = $(".sx-arrow-left-btn");
         
         var jPropValues = $(".sx-prop-values");
+        
+        $(".sx-close-btn").on("click", function() {
+            var jLi = $(this).closest("li");
+            var tree_id = jLi.data("id");
+            
+            var query = sx.ajax.preparePostQuery(self.get("backend_clear"), {
+                'tree_id' : tree_id
+            });
+            
+            var Handler = new sx.classes.AjaxHandlerStandartRespose(query, {
+                'blockerSelector' : ".sx-compare-wrapper",
+                'enableBlocker' : true
+            });
+            
+            Handler.on("success", function() {
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+            });
+            
+    
+            query.execute();
+            
+        });
+        
+        $(".sx-clear-all").on("click", function() {
+            
+            var query = sx.ajax.preparePostQuery(self.get("backend_clear"), {
+            });
+            
+            var Handler = new sx.classes.AjaxHandlerStandartRespose(query, {
+                'blockerSelector' : ".sx-compare-wrapper",
+                'enableBlocker' : true
+            });
+            
+            Handler.on("success", function() {
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+            });
+            
+    
+            query.execute();
+            
+        });
         
         jRightBtn.on("click", function() {
             var width = $(".sx-product-card-wrapper").width();
@@ -277,7 +348,7 @@ sx.classes.CompareManager = sx.classes.Component.extend({
     }
 });
 
-new sx.classes.CompareManager ();
+new sx.classes.CompareManager({$js});
 JS
 );
 
@@ -440,7 +511,7 @@ $this->registerCss(<<<CSS
     transition: 0.25s linear;
 }
 .sx-trees i {
-    font-size: 0.5rem;
+    font-size: 0.8rem;
     margin-left: 0.25rem;
 }
 @media (max-width: 768px) {
@@ -459,3 +530,14 @@ $this->registerCss(<<<CSS
     
 CSS
 );
+?>
+
+
+<?php else : ?>
+
+    <div class="sx-compare-wrapper" style="padding-bottom: 20px; padding-top: 20px; height: 50vh; display: flex; align-items: center; justify-content: center;">
+        Нет товаров для сравнения
+    </div>
+<?php endif; ?>
+
+

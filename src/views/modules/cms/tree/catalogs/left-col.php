@@ -113,7 +113,8 @@ if ($model->shop_has_collections) {
                             --><?php /*endif; */ ?>
 
                             <?php foreach ($appliedValues as $data) : ?>
-                                <?php $name = \yii\helpers\ArrayHelper::getValue($data, "name"); ?>
+                                <?php 
+                                $name = \yii\helpers\ArrayHelper::getValue($data, "name"); ?>
                                 <?php $value = \yii\helpers\ArrayHelper::getValue($data, "value"); ?>
                                 <?php
                                 $property_id = '';
@@ -218,8 +219,8 @@ if ($model->shop_has_collections) {
                                 <? foreach ($savedFilters as $sf) : ?>
                                     <?php echo $this->render("@app/views/modules/cms/tree/catalogs/_filter", [
                                         'isActive'    => (@$savedFilter && $sf->id == $savedFilter->id),
-                                        'value_id'    => $sf->value_content_element_id ? $sf->value_content_element_id : $sf->value_content_property_enum_id,
-                                        'property_id' => $sf->cms_content_property_id,
+                                        'value_id'    => $sf->propertyValueForFilter,
+                                        'property_id' => $sf->propertyIdForFilter,
                                         'seoName'     => $sf->seoName,
                                         'displayName' => $sf->shortSeoName,
                                         'url'         => $sf->url,
