@@ -220,6 +220,19 @@ $isCompireAdded = \Yii::$app->shop->shopUser->getCmsCompareElements()->andWhere(
                             <? endif; ?>
                         </div>
                     <? endif; ?>
+
+                    <?/* if ($shopProduct->measure_ratio_min != 1) : */?><!--
+                        <?/*
+
+
+                        $pr = clone $priceHelper->minMoney;
+                        $pr->mul($shopProduct->measure_ratio_min);
+                        */?>
+                        <div class="new sx-new-price sx-list-new-price g-color-primary" data-toggle="tooltip" data-original-title="Минимальное количество для покупки" title="Минимальное количество для покупки"><?/*= $prefix; */?><?/*= $pr; */?>
+                            <span class="sx-measure">/ <?/* echo $shopProduct->measure_ratio_min; */?> <?/*= $shopProduct->measure->symbol; */?></span>
+                        </div>
+                    --><?/* endif; */?>
+
                 <? endif; ?>
             <? else : ?>
                 <div class="new sx-new-price sx-list-new-price g-color-primary">&nbsp;</div>

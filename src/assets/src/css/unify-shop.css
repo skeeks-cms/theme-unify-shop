@@ -107,6 +107,11 @@
     .sx-catalog-h1-wrapper {
         flex-direction: column;
     }
+
+    .sx-quantity-group .sx-minus, .sx-quantity-group .sx-plus {
+        min-width: 1.5rem;
+        text-align: center;
+    }
 }
 
 

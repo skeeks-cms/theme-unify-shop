@@ -70,10 +70,15 @@
     $("body").on("updatewidth", ".sx-quantity-group .sx-quantity-input", function () {
         var measure_ratio = Number($(this).data("measure_ratio")) || 1;
         var newVal = $(this).val();
-
-
         var length = (String(newVal).length - 1) || 1;
-        $(this).attr("size", length);
+
+        var jHidden = $("<span>").append(newVal);
+
+        $(this).after(jHidden);
+
+        $(this).css("width", jHidden.width() + 5);
+        jHidden.remove();
+        /*$(this).attr("size", length);*/
     });
 
     $(document).on('pjax:complete', function (e) {

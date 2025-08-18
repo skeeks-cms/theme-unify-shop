@@ -158,10 +158,18 @@ JS
                     if (!$images) {
                         $images = false;
                     }
-                    echo $this->render("@app/views/modules/cms/content-element/product/_product-images-vertical", [
-                        'images' => $images,
-                        'model' => $model,
-                    ]); ?>
+                    if (\Yii::$app->mobileDetect->isDesktop) {
+                        echo $this->render("@app/views/modules/cms/content-element/product/_product-images-vertical", [
+                            'images' => $images,
+                            'model' => $model,
+                        ]);
+                    } else {
+                        echo $this->render("@app/views/modules/cms/content-element/product/_product-images", [
+                            'images' => $images,
+                            'model' => $model,
+                        ]);
+                    }
+                     ?>
                 </div>
             </div>
             <div class="sx-product-page--right-col sx-col-product-info">
