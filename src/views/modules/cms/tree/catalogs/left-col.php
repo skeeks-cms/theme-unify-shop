@@ -370,7 +370,7 @@ if ($model->shop_has_collections) {
 
 
                 <?php if ($hasCollections) : ?>
-                    <div class="btn-group btn-block" style="margin-bottom: 20px;" role="group" aria-label="Basic example">
+                    <div class="btn-group btn-block sx-btn-view-mode" style="margin-bottom: 20px;" role="group" aria-label="Basic example">
                         <a href="<?php echo \yii\helpers\Url::current(['sx-catalog-view' => 'collection']); ?>" type="button" class="btn btn-xl <?php echo $viewMode == "collection" ? "btn-primary" : "btn-secondary"; ?>">Коллекции</a>
                         <a href="<?php echo \yii\helpers\Url::current(['sx-catalog-view' => 'product']); ?>" type="button"
                            class="btn btn-xl <?php echo $viewMode == "product" ? "btn-primary" : "btn-secondary"; ?>">Товары</a>
@@ -405,6 +405,7 @@ CSS
                     $query->innerJoinWith("shopProduct.collections as collections", false);
                     //$query->with("shopProduct.collections as collections");
                     $query->groupBy(['collections.id']);
+                    $query->orderBy(['collections.created_at' => SORT_DESC]);
 
                     $q = \skeeks\cms\shop\models\ShopCollection::find()->innerJoin(['main' => $query], [
                         'main.collection_id' => new \yii\db\Expression(\skeeks\cms\shop\models\ShopCollection::tableName().".id"),
@@ -415,7 +416,7 @@ CSS
                         'dataProvider' => new \yii\data\ActiveDataProvider([
                             'query'      => $q,
                             'pagination' => [
-                                'pageSize' => 21,
+                                'pageSize' => 24,
                             ],
                         ]),
                     ]); ?>

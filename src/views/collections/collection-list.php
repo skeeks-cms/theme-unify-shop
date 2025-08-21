@@ -50,8 +50,8 @@ CSS
         'class' => $itemClasses . ' item sx-collection-list-item-wrapper',
     ],*/
     'pager'        => [
-        'container' => '.sx-product-list',
-        'item'      => '.sx-product-card-wrapper',
+        'container' => '.sx-collection-list',
+        'item'      => '.sx-collection-list-item-wrapper',
         'class'     => \skeeks\cms\themes\unify\widgets\ScrollAndSpPager::class,
     ],
     'summary'      => "Всего коллекций: {totalCount}",
