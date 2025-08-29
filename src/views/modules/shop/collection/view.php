@@ -564,4 +564,5 @@ $title[] = "в магазине " . \Yii::$app->cms->cmsSite->name;
 
 $this->title = implode(' ', $title);
 
+
 ?>
