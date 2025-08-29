@@ -63,9 +63,9 @@
 }
 
 .sx-small-info {
-    font-size: 10px;
-    line-height: 1.1;
-    margin-bottom: 9px;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    margin-bottom: 0.9rem;
     color: gray;
 }
 

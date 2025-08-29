@@ -453,6 +453,17 @@ JS
 
                                 </div>
                             </div>
+
+                            <?
+                                $formConstructor = new \skeeks\modules\cms\form2\models\Form2Form();
+                            ?>
+                            <div class="col-12" style="margin-top: 1rem;">
+                                <div class="form-group required" style="margin-bottom: 0;">
+                                    <input type="checkbox" required id="sx-rules">
+                                    <label for="sx-rules" style="margin-bottom: 0;"><?php echo $formConstructor->legalCheckboxText; ?></label>
+                                </div>
+                            </div>
+
                             <div class="col-12">
                                 <a href="#" class="btn btn-xxl btn-block btn-primary btn-submit-order" data-pjax="0" data-value="Оформить заказ" data-process="Подождите...">
                                     Оформить заказ

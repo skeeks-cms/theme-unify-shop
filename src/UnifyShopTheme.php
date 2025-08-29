@@ -116,7 +116,8 @@ HTML
     public $product_page_view_file = "default";
 
     public $cart_view = "v2";
-    public $cart_after_btn_text = "Нажимая «Оформить заказ», вы соглашаетесь с условиями использования и оплаты";
+    //public $cart_after_btn_text = "Нажимая «Оформить заказ», вы соглашаетесь с условиями использования и оплаты";
+    public $cart_after_btn_text = "";
     public $cart_after_comment_text = "";
     public $cart_delivery_text = "";
     public $cart_paysystem_text = "";

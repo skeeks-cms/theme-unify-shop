@@ -339,6 +339,16 @@
             //Изменение любого поля по заказу - сохранит данные сразу
             $('body').on('click', '.btn-submit-order', function () {
                 var jBtn = $(this);
+
+                //Если есть галочка с правами
+                if ($("#sx-rules").length) {
+                    if ($("#sx-rules").is(":checked") === false) {
+                        $(".sx-order-error").empty().append("Необходимо согласиться с условиями обработки персональных данных.").fadeIn();
+
+                        return false;
+                    }
+                }
+
                 if (jBtn.hasClass("sx-disabled")) {
                     return false;
                 }
