@@ -48,7 +48,10 @@ CSS
 $infoModel = $model;
 
 $this->title = "Коллекция ".$infoModel->seoName." " . ($infoModel->brand ? $infoModel->brand->name : "") ."";
+
 $properties = [];
+
+$mainTree = '';
 ?>
 
 
@@ -121,6 +124,8 @@ JS
     if ($firstProduct && $firstProduct->cmsTree) {
         \Yii::$app->breadcrumbs->setPartsByTree($firstProduct->cmsTree);
         \Yii::$app->breadcrumbs->append($model->name);
+        
+        $mainTree = $firstProduct->cmsTree->name;
     }
     ?>
 <? endif; ?>
@@ -538,3 +543,25 @@ $description = $model->description_full;
         </div>
     </section>
 <?php endif; ?>
+
+
+<?php
+
+$title = [];
+
+$title[] = 'Коллекция';
+$title[] = $infoModel->name;
+
+if ($infoModel->brand) {
+    $title[] = $infoModel->brand->name;
+}
+
+if ($mainTree) {
+    $title[] = " / " . $mainTree;
+}
+
+$title[] = "в магазине " . \Yii::$app->cms->cmsSite->name;
+
+$this->title = implode(' ', $title);
+
+?>
