@@ -564,5 +564,9 @@ $title[] = "в магазине " . \Yii::$app->cms->cmsSite->name;
 
 $this->title = implode(' ', $title);
 
+$this->registerMetaTag([
+    'property' => 'og:title',
+    'content'  => $this->title,
+], 'og:title');
 
 ?>
