@@ -405,11 +405,13 @@ CSS
                     $query->innerJoinWith("shopProduct.collections as collections", false);
                     //$query->with("shopProduct.collections as collections");
                     $query->groupBy(['collections.id']);
-                    $query->orderBy(['collections.created_at' => SORT_DESC]);
+                    /*$query->orderBy(['collections.created_at' => SORT_DESC]);*/
+                    /*$query->orderBy(['collections.show_counter' => SORT_DESC]);*/
 
                     $q = \skeeks\cms\shop\models\ShopCollection::find()->innerJoin(['main' => $query], [
                         'main.collection_id' => new \yii\db\Expression(\skeeks\cms\shop\models\ShopCollection::tableName().".id"),
                     ]);
+                    $q->orderBy([\skeeks\cms\shop\models\ShopCollection::tableName() . ".show_counter" => SORT_DESC])
                     ?>
 
                     <?php echo $this->render("@app/views/collections/collection-list", [

@@ -121,7 +121,8 @@ if ($collectionsQuery->count()) :
             ->joinWith("shopProducts as shopProducts")
             ->andWhere(['is not', 'cms_image_id', null])
             ->andHaving(['>', 'totalProducts', 0])
-            ->orderBy(['priority' => SORT_DESC])
+            /*->orderBy(['priority' => SORT_DESC])*/
+            ->orderBy(['show_counter' => SORT_DESC])
             ->groupBy([\skeeks\cms\shop\models\ShopCollection::tableName() . '.id'])
             ->limit(4);
         ?>
