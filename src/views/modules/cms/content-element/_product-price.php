@@ -33,6 +33,20 @@ JS
 <? if ($shopProduct->isSimpleProduct) : ?>
 
     <div class="product-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+
+
+        <?php if ($shopProduct->shop_product_model_id && @$shopChooseJoinedProductsHelper) : ?>
+            <?
+                /*if (YII_ENV_DEV) {*/
+                    /*$shopChooseJoinedProductsHelper = new \skeeks\cms\shop\helpers\ShopChooseJoinedProductsHelper([
+                        'shopProduct'            => $shopProduct,
+                    ]);*/
+                    echo $shopChooseJoinedProductsHelper->render();
+                /*}*/
+
+            ?>
+        <?php endif; ?>
+
         <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
         <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
         <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">

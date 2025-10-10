@@ -276,6 +276,9 @@
     padding-top: 20px;
 }
 
+.product-info-header .sx-properties-wrapper {
+    margin-top: 1rem;
+}
 .product-info-header .sx-properties-wrapper.sx-columns-1 ul.sx-properties {
     padding: 0;
     padding-right: 0;

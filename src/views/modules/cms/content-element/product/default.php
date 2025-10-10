@@ -11,6 +11,7 @@
  * @var $singlPage \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage
  * @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper
  * @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper
+ * @var $shopChooseJoinedProductsHelper \skeeks\cms\shop\helpers\ShopChooseJoinedProductsHelper
  * @var $shopProduct \skeeks\cms\shop\models\ShopProduct
  * @var $brandSavedFilter \skeeks\cms\models\CmsSavedFilter
  */
@@ -116,6 +117,7 @@ JS
                         'shopProduct'           => $shopProduct,
                         'priceHelper'           => $priceHelper,
                         'shopOfferChooseHelper' => $shopOfferChooseHelper,
+                        'shopChooseJoinedProductsHelper' => $shopChooseJoinedProductsHelper,
                     ]); ?>
                     <?php
                     /**
@@ -265,6 +267,7 @@ CSS
                         //'shopProduct'           => $shopProduct,
                         'priceHelper'           => $priceHelper,
                         'shopOfferChooseHelper' => $shopOfferChooseHelper,
+                        'shopChooseJoinedProductsHelper' => $shopChooseJoinedProductsHelper,
                     ]); ?>
                 </div>
             </div>
@@ -282,6 +285,7 @@ CSS
             'shopProduct'           => $shopProduct,
             'priceHelper'           => $priceHelper,
             'shopOfferChooseHelper' => $shopOfferChooseHelper,
+            'shopChooseJoinedProductsHelper' => $shopChooseJoinedProductsHelper,
         ]); ?>
     </div>
 </section>
@@ -291,5 +295,6 @@ CSS
     'shopProduct'           => $shopProduct,
     'priceHelper'           => $priceHelper,
     'shopOfferChooseHelper' => $shopOfferChooseHelper,
+    'shopChooseJoinedProductsHelper' => $shopChooseJoinedProductsHelper,
     'singlPage'             => $singlPage,
 ]); ?>

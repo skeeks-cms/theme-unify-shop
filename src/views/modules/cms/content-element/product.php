@@ -23,6 +23,14 @@ $shopOfferChooseHelper = null;
 $shopProduct = $model->shopProduct;
 //Если это страница товара-предложения
 
+$shopChooseJoinedProductsHelper = null;
+if ($shopProduct->shop_product_model_id) {
+    $shopChooseJoinedProductsHelper = new \skeeks\cms\shop\helpers\ShopChooseJoinedProductsHelper([
+        'shopProduct'            => $shopProduct,
+    ]);
+    $model = $shopChooseJoinedProductsHelper->offerCmsContentElement;
+    $shopProduct = $model->shopProduct;
+}
 
 if ($shopProduct->isOfferProduct) {
     $shopProductOffer = $shopProduct;
@@ -155,6 +163,7 @@ if ($this->theme->product_list_images == 2) {
         'priceHelper'           => $priceHelper,
         'shopProduct'           => $shopProduct,
         'shopOfferChooseHelper' => $shopOfferChooseHelper,
+        'shopChooseJoinedProductsHelper' => $shopChooseJoinedProductsHelper,
     ]); ?>
 </section>
 
