@@ -154,7 +154,13 @@ $dataProvider->setTotalCount($total);
  * Это надо вынести куда нибудь в контроллер
  */
 $cmsTreeType = $model->cmsTreeType;
-if (!$model->meta_title && $cmsTreeType->meta_title_template) {
+/*print_r($model->toArray());die;*/
+@$savedFilter;
+if (
+        (!$model->meta_title && $cmsTreeType->meta_title_template)
+    || (@$savedFilter && !$savedFilter->meta_title  && $cmsTreeType->meta_title_template)
+
+) {
     $metaTitle = $cmsTreeType->meta_title_template;
     if (strpos($metaTitle, "{=section.seoName}") !== false) {
         $metaTitle = str_replace("{=section.seoName}", $model->seoName, $metaTitle);
@@ -175,7 +181,10 @@ if (!$model->meta_title && $cmsTreeType->meta_title_template) {
     ], 'og:title');
 }
 
-if (!$model->meta_description && $cmsTreeType->meta_description_template) {
+if (
+    (!$model->meta_description && $cmsTreeType->meta_description_template)
+    || (@$savedFilter && !$savedFilter->meta_description  && $cmsTreeType->meta_description_template)
+) {
     $metaDescription = $cmsTreeType->meta_description_template;
     if (strpos($metaDescription, "{=section.seoName}") !== false) {
         $metaDescription = str_replace("{=section.seoName}", $model->seoName, $metaDescription);
