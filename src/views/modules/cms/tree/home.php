@@ -97,20 +97,7 @@ $collectionsQuery = \skeeks\cms\shop\models\ShopCollection::find()
 if ($collectionsQuery->count()) :
 ?>
 
-    <div id="sx-home-collection-1">
-        <div class="container sx-container sx-popular-product" style="margin: 40px auto;">
-    <?php echo $this->render("@app/views/collections/collection-list-no-page", [
-        'label' => "Новые коллекции",
-        'itemClasses' => "col-sm-6 col-lg-3",
-        'dataProvider' => new \yii\data\ActiveDataProvider([
-            'query'      => $collectionsQuery,
-            'pagination' => [
-                'pageSize' => 4,
-            ],
-        ]),
-    ]); ?>
-    </div>
-    </div>
+    
     <div id="sx-home-collection-2">
         <?
         $collectionsQuery = \skeeks\cms\shop\models\ShopCollection::find()
@@ -127,8 +114,23 @@ if ($collectionsQuery->count()) :
             ->limit(4);
         ?>
         <div class="container sx-container sx-popular-product" style="margin: 40px auto;">
-            <?php echo $this->render("@app/views/collections/collection-list-no-page", [
-            'label' => "Популярные коллекции",
+                <?php echo $this->render("@app/views/collections/collection-list-no-page", [
+                'label' => "Популярные коллекции",
+                'itemClasses' => "col-sm-6 col-lg-3",
+                'dataProvider' => new \yii\data\ActiveDataProvider([
+                    'query'      => $collectionsQuery,
+                    'pagination' => [
+                        'pageSize' => 4,
+                    ],
+                ]),
+            ]); ?>
+        </div>
+    </div>
+
+    <div id="sx-home-collection-1">
+            <div class="container sx-container sx-popular-product" style="margin: 40px auto;">
+        <?php echo $this->render("@app/views/collections/collection-list-no-page", [
+            'label' => "Новые коллекции",
             'itemClasses' => "col-sm-6 col-lg-3",
             'dataProvider' => new \yii\data\ActiveDataProvider([
                 'query'      => $collectionsQuery,
@@ -137,7 +139,7 @@ if ($collectionsQuery->count()) :
                 ],
             ]),
         ]); ?>
-    </div>
+        </div>
     </div>
 
 <?php endif; ?>

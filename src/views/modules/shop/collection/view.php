@@ -229,6 +229,9 @@ CSS
                         );
 
                         $this->registerJs(<<<JS
+
+
+
 $(".sx-prices li").each(function() {
     var id = $(this).data("id");
     var jVal = $(".sx-properties--value", $(this));
@@ -265,7 +268,7 @@ JS
                                             <span class="sx-properties--name">
                                             <?= \skeeks\cms\helpers\StringHelper::ucfirst($placeProp->value); ?>
                                             </span>
-                                            <span class="sx-properties--value">
+                                            <span class="sx-properties--value" style="white-space: nowrap;">
                                                 от ...
                                             </span>
                                         </li>
@@ -465,9 +468,7 @@ $description = $model->description_full;
                                             <? else : ?>
                                                 <? if ((float)$priceHelper->minMoney->getAmount() > 0) : ?>
                                                     <div class="new sx-new-price sx-list-new-price g-color-primary"
-                                                         data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?>
-                                                        <? if ($this->theme->catalog_is_show_measure == 1) : ?>
-                                                            <span class="sx-measure">/ <?= $shopProduct->measure->symbol; ?></span>
+                                                         data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?><? if ($this->theme->catalog_is_show_measure == 1) : ?><span class="sx-measure">/<?= $shopProduct->measure->symbol; ?></span>
                                                         <? endif; ?>
                                                     </div>
                                                 <? endif; ?>
