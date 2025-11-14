@@ -128,6 +128,10 @@ if ($collectionsQuery->count()) :
     </div>
 
     <div id="sx-home-collection-1">
+        <?
+        $collectionsQueryNew = clone $collectionsQuery;
+        $collectionsQueryNew->orderBy(['created_at' => SORT_DESC]);
+        ?>
             <div class="container sx-container sx-popular-product" style="margin: 40px auto;">
         <?php echo $this->render("@app/views/collections/collection-list-no-page", [
             'label' => "Новые коллекции",
