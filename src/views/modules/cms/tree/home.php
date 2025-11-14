@@ -137,7 +137,7 @@ if ($collectionsQuery->count()) :
             'label' => "Новые коллекции",
             'itemClasses' => "col-sm-6 col-lg-3",
             'dataProvider' => new \yii\data\ActiveDataProvider([
-                'query'      => $collectionsQuery,
+                'query'      => $collectionsQueryNew,
                 'pagination' => [
                     'pageSize' => 4,
                 ],
