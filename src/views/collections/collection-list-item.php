@@ -11,6 +11,7 @@
  * @var \skeeks\cms\shop\models\ShopCollection $model
  */
 \skeeks\cms\themes\unify\assets\VanillaLazyLoadAsset::register($this);
+\skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductCardAsset::register($this);
 ?>
 <div class="g-brd-gray-light-v4 g-color-gray-dark-v2 g-brd-around g-bg-white sx-collection-list-item">
     <a class="d-block text-center" href="<?= $model->url; ?>">
@@ -55,6 +56,14 @@
                 </div>
         <? else : ?>
             <img class="img-fluid g-transform-scale-1_1--parent-hover g-transition-0_5 g-transition--ease-in-out" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $model->name; ?>">
+        <? endif; ?>
+
+        <? if ($model->shopCollectionStickers) : ?>
+            <div class="sx-labels">
+                <? foreach ($model->shopCollectionStickers as $sticker) : ?>
+                    <div style="background: <?php echo $sticker->color ? $sticker->color : "green"; ?>" class="sx-product-label sx-collection-label-<?php echo $sticker->id; ?>"><?php echo $sticker->name; ?></div>
+                <? endforeach; ?>
+            </div>
         <? endif; ?>
     </a>
     <div class="g-pt-15 g-px-15">

@@ -146,6 +146,24 @@ JS
         <div class="sx-main-product-container">
             <div class="sx-product-page--left-col">
                 <div class="sx-product-images">
+
+                    <? if ($model->shopCollectionStickers) : ?>
+                    <?
+            $this->registerCss(<<<CSS
+.sx-productpage-labels {
+    top: 1.5rem;
+}
+CSS
+)
+            ?>
+                        <div class="sx-labels sx-productpage-labels">
+                            <? foreach ($model->shopCollectionStickers as $sticker) : ?>
+                                <div style="background: <?php echo $sticker->color ? $sticker->color : "green"; ?>" class="sx-product-label sx-collection-label-<?php echo $sticker->id; ?>"><?php echo $sticker->name; ?></div>
+                            <? endforeach; ?>
+                        </div>
+                    <? endif; ?>
+
+
                     <? /*= $this->render("_product-images", [
                         'model'                 => $model,
                         'shopOfferChooseHelper' => null,

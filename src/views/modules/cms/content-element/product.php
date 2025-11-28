@@ -153,7 +153,6 @@ if ($this->theme->product_list_images == 2) {
                 <meta itemprop="ratingCount" content="<?php echo $shopProduct->rating_count; ?>">
             </span>
         <?php endif; ?>
-
     <?php endif; ?>
 
     <?php echo $this->render("@app/views/modules/cms/content-element/product/".(\Yii::$app->mobileDetect->isMobile ? "mobile" : \Yii::$app->view->theme->product_page_view_file), [
@@ -165,9 +164,38 @@ if ($this->theme->product_list_images == 2) {
         'shopOfferChooseHelper' => $shopOfferChooseHelper,
         'shopChooseJoinedProductsHelper' => $shopChooseJoinedProductsHelper,
     ]); ?>
+
+    <? if (\Yii::$app->shop->cmsContentPropertyStiker) : ?>
+        <?
+        /**
+         * @var \skeeks\cms\models\CmsContentPropertyEnum[] $enumLabels
+         */
+        $enumLabels = $model->relatedPropertiesModel->getEnumByAttribute(\Yii::$app->shop->cmsContentPropertyStiker->code);
+        if ($enumLabels) :
+        ?>
+        <?
+            $this->registerJs(<<<JS
+$(".sx-product-images").append($(".sx-productpage-labels"));
+JS
+)
+            ?>
+        <?
+            $this->registerCss(<<<CSS
+.sx-productpage-labels {
+    top: 1.5rem;
+}
+CSS
+)
+            ?>
+            <div class="sx-labels  sx-productpage-labels">
+                <? foreach ($enumLabels as $enum) : ?>
+                    <div style="background: <?php echo $enum->color ? $enum->color : "green"; ?>" class="sx-product-label sx-product-label-<?php echo $enum->code; ?>"><?php echo $enum->value; ?></div>
+                <? endforeach; ?>
+            </div>
+        <? endif; ?>
+    <? endif; ?>
+
 </section>
-
-
 <?
 $modal = \yii\bootstrap\Modal::begin([
     'header'       => 'Оставить заявку',
@@ -182,7 +210,6 @@ $modal = \yii\bootstrap\Modal::begin([
     'viewFile'  => 'with-messages'
     //'viewFile' => '@app/views/widgets/FormWidget/fiz-connect'
 ]); ?>
-
 <?
 $modal::end();
 ?>

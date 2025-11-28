@@ -54,6 +54,9 @@ if ($images !== false && !$images) {
 ?>
 <? if ($images) : ?>
     <div class="d-flex flex-row">
+
+
+
         <? if (count($images) > 1) : ?>
             <div id="carouselCus2" class="js-carousel text-center g-mx-minus-5 sx-stick sx-stick-navigation" style="width: 80px;"
                  data-infinite="true"

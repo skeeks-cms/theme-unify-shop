@@ -102,6 +102,22 @@
     cursor: pointer;
 }
 
+.sx-labels .sx-product-label {
+    margin-left: 0.2rem;
+    border-radius: var(--base-radius);
+    padding: 0.2rem 0.6rem;
+    color: white;
+}
+
+.sx-labels {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    display: flex;
+    z-index: 1;
+}
+
+
 @media (min-width: 992px) {
     .sx-product-card .sx-product-card--actions {
         /*visibility: hidden;*/

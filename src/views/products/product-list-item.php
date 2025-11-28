@@ -197,7 +197,27 @@ $isCompireAdded = \Yii::$app->shop->shopUser->getCmsCompareElements()->andWhere(
         <? endif; ?>
 
     <? endif; ?>
+
+    <? if (\Yii::$app->shop->cmsContentPropertyStiker) : ?>
+        <?
+        /**
+         * @var \skeeks\cms\models\CmsContentPropertyEnum[] $enumLabels
+         */
+        $enumLabels = $infoModel->relatedPropertiesModel->getEnumByAttribute(\Yii::$app->shop->cmsContentPropertyStiker->code);
+        if ($enumLabels) :
+        ?>
+
+            <div class="sx-labels">
+                <? foreach ($enumLabels as $enum) : ?>
+                    <div style="background: <?php echo $enum->color ? $enum->color : "green"; ?>" class="sx-product-label sx-product-label-<?php echo $enum->code; ?>"><?php echo $enum->value; ?></div>
+                <? endforeach; ?>
+            </div>
+        <? endif; ?>
+    <? endif; ?>
+
 </div>
+
+
 <div class="sx-product-card--info">
     <div>
     <? if (isset($shopProduct)) : ?>
