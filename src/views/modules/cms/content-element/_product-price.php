@@ -37,12 +37,12 @@ JS
 
         <?php if ($shopProduct->shop_product_model_id && @$shopChooseJoinedProductsHelper) : ?>
             <?
-                /*if (YII_ENV_DEV) {*/
-                    /*$shopChooseJoinedProductsHelper = new \skeeks\cms\shop\helpers\ShopChooseJoinedProductsHelper([
-                        'shopProduct'            => $shopProduct,
-                    ]);*/
-                    echo $shopChooseJoinedProductsHelper->render();
-                /*}*/
+            /*if (YII_ENV_DEV) {*/
+            /*$shopChooseJoinedProductsHelper = new \skeeks\cms\shop\helpers\ShopChooseJoinedProductsHelper([
+                'shopProduct'            => $shopProduct,
+            ]);*/
+            echo $shopChooseJoinedProductsHelper->render();
+            /*}*/
 
             ?>
         <?php endif; ?>
@@ -54,7 +54,7 @@ JS
         <link itemprop="availability" href="http://schema.org/InStock">
 
         <?
-        
+
         //TODO: подумать сделать оптимальнее
         $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
         $quantityAvailable = 0;
@@ -68,10 +68,10 @@ JS
         $isShowPrice = false;
         if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
             $isShowPrice = true;
-            
+
             //нужно проверить наличие
             if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity) {
-                
+
                 if ($shopStoreProducts) {
                     if ($quantityAvailable > 0) {
 
@@ -82,7 +82,7 @@ JS
                 } else {
                     $isShowPrice = true;
                 }
-                
+
             }
         }
 
@@ -151,89 +151,132 @@ JS
     </div>
 
     <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_cart) : ?>
-        <div class="sx-quantity-wrapper">
-            <div class="d-flex flex-row">
-        <span class="d-flex flex-row sx-quantity-group sx-main-quantity-group">
-            <div class="my-auto sx-minus">-</div>
-            <div class="my-auto">
-                <input
-                        value="<?= $shopProduct->measure_ratio_min; ?>"
-                        class="form-control sx-quantity-input"
-                        data-measure_ratio="<?= $shopProduct->measure_ratio; ?>"
-                        data-measure_ratio_min="<?= $shopProduct->measure_ratio_min; ?>"
-                />
-            </div>
-            <div class="my-auto sx-plus">+</div>
-        </span>
-                <div class="my-auto sx-measure-symbol">
-                    <?= $shopProduct->measure->symbol; ?>
-                </div>
-            </div>
-
-            <? if ($shopProduct->measure_matches_jsondata) : ?>
-                <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
-                    <div class="d-flex flex-row">
-                        <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
-                        <? if ($shopProduct->measure_ratio >= $count) : ?>
-
-                            <!--<div class="my-auto g-ml-10">
-                                =
-                            </div>-->
-                            <div class="my-auto d-flex flex-row">
-                        <span class="d-flex flex-row sx-quantity-group sx-secondary-quantity-group">
-                            <div class="my-auto sx-minus">-</div>
-                            <div class="my-auto">
-                                <input
-                                        value="<?
-                                        if ($count / $shopProduct->measure_ratio >= 1) {
-                                            echo $count / $shopProduct->measure_ratio;
-                                        } else {
-                                            echo round($shopProduct->measure_ratio / $count);
-                                        }
-                                        ?>"
-                                        class="form-control sx-quantity-input"
-                                        data-measure_ratio="<?
-                                        if ($count / $shopProduct->measure_ratio >= 1) {
-                                            echo $count / $shopProduct->measure_ratio;
-                                        } else {
-                                            echo round($shopProduct->measure_ratio / $count);
-                                        }
-                                        ?>"
-                                        data-measure_ratio_min="<?
-                                        if ($count / $shopProduct->measure_ratio >= 1) {
-                                            echo $count / $shopProduct->measure_ratio;
-                                        } else {
-                                            echo round($shopProduct->measure_ratio / $count);
-                                        }
-                                        ?>"
-                                />
-                            </div>
-                            <div class="my-auto sx-plus">+</div>
-                        </span>
-                                <div class="my-auto" style="margin-left: 10px;">
-                                    <?= $measure->symbol; ?>
-                                </div>
-                            </div>
-                        <? else: ?>
-                            <div class="my-auto g-ml-10" style="color: gray; font-size: 14px;">
-                                в 1 <?= $measure->symbol; ?> <?= $count; ?> <?= $shopProduct->measure->symbol; ?>
-                            </div>
-                        <? endif; ?>
+        <div class="sx-quantity-wrapper-box">
+            <div class="sx-quantity-wrapper">
+                <div class="d-flex flex-row">
+                    <span class="d-flex flex-row sx-quantity-group sx-main-quantity-group">
+                        <div class="my-auto sx-minus">-</div>
+                        <div class="my-auto">
+                            <input
+                                    value="<?= $shopProduct->measure_ratio_min; ?>"
+                                    class="form-control sx-quantity-input"
+                                    data-measure_ratio="<?= $shopProduct->measure_ratio; ?>"
+                                    data-measure_ratio_min="<?= $shopProduct->measure_ratio_min; ?>"
+                            />
+                        </div>
+                        <div class="my-auto sx-plus">+</div>
+                    </span>
+                    <div class="my-auto sx-measure-symbol">
+                        <?= $shopProduct->measure->symbol; ?>
                     </div>
-
-
-                <? endforeach; ?>
-            <? endif; ?>
+                </div>
+    
+                <? if ($shopProduct->measure_matches_jsondata) : ?>
+                    <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
+                        <div class="d-flex flex-row">
+                            <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
+                            <? if ($shopProduct->measure_ratio >= $count) : ?>
+    
+                                <!--<div class="my-auto g-ml-10">
+                                    =
+                                </div>-->
+                                <div class="my-auto d-flex flex-row">
+                            <span class="d-flex flex-row sx-quantity-group sx-secondary-quantity-group">
+                                <div class="my-auto sx-minus">-</div>
+                                <div class="my-auto">
+                                    <input
+                                            value="<?
+                                            if ($count / $shopProduct->measure_ratio >= 1) {
+                                                echo $count / $shopProduct->measure_ratio;
+                                            } else {
+                                                echo round($shopProduct->measure_ratio / $count);
+                                            }
+                                            ?>"
+                                            class="form-control sx-quantity-input"
+                                            data-measure_ratio="<?
+                                            if ($count / $shopProduct->measure_ratio >= 1) {
+                                                echo $count / $shopProduct->measure_ratio;
+                                            } else {
+                                                echo round($shopProduct->measure_ratio / $count);
+                                            }
+                                            ?>"
+                                            data-measure_ratio_min="<?
+                                            if ($count / $shopProduct->measure_ratio >= 1) {
+                                                echo $count / $shopProduct->measure_ratio;
+                                            } else {
+                                                echo round($shopProduct->measure_ratio / $count);
+                                            }
+                                            ?>"
+                                    />
+                                </div>
+                                <div class="my-auto sx-plus">+</div>
+                            </span>
+                                    <div class="my-auto" style="margin-left: 10px;">
+                                        <?= $measure->symbol; ?>
+                                    </div>
+                                </div>
+                            <? else: ?>
+                                <div class="my-auto g-ml-10" style="color: gray; font-size: 14px;">
+                                    в 1 <?= $measure->symbol; ?> <?= $count; ?> <?= $shopProduct->measure->symbol; ?>
+                                </div>
+                            <? endif; ?>
+                        </div>
+    
+    
+                    <? endforeach; ?>
+                <? endif; ?>
+            </div>
+            <?php if($shopProduct->measure_ratio_min != 1 && $shopProduct->minProductPrice) : ?>
+                <?php $amount = $shopProduct->minProductPrice->money->mul($shopProduct->measure_ratio_min)->amount; ?>
+                <?
+                $this->registerJs(<<<JS
+$(".sx-quantity-input").on("change", function() {
+    setTimeout(function() {
+        
+        var jFirst = $(".sx-quantity-input:eq(0)");
+        
+        var base = Number($(".sx-money-total").data("amount"));
+        var qty = Number(jFirst.val());
+    
+        var total = base * qty;
+    
+        // округление до 2 знаков
+        total = Number(total.toFixed(2));
+    
+        // форматирование (пример: русская локаль, без валюты)
+        var formatted = new Intl.NumberFormat("ru-RU", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(total);
+    
+        $(".sx-money-total").text(formatted);
+    }, 300);
+    
+});
+JS
+);
+                ?>
+            
+                <div class="sx-ravno my-auto h2">
+                    =
+                </div>
+                <div class="sx-total-price my-auto h2">
+                    
+                     <span class="sx-money-total" data-amount="<?php echo $shopProduct->minProductPrice->money->amount ?>"><?php echo \Yii::$app->formatter->asDecimal($amount); ?></span>
+                     <span><?php echo \Yii::$app->money->currency_symbol; ?></span>
+                </div>
+            <?php endif; ?>
+            
         </div>
 
         <?
-        
+
         if (($quantityAvailable > 0 || !\Yii::$app->shop->allStores) || \Yii::$app->skeeks->site->shopSite->is_show_product_no_quantity) : ?>
             <div class="g-mt-10">
                 <div class="control-group group-submit g-mb-15">
                     <div class="buttons-row ">
                         <? if (
-                                ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) || (!$shopProduct->minProductPrice)
+                            ($shopProduct->minProductPrice && $shopProduct->minProductPrice->price == 0) || (!$shopProduct->minProductPrice)
                         ) : ?>
                             <? if (\Yii::$app->skeeks->site->shopSite->is_show_button_no_price) : ?>
                                 <?= \yii\helpers\Html::tag('button', '<i class="icon-cart"></i> '.\Yii::t('skeeks/unify-shop', 'Add to cart'), [
@@ -329,8 +372,8 @@ JS
         <?
         $offerShopProduct = $shopOfferChooseHelper->offerCmsContentElement->shopProduct;
         $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($shopOfferChooseHelper->offerCmsContentElement);
-        
-                
+
+
         //TODO: подумать сделать оптимальнее
         $shopStoreProducts = $offerShopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
         $quantityAvailable = 0;
@@ -339,14 +382,14 @@ JS
                 $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
             }
         }
-        
+
         $isShowPrice = false;
         if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
             $isShowPrice = true;
-            
+
             //нужно проверить наличие
             if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity) {
-                
+
                 if ($shopStoreProducts) {
                     if ($quantityAvailable > 0) {
                         $isShowPrice = true;
@@ -356,7 +399,7 @@ JS
                 } else {
                     $isShowPrice = true;
                 }
-                
+
             }
         }
 
@@ -424,7 +467,7 @@ JS
         <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_cart) : ?>
             <?
 
-            
+
             if (($quantityAvailable > 0 || !\Yii::$app->shop->allStores)) : ?>
 
 
