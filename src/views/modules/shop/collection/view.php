@@ -19,17 +19,27 @@ $singlPage::end();
 
 $product = null;
 $this->registerCss(<<<CSS
+
+.products-section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.sx-filters-block-header {
+    display: none;
+}
+ul.sx-properties {
+    font-size: 1.2rem;
+}
+
 .js-carousel.slick-initialized .js-slide, .js-carousel.slick-initialized .js-thumb {
     margin-right: 10px;
     margin-top: 10px;
     cursor: pointer;
 }
-
-.cbp-filter-item a {
-    border: 1px solid;
-    font-size: 16px;
+.sx-js-pagination {
+    display: none;
 }
-
 @media (max-width: 768px) {
     ul.sx-properties
     {
@@ -38,16 +48,12 @@ $this->registerCss(<<<CSS
     }
 }
 
-.sx-container {
-    overflow: hidden;
-}
-
 CSS
 );
 
 $infoModel = $model;
 
-$this->title = "Коллекция ".$infoModel->seoName." " . ($infoModel->brand ? $infoModel->brand->name : "") ."";
+$this->title = "Коллекция ".$infoModel->seoName." ".($infoModel->brand ? $infoModel->brand->name : "")."";
 
 $properties = [];
 
@@ -55,18 +61,27 @@ $mainTree = '';
 ?>
 
 
-
-
 <?
 /**
  * @var \skeeks\cms\shop\models\ShopCmsContentElement[] $collectionProducts
  */
 $query = \skeeks\cms\shop\models\ShopCmsContentElement::find()
-    ->cmsSite()
+    //->cmsSite()
     ->active()
+    ->joinWith([
+    'shopProduct' => function ($q) {
+            $q->alias('sp')
+              ->joinWith(['collections collections'], false);
+        }
+    ], false)
     //->joinWith("cmsContentElementPropertyValues.element as cmsElement")
-    ->innerJoinWith("shopProduct as shopProduct", false)
-    ->innerJoinWith("shopProduct.collections as collections", false)
+    //->innerJoinWith("shopProduct as sp", false)
+    /*->innerJoinWith("shopProduct.collections as collections", false)*/
+    /*->joinWith([
+        'shopProduct sp' => function($qtmp) {
+            $qtmp->joinWith(['collections collections'], false);
+        }
+    ], false)*/
     ->andWhere([
         'collections.id' => $model->id //Товары
     ]);
@@ -74,23 +89,21 @@ $query = \skeeks\cms\shop\models\ShopCmsContentElement::find()
 //\Yii::$app->shop->filterBaseContentElementQuery($query);
 //\Yii::$app->shop->filterByQuantityQuery($query);
 
-$collectionProducts = $query->all();
+$queryForProperties = clone $query;
+$queryForProperties->select([\skeeks\cms\shop\models\ShopCmsContentElement::tableName().'.id']);
+
+$collectionProducts = $query->count();
+
 ?>
 
 <?php if ($collectionProducts) : ?>
 
     <?
-    skeeks\assets\unify\base\UnifyHsCubeportfolioAsset::register($this);
-
-    $this->registerJs(<<<JS
-$.HSCore.components.HSCubeportfolio.init('.cbp');
-JS
-    );
-    $ids = \yii\helpers\ArrayHelper::map($collectionProducts, "id", 'id');
+    //$ids = \yii\helpers\ArrayHelper::map($collectionProducts, "id", 'id');
 
     $allProps = \skeeks\cms\models\CmsContentElementProperty::find()
         ->leftJoin(\skeeks\cms\models\CmsContentProperty::tableName().' ccp', 'ccp.id ='.skeeks\cms\models\CmsContentElementProperty::tableName().'.property_id')
-        ->andWhere(['element_id' => $ids])
+        ->andWhere(['element_id' => $queryForProperties])
         ->groupBy(['property_id'])
         ->select(['property_id'])
         ->asArray()
@@ -99,7 +112,7 @@ JS
 
     $allValues = \skeeks\cms\models\CmsContentElementProperty::find()
         ->leftJoin(\skeeks\cms\models\CmsContentProperty::tableName().' ccp', 'ccp.id ='.skeeks\cms\models\CmsContentElementProperty::tableName().'.property_id')
-        ->andWhere(['element_id' => $ids])
+        ->andWhere(['element_id' => $queryForProperties])
         ->groupBy(['property_id', 'value'])
         ->all();
 
@@ -107,132 +120,178 @@ JS
      * @var $properties \skeeks\cms\models\CmsContentProperty[]
      */
     $properties = \skeeks\cms\models\CmsContentProperty::find()->orderBy(['priority' => SORT_ASC])->andWhere(['id' => \yii\helpers\ArrayHelper::map($allProps, "property_id", "property_id")])->all();
-    foreach ($properties as $property) {
+    /*foreach ($properties as $property) {
 
-    }
+    }*/
 
     $placesProps = \skeeks\cms\models\CmsContentElementProperty::find()
         ->leftJoin(\skeeks\cms\models\CmsContentProperty::tableName().' ccp', 'ccp.id ='.skeeks\cms\models\CmsContentElementProperty::tableName().'.property_id')
         ->joinWith("valueEnum as valueEnum")
         ->andWhere(['ccp.code' => 'ceramic_type_of_goods'])
-        ->andWhere(['element_id' => $ids])
+        ->andWhere(['element_id' => $queryForProperties])
         ->groupBy(['value_enum'])
-        ->orderBy(['valueEnum.priority' => SORT_ASC])
-    ;
+        ->orderBy(['valueEnum.priority' => SORT_ASC]);
 
-    $firstProduct = $collectionProducts[0];
+    $firstProductQuery = clone $query;
+    $firstProductQuery->limit(1);
+
+    $firstProduct = $firstProductQuery->one();
+
+    /**
+     * @var $firstProduct \skeeks\cms\shop\models\ShopCmsContentElement
+     */
     if ($firstProduct && $firstProduct->cmsTree) {
         \Yii::$app->breadcrumbs->setPartsByTree($firstProduct->cmsTree);
         \Yii::$app->breadcrumbs->append($model->name);
-        
+
         $mainTree = $firstProduct->cmsTree->name;
     }
     ?>
 <? endif; ?>
-<section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper">
-    <? if ($model->image) : ?>
-        <link itemprop="image" href="<?= $model->image->absoluteSrc; ?>">
-    <? endif; ?>
-    <div class="container sx-container g-py-20">
-        <div class="row">
-            <div class="col-md-12">
-                <?= $this->render('@app/views/breadcrumbs', [
-                    'model'    => $model,
-                    'isShowH1' => false,
-                ]); ?>
+    <section class="sx-product-card-wrapper g-mt-0 g-pb-0 to-cart-fly-wrapper">
+        <? if ($model->image) : ?>
+            <link itemprop="image" href="<?= $model->image->absoluteSrc; ?>">
+        <? endif; ?>
+        <div class="container sx-container g-py-20">
+            <div class="row">
+                <div class="col-md-12">
+                    <?= $this->render('@app/views/breadcrumbs', [
+                        'model'    => $model,
+                        'isShowH1' => false,
+                    ]); ?>
+                </div>
             </div>
-        </div>
-        <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
-        <div class="sx-main-product-container">
-            <div class="sx-product-page--left-col">
-                <div class="sx-product-images">
+            <? $pjax = \skeeks\cms\widgets\Pjax::begin(); ?>
+            <div class="sx-main-product-container">
+                <div class="sx-product-page--left-col">
+                    <div class="sx-product-images">
 
-                    <? if ($model->shopCollectionStickers) : ?>
-                    <?
-            $this->registerCss(<<<CSS
+                        <? if ($model->shopCollectionStickers) : ?>
+                            <?
+                            $this->registerCss(<<<CSS
 .sx-productpage-labels {
     top: 1.5rem;
 }
 CSS
-)
-            ?>
-                        <div class="sx-labels sx-productpage-labels">
-                            <? foreach ($model->shopCollectionStickers as $sticker) : ?>
-                                <div style="background: <?php echo $sticker->color ? $sticker->color : "green"; ?>" class="sx-product-label sx-collection-label-<?php echo $sticker->id; ?>"><?php echo $sticker->name; ?></div>
-                            <? endforeach; ?>
-                        </div>
-                    <? endif; ?>
+                            )
+                            ?>
+                            <div class="sx-labels sx-productpage-labels">
+                                <? foreach ($model->shopCollectionStickers as $sticker) : ?>
+                                    <div style="background: <?php echo $sticker->color ? $sticker->color : "green"; ?>"
+                                         class="sx-product-label sx-collection-label-<?php echo $sticker->id; ?>"><?php echo $sticker->name; ?></div>
+                                <? endforeach; ?>
+                            </div>
+                        <? endif; ?>
 
 
-                    <? /*= $this->render("_product-images", [
+                        <? /*= $this->render("_product-images", [
                         'model'                 => $model,
                         'shopOfferChooseHelper' => null,
 
                     ]); */ ?>
 
-                    <?
-                    $images = [];
-                    if ($model->image) {
-                        $images[] = $model->image;
-                    }
-                    if ($model->images) {
-                        $images = \yii\helpers\ArrayHelper::merge($images, $model->images);
-                    }
-                    if (!$images) {
-                        $images = false;
-                    }
-                    if (\Yii::$app->mobileDetect->isDesktop) {
-                        echo $this->render("@app/views/modules/cms/content-element/product/_product-images-vertical", [
-                            'images' => $images,
-                            'model' => $model,
-                        ]);
-                    } else {
-                        echo $this->render("@app/views/modules/cms/content-element/product/_product-images", [
-                            'images' => $images,
-                            'model' => $model,
-                        ]);
-                    }
-                     ?>
-                </div>
-            </div>
-            <div class="sx-product-page--right-col sx-col-product-info">
-                <div class="sx-right-product-info product-info ss-product-info" style="min-height: 100%;">
-                    <h1 class="h2" style="margin-bottom: 1rem;">Коллекция <?= $model->seoName; ?> <?= $infoModel->brand ? $infoModel->brand->name : ""; ?></h1>
-
-                    <div class="product-info-header">
-                    <div class="sx-properties-wrapper sx-columns-1">
-                        <ul class="sx-properties">
-                            <?php if($infoModel->brand) : ?>
-                                <li>
-                                    <span class="sx-properties--name">
-                                    Бренд
-                                    </span>
-                                    <span class="sx-properties--value">
-                                    <?= $infoModel->brand->name; ?>
-                                    </span>
-                                </li>
-                                <? if ($infoModel->brand->country) : ?>
-                                    <li>
-                                        <span class="sx-properties--name">
-                                        Страна
-                                        </span>
-                                        <span class="sx-properties--value">
-                                        <?= $infoModel->brand->country->name; ?>
-                                        </span>
-                                    </li>
-                                <? endif; ?>
-
-                            <?php endif; ?>
-
-
-
-
-                        </ul>
-                    </div>
-
-                    <? if ($collectionProducts && $placesProps->exists()) : ?>
                         <?
-                        $this->registerCss(<<<CSS
+                        $images = [];
+                        if ($model->image) {
+                            $images[] = $model->image;
+                        }
+                        if ($model->images) {
+                            $images = \yii\helpers\ArrayHelper::merge($images, $model->images);
+                        }
+                        if (!$images) {
+                            $images = false;
+                        }
+                        if (\Yii::$app->mobileDetect->isDesktop) {
+                            echo $this->render("@app/views/modules/cms/content-element/product/_product-images-vertical", [
+                                'images' => $images,
+                                'model'  => $model,
+                            ]);
+                        } else {
+                            echo $this->render("@app/views/modules/cms/content-element/product/_product-images", [
+                                'images' => $images,
+                                'model'  => $model,
+                            ]);
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="sx-product-page--right-col sx-col-product-info">
+                    <div class="sx-right-product-info product-info ss-product-info" style="min-height: 100%;">
+                        <h1 class="h2" style="margin-bottom: 1rem;">Коллекция <?= $model->seoName; ?> <?= $infoModel->brand ? $infoModel->brand->name : ""; ?></h1>
+
+                        <div class="product-info-header">
+                            <div class="sx-properties-wrapper sx-columns-1">
+                                <ul class="sx-properties">
+
+
+                                    <? if ($infoModel->brand) : ?>
+                                        <li>
+                                            <span class="sx-properties--name">
+                                                Бренд
+                                            </span>
+                                            <span class="sx-properties--value">
+                                                <?php if ($infoModel->brand->logo_image_id) : ?>
+                                                    <? $logo = $infoModel->brand->logo; ?>
+
+                                                    <img class="img-fluid"
+                                                         src="<?= \Yii::$app->imaging->thumbnailUrlOnRequest($logo->src,
+                                                             new \skeeks\cms\components\imaging\filters\Thumbnail([
+                                                                 'w' => 0,
+                                                                 'h' => 20,
+                                                                 'm' => \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND,
+                                                             ]), $infoModel->brand->code
+                                                         ); ?>" alt="<?= $infoModel->brand->name; ?>">
+                                                <?php endif; ?>
+
+                                                <a href="<?php echo $infoModel->brand->url; ?>" data-pjax="0">
+                                                    <?= $infoModel->brand->name; ?>
+                                                </a>
+                                            </span>
+                                        </li>
+
+
+                                        <? if ($infoModel->brand->country) : ?>
+                                            <li>
+                                            <span class="sx-properties--name">
+                                            Страна
+                                            </span>
+                                                <span class="sx-properties--value">
+                                            <?= $infoModel->brand->country->name; ?>
+                                            </span>
+                                            </li>
+                                        <? endif; ?>
+
+                                    <?php endif; ?>
+
+                                    <?php if ($collectionProducts) : ?>
+                                        <li>
+                                            <span class="sx-properties--name">
+                                            Всего товаров
+                                            </span>
+                                            <span class="sx-properties--value">
+                                            <?= \Yii::$app->formatter->asInteger($collectionProducts); ?> шт.
+                                            </span>
+                                        </li>
+                                    <?php endif; ?>
+
+                                    <?php if ($firstProduct) : ?>
+                                        <li>
+                                            <span class="sx-properties--name">
+                                            Цена товара от
+                                            </span>
+                                            <span class="sx-properties--value">
+                                                <?= $firstProduct->shopProduct->minProductPrice->money; ?>
+                                            </span>
+                                        </li>
+                                    <?php endif; ?>
+
+
+                                </ul>
+                            </div>
+
+                            <? if ($collectionProducts && $placesProps->exists() && 1 == 2) : ?>
+                                <?
+                                $this->registerCss(<<<CSS
 .sx-prices {
     font-size: 1.4rem;
 }
@@ -244,9 +303,9 @@ CSS
     font-weight: bold;
 }
 CSS
-                        );
+                                );
 
-                        $this->registerJs(<<<JS
+                                $this->registerJs(<<<JS
 
 
 
@@ -272,54 +331,53 @@ $(".sx-prices li").each(function() {
     }
 });
 JS
-                        );
-                        ?>
-                        <!-- Cube Portfolio Blocks - Filter -->
-                        <h4 style="margin-bottom: 1rem;">Цены на элементы коллекции:</h4>
-                        <div class="sx-properties-wrapper sx-columns-1 sx-prices">
-                            <ul class="sx-properties">
-                                <? foreach ($placesProps->all() as $placePropId) :
-                                    $placeProp = \skeeks\cms\models\CmsContentPropertyEnum::findOne($placePropId->value_enum);
-                                    if ($placeProp) :
-                                        ?>
-                                        <li data-id="<?php echo $placeProp->id; ?>">
+                                );
+                                ?>
+                                <!-- Cube Portfolio Blocks - Filter -->
+                                <h4 style="margin-bottom: 1rem;">Цены на элементы коллекции:</h4>
+                                <div class="sx-properties-wrapper sx-columns-1 sx-prices">
+                                    <ul class="sx-properties">
+                                        <? foreach ($placesProps->all() as $placePropId) :
+                                            $placeProp = \skeeks\cms\models\CmsContentPropertyEnum::findOne($placePropId->value_enum);
+                                            if ($placeProp) :
+                                                ?>
+                                                <li data-id="<?php echo $placeProp->id; ?>">
                                             <span class="sx-properties--name">
                                             <?= \skeeks\cms\helpers\StringHelper::ucfirst($placeProp->value); ?>
                                             </span>
-                                            <span class="sx-properties--value" style="white-space: nowrap;">
+                                                    <span class="sx-properties--value" style="white-space: nowrap;">
                                                 от ...
                                             </span>
-                                        </li>
+                                                </li>
 
-                                    <? endif; ?>
-                                <? endforeach; ?>
-                            </ul>
+                                            <? endif; ?>
+                                        <? endforeach; ?>
+                                    </ul>
+                                </div>
+                            <? endif; ?>
+
+
+                            <button style="margin-top: 20px;" onclick="new sx.classes.Location().href('#products-section')" class="btn btn-xxl btn-block btn-primary g-font-size-18">Смотреть товары коллекции</button>
                         </div>
-                    <? endif; ?>
-
-
-                    <button style="margin-top: 20px;" onclick="new sx.classes.Location().href('#portfolio-section')" class="btn btn-xxl btn-block btn-primary g-font-size-18">Смотреть товары коллекции</button>
                     </div>
                 </div>
             </div>
+            <? $pjax::end(); ?>
         </div>
-        <? $pjax::end(); ?>
-    </div>
-</section>
+    </section>
 
+    <section style="margin-bottom: 20px; margin-top: 20px;">
+        <div class="container sx-container">
 
-<section style="margin-bottom: 20px; margin-top: 20px;">
-    <div class="container sx-container">
-
-        <div class="sx-properties-wrapper">
-            <ul class="sx-properties">
-                <?php foreach ($properties as $prop) : ?>
-                    <?php if (!in_array($prop->code, ['collection', 'sku'])) : ?>
-                        <li data-prop-id="<?php echo $prop->id; ?>">
+            <div class="sx-properties-wrapper">
+                <ul class="sx-properties">
+                    <?php foreach ($properties as $prop) : ?>
+                        <?php if (!in_array($prop->code, ['collection', 'sku'])) : ?>
+                            <li data-prop-id="<?php echo $prop->id; ?>">
                             <span class="sx-properties--name">
                                 <?php echo $prop->name; ?>
                             </span>
-                            <span class="sx-properties--value">
+                                <span class="sx-properties--value">
                                 <?
                                 /**
                                  * @var \skeeks\cms\models\CmsContentElementProperty $valueData
@@ -356,16 +414,15 @@ JS
                                 <?php endif; ?>
 
                             </span>
-                        </li>
-                    <?php endif; ?>
+                            </li>
+                        <?php endif; ?>
 
 
-                <?php endforeach; ?>
-            </ul>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
         </div>
-    </div>
-</section>
-
+    </section>
 
 <?php
 $description = $model->description_full;
@@ -382,187 +439,122 @@ $description = $model->description_full;
     </section>
 <? endif; ?>
 
+
 <?php if ($collectionProducts) : ?>
+    <?php
+    \skeeks\cms\themes\unify\widgets\filters\assets\FiltersWidgetAsset::register($this);
+    $pjax = \skeeks\cms\widgets\PjaxLazyLoad::begin();
 
-    <section id="portfolio-section" class="g-pb-10 g-brd-gray-light-v4">
-        <div class="container sx-container">
+    $dataProvider = new \yii\data\ActiveDataProvider([
+        'query' => $query,
+    ]);
 
-            <? if ($placesProps->exists()) : ?>
-                <!-- Cube Portfolio Blocks - Filter -->
-                <ul id="filterControls1" class="d-block list-inline">
-                    <li class="list-inline-item cbp-filter-item cbp-filter-item-active" role="button" data-filter="*">
-                        <a href="#" onclick="return false;" class="btn btn-sm u-btn-outline-darkgray g-mr-10">Показать все</a>
-                    </li>
-                    <? foreach ($placesProps->all() as $placePropId) :
-                        $placeProp = \skeeks\cms\models\CmsContentPropertyEnum::findOne($placePropId->value_enum);
-                        if ($placeProp) :
-                            ?>
-
-                            <li class="list-inline-item cbp-filter-item" role="button" data-filter=".id<?= $placeProp->id ?>">
-                                <a href="#" onclick="return false;" class="btn btn-sm u-btn-outline-darkgray g-mr-10"><?= $placeProp->value; ?></a>
-                            </li>
-                        <? endif; ?>
-                    <? endforeach; ?>
-                </ul>
-                <!-- End Cube Portfolio Blocks - Filter -->
-            <? endif; ?>
-
-            <div class="cbp sx-product-list" data-controls="#filterControls1" data-animation="quicksand" data-x-gap="0" data-y-gap="10"
-                 data-media-queries='[{"width": 1500, "cols": 4}, {"width": 1100, "cols": 4}, {"width": 800, "cols": 4}, {"width": 480, "cols": 3}, {"width": 300, "cols": 1}]'>
-                <? foreach ($collectionProducts as $product) :
-                    /**
-                     * @var $product \skeeks\cms\shop\models\ShopCmsContentElement
-                     */
-                    $priceHelper = \Yii::$app->shop->cart->getProductPriceHelper($product);
-                    $shopProduct = $product->shopProduct;
-
-                    $types = $product->relatedPropertiesModel->getAttribute('ceramic_type_of_goods');
-                    ?>
+    ?>
+    <?php if ($pjax->isPjax) :
+        ?>
+        <div class="products-section" id="products-section">
+            <div class="sx-container container">
+                <?
 
 
-                    <div class=" item d-flex cbp-item identity sx-product-card-wrapper <? if ($types) : ?>
-            <? foreach ($types as $typeId) {
-                        echo "id".$typeId;
-                    } ?>
-<? endif; ?>">
-                        <article class="sx-product-card h-100 to-cart-fly-wrapper">
-
-                            <?
-                            $isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $product->id])->exists();
-                            ?>
-                            <div class="sx-favorite-product"
-                                 data-added-icon-class="fas fa-heart"
-                                 data-not-added-icon-class="far fa-heart"
-                                 data-is-added="<?= (int)$isAdded ?>"
-                                 data-product_id="<?= (int)$shopProduct->id ?>"
-                            >
-                                <a href="#" class="sx-favorite-product-trigger" data-pjax="0" style="font-size: 22px;">
-                                    <? if ($isAdded) : ?>
-                                        <i class="fas fa-heart"></i>
-                                    <? else : ?>
-                                        <i class="far fa-heart"></i>
-                                    <? endif; ?>
-                                </a>
-                            </div>
-
-                            <? if ($product->shopProduct && $product->shopProduct->baseProductPrice && $product->shopProduct->minProductPrice && $product->shopProduct->minProductPrice->id != $product->shopProduct->baseProductPrice->id) :
-
-                                $percent = (int)($priceHelper->percent * 100); ?>
-                                <div class="sx-product-card--sale">
-                                    <div><span class="number">-<?= (int)$percent; ?></span><span class="percent">%</span></div>
-                                    <div class="caption">скидка</div>
-                                </div>
-                            <? endif; ?>
-                            <div class="sx-product-card--photo">
-                                <a href="<?= $product->url; ?>" data-pjax="0">
-                                    <?
-                                    $preview = \Yii::$app->imaging->getPreview($product->image,
-                                        new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                            'w'          => $this->theme->catalog_img_preview_width,
-                                            'h'          => $this->theme->catalog_img_preview_width,
-                                            'm'          => \Yii::$app->view->theme->catalog_img_preview_crop ? \Yii::$app->view->theme->catalog_img_preview_crop : \Imagine\Image\ManipulatorInterface::THUMBNAIL_INSET,
-                                            'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_MEDIUM,
-                                        ]), $model->code
-                                    );
-                                    ?>
-                                    <img class="to-cart-fly-img" src="<?= $preview->src; ?>" title="<?= \yii\helpers\Html::encode($product->name); ?>" alt="<?= \yii\helpers\Html::encode($product->name); ?>"/>
-                                </a>
-                            </div>
-                            <div class="sx-product-card--info">
-
-                                <? if (isset($shopProduct)) : ?>
-                                    <div class="">
-                                        <? if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
-                                            <?
-                                            $prefix = "";
-                                            if ($shopProduct->isOffersProduct) {
-                                                $prefix = \Yii::t('skeeks/unify-shop', 'from')." ";
-                                            }
-                                            ?>
-                                            <? if ($priceHelper->hasDiscount && (float)$priceHelper->minMoney->getAmount() > 0) : ?>
-                                                <span class="new sx-new-price sx-list-new-price g-color-primary"
-                                                      data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?></span>
-                                                <span class="old sx-old-price sx-list-old-price" data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->basePrice->money; ?></span>
-                                            <? else : ?>
-                                                <? if ((float)$priceHelper->minMoney->getAmount() > 0) : ?>
-                                                    <div class="new sx-new-price sx-list-new-price g-color-primary"
-                                                         data-amount="<?= $priceHelper->minMoney->getAmount(); ?>"><?= $prefix; ?><?= $priceHelper->minMoney; ?><? if ($this->theme->catalog_is_show_measure == 1) : ?><span class="sx-measure">/<?= $shopProduct->measure->symbol; ?></span>
-                                                        <? endif; ?>
-                                                    </div>
-                                                <? endif; ?>
-                                            <? endif; ?>
-                                        <? endif; ?>
-                                    </div>
-                                <? endif; ?>
-                                <div class="sx-product-card--title">
-                                    <a href="<?= $product->url; ?>" title="<?= $product->productName; ?>" data-pjax="0"
-                                       class="sx-product-card--title-a sx-main-text-color g-text-underline--none--hover"><?= $product->productName; ?></a>
-                                </div>
-                                <? if (isset($shopProduct)) : ?>
-                                    <div class="sx-product-card--actions">
-                                        <? if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices && (float)$priceHelper->minMoney->getAmount() == 0) : ?>
-                                            <? if (
-                                                //$shopProduct->quantity > 0 &&
-                                                \Yii::$app->skeeks->site->shopSite->is_show_button_no_price && !$shopProduct->isOffersProduct) : ?>
-                                                <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>".\Yii::t('skeeks/unify-shop', 'To cart'), [
-                                                    'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
-                                                    'type'    => 'button',
-                                                    'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
-                                                ]); ?>
-
-                                            <? else : ?>
-                                                <?= \yii\helpers\Html::tag('a', "Подробнее", [
-                                                    'class' => 'btn btn-primary',
-                                                    'href'  => $product->url,
-                                                    'data'  => ['pjax' => 0],
-                                                ]); ?>
-                                            <? endif; ?>
-
-                                        <? else : ?>
-                                            <?
-
-                                            $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
-                                            $quantityAvailable = 0;
-                                            if ($shopStoreProducts) {
-                                                foreach ($shopStoreProducts as $shopStoreProduct) {
-                                                    $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
-                                                }
-                                            }
-
-                                            if (
-                                                !$shopStoreProducts || $quantityAvailable > 0
-                                                //&& !$shopProduct->isOffersProduct
-                                                && \Yii::$app->cms->cmsSite->shopSite->is_show_cart
-                                            ) : ?>
-                                                <?= \yii\helpers\Html::tag('button', "<i class=\"icon cart\"></i>".\Yii::t('skeeks/unify-shop', 'To cart'), [
-                                                    'class'   => 'btn btn-primary js-to-cart to-cart-fly-btn',
-                                                    'type'    => 'button',
-                                                    'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, 1); return false;"),
-                                                ]); ?>
-                                            <? else : ?>
-                                                <?= \yii\helpers\Html::tag('a', "Подробнее", [
-                                                    'class' => 'btn btn-primary',
-                                                    'href'  => $product->url,
-                                                    'data'  => ['pjax' => 0],
-                                                ]); ?>
-                                            <? endif; ?>
-                                        <? endif; ?>
-                                    </div>
-                                <? endif; ?>
+                $filtersWidget = new \skeeks\cms\themes\unifyshop\filters\StandartShopFiltersWidget([
+                    'activeFormConfig' => [
+                        'action'  => $model->url,
+                        'options' => [
+                            'data' => [
+                                'pjax' => 1,
+                            ],
+                        ],
+                    ],
+                ]);
 
 
-                            </div>
+                $baseQuery = clone $dataProvider->query;
 
-                        </article>
-                    </div>
+                $eavFiltersHandler = null;
+                $shopDataFiltersHandler = null;
+                /*$shopDataFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopDataFiltersHandler([
+                    'baseQuery' => $baseQuery,
+                ]);*/
 
-                <?php endforeach; ?>
+                $eavFiltersHandler = new \skeeks\cms\shop\queryFilter\ShopEavQueryFilterHandler([
+                    'baseQuery' => $baseQuery,
+                ]);
+
+                $eavFiltersHandler->openedPropertyIds = \Yii::$app->skeeks->site->shopSite->open_filter_property_ids;
+                $eavFiltersHandler->viewFile = '@app/views/filters/eav-filters';
+                $rpQuery = $eavFiltersHandler->getRPQuery();
+
+                if ($show_filter_property_ids = \Yii::$app->skeeks->site->shopSite->show_filter_property_ids) {
+                    $rpQuery->andWhere([\skeeks\cms\models\CmsContentProperty::tableName().'.id' => $show_filter_property_ids]);
+                }
+                /*$treeIds = [$model->id];
+                $rpQuery->andWhere([
+                    'or',
+                    ['map.cms_tree_id' => $treeIds],
+                    ['map.cms_tree_id' => null],
+                ]);*/
+                //print_r($rpQuery->createCommand()->rawSql);die;
+                $eavFiltersHandler->initRPByQuery($rpQuery);
+                $priceFiltersHandler = new \skeeks\cms\shop\queryFilter\PriceFiltersHandler([
+                    'baseQuery' => $baseQuery,
+                    'viewFile'  => '@app/views/filters/price-filter',
+                ]);
+
+                /*$filtersWidget
+                    ->registerHandler($priceFiltersHandler, "price");*/
+
+                /*$filtersWidget
+                    ->registerHandler($shopDataFiltersHandler, 'data');*/
+
+                $filtersWidget
+                    ->registerHandler($eavFiltersHandler, 'eav');
+
+                $filtersWidget->getEavHandler()->viewFile = \Yii::$app->mobileDetect->isMobile ? '@app/views/filters/eav-filters' : '@app/views/filters/eav-filters-inline';
+
+                \yii\helpers\ArrayHelper::remove($_GET, "code");
+                $filtersWidget->loadFromRequest();
+
+                $filtersWidget->applyToQuery($dataProvider->query);
+
+                \Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
+
+                $dataProvider->query->addSelect([
+                    \skeeks\cms\shop\models\ShopCmsContentElement::tableName() . ".*"
+                ])
+
+                ?>
+                <?php
+                if (!\Yii::$app->mobileDetect->isMobile) {
+                    $filtersWidget->getSortHandler()->viewFile = '@app/views/filters/sort-filter-inline';
+                    $filtersWidget->getAvailabilityHandler()->viewFile = '@app/views/filters/availability-filter-inline';
+                }
+
+                echo $filtersWidget->run();
+                ?>
+
+
+                <?php echo $this->render("@app/views/products/product-list", [
+                    'dataProvider' => $dataProvider,
+                ]); ?>
             </div>
-
         </div>
-    </section>
-<?php endif; ?>
 
+    <?php else : ?>
+        <div class="products-section" id="products-section">
+            <div class="sx-container container">
+
+                <!--Загрузка фильтров...-->
+
+                <?php echo $this->render("@app/views/products/product-list", [
+                    'dataProvider' => $dataProvider,
+                ]); ?>
+            </div>
+        </div>
+
+    <?php endif; ?>
+    <? $pjax::end(); ?>
+<?php endif; ?>
 
 <?php
 
@@ -576,10 +568,10 @@ if ($infoModel->brand) {
 }
 
 if ($mainTree) {
-    $title[] = " / " . $mainTree;
+    $title[] = " / ".$mainTree;
 }
 
-$title[] = "в магазине " . \Yii::$app->cms->cmsSite->name;
+$title[] = "в магазине ".\Yii::$app->cms->cmsSite->name;
 
 $this->title = implode(' ', $title);
 
