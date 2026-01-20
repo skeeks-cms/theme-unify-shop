@@ -221,8 +221,18 @@ CSS
                 $pjax = \skeeks\cms\widgets\PjaxLazyLoad::begin(); ?>
                 <?php if ($pjax->isPjax) : ?>
                     <? echo $filtersWidget->run(); ?>
-                <?php else : ?>
+                    <?/* $this->registerJs(<<<JS
+setTimeout(function() {
+    alert(1);
+    $('.js-sticky-block').trigger("update");
+}, 1000);
 
+JS
+                    );
+                    */?>
+                <?php else : ?>
+                    <? $form = \yii\widgets\ActiveForm::begin([]); ?>
+                    <? \yii\widgets\ActiveForm::end(); ?>
                 <?php endif; ?>
                 <? $pjax::end(); ?>
             </div>
