@@ -62,11 +62,16 @@ if ($orderId = \Yii::$app->session->getFlash("order")) {
         $jsData = \yii\helpers\Json::encode($data);
         $this->registerJs(<<<JS
 sx.onReady(function() {
-    sx.Shop.trigger("purchase", {$jsData});
+    setTimeout(function() {
+        sx.Shop.trigger("purchase", {$jsData});
+    }, 1000);
+    
 });
     
 JS
         );
+
+
     }
 
 }
