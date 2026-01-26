@@ -427,12 +427,13 @@ $dataProvider->setTotalCount($totalOffers);
                         [
                             'modelClass'       => \skeeks\cms\models\CmsCountry::class,
                             'modelPkAttribute' => 'alpha2',
+                            'limit' => '250',
                             'options'          => ['placeholder' => 'Все страны'],
                             'pluginOptions'    => [
                                 'allowClear' => true,
                             ],
                             'searchQuery'      => function ($word = '') {
-                                $query = \skeeks\cms\models\CmsCountry::find();
+                                $query = \skeeks\cms\models\CmsCountry::find()->orderBy(['name' => SORT_ASC]);
                                 if ($word) {
                                     $query->search($word);
                                 }
