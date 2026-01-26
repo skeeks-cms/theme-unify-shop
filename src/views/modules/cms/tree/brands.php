@@ -321,6 +321,10 @@ if ($filters->q) {
 }
 
 
+$cloneQCountry = clone $q;
+$cloneQCountry->groupBy(['products.country_alpha2']);
+$cloneQCountry->select(['products.country_alpha2']);
+
 $countries = [];
 /**
  * @var $countryContentProperty \skeeks\cms\models\CmsContentProperty
@@ -335,8 +339,12 @@ if ($filters->country) {
 }
 
 $cloneQ = clone $q;
+
 $cloneQ->addSelect(['letter' => new \yii\db\Expression("SUBSTRING(name, 1, 1)")]);
 $cloneQ->groupBy(['letter']);
+
+$cloneQCountry->groupBy(['products.country_alpha2']);
+$cloneQCountry->select(['products.country_alpha2']);
 
 $availableLetters = $cloneQ->asArray()->all();
 $availableLetters = \yii\helpers\ArrayHelper::map($availableLetters, function ($row) {
@@ -432,8 +440,11 @@ $dataProvider->setTotalCount($totalOffers);
                             'pluginOptions'    => [
                                 'allowClear' => true,
                             ],
-                            'searchQuery'      => function ($word = '') {
-                                $query = \skeeks\cms\models\CmsCountry::find()->orderBy(['name' => SORT_ASC]);
+                            'searchQuery'      => function ($word = '') use ($cloneQCountry) {
+                                $query = \skeeks\cms\models\CmsCountry::find()
+                                    ->andWhere(['alpha2' => $cloneQCountry])
+                                    ->orderBy(['name' => SORT_ASC])
+                                ;
                                 if ($word) {
                                     $query->search($word);
                                 }
