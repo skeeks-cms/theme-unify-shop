@@ -22,50 +22,73 @@
         return false;
     });
 
+
+    function normalizeQuantity(value, ratio, min) {
+
+        value = Number(value);
+        ratio = Number(ratio) || 1;
+        min   = Number(min) || ratio;
+
+        if (isNaN(value)) value = 0;
+
+        // точность шага
+        var precision = (ratio.toString().split('.')[1] || '').length;
+        var factor = Math.pow(10, precision);
+
+        // в целые
+        var valueInt = Math.round(value * factor);
+        var ratioInt = Math.round(ratio * factor);
+
+        // минимум
+        if (valueInt < ratioInt) {
+            valueInt = ratioInt;
+        }
+
+        // нормализация по шагу
+        var count = Math.round(valueInt / ratioInt);
+        valueInt = count * ratioInt;
+
+        // обратно
+        var result = valueInt / factor;
+
+        return Number(result.toFixed(precision));
+    }
+
     $("body").on("up", ".sx-quantity-group .sx-plus", function () {
 
-        var jGroup = $(this).closest(".sx-quantity-group");
-        var jInput = $(".sx-quantity-input", jGroup);
-        var measure_ratio = Number(jInput.data("measure_ratio")) || 1;
-        var measure_ratio_min = parseFloat(jInput.data("measure_ratio_min")) || 1;
-        var newVal = Number(jInput.val()) + measure_ratio;
+    var jInput = $(this)
+        .closest(".sx-quantity-group")
+        .find(".sx-quantity-input");
 
-        var count = newVal / measure_ratio;
-        count = Math.round(count);
+    var ratio = jInput.data("measure_ratio");
+    var min   = jInput.data("measure_ratio_min");
+    var value = Number(jInput.val()) + Number(ratio);
 
-        newVal = count * measure_ratio;
-        newVal = Math.floor(newVal * 100) / 100;
+    var newVal = normalizeQuantity(value, ratio, min);
 
-        if (newVal < measure_ratio_min) {
-            newVal = measure_ratio_min
-        }
+    jInput.val(newVal).focus().trigger("change", { result: "up" });
 
-        jInput.val(newVal);
-        jInput.focus();
+    return false;
+});
+        
 
-        jInput.trigger("change", {
-            'result': 'up'
-        });
-
-        return false;
-    });
 
     $("body").on("down", ".sx-quantity-group .sx-minus", function () {
-        var jGroup = $(this).closest(".sx-quantity-group");
-        var jInput = $(".sx-quantity-input", jGroup);
-        var measure_ratio = parseFloat(jInput.data("measure_ratio")) || 1;
-        var measure_ratio_min = parseFloat(jInput.data("measure_ratio_min")) || 1;
-        var newVal = parseFloat(jInput.val()) - measure_ratio;
-        if (newVal < measure_ratio_min) {
-            newVal = measure_ratio_min
-        }
-        jInput.val(newVal);
-        jInput.focus();
-        jInput.trigger("change", {
-            'result': 'down'
-        });
-        return false;
-    });
+
+    var jInput = $(this)
+        .closest(".sx-quantity-group")
+        .find(".sx-quantity-input");
+
+    var ratio = jInput.data("measure_ratio");
+    var min   = jInput.data("measure_ratio_min");
+    var value = Number(jInput.val()) - Number(ratio);
+
+    var newVal = normalizeQuantity(value, ratio, min);
+
+    jInput.val(newVal).focus().trigger("change", { result: "down" });
+
+    return false;
+});
 
     $("body").on("updatewidth", ".sx-quantity-group .sx-quantity-input", function () {
         var measure_ratio = Number($(this).data("measure_ratio")) || 1;
@@ -90,65 +113,63 @@
     });
 
     $("body").on("updateOther", ".sx-quantity-input", function () {
-        var measure_ratio = Number($(this).data("measure_ratio")) || 1;
-        var coefficient = $(this).val() / measure_ratio;
-        coefficient = Math.round(coefficient);
 
-        var jWrapper = $(this).closest(".sx-quantity-wrapper")
+    var jCurrent = $(this);
 
-        $(".sx-quantity-input", jWrapper).each(function () {
-            if ($(this).hasClass("sx-current-changed")) {
-                $(this).removeClass("sx-current-changed")
-            } else {
-                var measure_ratio = Number($(this).data("measure_ratio")) || 1;
-                var newVal = coefficient * measure_ratio;
-                console.log(newVal);
+    var ratio = Number(jCurrent.data("measure_ratio")) || 1;
+    var value = Number(jCurrent.val()) || 0;
 
-                newVal = Math.floor(newVal * 100) / 100;
+    // коэффициент — сколько шагов
+    var coefficient = Math.round(value / ratio);
 
-                $(this).val(newVal);
-                $(this).trigger("updatewidth");
-            }
-        });
+    var jWrapper = jCurrent.closest(".sx-quantity-wrapper");
 
-    });
+    $(".sx-quantity-input", jWrapper).each(function () {
 
-    $("body").on("change", ".sx-quantity-input", function (e, data) {
+        var jInput = $(this);
 
-        var measure_ratio = Number($(this).data("measure_ratio")) || 1;
-        var newVal = $(this).val();
-
-        if (isNaN(newVal) === false) {
-
-        } else {
-            newVal = 0;
+        if (jInput.hasClass("sx-current-changed")) {
+            jInput.removeClass("sx-current-changed");
+            return;
         }
 
-        if (Number(newVal) < measure_ratio) {
+        var inputRatio = Number(jInput.data("measure_ratio")) || 1;
+        var min = Number(jInput.data("measure_ratio_min")) || inputRatio;
 
-            $(this).val(measure_ratio);
-            $(this).trigger("updatewidth");
+        // считаем через нормализацию
+        var newVal = normalizeQuantity(
+            coefficient * inputRatio,
+            inputRatio,
+            min
+        );
 
-            $(this).focus();
-            $(this).addClass("sx-current-changed").trigger("updateOther");
-
-            return false;
-        }
-
-        var count = newVal / measure_ratio;
-        count = Math.round(count);
-
-        newVal = count * measure_ratio;
-        newVal = Math.floor(newVal * 100) / 100;
-
-        $(this).val(newVal);
-        $(this).trigger("updatewidth");
-
-        $(this).focus();
-        $(this).addClass("sx-current-changed").trigger("updateOther");
-
-        return false;
+        jInput.val(newVal);
+        jInput.trigger("updatewidth");
     });
+});
+
+    $("body").on("change", ".sx-quantity-input", function () {
+
+    var jInput = $(this);
+
+    var ratio = jInput.data("measure_ratio");
+    var min   = jInput.data("measure_ratio_min");
+    var value = jInput.val();
+
+    var newVal = normalizeQuantity(value, ratio, min);
+
+    jInput.val(newVal);
+    jInput.trigger("updatewidth");
+
+    jInput
+        .focus()
+        .addClass("sx-current-changed")
+        .trigger("updateOther");
+
+    return false;
+});
+        
+
 
     $(".sx-quantity-group .sx-quantity-input").trigger("updatewidth");
 
