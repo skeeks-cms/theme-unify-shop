@@ -245,8 +245,8 @@ $(".sx-quantity-input").on("change", function() {
     
         // форматирование (пример: русская локаль, без валюты)
         var formatted = new Intl.NumberFormat("ru-RU", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
         }).format(total);
     
         $(".sx-money-total").text(formatted);
