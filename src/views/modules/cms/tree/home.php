@@ -68,10 +68,10 @@ if (\Yii::$app->mobileDetect->isMobile) {
     if ($catalogTree) {
         $config['parent_tree_id'] = $catalogTree->id;
     }
-    $widget = \skeeks\cms\cmsWidgets\tree\TreeCmsWidget::beginWidget('home-tree-slider', $config);
-    $widget->descriptor->name = 'Слайдер разделов';
+    $widget = \skeeks\cms\cmsWidgets\tree\TreeCmsWidget::beginWidget('home-catalog', $config);
+    $widget->descriptor->name = 'Категории';
     $widget->is_cache = false;
-    $widget->viewFile = '@app/views/widgets/TreeCmsWidget/revolution-slider';
+    $widget->viewFile = '@app/views/widgets/TreeCmsWidget/home-catalog';
     $widget->is_has_image_only = true;
     $widget->activeQuery->with('image');
     $widget::end();
