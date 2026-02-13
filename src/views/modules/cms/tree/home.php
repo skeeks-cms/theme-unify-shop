@@ -46,6 +46,20 @@
 <? endif; ?>
 
 
+<? if ($model->description_short) : ?>
+    <div class="sx-section sx-home-section sx-home-short-desc">
+        <div class="container sx-container">
+            <div class="row">
+                <div class="col-12">
+                    <?= $model->description_short; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<? endif; ?>
+
+
+
 <?
 
 if (\Yii::$app->mobileDetect->isMobile) {
