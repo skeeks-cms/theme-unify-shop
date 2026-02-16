@@ -197,9 +197,10 @@ CSS
         <?php
 $isHeaderSticky = $this->theme->is_header_sticky ? "true" : "false";
 ?>
-        <div class="js-sticky-block" data-has-sticky-header="<?php echo $isHeaderSticky; ?>" data-start-point=".sx-fast-filters" data-end-point=".sx-footer-wrapper">
-            <div class="sx-filters-left-wrapper js-scrollbar">
-                <?
+        <!--<div class="js-sticky-block" data-has-sticky-header="<?php /*echo $isHeaderSticky; */?>" data-start-point=".sx-fast-filters" data-end-point=".sx-footer-wrapper">-->
+        <div class="js-sticky-block-no">
+            <div class="sx-filters-left-wrapper js-scrollbar-no">
+                <?/*
                 \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this);
                 $this->registerJs(<<<JS
 if ($(".u-header--sticky-top").length) {
@@ -209,11 +210,13 @@ if ($(".u-header--sticky-top").length) {
 }
 
 JS
-                );
+                );*/
                 $this->registerCss(<<<CSS
 /*.sx-filters-left-wrapper {
     overflow-y: auto;
 }*/
+
+
 CSS
                 );
 
