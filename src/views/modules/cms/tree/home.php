@@ -292,13 +292,14 @@ if ($collectionsQuery->count()) :
 
 
 
-<!-- Blog News -->
-<section class="container sx-container" style="padding-top: 10px; padding-bottom: 10px;">
+<div class="sx-section sx-home-section sx-home-blog">
+<div class="container sx-container">
     <?
+
     $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("home-news-v2", [
         'viewFile'                   => '@app/views/widgets/ContentElementsCmsWidget/news-grid',
         'label'                      => "Новости компании",
-        'enabledRunCache'            => "Y",
+        'enabledRunCache'            => "N",
         'content_ids'                => [1],
         'limit'                      => 4,
         'pageSize'                   => 4,
@@ -310,6 +311,7 @@ if ($collectionsQuery->count()) :
     $widgetElements::end();
     ?>
 
-</section>
+</div>
+</div>
 <!-- End Blog News -->
 

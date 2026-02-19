@@ -14,6 +14,7 @@
 /*$q = clone $dataProvider->query;
 $total = $q->limit(-1)->offset(-1)->orderBy([])->count('*');
 $dataProvider->setTotalCount($total);*/
+$dataProvider->pagination->defaultPageSize = $this->theme->catalog_per_page;
 ?>
 <!--<meta itemprop="offerCount" content="<?php /*echo $total; */?>">-->
 <? echo \yii\widgets\ListView::widget([

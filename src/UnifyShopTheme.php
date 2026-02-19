@@ -92,6 +92,7 @@ HTML
     public $catalog_img_preview_height = 200;
     public $catalog_img_preview_width = 260;
     public $catalog_is_show_measure = 1;
+    public $catalog_per_page = 15;
     public $catalog_img_preview_crop = ManipulatorInterface::THUMBNAIL_INSET;
 
     public $product_slider_items = 5;
@@ -190,6 +191,10 @@ HTML
                         'catalog_is_show_measure' => [
                             'class'     => BoolField::class,
                             'allowNull' => false,
+                        ],
+
+                        'catalog_per_page' => [
+                            'class'     => NumberField::class,
                         ],
 
                         [
@@ -340,6 +345,7 @@ HTML
                 'catalog_img_preview_height' => 'Высота превью картинки товара',
                 'catalog_img_preview_crop'   => 'Режим обрезки превью картинки товара',
                 'catalog_is_show_measure'    => 'Выводить единицу измерения в карточку',
+                'catalog_per_page'    => 'Количество товаров на странице в каталоге',
 
                 'product_card_img_preview_height' => 'Высота превью картинки товара',
                 'product_card_img_preview_width'  => 'Ширина превью картинки товара',
@@ -378,6 +384,7 @@ HTML
                         'product_card_img_preview_height',
                         'product_card_img_preview_width',
                         'catalog_is_show_measure',
+                        'catalog_per_page',
                     ],
                     'integer',
                 ],
