@@ -47,6 +47,14 @@ CSS
         <div class="sx-subcatalog-wrapper">
             <?php echo $this->render("_sub-catalog"); ?>
         </div>
+        <?php if($model->description_full) : ?>
+        <div class="sx-section">
+        <div class="sx-container container">
+            <div class="sx-description"><?php echo $model->description_full; ?></div>
+        </div>
+        </div>
+        <?php endif; ?>
+
     </div>
 <?php endif; ?>
 

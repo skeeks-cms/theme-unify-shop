@@ -53,7 +53,10 @@ CSS
 
 $infoModel = $model;
 
-$this->title = "Коллекция ".$infoModel->seoName." ".($infoModel->brand ? $infoModel->brand->name : "")."";
+if (!$model->meta_title) {
+    $this->title = "Коллекция ".$infoModel->seoName." ".($infoModel->brand ? $infoModel->brand->name : "")."";
+}
+
 
 $properties = [];
 
