@@ -10,8 +10,8 @@
 /* @var $shopProduct \skeeks\cms\shop\models\ShopProduct */
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
 /* @var $singlPage \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPage
-/* @var $this yii\web\View */
-
+ * /* @var $this yii\web\View
+ */
 
 
 ?>
@@ -93,14 +93,15 @@ CSS
                                                 <?
                                                 $preview = \Yii::$app->imaging->getPreview($collection->image,
                                                     new \skeeks\cms\components\imaging\filters\Thumbnail([
-                                                        'w' => $this->theme->product_card_img_preview_width,
-                                                        'h' => $this->theme->product_card_img_preview_height,
-                                                        'm' => $this->theme->product_card_img_preview_crop,
+                                                        'w'          => $this->theme->product_card_img_preview_width,
+                                                        'h'          => $this->theme->product_card_img_preview_height,
+                                                        'm'          => $this->theme->product_card_img_preview_crop,
                                                         'sx_preview' => \skeeks\cms\components\storage\SkeeksSuppliersCluster::IMAGE_PREVIEW_BIG,
                                                     ]), $model->code
                                                 );
                                                 ?>
-                                                <img class="w-100 u-block-hover__main--zoom-v1" src="<?php echo $preview->src; ?>" title="<?= \yii\helpers\Html::encode($collection->name); ?>" alt="<?= \yii\helpers\Html::encode($collection->name); ?>"/>
+                                                <img class="w-100 u-block-hover__main--zoom-v1" src="<?php echo $preview->src; ?>" title="<?= \yii\helpers\Html::encode($collection->name); ?>"
+                                                     alt="<?= \yii\helpers\Html::encode($collection->name); ?>"/>
                                             <? else : ?>
                                                 <img class="w-100 u-block-hover__main--zoom-v1" src="<?= \skeeks\cms\helpers\Image::getCapSrc(); ?>" alt="<?= $collection->name; ?>">
                                             <? endif; ?>
@@ -134,8 +135,8 @@ CSS
 
                                         $activeDataProvider->query->joinWith("shopProduct.collections as collections");
                                         $activeDataProvider->query->andWhere(['collections.id' => $collection->id]);
-                                        
-                                       
+
+
                                         //$activeDataProvider->query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
 
                                         /*$activeDataProvider->query->andWhere([
@@ -184,7 +185,7 @@ CSS
         $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("product-relation-products", [
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
             'label'                => "С этим товаром приобретают",
-            'enabledCurrentTree'        => "N",
+            'enabledCurrentTree'   => "N",
             'enabledPaging'        => "N",
             'content_ids'          => [\Yii::$app->shop->contentProducts->id],
             'limit'                => 25,
@@ -234,7 +235,6 @@ CSS
         <? endif; ?>
 
 
-
         <?
         $treeIds = [];
         if ($model->cmsTree && $model->cmsTree->parent) {
@@ -249,7 +249,7 @@ CSS
             'viewFile'             => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
             'label'                => "Товары из этой же категории",
             'enabledPaging'        => "N",
-            'enabledCurrentTree'        => "N",
+            'enabledCurrentTree'   => "N",
             'content_ids'          => [\Yii::$app->shop->contentProducts->id],
             'tree_ids'             => $treeIds,
             'limit'                => 15,
@@ -318,6 +318,87 @@ CSS
                     </div>
                 </section>
             <? endif; ?>
+        <? endif; ?>
+
+
+        <? if ($model->cms_content_model_id) : ?>
+            <?
+            /**
+             * @var \skeeks\cms\models\CmsContent[] $contetns
+             */
+            $contetns = \skeeks\cms\models\CmsContent::find()->andWhere([
+                'id' => $model->cmsContentModel->getCmsContentElements()->joinWith("cmsContent as cmsContent")->select("cmsContent.id")->groupBy(['cmsContent.id']),
+            ])->sort()->all();
+            if ($contetns) :
+                ?>
+                <div class="sx-joins">
+                <? foreach ($contetns as $content) : ?>
+                <div class="sx-section">
+                <div class="container sx-container">
+                    <div class="h3">Связанные <?php echo \skeeks\cms\helpers\StringHelper::strtolower($content->name); ?></div>
+
+                    <?php
+                    $elementsQuery = $model->cmsContentModel->getCmsContentElements()->contentId($content->id)->select("id");
+                    if ($content->isProducts) : ?>
+                        <?
+                        $this->registerCss(<<<CSS
+.sx-products-stick .slick-track {
+    margin-left: 0;
+}
+CSS
+                        );
+
+                        $widgetElements2 = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("joines-products", [
+                            'viewFile'            => '@app/views/widgets/ContentElementsCmsWidget/products-stick',
+                            'label'               => false,
+                            'enabledPaging'       => "N",
+                            /*'content_ids'         => [\Yii::$app->shop->contentProducts->id],*/
+                            //'tree_ids'             => $treeIds,
+                            'enabledSearchParams' => "N",
+                            'enabledCurrentTree'  => "N",
+                            'limit'               => 15,
+                            'contentElementClass' => \skeeks\cms\shop\models\ShopCmsContentElement::class,
+                            'activeQueryCallback' => function (\yii\db\ActiveQuery $query) use ($model, $elementsQuery) {
+                                $query->andWhere(['in', \skeeks\cms\models\CmsContentElement::tableName().".id", $elementsQuery]);
+                            },
+                        ]);
+                        ?>
+
+                        <? if ($widgetElements2->dataProvider->query->count()) : ?>
+                            <section class="sx-products-slider-section sx-product-viewed">
+                                    <? $widgetElements2::end(); ?>
+                            </section>
+                        <? endif; ?>
+                    <? else : ?>
+
+                        <?
+
+                        $widgetElements = \skeeks\cms\cmsWidgets\contentElements\ContentElementsCmsWidget::beginWidget("joines-elements", [
+                            'viewFile'                   => '@app/views/widgets/ContentElementsCmsWidget/news-grid',
+                            'label'                      => false,
+                            'enabledRunCache'            => "N",
+                            'content_ids'                => [1],
+                            'limit'                      => 4,
+                            'pageSize'                   => 4,
+                            'enabledPaging'              => 'N',
+                            'enabledCurrentTree'         => \skeeks\cms\components\Cms::BOOL_N,
+                            'enabledCurrentTreeChild'    => skeeks\cms\components\Cms::BOOL_N,
+                            'enabledCurrentTreeChildAll' => skeeks\cms\components\Cms::BOOL_N,
+                            'activeQueryCallback'        => function (\yii\db\ActiveQuery $query) use ($model, $elementsQuery) {
+                                $query->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName().".id", $model->id]);
+                                $query->andWhere(['in', \skeeks\cms\models\CmsContentElement::tableName().".id", $elementsQuery]);
+                            },
+                        ]);
+                        $widgetElements::end();
+                        ?>
+                    <? endif; ?>
+
+                </div>
+
+            <? endforeach; ?>
+            <? endif; ?>
+            </div>
+            </div>
         <? endif; ?>
 
 
