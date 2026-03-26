@@ -327,7 +327,7 @@ CSS
              * @var \skeeks\cms\models\CmsContent[] $contetns
              */
             $contetns = \skeeks\cms\models\CmsContent::find()->andWhere([
-                'id' => $model->cmsContentModel->getCmsContentElements()->joinWith("cmsContent as cmsContent")->select("cmsContent.id")->groupBy(['cmsContent.id']),
+                'id' => $model->cmsContentModel->getCmsContentElements()->andWhere(['!=', \skeeks\cms\models\CmsContentElement::tableName() . '.id', $model->id])->joinWith("cmsContent as cmsContent")->select("cmsContent.id")->groupBy(['cmsContent.id']),
             ])->sort()->all();
             if ($contetns) :
                 ?>
@@ -338,7 +338,7 @@ CSS
                     <div class="h3">Связанные <?php echo \skeeks\cms\helpers\StringHelper::strtolower($content->name); ?></div>
 
                     <?php
-                    $elementsQuery = $model->cmsContentModel->getCmsContentElements()->contentId($content->id)->select("id");
+                    $elementsQuery = $model->cmsContentModel->getCmsContentElements()->andWhere(['!=', 'id', $model->id])->contentId($content->id)->select("id");
                     if ($content->isProducts) : ?>
                         <?
                         $this->registerCss(<<<CSS

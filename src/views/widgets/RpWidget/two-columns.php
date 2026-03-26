@@ -41,11 +41,14 @@
                                         $enum = $property->getEnums()->andWhere(['id' => $enumId])->one();
                                         /*print_r($property->getEnums()->all());die;*/
                                         
-                                        if ($url = $widget->getUrl($code, null, $enumId)) {
-                                            $results[] = '<a href="' . $url . '" data-pjax="0">' . $enum->value . "</a>";
-                                        } else {
-                                            $results[] = $enum->value;
+                                        if ($enum) {
+                                            if ($url = $widget->getUrl($code, null, $enumId)) {
+                                                $results[] = '<a href="' . $url . '" data-pjax="0">' . $enum->value . "</a>";
+                                            } else {
+                                                $results[] = $enum->value;
+                                            }
                                         }
+                                        
                                     }
                                 }
                                 
