@@ -49,6 +49,19 @@ $q->groupBy(['cmsTree.id']);*/
 ?>
 
 
+
+<?php if($model->cmsFaqs) : ?>
+            <section class="sx-faqs" style="margin-top: 20px;">
+                <div class="container sx-container">
+                        <div class="h2">Популярные вопросы</div>
+                        <?php echo $this->render('@app/views/include/faq', [
+                            'elements' => $model->cmsFaqs
+                        ]); ?>
+
+                </div>
+            </section>
+        <?php endif; ?>
+
 <? if (\Yii::$app->shop->contentProducts) : ?>
 
     <?
@@ -178,6 +191,8 @@ CSS
                 </div>
             </section>
         <?php endif; ?>
+
+
 
 
         <?
