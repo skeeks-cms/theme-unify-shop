@@ -9,9 +9,6 @@
 /* @var $widget \skeeks\cms\rpViewWidget\RpViewWidget */
 ?>
 <? if ($attributes = $widget->rpAttributes) :  ?>
-<?
-    /*print_r($attributes);die;*/
-    ?>
     <ul class="sx-properties">
         <? $counter = 0; ?>
         <? foreach ($attributes as $code => $value ) :

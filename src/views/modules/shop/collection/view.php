@@ -277,7 +277,7 @@ CSS
                                         </li>
                                     <?php endif; ?>
 
-                                    <?php if ($firstProduct && $firstProduct->shopProduct->minProductPrice) : ?>
+                                    <?php if ($firstProduct && $firstProduct->shopProduct && $firstProduct->shopProduct->minProductPrice) : ?>
                                         <li>
                                             <span class="sx-properties--name">
                                             Цена товара от
