@@ -124,6 +124,12 @@ HTML
     public $cart_paysystem_text = "";
     public $cart_contact_text = "";
     public $cart_is_show_delivery_btn_price = false;
+    
+    
+    public $brand_line_is_active = 0;
+    public $brand_line_is_flags = 1;
+    public $brand_line_is_collection = 0;
+    public $brand_line_collection_trigger = "click";
 
     public function getConfigFormModelData()
     {
@@ -221,9 +227,12 @@ HTML
                             'class'     => BoolField::class,
                             'allowNull' => false,
                         ],
+
+                        
                     ],
                 ],
 
+                
                 'product'   => [
                     'class' => FieldSet::class,
                     'name'  => \Yii::t('skeeks/shop/app', 'Товарная страница'),
@@ -328,6 +337,33 @@ HTML
                         ],
                     ],
                 ],
+                
+                'stick' => [
+                    'class' => FieldSet::class,
+                    'name'  => \Yii::t('skeeks/shop/app', 'Гребенка с брендами'),
+
+                    'fields' => [
+                        'brand_line_is_active' => [
+                            'class'     => BoolField::class,
+                            'allowNull' => false,
+                        ],
+                        'brand_line_is_flags' => [
+                            'class'     => BoolField::class,
+                            'allowNull' => false,
+                        ],
+                        'brand_line_is_collection' => [
+                            'class'     => BoolField::class,
+                            'allowNull' => false,
+                        ],
+                        'brand_line_collection_trigger' => [
+                            'class' => SelectField::class,
+                            'items' => [
+                                "click"    => 'По клику',
+                                "hover"    => 'По наведению',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'attributeHints'  => [
 
@@ -365,6 +401,10 @@ HTML
                 'is_allow_filters'                        => 'Показывать фильтры?',
                 'product_page_view_file'                  => 'Шаблон страницы одного товара',
                 'is_join_second_trees'                    => 'Учитывать дополнительные разделы в каталоге?',
+                'brand_line_is_active'                    => 'Включить гребенку?',
+                'brand_line_is_flags'                    => 'Показывать флаги стран?',
+                'brand_line_is_collection'                    => 'Подгружать коллекции?',
+                'brand_line_collection_trigger'                    => 'Как подгружать коллекции',
             ],
             'rules'           => [
                 [
@@ -378,6 +418,10 @@ HTML
                         'product_list_count_columns_mobile',
                         'is_allow_filters',
                         'is_show_catalog_subtree_before_products',
+                        'brand_line_is_active',
+                        'brand_line_is_flags',
+                        'brand_line_is_collection',
+                        
                         'is_join_second_trees',
                         'cart_is_show_delivery_btn_price',
 
@@ -396,6 +440,8 @@ HTML
                         'product_list_view_file',
                         'product_page_view_file',
 
+                        'brand_line_collection_trigger',
+                        
                         'cart_after_comment_text',
                         'cart_after_btn_text',
                         'cart_delivery_text',

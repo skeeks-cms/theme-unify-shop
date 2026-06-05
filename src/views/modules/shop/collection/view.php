@@ -17,6 +17,8 @@ $singlPage = \skeeks\cms\themes\unifyshop\cmsWidgets\product\ShopProductSinglPag
 $singlPage->addCss();
 $singlPage::end();
 
+$firstProduct = null;
+
 $product = null;
 $this->registerCss(<<<CSS
 
