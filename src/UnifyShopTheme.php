@@ -409,6 +409,33 @@ HTML
             'rules'           => [
                 [
                     [
+                        'catalog_img_preview_crop',
+                        'product_slider_img_preview_crop',
+                        'product_card_img_preview_crop',
+                    ],
+                    'filter',
+                    'filter' => function ($value) {
+                        if (is_array($value)) {
+                            $value = reset($value);
+                        }
+
+                        return $value === null ? null : (string)$value;
+                    },
+                ],
+                [
+                    [
+                        'catalog_img_preview_crop',
+                        'product_slider_img_preview_crop',
+                        'product_card_img_preview_crop',
+                    ],
+                    'in',
+                    'range' => [
+                        ManipulatorInterface::THUMBNAIL_INSET,
+                        ManipulatorInterface::THUMBNAIL_OUTBOUND,
+                    ],
+                ],
+                [
+                    [
                         'catalog_img_preview_height',
                         'catalog_img_preview_width',
                         'product_slider_items',
