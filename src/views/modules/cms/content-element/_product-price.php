@@ -10,6 +10,7 @@
 /* @var $shopOfferChooseHelper \skeeks\cms\shop\helpers\ShopOfferChooseHelper */
 /* @var $shopProduct \skeeks\cms\shop\models\ShopProduct */
 /* @var $priceHelper \skeeks\cms\shop\helpers\ProductPriceHelper */
+\skeeks\cms\admin\assets\JqueryMaskInputAsset::register($this);
 $this->registerJs(<<<JS
 $("body").on("click", ".sx-not-select-offer", function() {
     var hasError = false;
@@ -294,6 +295,11 @@ JS
                                 'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$shopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                             ]); ?>
                         <? endif; ?>
+                        <?= \yii\helpers\Html::button('Купить в 1 клик', [
+                            'class'           => 'btn btn-xxl btn-block btn-secondary sx-buy-one-click-btn g-font-size-18 g-mt-10',
+                            'type'            => 'button',
+                            'data-product_id' => $shopProduct->id,
+                        ]); ?>
                     </div>
 
                     <?
@@ -537,8 +543,6 @@ JS
                                     в 1 <?= $measure->symbol; ?> <?= $count; ?> <?= $shopProduct->measure->symbol; ?>
                                 </div>
                             <? endif; ?>
-
-
                         <? endforeach; ?>
                     <? endif; ?>
                 </div>
@@ -564,6 +568,11 @@ JS
                                     'onclick' => new \yii\web\JsExpression("sx.Shop.addProduct({$offerShopProduct->id}, $('.sx-quantity-input').val()); return false;"),
                                 ]); ?>
                             <? endif; ?>
+                            <?= \yii\helpers\Html::button('Купить в 1 клик', [
+                                'class'           => 'btn btn-xxl btn-block btn-secondary sx-buy-one-click-btn g-font-size-18 g-mt-10',
+                                'type'            => 'button',
+                                'data-product_id' => $offerShopProduct->id,
+                            ]); ?>
                         </div>
 
                         <?
@@ -602,7 +611,7 @@ JS
 
                     </div>
                 </div>
-            <? endif; ?>
+<? endif; ?>
 
         <?php else : ?>
 
@@ -705,4 +714,100 @@ JS
 
 <? endif; ?>
 
+<div class="modal fade" id="sx-buy-one-click-modal" tabindex="-1" role="dialog" aria-labelledby="sx-buy-one-click-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="sx-buy-one-click-form" class="modal-content">
+            <input type="hidden" id="sx-buy-one-click-product-id" name="product_id" value="">
+            <input type="hidden" id="sx-buy-one-click-quantity" name="quantity" value="">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sx-buy-one-click-title">Купить в 1 клик</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="sx-buy-one-click-phone">Телефон</label>
+                    <input type="text" id="sx-buy-one-click-phone" class="form-control" name="phone" placeholder="+7 ___ ___-__-__" autocomplete="tel" required>
+                    <div class="invalid-feedback sx-buy-one-click-error"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                <button type="submit" class="btn btn-primary sx-buy-one-click-submit">Отправить</button>
+            </div>
+        </form>
+    </div>
+</div>
 
+<?php
+$this->registerJs(<<<JS
+sx.onReady(function() {
+    var jModal = $("#sx-buy-one-click-modal");
+    var jForm = $("#sx-buy-one-click-form");
+    var jPhone = $("#sx-buy-one-click-phone");
+    var jSubmit = $(".sx-buy-one-click-submit", jForm);
+    var jError = $(".sx-buy-one-click-error", jForm);
+
+    if (jPhone.mask) {
+        jPhone.mask("+7 999 999-99-99");
+    }
+
+    $("body").on("click", ".sx-buy-one-click-btn", function() {
+        var productId = $(this).data("product_id");
+        var quantity = $(".sx-main-quantity-group .sx-quantity-input:eq(0)").val() || $(".sx-quantity-input:eq(0)").val() || 1;
+
+        $("#sx-buy-one-click-product-id").val(productId);
+        $("#sx-buy-one-click-quantity").val(quantity);
+        jError.text("").hide();
+        jPhone.removeClass("is-invalid");
+        jModal.modal("show");
+    });
+
+    jForm.on("submit", function(e) {
+        e.preventDefault();
+
+        var phone = jPhone.val();
+        var ajax = sx.Shop.createAjaxBuyOneClick(
+            $("#sx-buy-one-click-product-id").val(),
+            $("#sx-buy-one-click-quantity").val(),
+            phone
+        );
+
+        jSubmit.prop("disabled", true);
+        jError.text("").hide();
+        jPhone.removeClass("is-invalid");
+
+        ajax.onSuccess(function(e, data) {
+            if (!data.response.success) {
+                var message = data.response.message ? data.response.message : "Не удалось создать заказ";
+                jError.text(message).show();
+                jPhone.addClass("is-invalid");
+                jSubmit.prop("disabled", false);
+                return;
+            }
+
+            if (data.response.redirect) {
+                window.location.href = data.response.redirect;
+            } else {
+                jModal.modal("hide");
+            }
+        });
+
+        ajax.onError(function(e, data) {
+            var message = data.response && data.response.message ? data.response.message : "Не удалось создать заказ";
+            jError.text(message).show();
+            jPhone.addClass("is-invalid");
+            jSubmit.prop("disabled", false);
+        });
+
+        ajax.execute();
+    });
+
+    jModal.on("hidden.bs.modal", function() {
+        jSubmit.prop("disabled", false);
+    });
+});
+JS
+);
+?>
