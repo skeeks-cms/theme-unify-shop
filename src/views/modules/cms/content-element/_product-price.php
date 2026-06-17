@@ -731,6 +731,12 @@ JS
                     <input type="text" id="sx-buy-one-click-phone" class="form-control" name="phone" placeholder="+7 ___ ___-__-__" autocomplete="tel" required>
                     <div class="invalid-feedback sx-buy-one-click-error"></div>
                 </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" id="sx-buy-one-click-personal-data" class="form-check-input" name="personal_data" value="1" required>
+                    <label class="form-check-label" for="sx-buy-one-click-personal-data">
+                        Я принимаю <a href="<?php echo \yii\helpers\Url::to(['/cms/legal/personal-data']); ?>" target="_blank" rel="noopener" data-pjax="0">условия обработки персональных данных</a> *
+                    </label>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
@@ -766,6 +772,13 @@ sx.onReady(function() {
 
     jForm.on("submit", function(e) {
         e.preventDefault();
+
+        if (this.checkValidity && !this.checkValidity()) {
+            if (this.reportValidity) {
+                this.reportValidity();
+            }
+            return;
+        }
 
         var phone = jPhone.val();
         var ajax = sx.Shop.createAjaxBuyOneClick(
