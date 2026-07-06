@@ -8,6 +8,12 @@
 /* @var $this yii\web\View */
 /* @var $model \skeeks\cms\models\CmsTree */
 
+$this->registerMetaTag([
+    'name' => 'robots',
+    'content' => 'noindex, nofollow',
+], 'robots');
+\Yii::$app->response->headers->set('X-Robots-Tag', 'noindex, nofollow');
+
 $pjax = \skeeks\cms\widgets\PjaxLazyLoad::begin([
     'id' => 'sx-search-result-lazy',
 ]);
