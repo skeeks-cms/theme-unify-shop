@@ -399,6 +399,12 @@ $dataProvider->setTotalCount($totalOffers);
             </div>
         </div>
 
+        <?php if ($model->description_short) : ?>
+            <div class="sx-content sx-description-short">
+                <?= $model->description_short; ?>
+            </div>
+        <?php endif; ?>
+
 
         <div class="sx-filters">
 
@@ -531,6 +537,12 @@ $dataProvider->setTotalCount($totalOffers);
                     <div class="row"><div class="col-md-12">{pager}</div></div>',
         ])
         ?>
+
+        <?php if ($model->description_full) : ?>
+            <div class="sx-content sx-description-full" style="margin-top: 20px;">
+                <?= $model->description_full; ?>
+            </div>
+        <?php endif; ?>
 
     </div>
 </section>
