@@ -7,10 +7,9 @@
  * @author Semenov Alexander <semenov@skeeks.com>
  */
 /* @var $this yii\web\View */
-
 ?>
 
-<?php if ($this->beginCache('header-fast-brands-html-v2', [
+<?php if ($this->beginCache('header-fast-brands-html-v3', [
     'duration' => 7200*4,
     'dependency' => new \yii\caching\TagDependency([
         'tags' => [
@@ -46,6 +45,7 @@ $availableLetters = \yii\helpers\ArrayHelper::map($availableLetters, function ($
 });
 
 $brandsArray = [];
+$brandColumnCount = 4;
 
 foreach ($q->all() as $brand) {
     $name = \skeeks\cms\helpers\StringHelper::ucfirst($brand['name']);
@@ -69,12 +69,17 @@ $collectionsAjaxUrl = \yii\helpers\Url::to(['/shop/brand/collections']);
                             <li>
                                 <?php echo $letter; ?>
 
-                                <div class="sx-alphabet">
+                                <?php
+                                $letterBrands = $brandsArray[$letter];
+                                $brandRowCount = max(1, (int) ceil(count($letterBrands) / $brandColumnCount));
+                                ?>
+                                <div class="sx-alphabet"
+                                     style="--sx-brand-column-count: <?= $brandColumnCount; ?>; --sx-brand-row-count: <?= $brandRowCount; ?>;">
                                     <?
                                     /**
                                      * @var $brand \skeeks\cms\shop\models\ShopBrand
                                      */
-                                    foreach ($brandsArray[$letter] as $brand) : ?>
+                                    foreach ($letterBrands as $brand) : ?>
                                         <div class="sx-brand-item">
                                             <span style="position: relative;">
                                                 <a href="<?php echo $brand->url; ?>"
@@ -151,7 +156,9 @@ $this->registerCss(<<<CSS
 }
 
 .sx-fast-brands-content .sx-b-list {
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
 }
 
 .sx-fast-brands-content .sx-b-list ul {
@@ -159,6 +166,8 @@ $this->registerCss(<<<CSS
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0;
+    padding-left: 0;
+    min-width: 0;
     width: 100%;
 }
 
@@ -166,23 +175,31 @@ $this->registerCss(<<<CSS
     display: flex;
     justify-content: start;
     align-items: center;
+    min-width: 0;
+}
+
+.sx-fast-brands-content .sx-b-title {
+    flex: 0 0 auto;
 }
 
 .sx-fast-brands .sx-alphabet {
     min-height: 10rem;
     align-content: flex-start;
     cursor: default;
+    box-sizing: border-box;
 
     display: grid;
     gap: 10px;
-    grid-template-columns: repeat(4, 25%);
-    grid-template-rows: repeat(var(--countRow), 20px);
+    grid-auto-flow: column;
+    grid-template-columns: repeat(var(--sx-brand-column-count), minmax(0, 1fr));
+    grid-template-rows: repeat(var(--sx-brand-row-count), 20px);
 
     position: absolute;
     top: 3rem;
     left: 0;
     z-index: 999;
     width: 100%;
+    max-width: 100%;
     background: white;
     border-radius: 0 0 5px 5px;
     padding: 15px 30px;
@@ -239,7 +256,7 @@ $this->registerCss(<<<CSS
     max-height: 260px;
     overflow-y: auto;
 
-    display: block;
+    display: none;
     opacity: 0;
     visibility: hidden;
     /*transform: translateY(8px) scale(0.98);*/
@@ -269,6 +286,7 @@ $this->registerCss(<<<CSS
 }*/
 
 .sx-fast-brands .sx-brand-collections-popup.is-open {
+    display: block;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
