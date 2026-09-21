@@ -31,13 +31,15 @@ $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties
     'visible_only_has_values' => true,
 ]);
 $widget->viewFile = '@app/views/widgets/RpWidget/'.$singlPage->properties_view_file;
+// Форматируем характеристики один раз для проверки блока и его шаблона.
+$widget->params['rpAttributes'] = $widget->rpAttributes;
 ?>
 
 <div class="row">
     <div class="col-md-12">
         <div id="sx-product-info-accordion" class="sx-product-info-accordion">
 
-            <? if ($widget->rpAttributes) : ?>
+            <? if ($widget->params['rpAttributes']) : ?>
                 <div class="card">
                     <div class="card-header " id="sx-properties-header">
                         <a class="h2 sx-main-text-color" href="#" data-toggle="collapse" data-target="#sx-properties" aria-expanded="true" aria-controls="sx-properties">

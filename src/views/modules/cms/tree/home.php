@@ -97,6 +97,32 @@ if (\Yii::$app->mobileDetect->isMobile) {
 
 
 <?php
+// Кеш коллекций использует тот же тег сайта, что и гребёнка брендов.
+\skeeks\cms\themes\unify\assets\VanillaLazyLoadAsset::register($this);
+\skeeks\cms\themes\unifyshop\assets\components\ShopUnifyProductCardAsset::register($this);
+\skeeks\cms\themes\unifyshop\assets\ProductListImagesAsset::register($this);
+$this->render('@app/views/collections/_collection-list-css');
+if ($this->beginCache('home-collections-html-v1', [
+    'duration' => 8 * 3600,
+    'variations' => [
+        \Yii::$app->skeeks->site->id,
+        $model->id,
+        \Yii::$app->language,
+        \Yii::$app->request->hostInfo,
+        \Yii::$app->request->baseUrl,
+        \Yii::$app->request->get('page', 1),
+        \Yii::$app->request->get('per-page'),
+        \Yii::$app->request->get('sort'),
+        get_class($this->theme),
+        $this->theme->prooductListItemCssClasses,
+        $this->theme->catalog_img_preview_width,
+        $this->theme->catalog_img_preview_crop,
+    ],
+    'dependency' => new \yii\caching\TagDependency([
+        'tags' => [\Yii::$app->skeeks->site->cacheTag],
+    ]),
+])) :
+
 $collectionsQuery = \skeeks\cms\shop\models\ShopCollection::find()
     ->select([
         \skeeks\cms\shop\models\ShopCollection::tableName() . ".*",
@@ -166,6 +192,8 @@ if ($totalCollections) :
 
 <?php endif; ?>
 
+
+<?php $this->endCache(); endif; ?>
 
 <? if (\Yii::$app->shop->shopContents) : ?>
     <div class="container sx-container sx-popular-product" style="margin: 40px auto;">

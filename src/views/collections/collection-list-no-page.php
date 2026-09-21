@@ -12,25 +12,7 @@ $dataProvider->query->with(['image', 'images', 'shopCollectionStickers', 'brand.
 if (!@$itemClasses) {
     $itemClasses = 'col-sm-6 col-lg-4';
 }
-$this->registerCss(<<<CSS
-.sx-collection-list-item-wrapper {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-.sx-collection-list .sx-collection-list-item-wrapper {
-    padding-right: 7px !important;
-    padding-left: 7px !important;
-}
-.sx-collection-list {
-    margin-right: -7px !important;
-    margin-left: -7px !important;
-}
-.sx-collection-list-item {
-    border-radius: var(--base-radius);
-    overflow: hidden;
-}
-CSS
-);
+$this->render('@app/views/collections/_collection-list-css');
 ?>
 <div class="sx-products-slider-wrapper">
         <? if ($label) : ?>

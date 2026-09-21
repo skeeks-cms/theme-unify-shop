@@ -30,12 +30,14 @@ $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties
     'visible_only_has_values' => true,
 ]);
 $widget->viewFile = '@app/views/widgets/RpWidget/'.$singlPage->properties_view_file;
+// Форматируем характеристики один раз для проверки блока и его шаблона.
+$widget->params['rpAttributes'] = $widget->rpAttributes;
 /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/
 ?>
 
 
 
-<? if ($widget->rpAttributes) : ?>
+<? if ($widget->params['rpAttributes']) : ?>
     <div class="row">
         <div class="col-md-12">
             <h2>Характеристики</h2>

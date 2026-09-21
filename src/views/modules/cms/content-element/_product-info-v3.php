@@ -32,6 +32,8 @@ $widget = \skeeks\cms\rpViewWidget\RpViewWidget::beginWidget('product-properties
     'visible_only_has_values' => true,
 ]);
 $widget->viewFile = '@app/views/widgets/RpWidget/'.$singlPage->properties_view_file;
+// Форматируем характеристики один раз для проверки блока и его шаблона.
+$widget->params['rpAttributes'] = $widget->rpAttributes;
 
 /* $widget->viewFile = '@app/views/modules/cms/content-element/_product-properties';*/
 $this->registerJs(<<<JS
@@ -42,7 +44,7 @@ JS
 
 <ul class="nav u-nav-v5-1 u-nav-primary g-brd-bottom--md g-brd-gray-light-v4" role="tablist" data-target="nav-5-1-default-hor-border-bottom-left-padding-0" data-tabs-mobile-type="slide-up-down"
     data-btn-classes="btn btn-md btn-block rounded-0 u-btn-outline-lightgray">
-    <? if ($widget->rpAttributes) : ?>
+    <? if ($widget->params['rpAttributes']) : ?>
         <li class="nav-item">
             <a class="nav-link sx-main-text-color g-px-0--md g-mr-30--md active" data-toggle="tab" href="#sx-properties" role="tab">Характеристики</a>
         </li>
@@ -57,7 +59,7 @@ JS
 </ul>
 
 <div id="nav-5-1-default-hor-border-bottom-left-padding-0" class="tab-content g-pt-20">
-    <? if ($widget->rpAttributes) : ?>
+    <? if ($widget->params['rpAttributes']) : ?>
         <div class="tab-pane fade show active" id="sx-properties" role="tabpanel">
             <div class="card-body-1">
                 <? $widget::end(); ?>

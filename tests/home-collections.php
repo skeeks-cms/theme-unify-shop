@@ -16,7 +16,7 @@ $db->createCommand('INSERT INTO home_collection_product SELECT id,1 FROM collect
 foreach(['home_collection','home_product','home_collection_product'] as $table)$db->schema->getTableSchema($table);
 $source=str_replace("\r\n","\n",file_get_contents(dirname(__DIR__).'/src/views/modules/cms/tree/home.php'));
 $start=strpos($source,'$collectionsQuery =');
-$end=strpos($source,'<? if (\Yii::$app->shop->shopContents)');
+$end=strpos($source,'<?php $this->endCache(); endif; ?>');
 $check($start!==false && $end>$start,'Не найден блок коллекций главной');
 $temp=tempnam(sys_get_temp_dir(),'collections-home-');
 file_put_contents($temp,"<?php\n".substr($source,$start,$end-$start));

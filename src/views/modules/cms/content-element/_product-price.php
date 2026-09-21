@@ -173,9 +173,16 @@ JS
                 </div>
     
                 <? if ($shopProduct->measure_matches_jsondata) : ?>
-                    <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
+                    <?php
+                        // Единицы пересчёта загружаем набором только для отображаемого блока.
+                        $measureMatches = $shopProduct->measureMatches;
+                        $matchedMeasures = $measureMatches
+                            ? \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => array_keys($measureMatches)])->indexBy('code')->all()
+                            : [];
+                    ?>
+                    <? foreach ($measureMatches as $code => $count) : ?>
                         <div class="d-flex flex-row">
-                            <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
+                            <? $measure = $matchedMeasures[$code] ?? null; ?>
                             <? if ($shopProduct->measure_ratio >= $count) : ?>
     
                                 <!--<div class="my-auto g-ml-10">
@@ -497,8 +504,15 @@ JS
                     </div>
 
                     <? if ($shopProduct->measure_matches_jsondata) : ?>
-                        <? foreach ($shopProduct->measureMatches as $code => $count) : ?>
-                            <? $measure = \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => $code])->one(); ?>
+                        <?php
+                        // Единицы пересчёта загружаем набором только для отображаемого блока.
+                        $measureMatches = $shopProduct->measureMatches;
+                        $matchedMeasures = $measureMatches
+                            ? \skeeks\cms\measure\models\CmsMeasure::find()->where(['code' => array_keys($measureMatches)])->indexBy('code')->all()
+                            : [];
+                    ?>
+                    <? foreach ($measureMatches as $code => $count) : ?>
+                            <? $measure = $matchedMeasures[$code] ?? null; ?>
                             <? if ($shopProduct->measure_ratio >= $count) : ?>
                                 <div class="my-auto g-ml-10">
                                     =

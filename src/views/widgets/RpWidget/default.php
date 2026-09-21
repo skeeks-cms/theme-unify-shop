@@ -8,7 +8,7 @@
 /* @var $this yii\web\View */
 /* @var $widget \skeeks\cms\rpViewWidget\RpViewWidget */
 ?>
-<? if ($attributes = $widget->rpAttributes) :  ?>
+<? if ($attributes = ($rpAttributes ?? $widget->rpAttributes)) :  ?>
     <table class="table table-striped">
         <? $counter = 0; ?>
         <? foreach ($attributes as $code => $value ) :
