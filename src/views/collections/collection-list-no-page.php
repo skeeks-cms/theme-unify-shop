@@ -7,6 +7,8 @@
  */
 /* @var $this   yii\web\View */
 /* @var $dataProvider \yii\data\ActiveDataProvider */
+// Загружаем связи карточек одним набором запросов для текущей страницы.
+$dataProvider->query->with(['image', 'images', 'shopCollectionStickers', 'brand.country']);
 if (!@$itemClasses) {
     $itemClasses = 'col-sm-6 col-lg-4';
 }
