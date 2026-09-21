@@ -195,7 +195,8 @@ if ($totalCollections) :
 
 <?php $this->endCache(); endif; ?>
 
-<? if (\Yii::$app->shop->shopContents) : ?>
+<?php $shopContents = \Yii::$app->shop->shopContents; ?>
+<? if ($shopContents) : ?>
     <div class="container sx-container sx-popular-product" style="margin: 40px auto;">
         <?
         \skeeks\cms\themes\unify\assets\components\UnifyThemeStickAsset::register($this);
@@ -208,7 +209,7 @@ if ($totalCollections) :
             'enabledCurrentTree'   => "N",
             'orderBy'              => 'show_counter',
             'active'               => "Y",
-            'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+            'content_ids'          => \yii\helpers\ArrayHelper::map($shopContents, 'id', 'id'),
             'limit'                => 15,
             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
             'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) //use ($filterWidget)
@@ -239,7 +240,7 @@ if ($totalCollections) :
             'active'               => "Y",
             'orderBy'                    => "published_at",
             'order'                      => SORT_DESC,
-            'content_ids'          => \yii\helpers\ArrayHelper::map(\Yii::$app->shop->shopContents, 'id', 'id'),
+            'content_ids'          => \yii\helpers\ArrayHelper::map($shopContents, 'id', 'id'),
             'limit'                => 15,
             'contentElementClass'  => \skeeks\cms\shop\models\ShopCmsContentElement::class,
             'dataProviderCallback' => function (\yii\data\ActiveDataProvider $activeDataProvider) //use ($filterWidget)
