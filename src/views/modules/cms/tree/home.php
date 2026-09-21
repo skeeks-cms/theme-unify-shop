@@ -102,13 +102,15 @@ $collectionsQuery = \skeeks\cms\shop\models\ShopCollection::find()
         \skeeks\cms\shop\models\ShopCollection::tableName() . ".*",
         'totalProducts' => new \yii\db\Expression("count(shopProducts.id)")
     ])
-    ->joinWith("shopProducts as shopProducts")
+    ->joinWith("shopProducts as shopProducts", false)
     ->andWhere(['is not', 'cms_image_id', null])
     ->andHaving(['>', 'totalProducts', 0])
     ->orderBy(['created_at' => SORT_DESC])
     ->groupBy([\skeeks\cms\shop\models\ShopCollection::tableName() . '.id'])
     ->limit(4);
-if ($collectionsQuery->count()) :
+// Оба блока имеют одинаковый фильтр: считаем полный набор один раз.
+$totalCollections = (clone $collectionsQuery)->limit(-1)->offset(-1)->orderBy([])->count();
+if ($totalCollections) :
 ?>
 
     
@@ -119,7 +121,7 @@ if ($collectionsQuery->count()) :
                 \skeeks\cms\shop\models\ShopCollection::tableName() . ".*",
                 'totalProducts' => new \yii\db\Expression("count(shopProducts.id)")
             ])
-            ->joinWith("shopProducts as shopProducts")
+            ->joinWith("shopProducts as shopProducts", false)
             ->andWhere(['is not', 'cms_image_id', null])
             ->andHaving(['>', 'totalProducts', 0])
             /*->orderBy(['priority' => SORT_DESC])*/
@@ -133,6 +135,7 @@ if ($collectionsQuery->count()) :
                 'itemClasses' => "col-sm-6 col-lg-3",
                 'dataProvider' => new \yii\data\ActiveDataProvider([
                     'query'      => $collectionsQuery,
+                    'totalCount' => $totalCollections,
                     'pagination' => [
                         'pageSize' => 4,
                     ],
@@ -152,6 +155,7 @@ if ($collectionsQuery->count()) :
             'itemClasses' => "col-sm-6 col-lg-3",
             'dataProvider' => new \yii\data\ActiveDataProvider([
                 'query'      => $collectionsQueryNew,
+                'totalCount' => $totalCollections,
                 'pagination' => [
                     'pageSize' => 4,
                 ],
