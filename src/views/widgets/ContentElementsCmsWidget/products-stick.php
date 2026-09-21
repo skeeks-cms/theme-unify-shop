@@ -17,9 +17,13 @@ $query = $widget->dataProvider->query;
 }*/
 
 $widget->dataProvider->setTotalCount(1);
+$query->with(['image', 'images', 'shopProduct.baseProductPrice', 'shopProduct.shopProductPrices']);
+$models = $widget->dataProvider->getModels();
+$cardData = class_exists(\skeeks\cms\shop\helpers\ProductCardData::class)
+    ? \skeeks\cms\shop\helpers\ProductCardData::load($models, \Yii::$app->shop) : null;
 
 ?>
-<? if ($query->one()) : ?>
+<? if ($models) : ?>
     <div class="sx-products-slider-wrapper">
         <? if ($widget->label) : ?>
             <div class="sx-products-slider--title">
@@ -30,6 +34,7 @@ $widget->dataProvider->setTotalCount(1);
 
         <? echo \yii\widgets\ListView::widget([
             'dataProvider' => $widget->dataProvider,
+            'viewParams'   => ['cardData' => $cardData],
             'itemView'     => '@app/views/products/product-list-item',
             'emptyText'    => '',
             'itemOptions'  => \yii\helpers\ArrayHelper::merge([

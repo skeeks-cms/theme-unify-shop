@@ -30,7 +30,10 @@ if ($model->main_cce_id) {
 $priceHelper = \Yii::$app->shop->shopUser->getProductPriceHelper($model);
 
 
-$shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
+$hasCardData = isset($cardData) && $cardData instanceof \skeeks\cms\shop\helpers\ProductCardData
+    && $cardData->hasProduct($shopProduct->id);
+$shopStoreProducts = $hasCardData ? $cardData->getStoreProducts($shopProduct->id)
+    : $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
 $quantityAvailable = 0;
 if ($shopStoreProducts) {
     foreach ($shopStoreProducts as $shopStoreProduct) {
@@ -68,8 +71,8 @@ if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
 
 <?
 
-$isAdded = \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $shopProduct->id])->exists();
-$isCompireAdded = \Yii::$app->shop->shopUser->getCmsCompareElements()->andWhere(['cms_content_element_id' => $shopProduct->id])->exists();
+$isAdded = $hasCardData ? $cardData->isFavorite($shopProduct->id) : \Yii::$app->shop->cart->getShopFavoriteProducts()->andWhere(['shop_product_id' => $shopProduct->id])->exists();
+$isCompireAdded = $hasCardData ? $cardData->isCompared($shopProduct->id) : \Yii::$app->shop->shopUser->getCmsCompareElements()->andWhere(['cms_content_element_id' => $shopProduct->id])->exists();
 ?>
 
 

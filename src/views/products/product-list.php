@@ -15,10 +15,14 @@
 $total = $q->limit(-1)->offset(-1)->orderBy([])->count('*');
 $dataProvider->setTotalCount($total);*/
 $dataProvider->pagination->defaultPageSize = $this->theme->catalog_per_page;
+$dataProvider->query->with(['image', 'images', 'shopProduct.baseProductPrice', 'shopProduct.shopProductPrices']);
+$cardData = class_exists(\skeeks\cms\shop\helpers\ProductCardData::class)
+    ? \skeeks\cms\shop\helpers\ProductCardData::load($dataProvider->getModels(), \Yii::$app->shop) : null;
 ?>
 <!--<meta itemprop="offerCount" content="<?php /*echo $total; */?>">-->
 <? echo \yii\widgets\ListView::widget([
     'dataProvider' => $dataProvider,
+    'viewParams'   => ['cardData' => $cardData],
     'itemView'     => '@app/views/products/product-list-item',
     'emptyText'    => '',
     'options'      => [
