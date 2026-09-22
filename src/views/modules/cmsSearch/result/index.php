@@ -20,24 +20,18 @@ $pjax = \skeeks\cms\widgets\PjaxLazyLoad::begin([
 
 if ($pjax->isPjax) {
 
-$dataProvider = new \yii\data\ActiveDataProvider([
-    'query' => \skeeks\cms\shop\models\ShopCmsContentElement::find()->cmsSite()->active(),
-]);
-//$dataProvider->query->cmsTree();
-
+$hasUnifiedSearch = class_exists(\skeeks\cms\search\assets\SearchResultsAsset::class);
+$query = $hasUnifiedSearch
+    ? (new \skeeks\cms\search\services\StorefrontSuggest())->productQuery(\skeeks\cms\search\services\SuggestQuery::normalize(\Yii::$app->request->get(\Yii::$app->cmsSearch->searchQueryParamName, '')))
+    : \skeeks\cms\shop\models\ShopCmsContentElement::find()->cmsSite()->active()->joinWith('shopProduct');
+if (!$hasUnifiedSearch) {
+    \Yii::$app->shop->filterByTypeContentElementQuery($query);
+    \Yii::$app->cmsSearch->buildElementsQuery($query);
+}
+$dataProvider = new \yii\data\ActiveDataProvider(['query' => $query]);
 $dataProvider->pagination->pageSize = \Yii::$app->view->theme->productListPerPageSize;
-$dataProvider->query->with('shopProduct');
-$dataProvider->query->with('shopProduct.baseProductPrice');
-$dataProvider->query->with('image');
-$dataProvider->query->joinWith('shopProduct');
-
-//\Yii::$app->shop->filterByMainPidContentElementQuery($dataProvider->query);
-\Yii::$app->shop->filterByTypeContentElementQuery($dataProvider->query);
-
-\Yii::$app->cmsSearch->buildElementsQuery($dataProvider->query);
-/*\Yii::$app->cmsSearch->logResult($dataProvider);*/
-
-$dataProvider->query->groupBy([\skeeks\cms\models\CmsContentElement::tableName().".id"]);
+$dataProvider->query->with(['shopProduct', 'shopProduct.baseProductPrice', 'image']);
+$dataProvider->query->groupBy([\skeeks\cms\models\CmsContentElement::tableName().'.id']);
 //print_r($dataProvider->query->createCommand()->rawSql);die;
 $q = clone $dataProvider->query;
 $select = [
@@ -56,14 +50,16 @@ $dataProvider->setTotalCount($total);
             <div class="col-12 sx-catalog-wrapper" style="padding-bottom: 20px; padding-top: 20px;">
         <?php if ($pjax->isPjax) : ?>
 
+        <?php if ($hasUnifiedSearch) echo $this->render("@skeeks/cms/search/views/result/groups"); ?>
         <div class="sx-catalog-h1-wrapper">
-            <div><h1 class="sx-breadcrumbs-h1 sx-catalog-h1"><?php echo \Yii::t('app', '{n, plural, =0{нет товаров} =1{# товар} one{# товар} few{# товара} many{# товаров} other{# товаров}}', ['n' => $dataProvider->totalCount],
-                    'ru_RU'); ?></h1></div>
+            <div><h2 class="sx-breadcrumbs-h1 sx-catalog-h1"><?php echo \Yii::t('app', '{n, plural, =0{нет товаров} =1{# товар} one{# товар} few{# товара} many{# товаров} other{# товаров}}', ['n' => $dataProvider->totalCount],
+                    'ru_RU'); ?></h2></div>
             
         </div>
         
         <?php echo $this->render("@app/views/products/product-list", [
             'dataProvider' => $dataProvider,
+            'pagerOptions' => ['triggerOffset' => 0],
         ]); ?>
         <?php else : ?>
             <div class="sx-search-lazy-placeholder">

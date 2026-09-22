@@ -33,12 +33,12 @@ $cardData = class_exists(\skeeks\cms\shop\helpers\ProductCardData::class)
         'tag'   => 'div',
         'class' => \Yii::$app->view->theme->prooductListItemCssClasses . ' sx-product-card-wrapper',
     ], (array)@$itemOptions),
-    'pager'        => [
+    'pager'        => \yii\helpers\ArrayHelper::merge([
         'container' => '.sx-product-list',
         'item'      => '.sx-product-card-wrapper',
         'class'     => \skeeks\cms\themes\unify\widgets\ScrollAndSpPager::class,
         'triggerOffset'     => (int) $this->theme->pagination_trigger_offset,
-    ],
+    ], $pagerOptions ?? []),
     //'summary'      => "Всего товаров: {totalCount}",
     'summary'      => false,
     //"\n{items}<div class=\"box-paging\">{pager}</div>{summary}<div class='sx-js-pagination'></div>",
