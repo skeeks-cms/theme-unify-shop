@@ -82,6 +82,12 @@ CSS
                         $savedFilters->andWhere(['value_content_element_id' => $savedFilter->value_content_element_id]);
                     } elseif ($savedFilter->value_content_property_enum_id) {
                         $savedFilters->andWhere(['value_content_property_enum_id' => $savedFilter->value_content_property_enum_id]);
+                    } elseif ($savedFilter->shop_brand_id) {
+                        $savedFilters->andWhere(['shop_brand_id' => $savedFilter->shop_brand_id]);
+                    } elseif ($savedFilter->country_alpha2) {
+                        $savedFilters->andWhere(['country_alpha2' => $savedFilter->country_alpha2]);
+                    } else {
+                        $savedFilters->andWhere('0=1');
                     }
 
                     $savedFilters = $savedFilters->all();
@@ -177,13 +183,75 @@ CSS
 
                 <?php if ($catalogSettings->is_fix_filters_on_scroll) : ?>
                 <!--Зафиксировать фильтры на верху страницы-->
-                <div class="sx-filters-wrapper-inline js-sticky-block "
-                     id="sx-filters-wrapper-inline"
-                     data-has-sticky-header="true"
-                     data-start-point="#sx-filters-wrapper-inline"
-                     data-end-point=".sx-footer"
-                >
-                    <?php \skeeks\assets\unify\base\UnifyHsStickyBlockAsset::register($this); ?>
+                <?php
+                /**
+                 * CSS sticky вместо hs-sticky-block: шапка при скролле анимированно меняет высоту,
+                 * поэтому отступ сверху берётся из фактического нижнего края шапки на каждом кадре скролла.
+                 */
+                $this->registerCss(<<<CSS
+.sx-filters-wrapper-inline.sx-filters-sticky {
+    position: sticky;
+    top: var(--sx-filters-sticky-top, 0px);
+    z-index: 100;
+    background: #fff;
+    padding-top: 0.5rem;
+    margin-top: -0.5rem;
+}
+.sx-filters-wrapper-inline.sx-filters-sticky.sx-is-stuck {
+    box-shadow: 0 8px 12px -10px rgba(0, 0, 0, 0.25);
+}
+CSS
+                );
+                $this->registerJs(<<<JS
+(function () {
+    var block = document.getElementById('sx-filters-wrapper-inline');
+    if (!block) {
+        return;
+    }
+    var until = 0;
+    var ticking = false;
+
+    function headerBottom() {
+        var header = document.querySelector('.u-header--sticky-top, .u-header--floating, header.u-header');
+        if (!header || getComputedStyle(header).position !== 'fixed') {
+            return 0;
+        }
+        return Math.max(0, Math.round(header.getBoundingClientRect().bottom));
+    }
+
+    function apply() {
+        var top = headerBottom();
+        block.style.setProperty('--sx-filters-sticky-top', top + 'px');
+        block.classList.toggle('sx-is-stuck', Math.round(block.getBoundingClientRect().top) <= top && window.pageYOffset > 0);
+    }
+
+    function update() {
+        apply();
+        if (Date.now() < until) {
+            window.requestAnimationFrame(update);
+        } else {
+            ticking = false;
+        }
+    }
+
+    function schedule() {
+        //Шапка меняет высоту с анимацией, поэтому пересчитываем ещё полсекунды после события
+        until = Date.now() + 600;
+        apply();
+        if (!ticking) {
+            ticking = true;
+            window.requestAnimationFrame(update);
+        }
+    }
+
+    window.addEventListener('scroll', schedule, {passive: true});
+    window.addEventListener('resize', schedule);
+    schedule();
+})();
+JS
+                );
+                ?>
+                <div class="sx-filters-wrapper-inline sx-filters-sticky" id="sx-filters-wrapper-inline">
                     <?php else: ?>
                         <div class="sx-filters-wrapper-inline" id="sx-filters-wrapper-inline">
                     <?php endif; ?>
@@ -196,8 +264,11 @@ CSS
                             if (!\Yii::$app->mobileDetect->isMobile) {
                                 $filtersWidget->getSortHandler()->viewFile = '@app/views/filters/sort-filter-inline';
                                 $filtersWidget->getAvailabilityHandler()->viewFile = '@app/views/filters/availability-filter-inline';
+                                if ($filtersWidget->getShopDataHandler()) {
+                                    $filtersWidget->getShopDataHandler()->viewFile = '@app/views/filters/shop-data-filters-inline';
+                                }
                             }
-    
+
                             echo $filtersWidget->run();
                             ?>
                         <?php else : ?>
