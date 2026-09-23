@@ -93,14 +93,7 @@ CSS
                         <div class="h5 sx-sub-title">Другие товары с опцией «<?php echo $savedFilter->propertyValueName; ?>»:</div>
 
                         <?php
-                        $savedFiltersData = [];
-                        foreach ($savedFilters as $sf) {
-                            /**
-                             * @var $sf \skeeks\cms\models\CmsSavedFilter
-                             */
-                            $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
-                            $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
-                        }
+                        $savedFiltersData = \skeeks\cms\models\CmsSavedFilter::formatFilters($savedFilters);
                         ?>
                         <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
                             <!--<div class="h4 sx-sub-title"><?php /*echo \yii\helpers\ArrayHelper::getValue($savedFiltersRow, "name"); */ ?></div>-->
@@ -305,11 +298,7 @@ JS
                     
                         <div class="sx-saved-filters-list sx-saved-filters-list--after sx-spoiler" style="margin-top: 1.5rem;">
                             <?php
-                            $savedFiltersData = [];
-                            foreach ($savedFilters as $sf) {
-                                $savedFiltersData[$sf->cms_content_property_id]['savedFilters'][$sf->id] = $sf;
-                                $savedFiltersData[$sf->cms_content_property_id]['name'] = $sf->cmsContentProperty->name;
-                            }
+                            $savedFiltersData = \skeeks\cms\models\CmsSavedFilter::formatFilters($savedFilters);
                             ?>
                             <div class="h3 sx-title">Быстрый подбор товаров из раздела «<?php echo $savedFilter ? $savedFilter->getCmsTree()->one()->name : $model->name; ?>»</div>
                             <? foreach ($savedFiltersData as $savedFiltersRow) : ?>
