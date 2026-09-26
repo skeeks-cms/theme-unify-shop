@@ -252,37 +252,70 @@ if (!$model->meta_keywords && $cmsTreeType->meta_keywords_template) {
 
 //print_r($eavFiltersHandler->toArray());die;
 
+/**
+ * Микроразметка листинга: CollectionPage + ItemList товаров текущей страницы (JSON-LD).
+ * Product/AggregateOffer/AggregateRating на разделе не выводим: Google допускает Product
+ * только для страницы одного товара, не для категории или фильтра.
+ * Если в описании раздела/фильтра уже есть своя разметка CollectionPage, общую не выводим, чтобы не задваивать.
+ * Товары для ItemList записывает @app/views/products/product-list — только те, что реально выведены
+ * (в режиме «Коллекции» товары не выводятся, и ItemList не будет).
+ */
+$sxIsCollectionLd = $total && strpos((string)$model->description_short . (string)$model->description_full, 'CollectionPage') === false;
+if ($sxIsCollectionLd) {
+    $this->params['sxCatalogLdItems'] = [];
+}
+
+echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->view->theme->product_list_view_file, [
+    'model'                => $model,
+    'description_short'    => $model->description_short,
+    'description'          => $model->description_full,
+    'dataProvider'         => $dataProvider,
+    'filtersWidget'        => $filtersWidget,
+    'savedFilter'          => @$savedFilter,
+    'agregateCategoryData' => $data,
+]);
+
+if ($sxIsCollectionLd) {
+    $sxLdUrl = $savedFilter ? $savedFilter->getAbsoluteUrl() : $model->getAbsoluteUrl();
+    $sxLd = [
+        '@context' => 'https://schema.org',
+        '@type'    => 'CollectionPage',
+        '@id'      => $sxLdUrl.'#webpage',
+        'url'      => $sxLdUrl,
+        'name'     => (string)$model->seoName,
+    ];
+
+    //Описание то же, что в meta description страницы: шаблонное (для фильтра без своего описания), иначе из модели
+    $sxLdDescription = trim(strip_tags((string)(isset($metaDescription) ? $metaDescription : $model->meta_description)));
+    if ($sxLdDescription !== '') {
+        $sxLd['description'] = $sxLdDescription;
+    }
+
+    $sxLdItems = (array)\yii\helpers\ArrayHelper::getValue($this->params, 'sxCatalogLdItems', []);
+    if ($sxLdItems) {
+        $sxLdPosition = (int)$dataProvider->pagination->offset;
+        $sxLdList = [];
+        foreach ($sxLdItems as $sxLdItem) {
+            $sxLdPosition++;
+            $sxLdList[] = [
+                '@type'    => 'ListItem',
+                'position' => $sxLdPosition,
+                'url'      => $sxLdItem['url'],
+                'name'     => $sxLdItem['name'],
+            ];
+        }
+
+        $sxLd['mainEntity'] = [
+            '@type'           => 'ItemList',
+            'numberOfItems'   => (int)$total,
+            'itemListElement' => $sxLdList,
+        ];
+    }
+
+    echo \yii\helpers\Html::script(
+        \yii\helpers\Json::encode($sxLd, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG),
+        ['type' => 'application/ld+json']
+    );
+}
+unset($this->params['sxCatalogLdItems']);
 ?>
-<span itemprop="product" itemscope itemtype="https://schema.org/Product">
-<meta itemprop="name" content="<?php echo $model->seoName; ?>"/>
-    
-<?php if ($data) : ?>
-    <span itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
-        <meta itemprop="reviewCount" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'reviewCount', 0); ?>"/>
-        <meta itemprop="ratingValue" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'ratingValue', 0); ?>"/>
-        <meta itemprop="bestRating" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'bestRating', 0); ?>"/>
-        <meta itemprop="worsRating" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'worsRating', 0); ?>"/>
-    </span>
-<?php endif; ?>
-
-<div itemprop="offers" itemscope itemtype="https://schema.org/AggregateOffer">
-    <meta itemprop="priceCurrency" content="<?php echo \Yii::$app->money->currency_code; ?>"/>
-    <?php if ($data) : ?>
-        <meta itemprop="offerCount" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'offerCount', 0); ?>"/>
-        <meta itemprop="highPrice" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'highPrice', 0); ?>"/>
-        <meta itemprop="lowPrice" content="<?php echo \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0); ?>"/>
-
-    <?php endif; ?>
-    <?
-    echo $this->render("@app/views/modules/cms/tree/catalogs/".\Yii::$app->view->theme->product_list_view_file, [
-        'model'                => $model,
-        'description_short'    => $model->description_short,
-        'description'          => $model->description_full,
-        'dataProvider'         => $dataProvider,
-        'filtersWidget'        => $filtersWidget,
-        'savedFilter'          => @$savedFilter,
-        'agregateCategoryData' => $data,
-    ]);
-    ?>
-</div>
-</span>
