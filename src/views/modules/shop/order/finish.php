@@ -51,7 +51,22 @@ if ($orderId = \Yii::$app->session->getFlash("order")) {
         foreach ($model->shopOrderItems as $shopOrderItem) {
             if ($shopOrderItem->shopProduct) {
                 $productData = \skeeks\cms\shop\components\ShopComponent::productDataForJsEvent($shopOrderItem->shopProduct->cmsContentElement);
-                $productData['quantity'] = (float)$shopOrderItem->quantity;
+
+                //Цена и количество берутся из позиции заказа (цена продажи с учетом скидки), а не из текущей цены каталога
+                $quantity = (float)$shopOrderItem->quantity;
+                $unitPrice = (float)$shopOrderItem->moneyWithDiscount->amount;
+
+                if ($quantity > 0 && abs($quantity - round($quantity)) < 0.0001) {
+                    $productData['price'] = $unitPrice;
+                    $productData['quantity'] = (int)round($quantity);
+                } else {
+                    //Метрика принимает только целое количество: дробную позицию (м², кг...) передаем одной строкой
+                    //на всю сумму, чтобы сумма товаров совпадала с заказом; фактическое количество — в variant
+                    $productData['price'] = round($unitPrice * $quantity, 2);
+                    $productData['quantity'] = 1;
+                    $productData['variant'] = trim(\Yii::$app->formatter->asDecimal($quantity) . " " . $shopOrderItem->measure_name);
+                }
+
                 $products[] = $productData;
             }
         }

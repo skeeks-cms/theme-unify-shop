@@ -285,15 +285,33 @@
                 });
             });
 
-            //Просмотр добавление товара в корзину
+            //Покупка: одна отправка на номер заказа
             sx.Shop.on("purchase", function (e, data) {
+                var orderId = data && data.order ? data.order.id : null;
+                if (!orderId) {
+                    return;
+                }
+
+                var sentKey = "sx-ecommerce-purchase-" + orderId;
+                try {
+                    if (window.sessionStorage.getItem(sentKey)) {
+                        return;
+                    }
+                    window.sessionStorage.setItem(sentKey, "1");
+                } catch (err) {}
+
+                var revenue = Number(data.order.money ? data.order.money.amount : NaN);
+                if (!isFinite(revenue) || revenue <= 0) {
+                    console.warn("sx.Shop purchase: заказ " + orderId + " без суммы", data.order.money);
+                }
+
                 dataLayer.push({
                     "ecommerce": {
                         "currencyCode": sx.Shop.get("currencyCode"),
                         "purchase": {
                             "actionField": {
-                                'id': data.order.id,
-                                'revenue': data.order.money.amount,
+                                'id': orderId,
+                                'revenue': isFinite(revenue) ? revenue : 0
                             },
                             "products": data.products
                         }
