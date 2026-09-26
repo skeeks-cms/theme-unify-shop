@@ -138,9 +138,12 @@ if ($this->theme->product_list_images == 2) {
 >
 
     <?php if (!$shopProduct->isOffersProduct) : ?>
-        <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?> <?= $priceHelper->basePrice->money; ?>"/>
+        <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?>"/>
         <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
-        <meta itemprop="description" content="<?= $model->productDescriptionShort ? \yii\helpers\Html::encode(strip_tags($model->productDescriptionShort)) : '-'; ?>"/>
+        <?php $productDescription = trim(strip_tags((string)$model->productDescriptionShort)); ?>
+        <?php if ($productDescription !== '') : ?>
+            <meta itemprop="description" content="<?= \yii\helpers\Html::encode($productDescription); ?>"/>
+        <?php endif; ?>
         <meta itemprop="sku" content="<?= $model->id; ?>"/>
         <? if ($model->mainProductImage) : ?>
             <link itemprop="image" href="<?= $model->mainProductImage->absoluteSrc; ?>">
