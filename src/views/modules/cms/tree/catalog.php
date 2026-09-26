@@ -149,6 +149,32 @@ if (isset($q->select['realPrice'])) {
 $total = $q->select($select)->limit(-1)->offset(-1)->orderBy([])->count('*');
 $dataProvider->setTotalCount($total);
 
+//Пустой листинг не индексируем, но ссылки с него обходим
+if (!$total) {
+    $this->registerMetaTag([
+        'name'    => 'robots',
+        'content' => 'noindex, follow',
+    ], 'robots');
+}
+
+/**
+ * Подстановка {=minMoney} в SEO-шаблоны. Если в листинге нет товаров с ценой,
+ * фраза «от {=minMoney}» (вместе со словами «цены/цена/стоимость») убирается, а не выводится «от 0 р.».
+ */
+$sxReplaceMinMoney = function ($template) use ($data) {
+    $lowPrice = (float)\yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0);
+    if ($lowPrice > 0) {
+        $money = new \skeeks\cms\money\Money((string)$lowPrice, \Yii::$app->money->currencyCode);
+        return str_replace("{=minMoney}", (string)$money, $template);
+    }
+
+    $result = preg_replace('/[,;]?\s*(?:цены|цена|стоимость)?\s*от\s*\{=minMoney\}/iu', '', $template);
+    $result = str_replace("{=minMoney}", "", $result);
+    $result = preg_replace('/\s+([.,;!?])/u', '$1', $result);
+    $result = preg_replace('/([.,;])\s*\1+/u', '$1', $result);
+    return trim(preg_replace('/\s{2,}/u', ' ', $result));
+};
+
 /**
  * Формирование по шаблону
  * Это надо вынести куда нибудь в контроллер
@@ -169,9 +195,7 @@ if (
         $metaTitle = str_replace("{=siteName}", \Yii::$app->skeeks->site->name, $metaTitle);
     }
     if (strpos($metaTitle, "{=minMoney}") !== false) {
-        $lowPrice = \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0);
-        $money = new \skeeks\cms\money\Money((string)$lowPrice, \Yii::$app->money->currencyCode);
-        $metaTitle = str_replace("{=minMoney}", $money, $metaTitle);
+        $metaTitle = $sxReplaceMinMoney($metaTitle);
     }
 
     $this->title = $metaTitle;
@@ -193,9 +217,7 @@ if (
         $metaDescription = str_replace("{=siteName}", \Yii::$app->skeeks->site->name, $metaDescription);
     }
     if (strpos($metaDescription, "{=minMoney}") !== false) {
-        $lowPrice = \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0);
-        $money = new \skeeks\cms\money\Money((string)$lowPrice, \Yii::$app->money->currencyCode);
-        $metaDescription = str_replace("{=minMoney}", $money, $metaDescription);
+        $metaDescription = $sxReplaceMinMoney($metaDescription);
     }
 
 
@@ -219,9 +241,7 @@ if (!$model->meta_keywords && $cmsTreeType->meta_keywords_template) {
         $metaKeywords = str_replace("{=siteName}", \Yii::$app->skeeks->site->name, $metaKeywords);
     }
     if (strpos($metaKeywords, "{=minMoney}") !== false) {
-        $lowPrice = \yii\helpers\ArrayHelper::getValue($data, 'lowPrice', 0);
-        $money = new \skeeks\cms\money\Money((string)$lowPrice, \Yii::$app->money->currencyCode);
-        $metaKeywords = str_replace("{=minMoney}", $money, $metaKeywords);
+        $metaKeywords = $sxReplaceMinMoney($metaKeywords);
     }
 
     $this->registerMetaTag([

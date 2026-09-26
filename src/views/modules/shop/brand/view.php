@@ -125,6 +125,14 @@ if (isset($q->select['realPrice'])) {
 $totalOffers = $q->select($select)->limit(-1)->offset(-1)->orderBy([])->count('*');
 $dataProvider->setTotalCount($totalOffers);
 
+//Пустую страницу бренда не индексируем, но ссылки с неё обходим
+if (!$totalOffers) {
+    $this->registerMetaTag([
+        'name'    => 'robots',
+        'content' => 'noindex, follow',
+    ], 'robots');
+}
+
 $hasCollections = $hasCollectionsEnabledTree;
 $viewMode = 'product';
 if ($hasCollections) {
