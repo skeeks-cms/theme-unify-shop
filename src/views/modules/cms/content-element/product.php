@@ -145,6 +145,11 @@ if ($this->theme->product_list_images == 2) {
             <meta itemprop="description" content="<?= \yii\helpers\Html::encode($productDescription); ?>"/>
         <?php endif; ?>
         <meta itemprop="sku" content="<?= $model->id; ?>"/>
+        <?php if ($shopProduct->brand && trim((string)$shopProduct->brand->name) !== '') : ?>
+            <span itemprop="brand" itemscope itemtype="https://schema.org/Brand">
+                <meta itemprop="name" content="<?= \yii\helpers\Html::encode(trim($shopProduct->brand->name)); ?>"/>
+            </span>
+        <?php endif; ?>
         <? if ($model->mainProductImage) : ?>
             <link itemprop="image" href="<?= $model->mainProductImage->absoluteSrc; ?>">
         <? endif; ?>
