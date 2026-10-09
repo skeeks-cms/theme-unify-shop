@@ -586,7 +586,7 @@ if ($mainTree) {
 
 $title[] = "в магазине " . \Yii::$app->cms->cmsSite->name;
 
-$this->title = implode(' ', $title);
+$this->title = $infoModel->meta_title ?: implode(' ', $title);
 
 $this->registerMetaTag([
     'property' => 'og:title',
