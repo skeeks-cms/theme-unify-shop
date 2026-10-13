@@ -235,7 +235,10 @@ JS
                 <? endif; ?>
             </div>
             <?php if($shopProduct->measure_ratio_min != 1 && $shopProduct->minProductPrice) : ?>
-                <?php $amount = $shopProduct->minProductPrice->money->mul($shopProduct->measure_ratio_min)->amount; ?>
+                <?php
+                $totalMoney = clone $priceHelper->minMoney;
+                $amount = $totalMoney->mul($shopProduct->measure_ratio_min)->amount;
+                ?>
                 <?
                 $this->registerJs(<<<JS
 $(".sx-quantity-input").on("change", function() {
@@ -270,7 +273,7 @@ JS
                 </div>
                 <div class="sx-total-price my-auto h2">
                     
-                     <span class="sx-money-total" data-amount="<?php echo $shopProduct->minProductPrice->money->amount ?>"><?php echo \Yii::$app->formatter->asDecimal($amount); ?></span>
+                     <span class="sx-money-total" data-amount="<?php echo $priceHelper->minMoney->amount ?>"><?php echo \Yii::$app->formatter->asDecimal($amount); ?></span>
                      <span><?php echo \Yii::$app->money->currency_symbol; ?></span>
                 </div>
             <?php endif; ?>
