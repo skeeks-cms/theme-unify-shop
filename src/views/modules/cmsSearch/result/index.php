@@ -51,7 +51,7 @@ if ($hasUnifiedSearch) {
         $hasNavigation = $hasNavigation || !empty($navigationGroups[$groupId]['items']);
     }
 }
-$showSearchEmpty = $hasUnifiedSearch && ($searchText === '' || (!$total && !$hasNavigation));
+$showSearchEmpty = $hasUnifiedSearch && is_file(Yii::getAlias('@skeeks/cms/search/views/result/empty.php')) && ($searchText === '' || (!$total && !$hasNavigation));
 
 }
 
