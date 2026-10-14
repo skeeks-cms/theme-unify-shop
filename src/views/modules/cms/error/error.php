@@ -77,9 +77,18 @@ $this->registerCss(<<<CSS
     margin-top: 16px;
 }
 .sx-error-section .sx-error-sections a {
-    border: 1px solid;
-    border-radius: 4px;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 999px;
     padding: 8px 16px;
+    background: #fff !important;
+    color: var(--sx-text-color, #222) !important;
+    text-decoration: none;
+}
+.sx-error-section .sx-error-sections a:hover,
+.sx-error-section .sx-error-sections a:focus-visible {
+    background: #f7f5f3 !important;
+    border-color: #bdb7b1 !important;
+    color: var(--sx-text-color, #222) !important;
 }
 .sx-error-section .sx-error-contacts {
     margin-top: 24px;

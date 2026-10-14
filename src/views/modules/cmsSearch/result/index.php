@@ -39,6 +39,19 @@ $select = [
 ];
 $total = $q->select($select)->limit(-1)->offset(-1)->orderBy([])->count('*');
 $dataProvider->setTotalCount($total);
+$searchText = $hasUnifiedSearch
+    ? \skeeks\cms\search\services\SuggestQuery::normalize(Yii::$app->cmsSearch->searchQuery)
+    : trim(Yii::$app->cmsSearch->searchQuery);
+$navigationGroups = [];
+$hasNavigation = false;
+if ($hasUnifiedSearch) {
+    $suggest = new \skeeks\cms\search\services\StorefrontSuggest();
+    foreach (['sections', 'filters', 'brands', 'collections'] as $groupId) {
+        $navigationGroups[$groupId] = $suggest->page($searchText, $groupId);
+        $hasNavigation = $hasNavigation || !empty($navigationGroups[$groupId]['items']);
+    }
+}
+$showSearchEmpty = $hasUnifiedSearch && ($searchText === '' || (!$total && !$hasNavigation));
 
 }
 
@@ -50,7 +63,10 @@ $dataProvider->setTotalCount($total);
             <div class="col-12 sx-catalog-wrapper" style="padding-bottom: 20px; padding-top: 20px;">
         <?php if ($pjax->isPjax) : ?>
 
-        <?php if ($hasUnifiedSearch) echo $this->render("@skeeks/cms/search/views/result/groups"); ?>
+        <?php if ($showSearchEmpty): ?>
+            <?= $this->render('@skeeks/cms/search/views/result/empty', ['query' => $searchText]) ?>
+        <?php else: ?>
+        <?php if ($hasUnifiedSearch) echo $this->render('@skeeks/cms/search/views/result/groups', ['navigationGroups' => $navigationGroups]); ?>
         <div class="sx-catalog-h1-wrapper">
             <div><h2 class="sx-breadcrumbs-h1 sx-catalog-h1"><?php echo \Yii::t('app', '{n, plural, =0{нет товаров} =1{# товар} one{# товар} few{# товара} many{# товаров} other{# товаров}}', ['n' => $dataProvider->totalCount],
                     'ru_RU'); ?></h2></div>
@@ -61,6 +77,7 @@ $dataProvider->setTotalCount($total);
             'dataProvider' => $dataProvider,
             'pagerOptions' => ['triggerOffset' => 0],
         ]); ?>
+        <?php endif; ?>
         <?php else : ?>
             <div class="sx-search-lazy-placeholder">
                 <div class="sx-search-lazy-placeholder__spinner"></div>
