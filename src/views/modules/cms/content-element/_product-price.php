@@ -234,7 +234,7 @@ JS
                     <? endforeach; ?>
                 <? endif; ?>
             </div>
-            <?php if($shopProduct->measure_ratio_min != 1 && $shopProduct->minProductPrice) : ?>
+            <?php if ($isShowPrice && $shopProduct->measure_ratio_min != 1 && $shopProduct->minProductPrice) : ?>
                 <?php
                 $totalMoney = clone $priceHelper->minMoney;
                 $amount = $totalMoney->mul($shopProduct->measure_ratio_min)->amount;
