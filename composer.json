@@ -16,7 +16,8 @@
 		}
 	],
 	"require": {
-		"skeeks/cms-theme-unify-v2": "^2.0 || dev-master"
+		"skeeks/cms-theme-unify-v2": "^2.0 || dev-master",
+		"skeeks/cms-shop": "^3.2.7.42 || dev-master"
 	},
     "autoload": {
         "psr-4": {

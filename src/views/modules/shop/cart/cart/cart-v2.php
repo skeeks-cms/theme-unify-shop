@@ -79,71 +79,38 @@ JS
 
                             </div>
 
-                            <?php if (\Yii::$app->user->isGuest) : ?>
+                            <?php
+                            $checkoutContacts = clone $shopOrder;
+                            $checkoutContacts->applyCheckoutContacts();
+                            ?>
 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group js-float-label-wrapper">
                                             <label>Имя</label>
-                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_first_name" value="<?php echo $shopOrder->contact_first_name; ?>"/>
+                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_first_name" value="<?php echo \yii\helpers\Html::encode($checkoutContacts->contact_first_name); ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group js-float-label-wrapper">
                                             <label>Фамилия</label>
-                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_last_name" value="<?php echo $shopOrder->contact_last_name; ?>"/>
+                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_last_name" value="<?php echo \yii\helpers\Html::encode($checkoutContacts->contact_last_name); ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group js-float-label-wrapper">
                                             <label>Телефон</label>
-                                            <input type="text" id='sx-phone' class="form-control sx-save-after-change" data-field="contact_phone" value="<?php echo $shopOrder->contact_phone; ?>"/>
+                                            <input type="text" id='sx-phone' class="form-control sx-save-after-change" data-field="contact_phone" value="<?php echo \yii\helpers\Html::encode($checkoutContacts->contact_phone); ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group js-float-label-wrapper">
                                             <label>Email</label>
-                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_email" value="<?php echo $shopOrder->contact_email; ?>"/>
+                                            <input type="text" class="form-control sx-save-after-change" data-field="contact_email" value="<?php echo \yii\helpers\Html::encode($checkoutContacts->contact_email); ?>"/>
                                         </div>
                                     </div>
                                 </div>
 
-                            <?php else : ?>
-
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="sx-small-info">
-                                            Вы авторизованы на сайте, данные покупателя подставлены из вашего профиля и редактируются в <a href="<?php echo \yii\helpers\Url::to(['/cms/upa-personal/update']); ?>">личном кабинете</a>!
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group js-float-label-wrapper">
-                                            <label>Имя</label>
-                                            <input type="text" <?php echo \Yii::$app->user->identity->first_name ? "disabled" : ""; ?> class="form-control" value="<?php echo \Yii::$app->user->identity->first_name; ?>"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group js-float-label-wrapper">
-                                            <label>Фамилия</label>
-                                            <input type="text" <?php echo \Yii::$app->user->identity->last_name ? "disabled" : ""; ?> class="form-control" value="<?php echo \Yii::$app->user->identity->last_name; ?>"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group js-float-label-wrapper">
-                                            <label>Телефон</label>
-                                            <input type="text" <?php echo \Yii::$app->user->identity->phone ? "disabled" : ""; ?> id='sx-phone' class="form-control"
-                                                   value="<?php echo \Yii::$app->user->identity->phone; ?>"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group js-float-label-wrapper">
-                                            <label>Email</label>
-                                            <input type="text" <?php echo \Yii::$app->user->identity->email ? "disabled" : ""; ?> class="form-control" value="<?php echo \Yii::$app->user->identity->email; ?>"/>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            <?php endif; ?>
 
                             <div class="sx-receiver">
                                 <div class="sx-receiver-triggger-wrapper">

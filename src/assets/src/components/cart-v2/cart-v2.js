@@ -373,7 +373,13 @@
                 }
 
 
-                var ajaxQuery = sx.ajax.preparePostQuery(self.get("checkout_backend"));
+                var contacts = {};
+                $('#sx-client-block [data-field]').each(function () {
+                    contacts[$(this).data('field')] = $(this).val();
+                });
+                var ajaxQuery = sx.ajax.preparePostQuery(self.get("checkout_backend"), {
+                    contacts: contacts
+                });
                 var Handler = new sx.classes.AjaxHandlerStandartRespose(ajaxQuery, {
                     'allowResponseErrorMessage': false
                 });
