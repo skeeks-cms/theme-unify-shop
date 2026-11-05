@@ -535,7 +535,7 @@ $description = $model->description_full;
                                             }
 
                                             if (
-                                                !$shopStoreProducts || $quantityAvailable > 0
+                                                (!$shopStoreProducts || $quantityAvailable > 0 || \Yii::$app->cms->cmsSite->shopSite->is_show_product_no_quantity)
                                                 //&& !$shopProduct->isOffersProduct
                                                 && \Yii::$app->cms->cmsSite->shopSite->is_show_cart
                                             ) : ?>

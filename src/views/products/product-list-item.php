@@ -45,8 +45,8 @@ $isShowPrice = false;
 if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
     $isShowPrice = true;
 
-    //нужно проверить наличие
-    if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity) {
+    //нужно проверить наличие; если товары не в наличии разрешено класть в корзину, цену показываем всегда
+    if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity && !\Yii::$app->cms->cmsSite->shopSite->is_show_product_no_quantity) {
 
         if ($shopStoreProducts) {
             if ($quantityAvailable > 0) {
@@ -297,7 +297,7 @@ $isCompireAdded = $hasCardData ? $cardData->isCompared($shopProduct->id) : \Yii:
 
 
                 if (
-                    (!$shopStoreProducts || $quantityAvailable > 0)
+                    (!$shopStoreProducts || $quantityAvailable > 0 || \Yii::$app->cms->cmsSite->shopSite->is_show_product_no_quantity)
                     &&
                     \Yii::$app->cms->cmsSite->shopSite->is_show_cart
                     && !$shopProduct->isOffersProduct

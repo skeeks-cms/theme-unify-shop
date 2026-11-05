@@ -70,8 +70,8 @@ JS
         if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
             $isShowPrice = true;
 
-            //нужно проверить наличие
-            if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity) {
+            //нужно проверить наличие; если товары не в наличии разрешено класть в корзину, цену показываем всегда
+            if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity && !\Yii::$app->cms->cmsSite->shopSite->is_show_product_no_quantity) {
 
                 if ($shopStoreProducts) {
                     if ($quantityAvailable > 0) {
@@ -403,8 +403,8 @@ JS
         if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
             $isShowPrice = true;
 
-            //нужно проверить наличие
-            if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity) {
+            //нужно проверить наличие; если товары не в наличии разрешено класть в корзину, цену показываем всегда
+            if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity && !\Yii::$app->cms->cmsSite->shopSite->is_show_product_no_quantity) {
 
                 if ($shopStoreProducts) {
                     if ($quantityAvailable > 0) {
@@ -484,7 +484,7 @@ JS
             <?
 
 
-            if (($quantityAvailable > 0 || !\Yii::$app->shop->allStores)) : ?>
+            if (($quantityAvailable > 0 || !\Yii::$app->shop->allStores) || \Yii::$app->skeeks->site->shopSite->is_show_product_no_quantity) : ?>
 
 
                 <div class="sx-quantity-wrapper">
