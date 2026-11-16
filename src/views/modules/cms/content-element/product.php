@@ -140,7 +140,27 @@ if ($this->theme->product_list_images == 2) {
     <?php if (!$shopProduct->isOffersProduct) : ?>
         <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?>"/>
         <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
-        <?php $productDescription = trim(strip_tags((string)$model->productDescriptionShort)); ?>
+        <?php
+        //Описание для разметки: краткое, а если его нет — полное; без HTML, одной строкой и не длиннее 500 символов
+        $productDescription = '';
+        foreach ([(string)$model->productDescriptionShort, (string)$model->productDescriptionFull] as $productDescriptionSource) {
+            $productDescriptionSource = preg_replace('/<(script|style)\b[^>]*>.*?<\/\1>/isu', ' ', $productDescriptionSource);
+            $productDescriptionSource = html_entity_decode(strip_tags(str_replace('<', ' <', $productDescriptionSource)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $productDescriptionSource = trim(preg_replace('/\s+/u', ' ', $productDescriptionSource));
+            if ($productDescriptionSource !== '') {
+                $productDescription = $productDescriptionSource;
+                break;
+            }
+        }
+        if (mb_strlen($productDescription) > 500) {
+            $productDescription = mb_substr($productDescription, 0, 500);
+            $productDescriptionSpace = mb_strrpos($productDescription, ' ');
+            if ($productDescriptionSpace > 400) {
+                $productDescription = mb_substr($productDescription, 0, $productDescriptionSpace);
+            }
+            $productDescription = rtrim($productDescription, " ,.;:—-").'…';
+        }
+        ?>
         <?php if ($productDescription !== '') : ?>
             <meta itemprop="description" content="<?= \yii\helpers\Html::encode($productDescription); ?>"/>
         <?php endif; ?>
