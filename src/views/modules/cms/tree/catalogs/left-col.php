@@ -389,30 +389,7 @@ if ($model->shop_has_collections) {
 }
 CSS
                     );
-                    /**
-                     * @var $query \yii\db\ActiveQuery
-                     */
-                    $query = $dataProvider->query;
-                    $realPrice = '';
-                    $select = [
-                        \skeeks\cms\models\CmsContentElement::tableName().".id",
-                    ];
-                    if (isset($query->select['realPrice'])) {
-                        $realPrice = $query->select['realPrice'];
-                        $select['realPrice'] = $realPrice;
-                    }
-                    $query->select($select);
-                    $query->addSelect(['collection_id' => "collections.id"]);
-                    $query->innerJoinWith("shopProduct.collections as collections", false);
-                    //$query->with("shopProduct.collections as collections");
-                    $query->groupBy(['collections.id']);
-                    /*$query->orderBy(['collections.created_at' => SORT_DESC]);*/
-                    /*$query->orderBy(['collections.show_counter' => SORT_DESC]);*/
-
-                    $q = \skeeks\cms\shop\models\ShopCollection::find()->innerJoin(['main' => $query], [
-                        'main.collection_id' => new \yii\db\Expression(\skeeks\cms\shop\models\ShopCollection::tableName().".id"),
-                    ]);
-                    $q->orderBy([\skeeks\cms\shop\models\ShopCollection::tableName() . ".show_counter" => SORT_DESC])
+                    $q = \skeeks\cms\themes\unifyshop\helpers\CollectionsByProducts::query($dataProvider->query);
                     ?>
 
                     <?php echo $this->render("@app/views/collections/collection-list", [

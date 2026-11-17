@@ -447,23 +447,8 @@ CSS
 CSS
                                     );
 
-                                    $collectionsQuery = clone $dataProvider->query;
-                                    $collectionsQuery->select([
-                                        \skeeks\cms\models\CmsContentElement::tableName().".id",
-                                    ]);
-                                    if (isset($dataProvider->query->select['realPrice'])) {
-                                        $collectionsQuery->addSelect(['realPrice' => $dataProvider->query->select['realPrice']]);
-                                    }
-                                    $collectionsQuery->addSelect(['collection_id' => "collections.id"]);
-                                    $collectionsQuery->innerJoinWith("shopProduct.collections as collections", false);
-                                    $collectionsQuery->groupBy(['collections.id']);
-
                                     $collectionsDataProvider = new \yii\data\ActiveDataProvider([
-                                        'query'      => \skeeks\cms\shop\models\ShopCollection::find()
-                                            ->innerJoin(['main' => $collectionsQuery], [
-                                                'main.collection_id' => new \yii\db\Expression(\skeeks\cms\shop\models\ShopCollection::tableName().".id"),
-                                            ])
-                                            ->orderBy([\skeeks\cms\shop\models\ShopCollection::tableName().".show_counter" => SORT_DESC]),
+                                        'query'      => \skeeks\cms\themes\unifyshop\helpers\CollectionsByProducts::query($dataProvider->query),
                                         'pagination' => [
                                             'pageSize' => 24,
                                         ],
