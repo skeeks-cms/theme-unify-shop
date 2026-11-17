@@ -155,6 +155,8 @@ if ($model->shop_has_collections) {
                         $savedFiltersQ = $model->getCmsSavedFilters()
                             ->joinWith("cmsTree as cmsTree")
                             ->with("cmsTree")
+                            ->with("brand")
+                            ->with("country")
                             ->with("cmsContentProperty")
                             ->with("valueContentElement")
                             ->with("valueContentPropertyEnum")
@@ -242,6 +244,8 @@ if ($model->shop_has_collections) {
                             ->joinWith("cmsTree as cmsTree")
                             ->with("cmsContentProperty")
                             ->with("cmsTree")
+                            ->with("brand")
+                            ->with("country")
                             ->orderBy([
                                 'cmsTree.level'    => SORT_ASC,
                                 'cmsTree.priority' => SORT_ASC,
@@ -451,6 +455,8 @@ CSS
                         ->joinWith("cmsTree as cmsTree")
                         ->with("cmsContentProperty")
                         ->with("cmsTree")
+                        ->with("brand")
+                        ->with("country")
                         ->orderBy([
                             'cmsTree.level'    => SORT_ASC,
                             'cmsTree.priority' => SORT_ASC,
@@ -509,6 +515,8 @@ CSS
                     $savedFilters = $model->getCmsSavedFilters()
                         ->joinWith("cmsContentProperty as cmsContentProperty")
                         ->with("cmsTree")
+                        ->with("brand")
+                        ->with("country")
                         ->with("cmsContentProperty")
                         ->with("valueContentElement")
                         ->with("valueContentPropertyEnum")

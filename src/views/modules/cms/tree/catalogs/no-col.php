@@ -71,6 +71,8 @@ CSS
                         ->joinWith("cmsTree as cmsTree")
                         ->with("cmsContentProperty")
                         ->with("cmsTree")
+                        ->with("brand")
+                        ->with("country")
                         ->orderBy([
                             'cmsTree.level'    => SORT_ASC,
                             'cmsTree.priority' => SORT_ASC,
@@ -307,6 +309,8 @@ JS
                         $savedFilters = $model->getCmsSavedFilters()
                             ->joinWith("cmsContentProperty as cmsContentProperty")
                             ->with("cmsTree")
+                            ->with("brand")
+                            ->with("country")
                             ->with("cmsContentProperty")
                             ->with("valueContentElement")
                             ->with("valueContentPropertyEnum")
