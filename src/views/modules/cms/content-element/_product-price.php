@@ -751,7 +751,11 @@ JS
                 <div class="form-group form-check">
                     <input type="checkbox" id="sx-buy-one-click-personal-data" class="form-check-input" name="personal_data" value="1" required>
                     <label class="form-check-label" for="sx-buy-one-click-personal-data">
-                        Я принимаю <a href="<?php echo \yii\helpers\Url::to(['/cms/legal/personal-data']); ?>" target="_blank" rel="noopener" data-pjax="0">условия обработки персональных данных</a> *
+                        <?php if (method_exists(\Yii::$app->legal, 'getConsentCheckboxText')) : ?>
+                            <?php echo \Yii::$app->legal->consentCheckboxText; ?> *
+                        <?php else : ?>
+                            Я принимаю <a href="<?php echo \yii\helpers\Url::to(['/cms/legal/personal-data']); ?>" target="_blank" rel="noopener" data-pjax="0">условия обработки персональных данных</a> *
+                        <?php endif; ?>
                     </label>
                 </div>
             </div>
