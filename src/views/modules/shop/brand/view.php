@@ -133,6 +133,12 @@ if (!$totalOffers) {
     ], 'robots');
 }
 
+/**
+ * Микроразметка страницы бренда: каталог (CollectionPage + ItemList товаров страницы, JSON-LD), не новость.
+ * Если в описании бренда уже есть своя разметка CollectionPage, общую не выводим, чтобы не задваивать.
+ */
+$sxIsCollectionLd = $totalOffers && strpos((string)$model->description_short.(string)$model->description_full, 'CollectionPage') === false;
+
 $hasCollections = $hasCollectionsEnabledTree;
 $viewMode = 'product';
 if ($hasCollections) {
@@ -230,46 +236,7 @@ CSS
                 <? /* if (!$this->theme->is_image_body_begin) : */ ?>
 
                 <? /* endif; */ ?>
-                <div class="sx-content" itemscope itemtype="http://schema.org/NewsArticle">
-                    <!-- Микроразметка новости-статьи -->
-                    <meta itemscope itemprop="mainEntityOfPage" itemType="https://schema.org/WebPage" itemid="<?= $model->getUrl(true); ?>"/>
-                    <meta itemprop="headline" content="<?= $model->seoName; ?>">
-                    <?php if ($model->createdBy) : ?>
-                        <span itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="<?= $model->createdBy->displayName; ?>"></span>
-                    <?php endif; ?>
-
-                    <span itemprop="publisher" itemtype="http://schema.org/Organization" itemscope="">
-                        <meta itemprop="name" content="<?= \Yii::$app->cms->appName; ?>">
-                        <?php if (\Yii::$app->skeeks->site->cmsSiteAddress) : ?>
-                            <meta itemprop="address" content="<?= \Yii::$app->skeeks->site->cmsSiteAddress->value; ?>">
-                        <?php endif; ?>
-
-                        <?php if (\Yii::$app->skeeks->site->cmsSitePhone) : ?>
-                            <meta itemprop="telephone" content="<?= \Yii::$app->skeeks->site->cmsSitePhone->value; ?>">
-                        <?php endif; ?>
-
-                                <span itemprop="logo" itemtype="http://schema.org/ImageObject" itemscope="">
-                                    <link itemprop="url" href="<?= $this->theme->logo; ?>">
-                                    <meta itemprop="image" content="<?= $this->theme->logo; ?>">
-                                </span>
-                            </span>
-                    <meta itemprop="datePublished" content="<?= \Yii::$app->formatter->asDate($model->created_at, "php:Y-m-d"); ?>"/>
-                    <meta itemprop="dateModified" content="<?= \Yii::$app->formatter->asDate($model->updated_at, "php:Y-m-d"); ?>"/>
-                    <? if ($model->description_short) : ?>
-                        <meta itemprop="description" content="<?= strip_tags((string)$model->description_short); ?>"/>
-                    <? else : ?>
-                        <meta itemprop="description" content="<?= \yii\helpers\StringHelper::truncate(strip_tags((string)$model->description_full), 250); ?>"/>
-                    <? endif; ?>
-                    <? if ($model->logo) : ?>
-                        <span itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-                        <link itemprop="url" href="<?= $model->getUrl(true); ?>">
-                        <span itemprop="image" content="<?= $model->logo->src; ?>">
-                            <meta itemprop="width" content="<?= $model->logo->image_width; ?>">
-                            <meta itemprop="height" content="<?= $model->logo->image_height; ?>">
-                        </span>
-                    </span>
-                    <? endif; ?>
-                    <!-- /Микроразметка новости -->
+                <div class="sx-content">
                     <div class="d-flex">
 
                         <? if ($image) : ?>
@@ -458,6 +425,12 @@ CSS
                                         'dataProvider' => $collectionsDataProvider,
                                     ]); ?>
                                 <?php elseif ($totalOffers > 0) : ?>
+                                    <?php
+                                    //Товары для ItemList записывает product-list (только выведенные на странице)
+                                    if ($sxIsCollectionLd) {
+                                        $this->params['sxCatalogLdItems'] = [];
+                                    }
+                                    ?>
                                     <?php echo $this->render("@app/views/products/product-list", [
                                         'dataProvider' => $dataProvider,
                                     ]); ?>
@@ -508,4 +481,61 @@ CSS
     </div>
 
 </section>
+<?php
+if ($sxIsCollectionLd) {
+    $sxLdUrl = $model->getUrl(true);
+    $sxLd = [
+        '@context' => 'https://schema.org',
+        '@type'    => 'CollectionPage',
+        '@id'      => $sxLdUrl.'#webpage',
+        'url'      => $sxLdUrl,
+        'name'     => (string)$model->seoName,
+    ];
+
+    //Описание то же, что в meta description страницы (его задаёт BrandController)
+    $sxLdDescription = '';
+    if (isset($this->metaTags['description']) && preg_match('/content="([^"]*)"/', $this->metaTags['description'], $sxLdMatch)) {
+        $sxLdDescription = trim(\yii\helpers\Html::decode($sxLdMatch[1]));
+    }
+    if ($sxLdDescription !== '') {
+        $sxLd['description'] = $sxLdDescription;
+    }
+
+    $sxLdBrand = [
+        '@type' => 'Brand',
+        'name'  => (string)$model->name,
+    ];
+    if ($model->logo) {
+        $sxLdBrand['logo'] = $model->logo->absoluteSrc;
+    }
+    $sxLd['about'] = $sxLdBrand;
+
+    $sxLdItems = (array)\yii\helpers\ArrayHelper::getValue($this->params, 'sxCatalogLdItems', []);
+    if ($sxLdItems) {
+        $sxLdPosition = (int)$dataProvider->pagination->offset;
+        $sxLdList = [];
+        foreach ($sxLdItems as $sxLdItem) {
+            $sxLdPosition++;
+            $sxLdList[] = [
+                '@type'    => 'ListItem',
+                'position' => $sxLdPosition,
+                'url'      => $sxLdItem['url'],
+                'name'     => $sxLdItem['name'],
+            ];
+        }
+
+        $sxLd['mainEntity'] = [
+            '@type'           => 'ItemList',
+            'numberOfItems'   => (int)$totalOffers,
+            'itemListElement' => $sxLdList,
+        ];
+    }
+
+    echo \yii\helpers\Html::script(
+        \yii\helpers\Json::encode($sxLd, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG),
+        ['type' => 'application/ld+json']
+    );
+}
+unset($this->params['sxCatalogLdItems']);
+?>
 
