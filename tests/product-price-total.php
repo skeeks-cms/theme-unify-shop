@@ -15,11 +15,14 @@ $view = new class extends \yii\web\View {
         if (strpos($js, 'var total = base * qty;') === false) {
             throw new RuntimeException('Не найден пересчёт суммы');
         }
+        if (strpos($js, 'maximumFractionDigits: hasKopecks ? 2 : 0') === false) {
+            throw new RuntimeException('Пересчёт суммы в браузере отбрасывает копейки');
+        }
         return $this;
     }
 };
 \Yii::$app->set('money', (object)['currency_symbol' => '₽']);
-foreach ([[1000, 800, 1.44], [1000, 1000, 1.44], [1000, 799.99, 2.88], [1000, 0, 1.44]] as [$regular, $discounted, $quantity]) {
+foreach ([[1000, 800, 1.44], [1000, 1000, 1.44], [1000, 799.99, 2.88], [1000, 0, 1.44], [2424.2, 2424.2, 2.88]] as [$regular, $discounted, $quantity]) {
     $createMoney = static function ($amount) {
         $money = (new ReflectionClass(\skeeks\cms\money\Money::class))->newInstanceWithoutConstructor();
         $money->amount = $amount;
@@ -45,7 +48,9 @@ foreach ([[1000, 800, 1.44], [1000, 1000, 1.44], [1000, 799.99, 2.88], [1000, 0,
         if (!preg_match('/class="sx-money-total" data-amount="([^"]+)">([^<]+)</', $html, $match)) {
             throw new RuntimeException('Не найдена сумма');
         }
-        $expected = \Yii::$app->formatter->asDecimal($discounted * $quantity);
+        $total = $discounted * $quantity;
+        // копейки выводятся, только если они есть (задача 9288: 6 981,70, а не 6 982)
+        $expected = \Yii::$app->formatter->asDecimal($total, round($total * 100) % 100 ? 2 : 0);
         if ((float)$match[1] !== (float)$discounted || $match[2] !== $expected) {
             throw new RuntimeException('Сумма или цена для браузерного пересчёта не учитывает скидку');
         }
@@ -54,4 +59,4 @@ foreach ([[1000, 800, 1.44], [1000, 1000, 1.44], [1000, 799.99, 2.88], [1000, 0,
         }
     }
 }
-echo "OK: скрытая цена, скидка, обычная и нулевая цена, дробное количество, данные пересчёта, неизменность цен.\n";
+echo "OK: скрытая цена, скидка, обычная и нулевая цена, дробное количество, копейки, данные пересчёта, неизменность цен.\n";

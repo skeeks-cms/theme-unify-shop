@@ -31,6 +31,10 @@ JS
 );
 ?>
 
+<?= $this->render("@app/views/modules/cms/content-element/_product-rating", [
+    'shopProduct' => $shopProduct,
+]); ?>
+
 <? if ($shopProduct->isSimpleProduct) : ?>
 
     <div class="product-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
@@ -52,7 +56,6 @@ JS
         <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
         <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
         <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
-        <link itemprop="availability" href="http://schema.org/InStock">
 
         <?
 
@@ -89,6 +92,9 @@ JS
 
 
         ?>
+        <?= $this->render("@app/views/modules/cms/content-element/_product-availability", [
+            'availability' => \skeeks\cms\themes\unifyshop\helpers\ProductAvailability::forSite($shopStoreProducts),
+        ]); ?>
         <? if ($isShowPrice) : ?>
             <? if ($priceHelper->hasDiscount) : ?>
 
@@ -255,9 +261,11 @@ $(".sx-quantity-input").on("change", function() {
         total = Number(total.toFixed(2));
     
         // форматирование (пример: русская локаль, без валюты)
+        // копейки показываем, только если они есть: 16 164 и 6 981,70
+        var hasKopecks = Math.round(total * 100) % 100 !== 0;
         var formatted = new Intl.NumberFormat("ru-RU", {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
+            minimumFractionDigits: hasKopecks ? 2 : 0,
+            maximumFractionDigits: hasKopecks ? 2 : 0
         }).format(total);
     
         $(".sx-money-total").text(formatted);
@@ -273,7 +281,7 @@ JS
                 </div>
                 <div class="sx-total-price my-auto h2">
                     
-                     <span class="sx-money-total" data-amount="<?php echo $priceHelper->minMoney->amount ?>"><?php echo \Yii::$app->formatter->asDecimal($amount); ?></span>
+                     <span class="sx-money-total" data-amount="<?php echo $priceHelper->minMoney->amount ?>"><?php echo \Yii::$app->formatter->asDecimal($amount, round($amount * 100) % 100 ? 2 : 0); ?></span>
                      <span><?php echo \Yii::$app->money->currency_symbol; ?></span>
                 </div>
             <?php endif; ?>
@@ -343,11 +351,6 @@ JS
                             ],
                         ]); ?>
                     </div>
-                    <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_quantity_product) : ?>
-                        <div class="availability-row available" style="">
-                            <span class="row-value">Товара нет</span>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
         <? endif; ?>
@@ -427,7 +430,9 @@ JS
             <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
             <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
             <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
-            <link itemprop="availability" href="http://schema.org/InStock">
+            <?= $this->render("@app/views/modules/cms/content-element/_product-availability", [
+                'availability' => \skeeks\cms\themes\unifyshop\helpers\ProductAvailability::forSite($shopStoreProducts),
+            ]); ?>
             <? if ($isShowPrice) : ?>
                 <? if ($priceHelper->hasDiscount) : ?>
                     <span class="current ss-price sx-new-price h1 g-color-primary" title="Ваша цена, по которой вы можете купить товар" data-toggle="tooltip"><?= $priceHelper->minMoney; ?></span>
@@ -619,11 +624,6 @@ JS
                                 ],
                             ]); ?>
                         </div>
-                        <?php if (\Yii::$app->cms->cmsSite->shopSite->is_show_quantity_product) : ?>
-                            <div class="availability-row available" style="">
-                                <span class="row-value">Товара нет</span>
-                            </div>
-                        <?php endif; ?>
 
 
                     </div>

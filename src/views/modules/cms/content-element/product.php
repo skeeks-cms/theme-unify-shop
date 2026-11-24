@@ -174,7 +174,8 @@ if ($this->theme->product_list_images == 2) {
             <link itemprop="image" href="<?= $model->mainProductImage->absoluteSrc; ?>">
         <? endif; ?>
 
-        <?php if ($shopProduct->rating_value) : ?>
+        <?php //Те же значения и условие, что у видимого рейтинга (_product-rating.php в _product-price.php) ?>
+        <?php if ((float)$shopProduct->rating_value > 0 && (int)$shopProduct->rating_count > 0) : ?>
             <span itemscope itemtype="https://schema.org/AggregateRating" itemprop="aggregateRating">
                 <meta itemprop="bestRating" content="<?php echo \Yii::$app->skeeks->site->shopSite->max_product_rating_value; ?>">
                 <meta itemprop="ratingValue" content="<?php echo $shopProduct->rating_value; ?>">
