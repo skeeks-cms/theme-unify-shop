@@ -141,9 +141,35 @@ if ($this->theme->product_list_images == 2) {
         <meta itemprop="name" content="<?= \yii\helpers\Html::encode($model->name); ?>"/>
         <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
         <?php
-        //Описание для разметки: краткое, а если его нет — полное; без HTML, одной строкой и не длиннее 500 символов
+        //Описание для разметки (Яндекс требует его у товара): краткое, затем полное описание товара,
+        //затем описание его коллекции, иначе строка из названия, бренда, коллекции и страны;
+        //без HTML, одной строкой и не длиннее 500 символов
         $productDescription = '';
-        foreach ([(string)$model->productDescriptionShort, (string)$model->productDescriptionFull] as $productDescriptionSource) {
+        $productDescriptionSources = [(string)$model->productDescriptionShort, (string)$model->productDescriptionFull];
+        $productDescriptionCollections = $shopProduct->collections;
+        if (!$productDescriptionCollections && $shopProduct->isOfferProduct && $shopProduct->shopProductWhithOffers) {
+            $productDescriptionCollections = $shopProduct->shopProductWhithOffers->collections;
+        }
+        foreach ($productDescriptionCollections as $productDescriptionCollection) {
+            $productDescriptionSources[] = (string)$productDescriptionCollection->description_short;
+            $productDescriptionSources[] = (string)$productDescriptionCollection->description_full;
+        }
+        $productDescriptionFacts = [];
+        if ($shopProduct->brand && trim((string)$shopProduct->brand->name) !== '') {
+            $productDescriptionFacts[] = 'Бренд: '.trim((string)$shopProduct->brand->name);
+        }
+        if ($productDescriptionCollections) {
+            $productDescriptionFacts[] = 'Коллекция: '.trim((string)reset($productDescriptionCollections)->name);
+        }
+        if ($shopProduct->country && trim((string)$shopProduct->country->name) !== '') {
+            $productDescriptionFacts[] = 'Страна: '.trim((string)$shopProduct->country->name);
+        }
+        //как в товарном фиде: цена в карточке и в Offer — за одну единицу товара
+        if ($shopProduct->measure_code && $shopProduct->measure && trim((string)$shopProduct->measure->symbol) !== '') {
+            $productDescriptionFacts[] = 'Цена указана за 1 '.trim((string)$shopProduct->measure->symbol);
+        }
+        $productDescriptionSources[] = rtrim(trim((string)$model->seoName ?: (string)$model->name), '.').($productDescriptionFacts ? '. '.implode('. ', $productDescriptionFacts) : '');
+        foreach ($productDescriptionSources as $productDescriptionSource) {
             $productDescriptionSource = preg_replace('/<(script|style)\b[^>]*>.*?<\/\1>/isu', ' ', $productDescriptionSource);
             $productDescriptionSource = html_entity_decode(strip_tags(str_replace('<', ' <', $productDescriptionSource)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
             $productDescriptionSource = trim(preg_replace('/\s+/u', ' ', $productDescriptionSource));
