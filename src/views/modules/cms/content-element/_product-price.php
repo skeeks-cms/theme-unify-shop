@@ -53,8 +53,9 @@ JS
         <?php endif; ?>
 
         <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
-        <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
-        <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
+        <?php /* Цена в разметке — та же «Ваша цена» со скидками, что видит покупатель и что уходит в товарный фид. */ ?>
+        <meta itemprop="price" content="<?= number_format((float)$priceHelper->minMoney->amount, 2, '.', ''); ?>">
+        <meta itemprop="priceCurrency" content="<?= $priceHelper->minMoney->currency->code; ?>">
         <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
 
         <?
@@ -427,8 +428,9 @@ JS
 
         <div class="product-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
             <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
-            <meta itemprop="price" content="<?= $priceHelper->basePrice->money->amount; ?>">
-            <meta itemprop="priceCurrency" content="<?= $priceHelper->basePrice->money->currency->code; ?>">
+            <?php /* Цена в разметке — та же «Ваша цена» со скидками, что видит покупатель и что уходит в товарный фид. */ ?>
+            <meta itemprop="price" content="<?= number_format((float)$priceHelper->minMoney->amount, 2, '.', ''); ?>">
+            <meta itemprop="priceCurrency" content="<?= $priceHelper->minMoney->currency->code; ?>">
             <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
             <?= $this->render("@app/views/modules/cms/content-element/_product-availability", [
                 'availability' => \skeeks\cms\themes\unifyshop\helpers\ProductAvailability::forSite($shopStoreProducts),
