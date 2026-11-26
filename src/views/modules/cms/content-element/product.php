@@ -67,8 +67,59 @@ $priceAmount = (float)$price->amount;
 if ($shopProduct->tradeOffers) {
     $price = "от ".$priceHelper->basePrice->money;
 }
+//Метатеги: свои у товара → шаблон контента товаров → по умолчанию (см. ProductMeta)
+$metaContent = $model->cmsContent;
+$metaTemplates = [
+    'title'       => $metaContent ? trim((string)$metaContent->meta_title_template) : '',
+    'description' => $metaContent ? trim((string)$metaContent->meta_description_template) : '',
+    'keywords'    => $metaContent ? trim((string)$metaContent->meta_keywords_template) : '',
+];
+$metaValues = null;
+$metaRender = function ($template) use ($model, $shopProduct, $price, $priceAmount, &$metaValues) {
+    if ($metaValues === null) {
+        $metaCollections = $shopProduct->collections;
+        if (!$metaCollections && $shopProduct->isOfferProduct && $shopProduct->shopProductWhithOffers) {
+            $metaCollections = $shopProduct->shopProductWhithOffers->collections;
+        }
+        $metaValues = [
+            'model.name'              => $model->name,
+            'model.seoName'           => $model->seoName,
+            'model.description_short' => \skeeks\cms\themes\unifyshop\helpers\ProductMeta::plain($model->description_short),
+            'section'                 => $model->cmsTree ? $model->cmsTree->name : '',
+            'section.seoName'         => $model->cmsTree ? $model->cmsTree->seoName : '',
+            'brand'                   => $shopProduct->brand ? $shopProduct->brand->name : '',
+            'sku'                     => $shopProduct->brand_sku,
+            'collection'              => $metaCollections ? reset($metaCollections)->name : '',
+            'country'                 => $shopProduct->country ? $shopProduct->country->name : '',
+            'price'                   => $priceAmount > 0 ? (string)$price : '',
+            'measure'                 => ($shopProduct->measure_code && $shopProduct->measure) ? $shopProduct->measure->symbol : '',
+            'siteName'                => \Yii::$app->skeeks->site ? \Yii::$app->skeeks->site->name : \Yii::$app->name,
+        ];
+    }
+    return \skeeks\cms\themes\unifyshop\helpers\ProductMeta::render($template, $metaValues, function ($name) use ($model) {
+        if (strpos($name, 'property.') !== 0 || !$model->relatedPropertiesModel) {
+            return '';
+        }
+        $code = substr($name, strlen('property.'));
+        $rpm = $model->relatedPropertiesModel;
+        $rpm->initAllProperties();
+        if (!$rpm->getRelatedProperty($code)) {
+            foreach ((array)$rpm->getProperties() as $propertyCode => $property) {
+                if (mb_strtolower(trim((string)$property->name)) === mb_strtolower(trim($code))) {
+                    $code = $propertyCode;
+                    break;
+                }
+            }
+        }
+        return $rpm->getRelatedProperty($code) ? \skeeks\cms\themes\unifyshop\helpers\ProductMeta::plain($rpm->getAttributeAsText($code)) : '';
+    });
+};
+
 if (!$model->meta_title) {
-    if ($priceAmount > 0) {
+    $metaTitle = $metaTemplates['title'] ? $metaRender($metaTemplates['title']) : '';
+    if ($metaTitle !== '') {
+        $this->title = $metaTitle;
+    } elseif ($priceAmount > 0) {
         $this->title = "{$model->seoName} - цена {$price} купить в интернет-магазине {$suffix}";
     } else {
         $this->title = "{$model->seoName} - купить в интернет-магазине {$suffix}";
@@ -76,16 +127,20 @@ if (!$model->meta_title) {
 
 }
 if (!$model->meta_description) {
-    $desc = strip_tags((string)$model->description_short);
+    $metaDescription = $metaTemplates['description'] ? $metaRender($metaTemplates['description']) : '';
+    if ($metaDescription === '') {
+        $metaDescription = \skeeks\cms\themes\unifyshop\helpers\ProductMeta::defaultDescription($model->seoName, $model->description_short, $priceAmount > 0 ? (string)$price : '');
+    }
     $this->registerMetaTag([
         "name"    => 'description',
-        "content" => "✔ {$model->seoName}. ✔ {$desc}. Цена {$price}.",
+        "content" => $metaDescription,
     ], 'description');
 }
 if (!$model->meta_keywords) {
+    $metaKeywords = $metaTemplates['keywords'] ? $metaRender($metaTemplates['keywords']) : '';
     $this->registerMetaTag([
         "name"    => 'keywords',
-        "content" => "{$model->seoName}",
+        "content" => $metaKeywords !== '' ? $metaKeywords : "{$model->seoName}",
     ], 'keywords');
 }
 
