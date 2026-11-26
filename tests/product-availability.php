@@ -46,6 +46,10 @@ $html = $view->renderFile($views.'_product-availability.php', ['availability' =>
 $check(strpos($html, 'schema.org/OutOfStock') !== false && strpos($html, 'Нет в наличии') !== false, 'Нет разметки и статуса OutOfStock');
 $html = $view->renderFile($views.'_product-availability.php', ['availability' => null]);
 $check(trim($html) === '', 'Без подтверждённого наличия ничего не выводится');
+// Без блока Offer (цена не показывается): статус для покупателя есть, разметки availability нет
+$html = $view->renderFile($views.'_product-availability.php', ['availability' => ProductAvailability::resolve([], true, true, $suppliers), 'markup' => false]);
+$check(strpos($html, 'itemprop') === false, 'Без Offer наличие не должно попадать в разметку');
+$check(strpos($html, 'Под заказ') !== false, 'Без Offer видимый статус должен остаться');
 
 // Видимый рейтинг: те же значения, что в AggregateRating; без оценок — пусто
 \Yii::$app->set('skeeks', (object)['site' => (object)['shopSite' => (object)['max_product_rating_value' => 5]]]);

@@ -37,7 +37,45 @@ JS
 
 <? if ($shopProduct->isSimpleProduct) : ?>
 
-    <div class="product-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+    <?
+
+    //TODO: подумать сделать оптимальнее
+    $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
+    $quantityAvailable = 0;
+    if ($shopStoreProducts) {
+        foreach ($shopStoreProducts as $shopStoreProduct) {
+            $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
+        }
+    }
+
+
+    $isShowPrice = false;
+    if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
+        $isShowPrice = true;
+
+        //нужно проверить наличие; если товары не в наличии разрешено класть в корзину, цену показываем всегда
+        if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity && !\Yii::$app->cms->cmsSite->shopSite->is_show_product_no_quantity) {
+
+            if ($shopStoreProducts) {
+                if ($quantityAvailable > 0) {
+
+                    $isShowPrice = true;
+                } else {
+                    $isShowPrice = false;
+                }
+            } else {
+                $isShowPrice = true;
+            }
+
+        }
+    }
+
+    /* Offer — только когда покупатель видит цену больше нуля: скрытую или нулевую цену поисковикам не передаём. */
+    $isOfferMarkup = $isShowPrice && (float)$priceHelper->minMoney->amount > 0;
+
+    ?>
+
+    <div class="product-price"<? if ($isOfferMarkup) : ?> itemprop="offers" itemscope="" itemtype="http://schema.org/Offer"<? endif; ?>>
 
 
         <?php if ($shopProduct->shop_product_model_id && @$shopChooseJoinedProductsHelper) : ?>
@@ -52,49 +90,17 @@ JS
             ?>
         <?php endif; ?>
 
+        <? if ($isOfferMarkup) : ?>
         <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
         <?php /* Цена в разметке — та же «Ваша цена» со скидками, что видит покупатель и что уходит в товарный фид. */ ?>
         <meta itemprop="price" content="<?= number_format((float)$priceHelper->minMoney->amount, 2, '.', ''); ?>">
         <meta itemprop="priceCurrency" content="<?= $priceHelper->minMoney->currency->code; ?>">
         <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
+        <? endif; ?>
 
-        <?
-
-        //TODO: подумать сделать оптимальнее
-        $shopStoreProducts = $shopProduct->getShopStoreProducts(\Yii::$app->shop->allStores)->all();
-        $quantityAvailable = 0;
-        if ($shopStoreProducts) {
-            foreach ($shopStoreProducts as $shopStoreProduct) {
-                $quantityAvailable = $quantityAvailable + $shopStoreProduct->quantity;
-            }
-        }
-
-
-        $isShowPrice = false;
-        if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) {
-            $isShowPrice = true;
-
-            //нужно проверить наличие; если товары не в наличии разрешено класть в корзину, цену показываем всегда
-            if (\Yii::$app->cms->cmsSite->shopSite->is_show_prices_only_quantity && !\Yii::$app->cms->cmsSite->shopSite->is_show_product_no_quantity) {
-
-                if ($shopStoreProducts) {
-                    if ($quantityAvailable > 0) {
-
-                        $isShowPrice = true;
-                    } else {
-                        $isShowPrice = false;
-                    }
-                } else {
-                    $isShowPrice = true;
-                }
-
-            }
-        }
-
-
-        ?>
         <?= $this->render("@app/views/modules/cms/content-element/_product-availability", [
             'availability' => \skeeks\cms\themes\unifyshop\helpers\ProductAvailability::forSite($shopStoreProducts),
+            'markup'       => $isOfferMarkup,
         ]); ?>
         <? if ($isShowPrice) : ?>
             <? if ($priceHelper->hasDiscount) : ?>
@@ -423,17 +429,23 @@ JS
             }
         }
 
+        /* Offer — только когда покупатель видит цену больше нуля: скрытую или нулевую цену поисковикам не передаём. */
+        $isOfferMarkup = $isShowPrice && (float)$priceHelper->minMoney->amount > 0;
+
         ?>
 
 
-        <div class="product-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+        <div class="product-price"<? if ($isOfferMarkup) : ?> itemprop="offers" itemscope="" itemtype="http://schema.org/Offer"<? endif; ?>>
+            <? if ($isOfferMarkup) : ?>
             <link itemprop="url" href="<?= $model->absoluteUrl; ?>"/>
             <?php /* Цена в разметке — та же «Ваша цена» со скидками, что видит покупатель и что уходит в товарный фид. */ ?>
             <meta itemprop="price" content="<?= number_format((float)$priceHelper->minMoney->amount, 2, '.', ''); ?>">
             <meta itemprop="priceCurrency" content="<?= $priceHelper->minMoney->currency->code; ?>">
             <meta itemprop="priceValidUntil" content="<?= date('Y-m-d', strtotime('+1 week')); ?>">
+            <? endif; ?>
             <?= $this->render("@app/views/modules/cms/content-element/_product-availability", [
                 'availability' => \skeeks\cms\themes\unifyshop\helpers\ProductAvailability::forSite($shopStoreProducts),
+                'markup'       => $isOfferMarkup,
             ]); ?>
             <? if ($isShowPrice) : ?>
                 <? if ($priceHelper->hasDiscount) : ?>
@@ -662,7 +674,8 @@ JS
         <?php endif; ?>
 
     <? else : ?>
-        <div class="product-price g-mb-10" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+        <?php /* Модификация не выбрана: цены и наличия конкретного предложения нет — Offer не размечаем. */ ?>
+        <div class="product-price g-mb-10">
             <? if ($priceHelper && \Yii::$app->cms->cmsSite->shopSite->is_show_prices) : ?>
                 <div class="">
                     <? if ($priceHelper->hasDiscount) : ?>

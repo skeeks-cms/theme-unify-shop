@@ -10,10 +10,12 @@
 /**
  * Наличие внутри блока Offer: разметка availability и тот же статус для покупателя.
  * Если склады на сайте не ведутся, наличие не подтверждено — не выводится ничего.
+ * $markup = false: блока Offer нет (цена не показывается) — выводится только статус для покупателя.
  */
 if (!$availability) {
     return;
 }
+$markup = isset($markup) ? (bool)$markup : true;
 $this->registerCss(<<<CSS
 .sx-product-availability {
     display: flex;
@@ -38,7 +40,9 @@ $this->registerCss(<<<CSS
 CSS
 );
 ?>
+<?php if ($markup) : ?>
 <link itemprop="availability" href="https://schema.org/<?= $availability['schema']; ?>">
+<?php endif; ?>
 <div class="sx-product-availability sx-product-availability--<?= $availability['schema']; ?>">
     <span class="sx-product-availability__label"><?= \yii\helpers\Html::encode($availability['label']); ?></span>
     <?php if ($availability['note']) : ?>
