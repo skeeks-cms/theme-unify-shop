@@ -34,21 +34,7 @@ if (!$shopOrder->cms_user_id && !\Yii::$app->user->isGuest) {
 
 $deliveries = \skeeks\cms\shop\models\ShopDelivery::find()->cmsSite()->active()->sort()->all();
 
-$this->registerJs(<<<JS
-$("body").on("click", ".sx-remove-order-item", function() {
-    var jItem = $(this).closest(".sx-order-item");
-    var ID = jItem.data("id");
-
-    sx.block(jItem);
-
-    var ajaxQuery = sx.Shop.createAjaxRemoveBasket(ID);
-    ajaxQuery.onSuccess(function (e, data) {
-        jItem.slideUp();
-    });
-    ajaxQuery.execute();
-});
-JS
-);
+//Удаление позиции (.sx-remove-order-item) обрабатывает cart-v2.js — второй обработчик здесь не нужен
 
 ?>
 <? /* \skeeks\cms\widgets\Pjax::begin([
@@ -426,7 +412,7 @@ JS
                             ?>
                             <div class="col-12" style="margin-top: 1rem;">
                                 <div class="form-group required" style="margin-bottom: 0;">
-                                    <input type="checkbox" required id="sx-rules">
+                                    <input type="checkbox" required id="sx-rules" class="sx-rules sx-cart-rules">
                                     <label for="sx-rules" style="margin-bottom: 0;"><?php echo $formConstructor->legalCheckboxText; ?></label>
                                 </div>
                             </div>

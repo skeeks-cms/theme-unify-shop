@@ -162,15 +162,38 @@
                 self.updateOrderResult();
             });
 
-            $("body").on("click", ".sx-remove-order-item", function () {
+            $("body").on("click", ".sx-remove-order-item", function (e) {
+                e.preventDefault();
+
                 var jItem = $(this).closest(".sx-order-item");
                 var ID = jItem.data("id");
 
-                sx.block(jItem);
+                //Один запрос на позицию: повторный клик, пока идёт удаление, ничего не делает
+                if (!ID || jItem.data("sx-removing")) {
+                    return false;
+                }
+                jItem.data("sx-removing", true);
+
+                var blocker = sx.block(jItem);
+                var unblock = function () {
+                    jItem.data("sx-removing", false);
+                    if (blocker && blocker.unblock) {
+                        blocker.unblock();
+                    }
+                };
 
                 var ajaxQuery = sx.Shop.createAjaxRemoveBasket(ID);
                 ajaxQuery.onSuccess(function (e, data) {
-                    jItem.slideUp();
+                    if (data && data.response && data.response.success === false) {
+                        unblock();
+                        return;
+                    }
+                    jItem.slideUp(function () {
+                        jItem.remove();
+                    });
+                });
+                ajaxQuery.onError(function () {
+                    unblock();
                 });
                 ajaxQuery.execute();
             });
@@ -341,8 +364,13 @@
                 var jBtn = $(this);
 
                 //Если есть галочка с правами
-                if ($("#sx-rules").length) {
-                    if ($("#sx-rules").is(":checked") === false) {
+                //Галочка согласия корзины (id="sx-rules", в том числе в перекрытых в проектах шаблонах).
+                //Галочки форм на той же странице (обратный звонок и т.п.) стоят внутри <form> и не учитываются.
+                var jRules = $("input[id='sx-rules']").filter(function () {
+                    return $(this).closest("form").length === 0;
+                }).first();
+                if (jRules.length) {
+                    if (jRules.is(":checked") === false) {
                         $(".sx-order-error").empty().append("Необходимо согласиться с условиями обработки персональных данных.").fadeIn();
 
                         return false;
